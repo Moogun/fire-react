@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { auth } from '../../firebase';
+import { Segment, Button, Header, Divider, Form, Input} from 'semantic-ui-react'
 
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value,
@@ -45,27 +46,56 @@ class PasswordChangeForm extends Component {
       passwordOne === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={passwordOne}
-          onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
-          type="password"
-          placeholder="New Password"
-        />
-        <input
-          value={passwordTwo}
-          onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
-          type="password"
-          placeholder="Confirm New Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Reset My Password
-        </button>
+      <Segment>
+        <Header as='h2'>Change your password</Header>
+          <Form onSubmit={this.onSubmit}>
+          <br/>
+          <Divider />
+          <Form.Field>
+            <Input
+              value={passwordOne}
+              onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
+              type="password"
+              placeholder="New Password"
+            />
+          </Form.Field>
+          <Form.Field>
+            <Input
+              value={passwordTwo}
+              onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
+              type="password"
+              placeholder="Confirm New Password"
+            />
+          </Form.Field>
+            <Button disabled={isInvalid} type="submit">
+              Reset My Password
+            </Button>
 
-        { error && <p>{error.message}</p> }
-      </form>
+            { error && <p>{error.message}</p> }
+          </Form>
+      </Segment>
     );
   }
 }
+
+
+//   <br/>
+//   <Divider />
+//   <Form size='big'>
+//     <Form.Field>
+//       <label>Old password</label>
+//       <input placeholder='First Name' />
+//     </Form.Field>
+//     <Form.Field>
+//       <label>New password</label>
+//       <input placeholder='Last Name' />
+//     </Form.Field>
+//     <Form.Field>
+//       <label>Confirm password</label>
+//       <input placeholder='Last Name' />
+//     </Form.Field>
+//     <Button type='submit'>Update</Button>
+//   </Form>
+// </Segment>
 
 export default PasswordChangeForm;

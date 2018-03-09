@@ -4,6 +4,13 @@ import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
 import { Button, Image, Modal, Form, Checkbox, Icon, Input } from 'semantic-ui-react'
 
+// import FacebookLogin from 'react-facebook-login';
+// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+//
+// const responseFacebook = (response) => {
+//   console.log(response);
+// }
+
 const SignUpPage = ({history}) => (
   <div>
     <SignUpForm history={history} />
@@ -21,7 +28,6 @@ const INITIAL_STATE = {
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value
 })
-
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -57,6 +63,31 @@ class SignUpForm extends Component {
     });
 
     event.preventDefault();
+  }
+
+  signUpWithGoogle = () => {
+    console.log('google signing');
+    const {history} = this.props;
+    auth.doCreateUserWithGoogle()
+      .then(result => {
+        var token = result.credential.accessToken; //This gives you a Google Access Token. You can use it to access the Google API.
+        var authUser = result.user;
+        db.doCreateUser(authUser.uid, authUser.displayName, authUser.email)
+        .then(() => {
+          this.setState(() => ({ ...INITIAL_STATE }));
+          history.push(routes.HOME);
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error));
+        });
+      })
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
+  }
+
+  componentClicked = () => {
+    console.log('fbSignin');
   }
 
   render() {
@@ -133,6 +164,16 @@ class SignUpForm extends Component {
               <Icon name='checkmark' /> Sign Up
             </Button> */}
           </Modal.Actions>
+          <Button onClick={this.signUpWithGoogle}>Google</Button>
+
+          {/* <FacebookLogin
+              appId="1329723160399765"
+              autoLoad={true}
+              fields="name,email,picture"
+              render={renderProps => (
+              <Button onClick={renderProps.onClick}>Facebook Sign up</Button> )}
+              onClick={this.componentClicked}
+              callback={responseFacebook} /> */}
 
         </Modal>
 

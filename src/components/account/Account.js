@@ -1,115 +1,86 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-
-import {PasswordForgetForm} from './PasswordForget';
-import PasswordChanggeForm from './PasswordChange';
+import {Link, Route} from 'react-router-dom'
 import withAuthorization from '../../HOC/withAuthorization';
 import profile from '../../assets/profile-lg.png'
 
+import Profile from './Profile'
+import Photo from './Photo'
+import {PasswordForgetForm} from './PasswordForget';
+import PasswordChangeForm from './PasswordChange';
+import Danger from './Danger'
+
 import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item } from 'semantic-ui-react'
 
-const AccountPage = (props, {authUser}) =>
-  <div>
-    <Segment inverted color='teal'>
-      <Container>
-        <Header
-          as='h3'
-          content='Account Settings'
-          // inverted
-          style={{
-            // fontSize: mobile ? '2em' : '3em',
-            // fontWeight: 'normal',
-            // marginBottom: mobile ? '1.5em' : '1.5em',
-            // marginTop: mobile ? '1.5em' : '1em',
-          }}
-        />
-        {/* <Divider /> */}
-        <Menu pointing secondary
+class AccountPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
 
+    };
+  }
 
-          size='large'
-          // text
-        >
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  render() {
+    const {match} = this.props
+    // console.log('account props',this.props);
+    // console.log('account authUser',this.context.authUser);
+    const { activeItem } = this.state
+    return (
+        <Segment>
           <Container>
-            <Menu.Item as='a' active>Account Settings</Menu.Item>
-            <Menu.Item as='a'>Security</Menu.Item>
-            <Menu.Item as='a'>Notifications</Menu.Item>
-          </Container>
-        </Menu>
-      </Container>
-    </Segment>
 
-    <Segment>
-      <Container>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={4}>
-
-                  <Menu secondary vertical>
-                  <br/>
-                  <Image src={profile} circular centered size='small'/>
-                  <br/>
-                    <Menu.Item name='profile'
-                      active
-                       // active={activeItem === 'account'} onClick={this.handleItemClick}
-                     />
-                    <Menu.Item name='photo'
-                       // active={activeItem === 'settings'} onClick={this.handleItemClick}
-                     />
-                     <Menu.Item name='password'
-                        // active={activeItem === 'settings'} onClick={this.handleItemClick}
-                      />
-                      <Menu.Item name='danger'
-                         // active={activeItem === 'settings'} onClick={this.handleItemClick}
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column width={3}>
+                      <Menu vertical>
+                      <br/>
+                      <Image src={profile} circular centered size='small'/>
+                      <br/>
+                        <Menu.Item name='profile'
+                          active
+                          as={Link} to='/account/profile'
+                          active={activeItem === 'profile'} onClick={this.handleItemClick}
+                         />
+                      <Menu.Item name='photo'
+                        as={Link} to='/account/photo'
+                          active={activeItem === 'photo'} onClick={this.handleItemClick}
                        />
-                  </Menu>
-              </Grid.Column>
-              <Grid.Column width={12}>
+                       <Menu.Item name='passwordChange'
+                        as={Link} to='/account/passwordChange'
+                         // as={Link} to={`${match.url}/passwordChange`}
+                          active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
+                        />
+                        <Menu.Item name='passwordForget'
+                         as={Link} to='/account/passwordForget'
+                          // as={Link} to={`${match.url}/passwordChange`}
+                           active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
+                         />
+                        <Menu.Item name='danger'
+                          as={Link} to='/account/danger'
+                           active={activeItem === 'danger'} onClick={this.handleItemClick}
+                         />
+                      </Menu>
+                  </Grid.Column>
+                  <Grid.Column width={13}>
 
-                <Segment>
-                  <Header as='h2'>Profile</Header>
-                  <br/>
-                  <Divider />
-                  <Form size='big'>
-                    <Form.Field>
-                      <label>Name</label>
-                      <input placeholder='First Name' />
-                    </Form.Field>
-                    <Form.Field>
-                      <label>Username</label>
-                      <input placeholder='Last Name' />
-                    </Form.Field>
-                    <Button type='submit'>Update</Button>
-                  </Form>
-                </Segment>
-                <Segment>
-                  <Header as='h2'>Change your password</Header>
-                  <br/>
-                  <Divider />
-                  <Form size='big'>
-                    <Form.Field>
-                      <label>Old password</label>
-                      <input placeholder='First Name' />
-                    </Form.Field>
-                    <Form.Field>
-                      <label>New password</label>
-                      <input placeholder='Last Name' />
-                    </Form.Field>
-                    <Form.Field>
-                      <label>Confirm password</label>
-                      <input placeholder='Last Name' />
-                    </Form.Field>
-                    <Button type='submit'>Update</Button>
-                  </Form>
-                </Segment>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-      </Container>
-    </Segment>
-    <PasswordForgetForm />
-    <PasswordChanggeForm />
-  </div>
+                    <Container>
+                      <Route path='/account/profile' component={Profile} />
+                      <Route path='/account/photo' component={Photo} />
+                      <Route path='/account/passwordChange' component={PasswordChangeForm} />
+                      <Route path='/account/passwordForget' component={PasswordForgetForm} />
+                      <Route path='/account/danger' component={Danger} />
+                      {/* <Route path='/account/passwordChange' component={(props) => <Questions click={this.handleNewQ} {...props}/>} /> */}
+                    </Container>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+          </Container>
+        </Segment>
+    );
+  }
+}
 
 AccountPage.contextTypes ={
   authUser: PropTypes.object,
@@ -118,17 +89,3 @@ AccountPage.contextTypes ={
 const authCondition = (authUser) => !!authUser;
 
 export default withAuthorization(authCondition)(AccountPage);
-
-
-
-
-// const Account = ({mobile}) => (
-//   <div>
-//   </div>
-// )
-//
-// Account.propTypes = {
-//   mobile: PropTypes.bool,
-// }
-//
-// export default Account

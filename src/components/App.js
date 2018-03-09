@@ -42,7 +42,7 @@ class App extends Component {
             component={() => <HomePage />}
           />
           <Route
-            exact path={routes.ACCOUNT}
+            path={routes.ACCOUNT}
             component={() => <AccountPage />}
           />
           <Route
@@ -74,7 +74,7 @@ class App extends Component {
             path='/cedit'
             component={() => <CEdit />}
           />
-          
+
 
           <Footer />
         </div>

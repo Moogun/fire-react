@@ -14,13 +14,15 @@ if (!firebase.apps.length) {
 }
 
 const auth = firebase.auth();
+const google = new firebase.auth.GoogleAuthProvider();
 const db = firebase.database();
 const storage = firebase.storage();
 const msg = firebase.messaging();
 
 export {
-  db,
   auth,
+  google,
+  db,
   storage,
   msg,
 }
