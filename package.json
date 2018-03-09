@@ -1,0 +1,25 @@
+{
+  "name": "fire",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.0.0-beta",
+    "firebase": "^4.9.1",
+    "font-awesome": "^4.7.0",
+    "popper.js": "^1.12.9",
+    "prop-types": "^15.6.0",
+    "query": "^0.2.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.1",
+    "semantic-ui-css": "^2.2.14",
+    "semantic-ui-react": "^0.78.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
