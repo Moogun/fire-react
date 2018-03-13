@@ -165,7 +165,10 @@ class NavigationAuth extends Component {
 
 class NavigationNonAuth extends Component {
 
-  state = {}
+  state = {
+    signInModalOpened: false,
+    signUpModalOpened: false,
+  }
 
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
@@ -179,8 +182,22 @@ class NavigationNonAuth extends Component {
 
   handleSearchField = () => this.setState ({ searchFieldActive: !this.state.searchFieldActive})
 
+  handleSignUpModal = () => this.setState ({signUpModalOpened: !this.state.signUpModalOpened})
+
+  handleSignInModal = () => this.setState ({ signInModalOpened: !this.state.signInModalOpened})
+
+  handleToggleModal = () => {
+    this.setState ({ signInModalOpened: !this.state.signInModalOpened})
+    console.log('status sign in',this.state.signInModalOpened );
+    this.setState ({ signUpModalOpened: !this.state.signUpModalOpened})
+    console.log('status sign up',this.state.signUpModalOpened );
+  }
+
+
+
   render() {
-    const {activeItem, fixed, sidebarOpened, searchFieldActive} = this.state
+    const {activeItem, fixed, sidebarOpened, searchFieldActive,
+      signInModalOpened, signUpModalOpened} = this.state
 
     let searchField = searchFieldActive? <Input className='icon' icon='search' placeholder='Search...' fluid /> : null
 
@@ -192,15 +209,27 @@ class NavigationNonAuth extends Component {
                 <Menu.Item  as={Link} to={routes.LANDING}
                   name='landing' active={activeItem === 'landing'} onClick={this.handleItemClick} />
                   <Category />
+
                   <Menu.Menu position='right'>
-                    <Menu.Item as={Link} to={routes.SIGN_IN}
-                      name='Sign In' active={activeItem === 'signin'} onClick={this.handleItemClick}>
-                        <SignIn />
+                    <Menu.Item
+                      as = 'a'
+                      name='Sign In' active={activeItem === 'signin'}
+                      onClick={this.handleSignInModal} >
+                        <SignIn
+                          click={this.handleToggleModal}
+                          open={signInModalOpened}
+                        />
                       </Menu.Item>
-                    <Menu.Item as={Link} to={routes.SIGN_UP}
-                        name='Sign Up' active={activeItem === 'signup'} onClick={this.handleItemClick} >
-                        <SignUp />
+
+                    <Menu.Item
+                        as = 'a'
+                        name='Sign Up' active={activeItem === 'signup'} onClick={this.handleSignUpModal} >
+                        <SignUp
+                          click={this.handleToggleModal}
+                          open={signUpModalOpened}
+                        />
                       </Menu.Item>
+
                   </Menu.Menu>
 
              </Container>
@@ -227,7 +256,7 @@ class NavigationNonAuth extends Component {
                      <Menu.Item onClick={this.handleSearchField}>
                        <Icon name='search' />
                      </Menu.Item>
-                     <Menu.Item position='center'>
+                     <Menu.Item>
                        Logo We qna
                      </Menu.Item>
                      <Menu.Item position='right'>

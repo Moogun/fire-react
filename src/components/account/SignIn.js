@@ -3,12 +3,13 @@ import {auth} from '../../firebase';
 import * as routes from '../../constants/routes';
 import {Link, withRouter} from 'react-router-dom';
 import {SignUpLink} from './SignUp';
+import SignUp from './SignUp'
 import {PasswordForgetLink} from './PasswordForget'
 import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider } from 'semantic-ui-react'
 
-const SignInPage = ({history}) => (
+const SignInPage = (props, {history}, modalClose = f => f) => (
   <div>
-    <SignInForm history={history}/>
+    <SignInForm open={props.open} click={props.click} history={history} />
   </div>
 )
 
@@ -47,12 +48,17 @@ class SignInForm extends Component {
 
   render() {
     const {email, password, error} = this.state;
+    const { open, click, history } = this.props
+    console.log(' sign in open ?', open);
+
     const isInvalid =
     email === '' ||
     password === '';
 
     return (
-      <Modal size="mini" trigger={<p> Sign In</p>} textAlign='center'>
+      <Modal size="mini" trigger={<p> Sign In</p>}
+        open={open}
+        >
           <Modal.Header>Log In to Your We Qna Account</Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.onSubmit}>
@@ -101,7 +107,7 @@ class SignInForm extends Component {
           </Modal.Content>
 
           <Modal.Actions>
-            <SignUpLink />
+            <p onClick={click}>Sign Up</p>
           </Modal.Actions>
 
         </Modal>

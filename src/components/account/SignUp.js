@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link, withRouter, } from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
-import { Button, Image, Modal, Form, Checkbox, Icon, Input } from 'semantic-ui-react'
+import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider } from 'semantic-ui-react'
 
 // import FacebookLogin from 'react-facebook-login';
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -11,9 +11,9 @@ import { Button, Image, Modal, Form, Checkbox, Icon, Input } from 'semantic-ui-r
 //   console.log(response);
 // }
 
-const SignUpPage = ({history}) => (
+const SignUpPage = (props, {history}) => (
   <div>
-    <SignUpForm history={history} />
+    <SignUpForm open={props.open} click={props.click} history={history} />
   </div>
 )
 
@@ -44,7 +44,7 @@ class SignUpForm extends Component {
       passwordOne,
     } = this.state;
 
-    const {history} = this.props;
+  const {history} = this.props;
 
   auth.doCreateUserWithEmailAndPassword(email, passwordOne)
     .then(authUser => {
@@ -93,18 +93,42 @@ class SignUpForm extends Component {
   render() {
 
     const {email, username, passwordOne, passwordTwo, error} = this.state;
-
+    const { open, click } = this.props
+    console.log('sign up', open);
     const isInvalid =
-          passwordOne !== passwordTwo ||
           passwordOne === '' ||
           email === '' ||
           username === '';
 
     return (
-      <Modal size="mini" trigger={<p> Sign Up</p>}>
+      <Modal size="mini" trigger={<p> Sign Up</p>}
+        open={open}
+        >
           <Modal.Header color='teal'>Sign Up</Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.onSubmit}>
+
+                <Form.Field>
+                  <Button fluid size="tiny" onClick={this.signUpWithGoogle}>
+                    <Icon name='google' /> Continue with Google
+                  </Button>
+                </Form.Field>
+
+                <Form.Field>
+                  <Button fluid size="tiny">
+                    <Icon name='facebook' /> Continue with Facebook
+                  </Button>
+                </Form.Field>
+                {/* <FacebookLogin
+                    appId="1329723160399765"
+                    autoLoad={true}
+                    fields="name,email,picture"
+                    render={renderProps => (
+                    <Button onClick={renderProps.onClick}>Facebook Sign up</Button> )}
+                    onClick={this.componentClicked}
+                    callback={responseFacebook} /> */}
+
+              <Divider horizontal>Or</Divider>
 
               <Form.Field>
                 <Input
@@ -136,16 +160,6 @@ class SignUpForm extends Component {
                   placeholder="Password"
                 />
                 </Form.Field>
-                <Form.Field>
-                  <Input
-                    icon='lock'
-                    iconPosition='left'
-                    value={passwordTwo}
-                    onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
-                    type="password"
-                    placeholder="Confirm Password"
-                  />
-                </Form.Field>
 
                 <Form.Field>
                   <Checkbox label='I agree to the Terms and Conditions' />
@@ -158,23 +172,9 @@ class SignUpForm extends Component {
           </Modal.Content>
 
           <Modal.Actions>
-            Forgot password?
-            Already have an account?
-            {/* <Button color='green'>
-              <Icon name='checkmark' /> Sign Up
-            </Button> */}
+            have an account?
+            <p onClick={click}>Sign In</p>
           </Modal.Actions>
-          <Button onClick={this.signUpWithGoogle}>Google</Button>
-
-          {/* <FacebookLogin
-              appId="1329723160399765"
-              autoLoad={true}
-              fields="name,email,picture"
-              render={renderProps => (
-              <Button onClick={renderProps.onClick}>Facebook Sign up</Button> )}
-              onClick={this.componentClicked}
-              callback={responseFacebook} /> */}
-
         </Modal>
 
     );
