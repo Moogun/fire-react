@@ -4,7 +4,7 @@ import * as routes from '../../constants/routes';
 import {Link, withRouter} from 'react-router-dom';
 import {SignUpLink} from './SignUp';
 import {PasswordForgetLink} from './PasswordForget'
-import { Button, Image, Modal, Form, Checkbox, Icon, Input } from 'semantic-ui-react'
+import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider } from 'semantic-ui-react'
 
 const SignInPage = ({history}) => (
   <div>
@@ -52,10 +52,23 @@ class SignInForm extends Component {
     password === '';
 
     return (
-      <Modal size="mini" trigger={<p> Sign In</p>}>
-          <Modal.Header>Sign In</Modal.Header>
+      <Modal size="mini" trigger={<p> Sign In</p>} textAlign='center'>
+          <Modal.Header>Log In to Your We Qna Account</Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.onSubmit}>
+              <Form.Field>
+                <Button fluid size="tiny" >
+                  <Icon name='google' /> Continue with Google
+                </Button>
+              </Form.Field>
+
+              <Form.Field>
+                <Button fluid size="tiny">
+                  <Icon name='facebook' /> Continue with Facebook
+                </Button>
+              </Form.Field>
+
+              <Divider horizontal>Or</Divider>
 
               <Form.Field>
                 <Input
@@ -80,14 +93,14 @@ class SignInForm extends Component {
                 </Form.Field>
 
                 <Button color='blue' fluid>
-                  <Icon name='checkmark' /> Sign In
+                  <Icon name='checkmark' /> Log In
                 </Button>
+                <PasswordForgetLink />
             </Form>
 
           </Modal.Content>
 
           <Modal.Actions>
-            <PasswordForgetLink />
             <SignUpLink />
           </Modal.Actions>
 

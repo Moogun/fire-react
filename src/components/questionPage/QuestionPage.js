@@ -5,7 +5,7 @@ import profile from '../../assets/profile-lg.png'
 import AnswerList from './AnswerList'
 
 const QuestionPage = () => (
-  <Segment>
+  <Segment basic>
     <Container text>
 
       <Question />

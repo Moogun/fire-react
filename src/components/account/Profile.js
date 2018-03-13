@@ -8,25 +8,32 @@ import profile from '../../assets/profile-lg.png'
 
 import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item } from 'semantic-ui-react'
 
-const Profile = () =>
-    <Segment>
+const Profile = (props) => {
+  // console.log('profile', props);
+  // console.log('profile', props.authUser.email);
+  return (
+    <Segment >
       <Container>
           <Grid>
             <Grid.Row>
               <Grid.Column width={12}>
 
-                <Segment>
+                <Segment basic>
                   <Header as='h2'>Profile</Header>
                   <br/>
                   <Divider />
                   <Form size='big'>
                     <Form.Field>
-                      <label>Username</label>
-                      <input placeholder='Username' defaultValue={'dddd'}/>
+                      <label>Email</label>
+                      <input placeholder='Email' defaultValue={props.authUser.email}/>
                     </Form.Field>
                     <Form.Field>
-                      <label>Name</label>
-                      <input placeholder='Name' />
+                      <label>Username</label>
+                      <input placeholder='Username'/>
+                    </Form.Field>
+                    <Form.Field>
+                      <label>displayName</label>
+                      <input placeholder='Name' defaultValue={props.authUser.displayName}/>
                     </Form.Field>
 
                     <Button type='submit'>Update</Button>
@@ -37,5 +44,8 @@ const Profile = () =>
           </Grid>
       </Container>
     </Segment>
+  )
+}
+
 
 export default Profile

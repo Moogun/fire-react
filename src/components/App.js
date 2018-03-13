@@ -41,10 +41,12 @@ class App extends Component {
             exact path={routes.HOME}
             component={() => <HomePage />}
           />
+
           <Route
             path={routes.ACCOUNT}
-            component={() => <AccountPage />}
+            render={() => <AccountPage />}
           />
+
           <Route
             exact path={routes.PASSWORD_FORGET}
             component={() => <PasswordForgetPage />}
@@ -57,8 +59,14 @@ class App extends Component {
 
           <Route
             path={routes.TEACHER}
-            component={() => <Teacher />}
+            render={() => <Teacher />}
           />
+
+          <Route
+            path='/teacher/:teacherId/course/:courseId'
+            render={() => <CoursePage />}
+          />
+
 
           <Route
             path='/question'
@@ -68,6 +76,11 @@ class App extends Component {
           <Route
             path='/coursePage'
             component={() => <CoursePage />}
+          />
+
+          <Route
+            path='/course/edit/:id'
+            component={() => <CEdit />}
           />
 
           <Route

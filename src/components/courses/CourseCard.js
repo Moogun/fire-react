@@ -7,7 +7,7 @@ import Teacher from '../teacher/Teacher'
 const CourseCard = ({course, click}) => {
     return (
         <Grid.Column>
-          <Card as={Link} to='/teacher' onClick={click}>
+          <Card onClick={click}>
             <Card.Content>
               <Image floated='left' size='mini' src={helen} />
 

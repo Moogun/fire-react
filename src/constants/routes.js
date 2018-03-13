@@ -8,7 +8,7 @@ export const PASSWORD_FORGET = '/pw-forget';
 
 export const COURSES = '/courses';
 export const COURSE = '/course';
-export const TEACHER = '/teacher';
+export const TEACHER = '/teacher/courses';
 export const CREATE = '/create';
 export const MY_COURSES = '/my_courses';
 

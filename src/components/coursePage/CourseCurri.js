@@ -1,9 +1,11 @@
 import React from 'react'
-import { Segment, Container, Image, Item, List, Icon } from 'semantic-ui-react'
+import { Segment, Container, Image, Item, List, Icon, Grid } from 'semantic-ui-react'
 
 const CourseCurri = () => {
 
   return (
+    <div>
+
     <Segment style={{ padding: '4em 0em' }}>
       <Container text>
         <h2>Curriculum</h2>
@@ -62,6 +64,7 @@ const CourseCurri = () => {
 
       </Container>
     </Segment>
+    </div>
   )
 }
 export default CourseCurri;

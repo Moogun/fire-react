@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
 import {auth} from '../../firebase'
+import { Form, Input, Button } from 'semantic-ui-react'
 
 const PasswordForgetPage = () =>
   <div>
@@ -43,20 +44,20 @@ class PasswordForgetForm extends Component {
 
     return (
         <div>
-          <form onSubmit={this.onSubmit}>
-            <input
-            value={this.state.email}
-            onChange={event => this.setState(byPropKey('email', event.target.value))}
-            type="text"
-            placeholder="Email Address"
-          />
-          <button disabled={isInvalid} type="submit">
-            Reset My Password
-          </button>
+            <Form onSubmit={this.onSubmit}>
+              <Input
+              value={this.state.email}
+              onChange={event => this.setState(byPropKey('email', event.target.value))}
+              type="text"
+              placeholder="Email Address"
+            />
+            <Button disabled={isInvalid} type="submit">
+              Reset My Password
+            </Button>
 
-          { error && <p>{error.message}</p> }
-            </form>
-          </div>
+            { error && <p>{error.message}</p> }
+          </Form>
+        </div>
     );
   }
 }

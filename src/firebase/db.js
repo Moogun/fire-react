@@ -9,6 +9,75 @@ export const doCreateUser = (id, username, email) =>
 export const onceGetUsers = () =>
   db.ref('users').once('value');
 
+  //get 1 user
+export const onceGetUser = (uid) =>
+  db.ref('users').child(uid).once('value');
+
+//get multiple courses
+export const onceGetCourses = () =>
+  db.ref('courses').once('value');
+
+//get 1 course
+export const onceGetCourse = (courseKey) =>
+  db.ref('courses').child(courseKey).child('metadata').once('value');
+
+//course creation
+export const doCreateCourse = (title, teacherId) =>
+{
+  var metadata = {
+     title,
+     teacherId,
+   }
+
+  // console.log('new course key generated in db file',newCourseKey);
+  //
+  // var updates = {}
+  // updates[`courses/${newCourseKey}`] = info
+  // updates[`users/${instructorId}/courseTeaching/${newCourseKey}`] = 1
+  //
+  // return db.ref().update(updates)
+  return db.ref('courses').push({metadata})
+}
+
+
+
+export const doUpdateCourseTeaching = (newCourseKey, teacherId) =>
+{
+  var updates = {}
+    // before Mar 1 updates[`users/${instructorId}/courseTeaching/${newCourseKey}`] = 1
+  updates[`teachers/${teacherId}/courseTeaching/${newCourseKey}`] = 1
+  return db.ref().update(updates)
+}
+
+export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, capacity) => {
+
+  var metadata = {
+     date,
+     time,
+     location,
+     textbook,
+     capacity,
+   }
+
+  var updates = {}
+  updates[`courses/${courseKey}/metadata/date`] = date
+  updates[`courses/${courseKey}/metadata/time`] = time
+  updates[`courses/${courseKey}/metadata/location`] = location
+  updates[`courses/${courseKey}/metadata/textbook`] = textbook
+  updates[`courses/${courseKey}/metadata/capacity`] = capacity
+
+  return db.ref().update(updates)
+
+}
+
+//publish course
+export const doPublishCourse = (courseKey, isPublished) => {
+  const status = isPublished
+  console.log('db', courseKey, status);
+  return db.ref(`courses/${courseKey}/metadata/`).update(status)
+}
+
+
 // 1. database snapshot contains data from a db location
 // 2. snapshot is passed to the event callbacks you attache with on() or once()
 // 3. you cna extract contents of the snapshot as a javascript object by calling val()

@@ -23,12 +23,9 @@ class HomePage extends Component {
     const {users} = this.state;
     console.log(users);
     return (
-        <div>
-            <CourseCards />
-              <CourseCards />
-            <CourseCards />
-        </div>
-
+      <div style={{minHeight: '700px'}}>  
+        <CourseCards />
+      </div>
     );
   }
 }
