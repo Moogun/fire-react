@@ -5,11 +5,11 @@ import {Link, withRouter} from 'react-router-dom';
 import {SignUpLink} from './SignUp';
 import SignUp from './SignUp'
 import {PasswordForgetLink} from './PasswordForget'
-import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider } from 'semantic-ui-react'
+import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment } from 'semantic-ui-react'
 
-const SignInPage = (props, {history}, modalClose = f => f) => (
+const SignInPage = (props, {history}, ) => (
   <div>
-    <SignInForm open={props.open} click={props.click} history={history} />
+    <SignInForm toSignUp={props.toSignUp} toResetPass={props.toResetPass} history={history} />
   </div>
 )
 
@@ -48,18 +48,16 @@ class SignInForm extends Component {
 
   render() {
     const {email, password, error} = this.state;
-    const { open, click, history } = this.props
-    console.log(' sign in open ?', open);
+    const { toSignUp, toResetPass } = this.props
 
     const isInvalid =
     email === '' ||
     password === '';
 
     return (
-      <Modal size="mini" trigger={<p> Sign In</p>}
-        open={open}
-        >
-          <Modal.Header>Log In to Your We Qna Account</Modal.Header>
+
+        <Segment>
+          <Modal.Header>Log In to Your We Qna Account </Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.onSubmit}>
               <Form.Field>
@@ -101,16 +99,16 @@ class SignInForm extends Component {
                 <Button color='blue' fluid>
                   <Icon name='checkmark' /> Log In
                 </Button>
-                <PasswordForgetLink />
+                <p onClick={toResetPass}>Forgot password?</p>
             </Form>
 
           </Modal.Content>
 
           <Modal.Actions>
-            <p onClick={click}>Sign Up</p>
-          </Modal.Actions>
+            <p onClick={toSignUp}>Sign Up</p>
 
-        </Modal>
+          </Modal.Actions>
+        </Segment>
     );
   }
 }
@@ -123,6 +121,7 @@ const SignInLink = () =>
   </div>
 
 export default withRouter(SignInPage);
+
 
 export {
   SignInForm,

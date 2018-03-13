@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
 import {auth} from '../../firebase'
-import { Form, Input, Button } from 'semantic-ui-react'
+import { Modal, Form, Input, Button, Segment } from 'semantic-ui-react'
 
-const PasswordForgetPage = () =>
+const PasswordForgetPage = (props) =>
   <div>
-    <h1>PasswordForget Page</h1>
+    {/* <h1>PasswordForget Page</h1> */}
     <PasswordForgetForm />
   </div>
 
@@ -40,24 +40,53 @@ class PasswordForgetForm extends Component {
   render() {
 
     const { email, error, } = this.state;
+    const { click, open, } = this.props;
     const isInvalid = email === '';
 
     return (
-        <div>
-            <Form onSubmit={this.onSubmit}>
-              <Input
-              value={this.state.email}
-              onChange={event => this.setState(byPropKey('email', event.target.value))}
-              type="text"
-              placeholder="Email Address"
-            />
-            <Button disabled={isInvalid} type="submit">
-              Reset My Password
-            </Button>
+        // <div>
+        //     <Form onSubmit={this.onSubmit}>
+        //       <Input
+        //       value={this.state.email}
+        //       onChange={event => this.setState(byPropKey('email', event.target.value))}
+        //       type="text"
+        //       placeholder="Registered Email Address"
+        //     />
+        //     <Button disabled={isInvalid} type="submit">
+        //       Reset My Password
+        //     </Button>
+        //
+        //     { error && <p>{error.message}</p> }
+        //   </Form>
+        // </div>
 
-            { error && <p>{error.message}</p> }
-          </Form>
-        </div>
+      <Segment>
+            <Modal.Header>Reset your password</Modal.Header>
+            <Modal.Content>
+              <Form onSubmit={this.onSubmit}>
+                <Form.Field>
+                  <Input
+                      icon='mail'
+                      iconPosition='left'
+                      value={email}
+                      onChange={(event) => this.setState(byPropKey('email', event.target.value))}
+                      type="email"
+                      placeholder="Registered Email Address"
+                    />
+                </Form.Field>
+                <Button disabled={isInvalid} type="submit">
+                  Reset My Password
+                </Button>
+                { error && <p>{error.message}</p> }
+              </Form>
+
+            </Modal.Content>
+
+            {/* <Modal.Actions>
+              <p onClick={click}> do some other than resetting</p>
+            </Modal.Actions> */}
+
+        </Segment>
     );
   }
 }

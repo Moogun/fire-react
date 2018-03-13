@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link, withRouter, } from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
-import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider } from 'semantic-ui-react'
+import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment } from 'semantic-ui-react'
 
 // import FacebookLogin from 'react-facebook-login';
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -11,17 +11,10 @@ import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider } from 'sema
 //   console.log(response);
 // }
 
-const SignUpPage = (props, {history}) => (
-  <div>
-    <SignUpForm open={props.open} click={props.click} history={history} />
-  </div>
-)
-
 const INITIAL_STATE = {
   email: '',
   username:'',
   passwordOne: '',
-  passwordTwo: '',
   error: null,
 }
 
@@ -29,7 +22,7 @@ const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value
 })
 
-class SignUpForm extends Component {
+class SignUpPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -92,18 +85,16 @@ class SignUpForm extends Component {
 
   render() {
 
-    const {email, username, passwordOne, passwordTwo, error} = this.state;
-    const { open, click } = this.props
-    console.log('sign up', open);
+    const {email, username, passwordOne, error} = this.state;
+    const { toLogin } = this.props
+
     const isInvalid =
           passwordOne === '' ||
           email === '' ||
           username === '';
 
     return (
-      <Modal size="mini" trigger={<p> Sign Up</p>}
-        open={open}
-        >
+        <Segment>
           <Modal.Header color='teal'>Sign Up</Modal.Header>
           <Modal.Content>
             <Form onSubmit={this.onSubmit}>
@@ -173,15 +164,12 @@ class SignUpForm extends Component {
 
           <Modal.Actions>
             have an account?
-            <p onClick={click}>Sign In</p>
+            <p onClick={toLogin}>Sign In</p>
           </Modal.Actions>
-        </Modal>
-
+        </Segment>
     );
   }
 }
-
-
 
 const SignUpLink = () =>
   <div>
@@ -194,6 +182,5 @@ const SignUpLink = () =>
 export default withRouter(SignUpPage);
 
 export {
-  SignUpForm,
   SignUpLink,
 }
