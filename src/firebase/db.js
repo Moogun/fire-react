@@ -50,14 +50,13 @@ export const doUpdateCourseTeaching = (newCourseKey, teacherId, title) =>
   return db.ref().update(updates)
 }
 
-export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, capacity) => {
+export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, uid) => {
 
   var metadata = {
      date,
      time,
      location,
      textbook,
-     capacity,
    }
 
   var updates = {}
@@ -65,7 +64,11 @@ export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, ca
   updates[`courses/${courseKey}/metadata/time`] = time
   updates[`courses/${courseKey}/metadata/location`] = location
   updates[`courses/${courseKey}/metadata/textbook`] = textbook
-  updates[`courses/${courseKey}/metadata/capacity`] = capacity
+
+  updates[`users/${uid}/courseTeaching/${courseKey}/metadata/date`] = date
+  updates[`users/${uid}/courseTeaching/${courseKey}/metadata/time`] = time
+  updates[`users/${uid}/courseTeaching/${courseKey}/metadata/location`] = location
+  updates[`users/${uid}/courseTeaching/${courseKey}/metadata/textbook`] = textbook
 
   return db.ref().update(updates)
 

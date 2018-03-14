@@ -17,37 +17,70 @@ class CourseEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      isLoading: false,
+      activeItem: 'info',
     };
   }
 
   componentDidMount() {
+
+    const {isLoading } = this.state
+    // console.log('before 1',isLoading);
+    this.setState({isLoading: !isLoading})
+    // console.log('after 1',isLoading);
     const {match} = this.props
+
     let courseId = match.params.id
     db.onceGetCourse(match.params.id)
       .then(snapshot => {
-        console.log('sna', snapshot.val());
+        // console.log('sna', snapshot.val());
 
         db.onceGetUser(snapshot.val().teacherId)
           .then(user => {
-            console.log('user', user.val());
-            this.setState ({ title: snapshot.val().title, teacherId: snapshot.val().teacherId, teacherName: user.val().username})
+            //console.log('user', user.val());
+
+            let meta = user.val().courseTeaching[courseId].metadata
+
+            this.setState ({
+              courseId: courseId,
+              title: snapshot.val().title,
+
+              teacherId: snapshot.val().teacherId,
+              teacherName: user.val().username,
+
+              textbook: meta.textbook,
+              date: meta.date,
+              time: meta.time,
+              location: meta.location
+              })
+
+            const {isLoading } = this.state
+            // console.log('before 1',isLoading);
+            this.setState({isLoading: !isLoading})
+            // console.log('after 1',isLoading);
           })
-          // .catch(error => {
-          //   this.setState(byPropKey('error', error));
-          // });
-      })
+          .catch(error => {
+            this.setState(byPropKey('error', error));
+          });
+      }).catch(error => {
+        this.setState(byPropKey('error', error));
+      });
   }
 
   handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
 
   render() {
-    const {activeItem, title, teacherName} = this.state
+
+    const {activeItem, courseId, title, teacherName, teacherId, isLoading,
+      textbook,
+      date,
+      time,
+      location } = this.state
     const {match} = this.props
-    console.log('c edit match.params.id', match.params.id);
+    // console.log('isLoading in render', isLoading, 'props', this.props);
 
     return (
-      <Segment loading>
+      <Segment loading={isLoading} >
         <Container>
 
           <Item.Group>
@@ -56,7 +89,7 @@ class CourseEdit extends Component {
 
               <Item.Content>
                 <Item.Header as='a'>{title}</Item.Header>
-                <Item.Meta> {teacherName} 1) title, 2) teacher name, loading 3) redirec to info </Item.Meta>
+                <Item.Meta> {teacherName} 3) redirec to info </Item.Meta>
                 <Item.Extra>Draft</Item.Extra>
               </Item.Content>
             </Item>
@@ -105,10 +138,19 @@ class CourseEdit extends Component {
               </Grid.Column>
 
               <Grid.Column width={8}>
-                <Route path={`${match.url}/info`} component={CEditMeta} />
-                <Route path={`${match.url}/curriculum`} component={CEditCurri} />
-                <Route path={`${match.url}/settings`} component={CEditSettings} />
-                <Route path={`${match.url}/assignment`} component={CEditSettings} />
+
+                <Route path={`${match.url}/info`} render={(props) => <CEditMeta
+                  {...props}
+                  courseId={courseId}
+                  teacherId={teacherId}
+                  textbook={textbook}
+                  date={date}
+                  time={time}
+                  location={location}                  onChange={this.handleOnChange}
+                /> }/>
+                <Route path={`${match.url}/curriculum`} render={() =><CEditCurri />} />
+                <Route path={`${match.url}/settings`} render={() => <CEditSettings />} />
+                <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
               </Grid.Column>
 
               <Grid.Column width={4}>
@@ -124,7 +166,6 @@ class CourseEdit extends Component {
 }
 
 export default withRouter(CourseEdit)
-
 
 
 // secure course key 1) from create page, 2) from the url match, 3)
