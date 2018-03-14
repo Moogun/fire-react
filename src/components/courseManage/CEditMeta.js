@@ -19,16 +19,22 @@ class CEditMeta extends Component {
     INITIAL_STATE,
   }
 
-  componentDidMount() {
-    // Mar 14 if a user tries to access this route directly, props will not hold anything due to not proper access
-    console.log('edit meta did mount');
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps',nextProps);
+      this.setState({
+        textbook: nextProps.textbook,
+        date: nextProps.date,
+        time: nextProps.time,
+        location: nextProps.location
+      });
+  }
 
-    // this.setState({
-    //   textbook: textbook,
-    //   date: date,
-    //   time: time,
-    //   location: location
-    // })
+  shouldComponentUpdate(nextProps) {
+    console.log('nextProps ',nextProps);
+      return this.state.textbook !== nextProps.textbook ||
+      this.state.date !== nextProps.date ||
+      this.state.time !== nextProps.time ||
+      this.state.location !== nextProps.location ;
   }
 
   onSubmit = (event) => {
@@ -47,14 +53,14 @@ class CEditMeta extends Component {
   }
 
   render() {
-    console.log('edit meta render');
+    console.log('edit meta render props', this.props);
     return (
       <Segment>
           <Form onSubmit={this.onSubmit}>
              <Form.Field>
                <label>Textbook</label>
                <Input placeholder='Textbook'
-                  // value={}
+                  value={this.state.textbook}
                   onChange={(event) => this.setState(byPropKey('textbook', event.target.value))}
                 />
              </Form.Field>

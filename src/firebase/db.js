@@ -50,14 +50,7 @@ export const doUpdateCourseTeaching = (newCourseKey, teacherId, title) =>
   return db.ref().update(updates)
 }
 
-export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, uid) => {
-
-  var metadata = {
-     date,
-     time,
-     location,
-     textbook,
-   }
+export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, tid) => {
 
   var updates = {}
   updates[`courses/${courseKey}/metadata/date`] = date
@@ -65,10 +58,30 @@ export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, ui
   updates[`courses/${courseKey}/metadata/location`] = location
   updates[`courses/${courseKey}/metadata/textbook`] = textbook
 
-  updates[`users/${uid}/courseTeaching/${courseKey}/metadata/date`] = date
-  updates[`users/${uid}/courseTeaching/${courseKey}/metadata/time`] = time
-  updates[`users/${uid}/courseTeaching/${courseKey}/metadata/location`] = location
-  updates[`users/${uid}/courseTeaching/${courseKey}/metadata/textbook`] = textbook
+  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/date`] = date
+  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/time`] = time
+  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/location`] = location
+  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/textbook`] = textbook
+
+  return db.ref().update(updates)
+
+}
+
+export const doUpdateCoursePrivacy = (courseKey, openCourse, password, tid) => {
+  console.log('open', courseKey, openCourse, password, tid);
+
+  var updates = {}
+  if (openCourse) {
+    // console.log('tr', openCourse);
+    updates[`courses/${courseKey}/metadata/openCourse`] = openCourse
+    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/openCourse`] = openCourse
+  } else {
+    // console.log('false',openCourse);
+    updates[`courses/${courseKey}/metadata/openCourse`] = openCourse
+    updates[`courses/${courseKey}/metadata/password`] = password
+    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/openCourse`] = openCourse
+    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/password`] = password
+  }
 
   return db.ref().update(updates)
 

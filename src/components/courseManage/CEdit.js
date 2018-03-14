@@ -146,10 +146,17 @@ class CourseEdit extends Component {
                   textbook={textbook}
                   date={date}
                   time={time}
-                  location={location}                  onChange={this.handleOnChange}
+                  location={location}
                 /> }/>
-                <Route path={`${match.url}/curriculum`} render={() =><CEditCurri />} />
-                <Route path={`${match.url}/settings`} render={() => <CEditSettings />} />
+                <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
+                  {...props}
+                  courseId={courseId}
+                  teacherId={teacherId}
+                />} />
+                <Route path={`${match.url}/settings`} render={() => <CEditSettings
+                  courseId={courseId}
+                  teacherId={teacherId}
+                />} />
                 <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
               </Grid.Column>
 
