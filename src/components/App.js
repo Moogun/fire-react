@@ -17,6 +17,7 @@ import Courses from './teacher/Courses';
 import Question from './questionPage/QuestionPage';
 
 import CEdit from './courseManage/CEdit';
+import Create from './courseManage/Create';
 import CoursePage from './coursePage/CoursePage';
 
 import MyCourses from './myCourses/MyCourses';
@@ -84,7 +85,12 @@ class App extends Component {
           />
 
           <Route
-            path='/cedit'
+            path='/create'
+            component={() => <Create />}
+          />
+
+          <Route
+            path='/course/:id/edit'
             component={() => <CEdit />}
           />
 

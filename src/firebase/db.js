@@ -41,11 +41,12 @@ export const doCreateCourse = (title, teacherId) =>
 
 
 
-export const doUpdateCourseTeaching = (newCourseKey, teacherId) =>
+export const doUpdateCourseTeaching = (newCourseKey, teacherId, title) =>
 {
   var updates = {}
     // before Mar 1 updates[`users/${instructorId}/courseTeaching/${newCourseKey}`] = 1
-  updates[`teachers/${teacherId}/courseTeaching/${newCourseKey}`] = 1
+  updates[`teachers/${teacherId}/courseTeaching/${newCourseKey}/metadata/title`] = title
+  updates[`users/${teacherId}/courseTeaching/${newCourseKey}/metadata/title`] = title
   return db.ref().update(updates)
 }
 

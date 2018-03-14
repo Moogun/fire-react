@@ -95,7 +95,7 @@ class NavigationAuth extends Component {
                     name='Weqna' active={activeItem === 'home'} onClick={this.handleItemClick} />
 
                   <Category />
-                  <Menu.Item as='a'
+                  <Menu.Item as={Link} to='/create'
                     name='Create' active={activeItem === 'create'} onClick={this.handleItemClick}>
                   </Menu.Item>
 

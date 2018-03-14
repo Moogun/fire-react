@@ -6,9 +6,16 @@ import {Link, withRouter} from 'react-router-dom';
 import { Button, Image, Modal, Form, Checkbox, Icon, Input } from 'semantic-ui-react'
 
 const CreatePage = ({history}, {authUser}) => {
+  let create;
+  if (authUser) {
+    create = <CreateForm history={history} uid={authUser.uid} name={authUser.displayName}/>
+  } else {
+    create = <p>You are not signed in </p>
+  }
   return (
     <div>
-      <CreateForm history={history} uid={authUser.uid} name={authUser.displayName}/>
+      {create}
+      {/* <CreateForm history={history} uid={authUser.uid} name={authUser.displayName}/> */}
     </div>
   )
 }
@@ -41,15 +48,15 @@ class CreateForm extends Component {
 
     db.doCreateCourse(title, uid)
       .then((res) => {
-
+        console.log('res', res);
         let courseKey = res.path.pieces_[1]
-        db.doUpdateCourseTeaching(courseKey, uid)
+        db.doUpdateCourseTeaching(courseKey, uid, title)
           .then((res) => {
             this.setState(() => ({ ...INITIAL_STATE }));
             this.handleClose()
 
             history.replace({
-              pathname: '/course/edit' + '/' + courseKey + '/info',
+              pathname: '/course/' + courseKey + '/edit',
               // search: '?query=' + title + name,
               state : {
                 courseKey: courseKey,
