@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom';
 import SignOutButton from './account/SignOut';
 import * as routes from '../constants/routes';
 import PropTypes from 'prop-types'
-import SignUp from './account/SignUp'
-import SignIn from './account/SignIn'
+// import SignUp from './account/SignUp'
+// import SignIn from './account/SignIn'
+import AuthModal from './account/AuthModal'
+import PasswordForget from './account/PasswordForget'
+
 import Create from './courseManage/Create'
-import {auth} from '../firebase'
+import {auth, db} from '../firebase'
 import imageSrc from '../assets/helen.png'
 
-import { Responsive, Visibility, Segment, Container, Menu, Icon, Grid, Input, Button, Dropdown, Header, Modal, Feed, Sidebar } from 'semantic-ui-react'
+import { Responsive, Visibility, Segment, Container, Menu, Icon, Grid, Input, Button, Dropdown, Header, Modal, Feed, Sidebar, Form, Divider, Checkbox } from 'semantic-ui-react'
 
 const Category = () => {
   return (
@@ -166,8 +169,6 @@ class NavigationAuth extends Component {
 class NavigationNonAuth extends Component {
 
   state = {
-    signInModalOpened: false,
-    signUpModalOpened: false,
   }
 
   hideFixedMenu = () => this.setState({ fixed: false })
@@ -182,22 +183,8 @@ class NavigationNonAuth extends Component {
 
   handleSearchField = () => this.setState ({ searchFieldActive: !this.state.searchFieldActive})
 
-  handleSignUpModal = () => this.setState ({signUpModalOpened: !this.state.signUpModalOpened})
-
-  handleSignInModal = () => this.setState ({ signInModalOpened: !this.state.signInModalOpened})
-
-  handleToggleModal = () => {
-    this.setState ({ signInModalOpened: !this.state.signInModalOpened})
-    console.log('status sign in',this.state.signInModalOpened );
-    this.setState ({ signUpModalOpened: !this.state.signUpModalOpened})
-    console.log('status sign up',this.state.signUpModalOpened );
-  }
-
-
-
   render() {
-    const {activeItem, fixed, sidebarOpened, searchFieldActive,
-      signInModalOpened, signUpModalOpened} = this.state
+    const {activeItem, fixed, sidebarOpened, searchFieldActive, authReq} = this.state
 
     let searchField = searchFieldActive? <Input className='icon' icon='search' placeholder='Search...' fluid /> : null
 
@@ -211,29 +198,28 @@ class NavigationNonAuth extends Component {
                   <Category />
 
                   <Menu.Menu position='right'>
-                    <Menu.Item
-                      as = 'a'
-                      name='Sign In' active={activeItem === 'signin'}
-                      onClick={this.handleSignInModal} >
-                        <SignIn
-                          click={this.handleToggleModal}
-                          open={signInModalOpened}
-                        />
-                      </Menu.Item>
 
-                    <Menu.Item
-                        as = 'a'
-                        name='Sign Up' active={activeItem === 'signup'} onClick={this.handleSignUpModal} >
-                        <SignUp
-                          click={this.handleToggleModal}
-                          open={signUpModalOpened}
-                        />
-                      </Menu.Item>
+                    <Menu.Item as='a' name='Sign In' active={activeItem === 'signin'} >
+                      <Modal trigger={<p>Log In</p>} size='mini' closeIcon >
+
+                        <AuthModal authReq={'login'} />
+                      </Modal>
+                    </Menu.Item>
+
+
+                    <Menu.Item as='a' name='Sign Up' active={activeItem === 'signup'}>
+                      <Modal trigger={<p>Sign Up</p>} size='mini'>
+                        <AuthModal authReq={'signup'}/>
+                      </Modal>
+                    </Menu.Item>
 
                   </Menu.Menu>
-
              </Container>
+
            </Menu>
+
+             <Modal trigger={<p></p>} size='mini'>
+             </Modal>
         </Responsive>
 
         <Responsive {...Responsive.onlyMobile}>
@@ -242,8 +228,6 @@ class NavigationNonAuth extends Component {
                <Menu.Item as='a'>Categories</Menu.Item>
                <Menu.Item as='a'>Register Courses</Menu.Item>
                <Menu.Item as='a'>Help</Menu.Item>
-               <Menu.Item as='a'> <SignUp /> </Menu.Item>
-               <Menu.Item as='a'> <SignIn /> </Menu.Item>
              </Sidebar>
 
              <Sidebar.Pusher dimmed={sidebarOpened} onClick={this.handlePusherClick} style={{ minHeight: '100vh' }}>
@@ -274,6 +258,5 @@ class NavigationNonAuth extends Component {
     )
   }
 }
-
 
 export default Navigation;
