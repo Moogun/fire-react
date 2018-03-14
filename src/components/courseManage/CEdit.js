@@ -51,7 +51,9 @@ class CourseEdit extends Component {
               textbook: meta.textbook,
               date: meta.date,
               time: meta.time,
-              location: meta.location
+              location: meta.location,
+              openCourse: meta.openCourse,
+              password: meta.password,
               })
 
             const {isLoading } = this.state
@@ -75,7 +77,9 @@ class CourseEdit extends Component {
       textbook,
       date,
       time,
-      location } = this.state
+      location,
+      openCourse,
+      password } = this.state
     const {match} = this.props
     // console.log('isLoading in render', isLoading, 'props', this.props);
 
@@ -156,6 +160,8 @@ class CourseEdit extends Component {
                 <Route path={`${match.url}/settings`} render={() => <CEditSettings
                   courseId={courseId}
                   teacherId={teacherId}
+                  openCourse={openCourse}
+                  currentPassword={password}
                 />} />
                 <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
               </Grid.Column>
