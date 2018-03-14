@@ -57,13 +57,11 @@ export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, ti
   updates[`courses/${courseKey}/metadata/time`] = time
   updates[`courses/${courseKey}/metadata/location`] = location
   updates[`courses/${courseKey}/metadata/textbook`] = textbook
-  updates[`courses/${courseKey}/metadata/openCourse`] = true
 
   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/date`] = date
   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/time`] = time
   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/location`] = location
   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/textbook`] = textbook
-  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/openCourse`] = true
 
   return db.ref().update(updates)
 }
@@ -89,10 +87,20 @@ export const doUpdateCoursePrivacy = (courseKey, openCourse, password, tid) => {
 }
 
 //publish course
-export const doPublishCourse = (courseKey, isPublished) => {
-  const status = isPublished
-  console.log('db', courseKey, status);
-  return db.ref(`courses/${courseKey}/metadata/`).update(status)
+export const doPublishCourse = (courseKey, tid, isPublished) => {
+  console.log('db', courseKey, isPublished);
+
+  var updates = {}
+
+  if (isPublished === true) {
+    updates[`courses/${courseKey}/metadata/isPublished`] = false
+    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/isPublished`] = false
+  } else {
+    updates[`courses/${courseKey}/metadata/isPublished`] = true
+    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/isPublished`] = true
+  }
+
+  return db.ref().update(updates)
 }
 
 

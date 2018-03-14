@@ -70,7 +70,11 @@ class CourseEdit extends Component {
   }
 
   handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
-
+  handlePublish = () => {
+    const {courseId, teacherId} = this.state
+    const {isPublished} = this.props
+    db.doPublishCourse(courseId, teacherId, isPublished)
+  }
   render() {
 
     const {activeItem, courseId, title, teacherName, teacherId, isLoading,
@@ -135,7 +139,7 @@ class CourseEdit extends Component {
                       Assignment (Coming soon)
                    </Menu.Item>
                    <Menu.Item>
-                      <Button primary fluid>Publish</Button>
+                      <Button primary fluid onClick={this.handlePublish}>Publish</Button>
                     </Menu.Item>
                  </Menu>
 
