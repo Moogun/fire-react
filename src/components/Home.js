@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Segment, Container, Grid } from 'semantic-ui-react'
+import { Segment, Container, Grid, Header } from 'semantic-ui-react'
 import withAuthorization from '../HOC/withAuthorization';
 import {db} from '../firebase';
 
@@ -23,9 +23,23 @@ class HomePage extends Component {
     const {users} = this.state;
     console.log(users);
     return (
-      <div style={{minHeight: '700px'}}>  
-        <CourseCards />
-      </div>
+      <Grid container>
+        <Grid.Row>
+          <Grid.Column>
+
+            <Header as='h5' style={{marginTop: '3em'}}>Header</Header>
+            <CourseCards />
+
+            <Header as='h5'>Header</Header>
+            <CourseCards />
+
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+      // <div style={{minHeight: '700px'}}>
+      //   Header
+      //   <CourseCards />
+      // </div>
     );
   }
 }

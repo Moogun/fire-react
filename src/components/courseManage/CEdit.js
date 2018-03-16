@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import {Link, Route, withRouter} from 'react-router-dom'
-import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input } from 'semantic-ui-react'
+import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input, Divider } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 import CEditMeta from './CEditMeta'
 import CEditCurri from './CEditCurri'
@@ -88,7 +88,7 @@ class CourseEdit extends Component {
     // console.log('isLoading in render', isLoading, 'props', this.props);
 
     return (
-      <Segment loading={isLoading} >
+      <Segment basic loading={isLoading} >
         <Container>
 
           <Item.Group>
@@ -106,7 +106,7 @@ class CourseEdit extends Component {
           <Grid >
             <Grid.Row>
 
-              <Grid.Column width={4}>
+              <Grid.Column width={3}>
                 <Menu vertical fluid>
                    <Menu.Item name='info'
                       active={activeItem === 'info'}
@@ -145,7 +145,7 @@ class CourseEdit extends Component {
 
               </Grid.Column>
 
-              <Grid.Column width={8}>
+              <Grid.Column width={10}>
 
                 <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                   {...props}
@@ -170,13 +170,72 @@ class CourseEdit extends Component {
                 <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
               </Grid.Column>
 
-              <Grid.Column width={4}>
+              <Grid.Column width={3}>
 
               </Grid.Column>
             </Grid.Row>
           </Grid>
 
         </Container>
+
+        <Container>
+
+      <Container>
+        <Item.Group>
+        <Item>
+          <Item.Image size='tiny' src={profile} />
+          <Item.Content>
+            <Item.Header as='a'>title</Item.Header>
+            <Item.Meta> teacherName 3) redirec to info </Item.Meta>
+            <Item.Extra>Draft</Item.Extra>
+          </Item.Content>
+        </Item>
+      </Item.Group>
+      </Container>
+
+      <Container>
+        <Grid celled>
+          <Grid.Column width={3}>
+            <Menu vertical fluid  secondary>
+             <Menu.Item active> <Header>abc</Header> </Menu.Item>
+             <Menu.Item> <Header>abc</Header> </Menu.Item>
+             <Menu.Item> <Header>abc</Header> </Menu.Item>
+             <Menu.Item> <Button color='red' fluid>Save</Button> </Menu.Item>
+             </Menu>
+
+          </Grid.Column>
+          <Grid.Column width={10}>
+
+            <Grid padded>
+                <Grid.Column>
+                  <Header >Menu 1st</Header>
+                  <Divider />
+                <Form>
+                  <Form.Field required>
+                     <label>First Name</label>
+                     <input placeholder='First Name' />
+                   </Form.Field>
+                   <Form.Field>
+                     <label>Last Name</label>
+                     <Input placeholder='Last Name' />
+                   </Form.Field>
+                   <Form.Field>
+                      <label>First Name</label>
+                      <input placeholder='First Name' />
+                    </Form.Field>
+                    <Form.Field>
+                      <label>Last Name</label>
+                      <Input placeholder='Last Name' />
+                    </Form.Field>
+                  <Button>Save</Button>
+                  </Form>
+                </Grid.Column>
+            </Grid>
+          </Grid.Column>
+          <Grid.Column width={3}></Grid.Column>
+        </Grid>
+      </Container>
+</Container>
       </Segment>
     );
   }

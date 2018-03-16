@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
 import CourseMeta from './CourseMeta'
+import CourseFeatures from './CourseFeatures'
 import CourseCurri from './CourseCurri'
 import CourseOpenQ from './CourseOpenQ'
-import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility } from 'semantic-ui-react'
+import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating } from 'semantic-ui-react'
+import profile from '../../assets/profile-lg.png'
 
 const menuStyle = {
   border: 'none',
@@ -26,39 +28,74 @@ class CoursePage extends Component {
 
   stickTopMenu = () => this.setState({ menuFixed: true })
   unStickTopMenu = () => this.setState({ menuFixed: false })
-  
+
   render() {
     const {menuFixed} = this.state
     return (
-          <div>
-            <Container text style={{ marginTop: '2em' }}>
-                <Header as='h1'>Course title</Header>
-                <p>This example shows how to use lazy loaded images, a sticky menu, and a simple text container</p>
-              </Container>
-              <Visibility
-            onBottomPassed={this.stickTopMenu}
-            onBottomVisible={this.unStickTopMenu}
-            once={false}
-          >
-            <Menu
-              borderless
-              fixed={menuFixed && 'top'}
-              style={menuFixed ? fixedMenuStyle : menuStyle}
-            >
-              <Container text>
-                <Menu.Item header>meta</Menu.Item>
-                <Menu.Item as='a'>curri</Menu.Item>
-                <Menu.Item as='a'>comments</Menu.Item>
-              </Container>
-            </Menu>
-          </Visibility>
+      <Grid>
+        <Grid.Row>
+            <Grid.Column>
+              <Container>
 
-          <Container text>
-            <CourseMeta />
-            <CourseCurri />
-            <CourseOpenQ />
-          </Container>
-        </div>
+                <Grid style={{margin: '3em'}} stackable>
+                  <Grid.Row>
+                    <Grid.Column width={12}>
+                      <Segment basic style={{margin: '3em' }} >
+                        <Header as='h1'
+                          // style={{color: '#fff'}}
+                          content='ChatBots: How to Make a Facebook Messenger Chat Bot in 1hr'
+                          subheader='We will Create a Parrot Bot Together! This course is a Step by Step Guide in Building a Chat Bot for Facebook Messenger' />
+
+                      </Segment>
+                    </Grid.Column>
+
+                    <Grid.Column width={3} textAlign='center'>
+                      <Image src={profile} circular />
+                      <Header as="h3" content='Name' subheader='profile' />
+                      <Rating icon='star' defaultRating={3} maxRating={4} />
+                      <p> '000 reviews' </p>
+                    </Grid.Column>
+                    <Grid.Column width={1}>
+                    </Grid.Column>
+
+                  </Grid.Row>
+                </Grid>
+
+              </Container>
+
+            </Grid.Column>
+        </Grid.Row>
+
+        <CourseMeta />
+        <CourseFeatures />
+        <CourseCurri />
+
+
+      </Grid>
+
+ //
+ //            <Visibility
+ //              onBottomPassed={this.stickTopMenu}
+ //              onBottomVisible={this.unStickTopMenu}
+ //              once={false}
+ //            >
+ //              <Menu inverted
+ //                borderless
+ //                fixed={menuFixed && 'top'}
+ //                style={menuFixed ? fixedMenuStyle : menuStyle}
+ //              >
+ //                <Container text>
+ //                  <Menu.Item header>meta</Menu.Item>
+ //                  <Menu.Item as='a'>curri</Menu.Item>
+ //                  <Menu.Item as='a'>comments</Menu.Item>
+ //                </Container>
+ //              </Menu>
+ //          </Visibility>
+ // */}
+ //
+ //
+ //        </Grid>
+ //        </Container>
     )
   }
 }
