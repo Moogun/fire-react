@@ -23,6 +23,9 @@ class Questions extends Component {
     console.log('questions testing', this.props);
     console.log(id);
     this.props.history.push("/question")
+    // this.props.history.push("/teacher/:teacherId/question/:questionId")
+    // => http://localhost:3001/teacher/:teacherId/question/:questionId renders teacher and menu too
+
   }
 
   render() {

@@ -5,6 +5,7 @@ import CourseCurri from './CourseCurri'
 import CourseOpenQ from './CourseOpenQ'
 import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
+import {Link, withRouter} from 'react-router-dom';
 
 const menuStyle = {
   border: 'none',
@@ -37,9 +38,18 @@ class CoursePage extends Component {
             <Grid.Column>
               <Container>
 
+                <Breadcrumb style={{marginTop: '2em' }}>
+                   <Breadcrumb.Section link> <Link to='/'>Home </Link></Breadcrumb.Section>
+                   <Breadcrumb.Divider icon='right angle' />
+                   <Breadcrumb.Section link><Link to='/teacher/456'>Teacher name</Link></Breadcrumb.Section>
+                   <Breadcrumb.Divider icon='right angle' />
+                   <Breadcrumb.Section active>This course</Breadcrumb.Section>
+                 </Breadcrumb>
+
                 <Grid style={{margin: '3em'}} stackable>
                   <Grid.Row>
                     <Grid.Column width={12}>
+
                       <Segment basic style={{margin: '3em' }} >
                         <Header as='h1'
                           // style={{color: '#fff'}}
@@ -52,24 +62,23 @@ class CoursePage extends Component {
                     <Grid.Column width={3} textAlign='center'>
                       <Image src={profile} circular />
                       <Header as="h3" content='Name' subheader='profile' />
-                      <Rating icon='star' defaultRating={3} maxRating={4} />
+                      <Rating icon='star' defaultRating={5} maxRating={4} />
                       <p> '000 reviews' </p>
                     </Grid.Column>
                     <Grid.Column width={1}>
                     </Grid.Column>
-
                   </Grid.Row>
+
+                  <CourseMeta />
+                  <CourseFeatures />
+                  <CourseCurri />
+
                 </Grid>
 
               </Container>
 
             </Grid.Column>
         </Grid.Row>
-
-        <CourseMeta />
-        <CourseFeatures />
-        <CourseCurri />
-
 
       </Grid>
 

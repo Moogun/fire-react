@@ -5,8 +5,9 @@ import profile from '../../assets/profile-lg.png'
 const CourseMeta = ({mobile}) => {
 
   return (
+    // <Grid.Row style={{margin: '3em 0em'}}>
+    //   <Container>
     <Grid.Row style={{margin: '3em 0em'}}>
-      <Container>
         <Grid.Column >
 
           <Segment basic >
@@ -38,8 +39,9 @@ const CourseMeta = ({mobile}) => {
             </Segment>
 
         </Grid.Column>
-      </Container>
-    </Grid.Row>
+      </Grid.Row>
+    //   </Container>
+    // </Grid.Row>
   )
 }
 export default CourseMeta;

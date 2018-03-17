@@ -59,18 +59,20 @@ class App extends Component {
           />
 
           <Route
-            path={routes.TEACHER}
+            // path={routes.TEACHER}
+            path='/teacher/:teacherId'
             render={() => <Teacher />}
           />
 
           <Route
-            path='/teacher/:teacherId/course/:courseId'
+            exact path='/teacher/:teacherId/course/:courseId'
             render={() => <CoursePage />}
           />
 
 
           <Route
             path='/question'
+            // path='/teacher/:teacherId/question/:questionId'
             component={() => <Question />}
           />
 
