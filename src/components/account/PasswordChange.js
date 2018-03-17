@@ -8,6 +8,7 @@ const byPropKey = (propertyName, value) => () => ({
 });
 
 const INITIAL_STATE = {
+  currentPassword: '',
   passwordOne: '',
   passwordTwo: '',
   error: null,
@@ -36,37 +37,46 @@ class PasswordChangeForm extends Component {
 
   render() {
     const {
+      currentPassword,
       passwordOne,
       passwordTwo,
       error,
     } = this.state;
 
     const isInvalid =
+      currentPassword === '' ||
       passwordOne !== passwordTwo ||
       passwordOne === '';
 
     return (
-      <Segment>
+      <Segment basic>
         <Header as='h2'>Change your password</Header>
+        <Divider />
           <Form onSubmit={this.onSubmit}>
-          <br/>
-          <Divider />
-          <Form.Field>
-            <Input
-              value={passwordOne}
-              onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
-              type="password"
-              placeholder="New Password"
-            />
-          </Form.Field>
-          <Form.Field>
-            <Input
-              value={passwordTwo}
-              onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
-              type="password"
-              placeholder="Confirm New Password"
-            />
-          </Form.Field>
+            <Form.Field>
+              <Input
+                value={currentPassword}
+                onChange={event => this.setState(byPropKey('currentPassword', event.target.value))}
+                type="password"
+                placeholder="Current Password"
+              />
+            </Form.Field>
+            <Form.Field>
+              <Input
+                value={passwordOne}
+                onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
+                type="password"
+                placeholder="New Password"
+              />
+            </Form.Field>
+            <Form.Field>
+              <Input
+                value={passwordTwo}
+                onChange={event => this.setState(byPropKey('passwordTwo', event.target.value))}
+                type="password"
+                placeholder="Confirm New Password"
+              />
+            </Form.Field>
             <Button disabled={isInvalid} type="submit">
               Reset My Password
             </Button>

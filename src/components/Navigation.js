@@ -105,6 +105,18 @@ class NavigationAuth extends Component {
                   <Menu.Item as={Link} to={routes.MY_COURSES}
                     name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick} />
 
+                  <Dropdown item text='Teacher' >
+                    <Dropdown.Menu>
+                      <Dropdown.Item as={Link} to={routes.MY_COURSES}
+                        name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick}>
+                        Create
+                      </Dropdown.Item>
+                      <Dropdown.Item >
+                          Manage Courses
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+
                   <Dropdown item text='Account' >
                     <Dropdown.Menu>
                       <Dropdown.Item as={Link} to={routes.ACCOUNT}>

@@ -60,7 +60,7 @@ class PasswordForgetForm extends Component {
         //   </Form>
         // </div>
 
-      <Segment>
+      <Segment basic>
             <Modal.Header>Reset your password</Modal.Header>
             <Modal.Content>
               <Form onSubmit={this.onSubmit}>

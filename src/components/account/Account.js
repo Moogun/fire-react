@@ -29,13 +29,13 @@ class AccountPage extends Component {
     const {authUser} = this.context
     const { activeItem } = this.state
     return (
-      <div style={{minHeight: '700px'}} >
-        <Grid padded centered>
-          <Grid.Row>
-            <Grid.Column width={3}>
-                <Menu vertical>
+      <Container text>
+        <Grid celled stackable>
+          <Grid.Row centered>
+            <Grid.Column width={4}>
+                <Menu vertical secondary fluid>
                 <br/>
-                <Image src={profile} circular centered size='small'/>
+                <Image src={profile} circular centered fluid/>
                 <br/>
                 <Menu.Item name='profile'
                   active
@@ -58,45 +58,13 @@ class AccountPage extends Component {
                  />
                 <Menu.Item name='danger'
                   as={Link} to='/account/danger'
-                   active={activeItem === 'danger'} onClick={this.handleItemClick}
+                  active={activeItem === 'danger'} onClick={this.handleItemClick}
                  />
               </Menu>
             </Grid.Column>
-            <Grid.Column width={10}>
-              <Segment >
-                <Container>
-                    <Grid>
-                      <Grid.Row>
-                        <Grid.Column width={12}>
 
-                          <Segment basic>
-                            <Header as='h2'>Profile</Header>
-                            <br/>
-                            <Divider />
-                            <Form size='big'>
-                              <Form.Field>
-                                <label>Email</label>
-                                {/* <input placeholder='Email' defaultValue={props.authUser.email} */}
-                                />
-                              </Form.Field>
-                              <Form.Field>
-                                <label>Username</label>
-                                <input placeholder='Username'/>
-                              </Form.Field>
-                              <Form.Field>
-                                <label>displayName</label>
-                                {/* <input placeholder='Name' defaultValue={props.authUser.displayName} */}
-                                />
-                              </Form.Field>
+            <Grid.Column width={12}>
 
-                              <Button type='submit'>Update</Button>
-                            </Form>
-                          </Segment>
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                </Container>
-              </Segment>
                 <Route path='/account/profile' render={(props) => <Profile {...props} authUser={authUser}/>} />
                 <Route path='/account/photo' render={() => <Photo />} />
                 <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
@@ -104,9 +72,10 @@ class AccountPage extends Component {
                 <Route path='/account/danger' render={() => <Danger />} />
 
             </Grid.Column>
+
           </Grid.Row>
         </Grid>
-      </div>
+      </Container>
     );
   }
 }
