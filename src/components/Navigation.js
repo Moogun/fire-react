@@ -98,24 +98,23 @@ class NavigationAuth extends Component {
                     name='Weqna' active={activeItem === 'home'} onClick={this.handleItemClick} />
 
                   <Category />
-                  <Menu.Item as={Link} to='/create'
-                    name='Create' active={activeItem === 'create'} onClick={this.handleItemClick}>
-                  </Menu.Item>
-
-                  <Menu.Item as={Link} to={routes.MY_COURSES}
-                    name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick} />
 
                   <Dropdown item text='Teacher' >
                     <Dropdown.Menu>
-                      <Dropdown.Item as={Link} to={routes.MY_COURSES}
-                        name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick}>
+                      <Dropdown.Item as={Link} to='/create'
+                        name='my courses' active={activeItem === 'create'} onClick={this.handleItemClick}>
                         Create
                       </Dropdown.Item>
-                      <Dropdown.Item >
+                      <Dropdown.Divider />
+                      <Dropdown.Item as={Link} to='/dashboard'
+                        name='dashboard' active={activeItem === 'dashboard'} onClick={this.handleItemClick}>
                           Manage Courses
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
+
+                  <Menu.Item as={Link} to={routes.MY_COURSES}
+                    name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick} />
 
                   <Dropdown item text='Account' >
                     <Dropdown.Menu>

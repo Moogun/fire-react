@@ -37,11 +37,10 @@ class CourseCards extends Component {
     const {courses} = this.state
     return (
 
-        <Grid stackable columns={4} style={{marginTop: '0em'}}>
+        <Grid stackable doubling columns={4} style={{marginTop: '0em'}}>
             {courses.map(c => <CourseCard key={c.id} course={c} click={() => this.handleClick(c.id, c.teacherId, c.title,)} />)}
         </Grid>
 
-      // </Segment>
     );
   }
 }

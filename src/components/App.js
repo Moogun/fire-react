@@ -12,6 +12,7 @@ import SignInPage from './account/SignIn';
 import PasswordForgetPage from './account/PasswordForget';
 import AccountPage from './account/Account';
 
+
 import Teacher from './teacher/Teacher';
 import Courses from './teacher/Courses';
 import Question from './questionPage/QuestionPage';
@@ -21,6 +22,7 @@ import Create from './courseManage/Create';
 import CoursePage from './coursePage/CoursePage';
 
 import MyCourses from './myCourses/MyCourses';
+import Dashboard from './dashboard/Dashboard';
 
 import {firebase} from '../firebase';
 import withAuthentication from '../HOC/withAuthentication';
@@ -62,6 +64,11 @@ class App extends Component {
             // path={routes.TEACHER}
             path='/teacher/:teacherId'
             render={() => <Teacher />}
+          />
+
+          <Route
+            path='/dashboard'
+            render={() => <Dashboard />}
           />
 
           <Route
