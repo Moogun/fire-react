@@ -21,7 +21,9 @@ class Courses extends Component {
   render() {
     const {coursesTeaching} = this.state
     return (
+        <Segment basic>
         <CourseTable courses={coursesTeaching} click={this.handleClick}/>
+        </Segment>
     );
   }
 }

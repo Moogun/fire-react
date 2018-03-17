@@ -58,14 +58,13 @@ class Teacher extends Component {
                           // style={{color: '#fff'}}
                           content='Teacher name'
                           subheader='Profile' />
+                          <Rating icon='star' defaultRating={5} maxRating={4} />
+                          <p> '000 reviews' </p>
                       </Segment>
                     </Grid.Column>
 
                     <Grid.Column width={3} textAlign='center'>
-                      <Image src={profile} circular />
-                      <Header as="h3" content='Name' subheader='profile' />
-                      <Rating icon='star' defaultRating={5} maxRating={4} />
-                      <p> '000 reviews' </p>
+                      <Image src={profile} circular centered/>
                     </Grid.Column>
                     <Grid.Column width={1}>
                     </Grid.Column>
@@ -74,30 +73,40 @@ class Teacher extends Component {
 
                   <Grid.Row>
                     <Grid.Column>
-                      <Menu size='large'>
-                        <Menu.Item
-                           name='courses'
-                           active={activeItem === 'courses'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/course`}>Courses</Menu.Item>
-                         <Menu.Item
-                           name='questions'
-                           active={activeItem === 'questions'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/question`}>Questions</Menu.Item>
-                         <Menu.Item
-                           name='story'
-                           active={activeItem === 'story'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/story`}>Story</Menu.Item>
-                         </Menu>
+                      <Segment basic>
+                        <Menu size='large'>
+                          <Container>
+                            <Menu.Item
+                               name='course'
+                               active={activeItem === 'course'}
+                               onClick={this.handleItemClick}
+                               as={Link} to={`${match.url}/course`}>Courses</Menu.Item>
+                             <Menu.Item
+                               name='question'
+                               active={activeItem === 'question'}
+                               onClick={this.handleItemClick}
+                               as={Link} to={`${match.url}/question`}>Questions</Menu.Item>
+                             <Menu.Item
+                               name='story'
+                               active={activeItem === 'story'}
+                               onClick={this.handleItemClick}
+                               as={Link} to={`${match.url}/story`}>Story</Menu.Item>
+                             <Menu.Item
+                               name='review'
+                               active={activeItem === 'review'}
+                               onClick={this.handleItemClick}
+                               as={Link} to={`${match.url}/story`}>Review</Menu.Item>
+                             </Container>
+                           </Menu>
+                          </Segment>
                        </Grid.Column>
                   </Grid.Row>
 
                   <Grid.Row>
                     <Grid.Column>
                       <Route path={`${match.url}/course`} component={Courses} />
-                      <Route path={`${match.url}/question`} render={(props) => <Questions click={this.handleNewQ} {...props}/>} />
+                      <Route path={`${match.url}/question`}
+                          render={ (props) =>  <Questions click={this.handleNewQ} {...props}/>} />
                       <Route path='/teacher/newq' component={NewQ} />
 
                     </Grid.Column>

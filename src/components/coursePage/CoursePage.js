@@ -60,7 +60,7 @@ class CoursePage extends Component {
                     </Grid.Column>
 
                     <Grid.Column width={3} textAlign='center'>
-                      <Image src={profile} circular />
+                      <Image src={profile} circular centered />
                       <Header as="h3" content='Name' subheader='profile' />
                       <Rating icon='star' defaultRating={5} maxRating={4} />
                       <p> '000 reviews' </p>
