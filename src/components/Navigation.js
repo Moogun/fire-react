@@ -106,7 +106,7 @@ class NavigationAuth extends Component {
                         Create
                       </Dropdown.Item>
                       <Dropdown.Divider />
-                      <Dropdown.Item as={Link} to='/dashboard'
+                      <Dropdown.Item as={Link} to='/teaching'
                         name='dashboard' active={activeItem === 'dashboard'} onClick={this.handleItemClick}>
                           Manage Courses
                       </Dropdown.Item>

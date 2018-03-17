@@ -67,7 +67,7 @@ class App extends Component {
           />
 
           <Route
-            path='/dashboard'
+            exact path='/teaching'
             render={() => <Dashboard />}
           />
 
@@ -86,11 +86,6 @@ class App extends Component {
           <Route
             path='/coursePage'
             component={() => <CoursePage />}
-          />
-
-          <Route
-            path='/course/edit/:id'
-            component={() => <CEdit />}
           />
 
           <Route

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Form, Input, Button, Segment, Label, Header } from 'semantic-ui-react'
+import { Form, Input, Button, Segment, Label, Header, Divider } from 'semantic-ui-react'
 import {db} from '../../firebase';
 
 const INITIAL_STATE = {
@@ -44,15 +44,15 @@ class CEditSettings extends Component {
             // open === openCourse ||
             // closed && currentPassword === password ||
             closed && password.length < 4 ;
-            // 1. prev open and current open , 2 closed && pass length < 4, 3 closed && old pass === new pass 
+            // 1. prev open and current open , 2 closed && pass length < 4, 3 closed && old pass === new pass
 
       console.log('length', password.length);
       console.log('length --', closed &&
       password.length > 3);
       return (
-        <Segment>
+        <Segment basic>
           <Header as='h3' content='Course privacy settings'></Header>
-
+          <Divider />
            <Segment basic>
               <Form onSubmit={this.onSubmit}>
                 <Button.Group>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Form, Input, Button, Segment } from 'semantic-ui-react'
+import { Form, Input, Button, Segment, Header, Divider } from 'semantic-ui-react'
 import {db} from '../../firebase';
 
 const INITIAL_STATE = {
@@ -55,7 +55,10 @@ class CEditMeta extends Component {
   render() {
     console.log('edit meta render props', this.props);
     return (
-      <Segment>
+      <Segment basic>
+        <Header as='h2'>Basic Info</Header>
+        <Divider />
+
           <Form onSubmit={this.onSubmit}>
              <Form.Field>
                <label>Textbook</label>
