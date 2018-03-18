@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.0.0-beta",
     "firebase": "^4.9.1",
     "font-awesome": "^4.7.0",
     "popper.js": "^1.12.9",
