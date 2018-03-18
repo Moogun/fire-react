@@ -135,7 +135,7 @@ class NavigationAuth extends Component {
 
 
          <Responsive {...Responsive.onlyMobile}>
-           {/* <Sidebar.Pushable>
+           <Sidebar.Pushable>
               <Sidebar as={Menu} animation='uncover' inverted vertical visible={sidebarOpened}>
                 <Menu.Item as='a'>{authUser.email}</Menu.Item>
                 <Menu.Item as='a'>Categories</Menu.Item>
@@ -148,9 +148,29 @@ class NavigationAuth extends Component {
               </Sidebar>
 
               <Sidebar.Pusher dimmed={sidebarOpened} onClick={this.handlePusherClick} style={{ minHeight: '100vh' }}>
-                <Segment inverted textAlign='center' style={{ minHeight: 20, padding: '1em 0em' }} vertical>
-                  <Container>
-                    <Menu inverted pointing secondary size='large'>
+                <Grid celled centered>
+                  <Grid.Column width={3}  textAlign='center'>
+                      <Menu.Item fitted name='browse' active={activeItem === 'browse'} onClick={this.handleItemClick}>
+                      <Icon name='question'/> We Qna
+                      </Menu.Item>
+                    </Grid.Column>
+                    <Grid.Column width={9} >
+                     <Input transparent fluid icon='search' iconPosition='left' placeholder='Search...' />
+                  </Grid.Column>
+                  <Grid.Column width={2} textAlign='center'>
+                    <Menu.Item name='signup' active={activeItem === 'signup'} onClick={this.handleItemClick} >
+                     <Icon name='book' />
+                    </Menu.Item>
+                  </Grid.Column>
+                <Grid.Column width={2} textAlign='center'>
+                    <Menu.Item name='help' active={activeItem === 'help'} onClick={this.handleItemClick}>
+                     <Icon name='user' />
+                    </Menu.Item>
+                 </Grid.Column>
+              </Grid>
+                {/* <Segment inverted textAlign='center' style={{ minHeight: 20, padding: '1em 0em' }} vertical> */}
+                  {/* <Container> */}
+                    {/* <Menu inverted pointing secondary size='large'>
                       <Menu.Item onClick={this.handleToggle}>
                         <Icon name='sidebar' />
                       </Menu.Item>
@@ -163,32 +183,13 @@ class NavigationAuth extends Component {
                       <Menu.Item>
                         My Courses
                       </Menu.Item>
-                    </Menu>
-                    {searchField}
-                  </Container>
-                </Segment>
+                    </Menu> */}
+                    {/* {searchField} */}
+                  {/* </Container> */}
+                {/* </Segment> */}
               </Sidebar.Pusher>
-            </Sidebar.Pushable> */}
-            <Grid celled centered>
-              <Grid.Column width={3}  textAlign='center'>
-                  <Menu.Item fitted name='browse' active={activeItem === 'browse'} onClick={this.handleItemClick}>
-                  <Icon name='question'/> We Qna
-                  </Menu.Item>
-                </Grid.Column>
-                <Grid.Column width={9} >
-                 <Input transparent fluid icon='search' iconPosition='left' placeholder='Search...' />
-              </Grid.Column>
-              <Grid.Column width={2} textAlign='center'>
-                <Menu.Item name='signup' active={activeItem === 'signup'} onClick={this.handleItemClick} >
-                 <Icon name='book' />
-                </Menu.Item>
-              </Grid.Column>
-            <Grid.Column width={2} textAlign='center'>
-                <Menu.Item name='help' active={activeItem === 'help'} onClick={this.handleItemClick}>
-                 <Icon name='user' />
-                </Menu.Item>
-             </Grid.Column>
-          </Grid>
+            </Sidebar.Pushable>
+
          </Responsive>
 
      </div>
@@ -218,7 +219,8 @@ class NavigationNonAuth extends Component {
   render() {
     const {activeItem, fixed, sidebarOpened, searchFieldActive, authReq} = this.state
 
-    let searchField = searchFieldActive? <Input className='icon' icon='search' placeholder='Search...' fluid /> : null
+    let searchField = searchFieldActive? <Grid.Column><Input className='icon' icon='search' placeholder='Search...' fluid  transparent iconPosition='left'/></Grid.Column> : null
+
 
     return (
       <div>
@@ -256,6 +258,7 @@ class NavigationNonAuth extends Component {
 
         <Responsive {...Responsive.onlyMobile}>
           <Sidebar.Pushable>
+
              <Sidebar as={Menu} animation='uncover' inverted vertical visible={sidebarOpened}>
                <Menu.Item as='a'>Categories</Menu.Item>
                <Menu.Item as='a'>Register Courses</Menu.Item>
@@ -263,7 +266,46 @@ class NavigationNonAuth extends Component {
              </Sidebar>
 
              <Sidebar.Pusher dimmed={sidebarOpened} onClick={this.handlePusherClick} style={{ minHeight: '100vh' }}>
-               <Segment inverted textAlign='center' style={{ minHeight: 20, padding: '1em 0em' }} vertical>
+
+               <Grid celled>
+                <Grid.Row color='blue'>
+                 <Grid.Column width={2}  textAlign='center'>
+                   <Menu.Item onClick={this.handleToggle}>
+                     <Icon name='sidebar' />
+                   </Menu.Item>
+                 </Grid.Column>
+
+                 <Grid.Column width={2}  textAlign='center'>
+                   <Menu.Item onClick={this.handleSearchField}>
+                     <Icon name='search'/>
+                   </Menu.Item>
+                 </Grid.Column>
+
+                 <Grid.Column width={8}  textAlign='center'>
+                     <Menu.Item fitted name='browse' active={activeItem === 'browse'} onClick={this.handleItemClick}>
+                     <Icon name='question'/> We Qna
+                     </Menu.Item>
+                  </Grid.Column>
+
+                 <Grid.Column width={2} textAlign='center'>
+                   <Menu.Item name='signup' active={activeItem === 'signup'} onClick={this.handleItemClick} >
+                    <Icon name='book' />
+                   </Menu.Item>
+                 </Grid.Column>
+
+                 <Grid.Column width={2} textAlign='center'>
+                   <Menu.Item name='help' active={activeItem === 'help'} onClick={this.handleItemClick}>
+                    <Icon name='user' />
+                   </Menu.Item>
+                </Grid.Column>
+
+                </Grid.Row>
+                <Grid.Row>
+                  {searchField}
+                </Grid.Row>
+              </Grid>
+
+               {/* <Segment inverted textAlign='center' style={{ minHeight: 20, padding: '1em 0em' }} vertical>
                  <Container>
                    <Menu inverted pointing secondary>
                      <Menu.Item onClick={this.handleToggle}>
@@ -281,7 +323,7 @@ class NavigationNonAuth extends Component {
                    </Menu>
                    {searchField}
                  </Container>
-               </Segment>
+               </Segment> */}
              </Sidebar.Pusher>
            </Sidebar.Pushable>
         </Responsive>
