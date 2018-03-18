@@ -22,6 +22,10 @@ class AccountPage extends Component {
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
+  componentDidMount(){
+    console.log('did mount');
+  }
+
   render() {
     const {match} = this.props
     console.log('account props',this.props);

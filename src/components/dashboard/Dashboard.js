@@ -3,45 +3,54 @@ import {Link, Route, withRouter} from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 import CourseCards from '../courses/CourseCards'
-import CourseList from './CourseList'
+import CourseTeaching from './CourseTeaching'
 import QPanel from './QPanel'
 import {db} from '../../firebase';
 import { Grid, Header, Menu, Visibility, Responsive } from 'semantic-ui-react'
 
 class Dashboard extends Component {
-  state = {
-    activeItem: '',
-    auth: null,
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      courseTeaching: null,
+    };
   }
 
   handleItemClick = (e, {name}) => this.setState({activeItem: name})
 
   componentDidMount() {
-     console.log('1 did mount ', this.context.authUser);
-      let teacherID = 'MxbMJw31WCUsU0v5GOWMTqwcApR2';
 
-      db.onceGetUser(teacherID)
-       .then(snapshot => this.setState( () => ({user: snapshot.val()} ) ))
-       .catch(error => {
-         this.setState({[error]: error});
-       });
+    console.log('4 did mount context authUser ', this.context.authUser);
 
-     // { this.context.authUser &&
-     //   firebase.db.onceGetUser(this.context.authUser.uid)
-     //     .then(snapshot => { console.log(snapshot.val())})
-     //     .error(error => {this.setState({error: error})})
+     //fetch teaching course with user id,
+     //if no id was provided redirec to signin
+
+     if ( this.context.authUser ) {
+       console.log('authUser');
+       db.onceGetUser(this.context.authUser.uid)
+        .then(snapshot => this.setState( () => ({courseTeaching: snapshot.val().courseTeaching} ) ))
+        .catch(error => {
+          this.setState({[error]: error});
+        });
+     }
 
   }
 
   render() {
+    const {authUser} = this.props
+    const {activeItem, error, user, courseTeaching} = this.state
 
-    const {activeItem, error, user} = this.state
-    console.log('1 error', error);
-    console.log('2 render user', user);
-    console.log('3 render auth user', this.context.authUser);
-    const {authUser} = this.context
+    console.log('1 render props authUser', authUser);
+    console.log('2 render state user', user);
+    console.log('2 render state courseTeaching', courseTeaching);
+    console.log('3 render context auth user', this.context.authUser);
 
-    // console.log('state auth User', {authUser&& });
+    let courses = courseTeaching ? <CourseTeaching courses={courseTeaching}/> : <p>No course teaching yet</p>
+    // if (courseTeaching) {
+    //   courses = <CourseTeaching courses={courseTeaching}/>
+    // } else
+
     let courseKey = '123'
       return (
         <Grid container>
@@ -74,8 +83,9 @@ class Dashboard extends Component {
                                 active={activeItem === 'announcement'}
                                 onClick={this.handleItemClick} />
                             </Menu>
+                            {courses}
 
-                        <CourseList />
+                        {/* <CourseTeaching   courses={courseTeaching}/> */}
                         <Route path='/teaching/questions' component = {QPanel} />
 
                       </Grid.Column>
@@ -94,6 +104,5 @@ class Dashboard extends Component {
 Dashboard.contextTypes ={
   authUser: PropTypes.object,
 }
-
 
 export default withRouter(Dashboard)

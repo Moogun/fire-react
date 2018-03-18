@@ -109,6 +109,7 @@ class NavigationAuth extends Component {
                       <Dropdown.Item as={Link} to='/teaching'
                         name='dashboard' active={activeItem === 'dashboard'} onClick={this.handleItemClick}>
                           Manage Courses
+
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -134,7 +135,7 @@ class NavigationAuth extends Component {
 
 
          <Responsive {...Responsive.onlyMobile}>
-           <Sidebar.Pushable>
+           {/* <Sidebar.Pushable>
               <Sidebar as={Menu} animation='uncover' inverted vertical visible={sidebarOpened}>
                 <Menu.Item as='a'>{authUser.email}</Menu.Item>
                 <Menu.Item as='a'>Categories</Menu.Item>
@@ -167,7 +168,27 @@ class NavigationAuth extends Component {
                   </Container>
                 </Segment>
               </Sidebar.Pusher>
-            </Sidebar.Pushable>
+            </Sidebar.Pushable> */}
+            <Grid celled centered>
+              <Grid.Column width={3}  textAlign='center'>
+                  <Menu.Item fitted name='browse' active={activeItem === 'browse'} onClick={this.handleItemClick}>
+                  <Icon name='question'/> We Qna
+                  </Menu.Item>
+                </Grid.Column>
+                <Grid.Column width={9} >
+                 <Input transparent fluid icon='search' iconPosition='left' placeholder='Search...' />
+              </Grid.Column>
+              <Grid.Column width={2} textAlign='center'>
+                <Menu.Item name='signup' active={activeItem === 'signup'} onClick={this.handleItemClick} >
+                 <Icon name='book' />
+                </Menu.Item>
+              </Grid.Column>
+            <Grid.Column width={2} textAlign='center'>
+                <Menu.Item name='help' active={activeItem === 'help'} onClick={this.handleItemClick}>
+                 <Icon name='user' />
+                </Menu.Item>
+             </Grid.Column>
+          </Grid>
          </Responsive>
 
      </div>
