@@ -1,23 +1,47 @@
 import React, {Component} from 'react'
 import {Link, Route, withRouter} from 'react-router-dom'
+import PropTypes from 'prop-types';
 
 import CourseCards from '../courses/CourseCards'
 import CourseList from './CourseList'
 import QPanel from './QPanel'
-
+import {db} from '../../firebase';
 import { Grid, Header, Menu, Visibility, Responsive } from 'semantic-ui-react'
 
 class Dashboard extends Component {
   state = {
-    activeItem: ''
+    activeItem: '',
+    auth: null,
   }
 
   handleItemClick = (e, {name}) => this.setState({activeItem: name})
 
+  componentDidMount() {
+     console.log('1 did mount ', this.context.authUser);
+      let teacherID = 'MxbMJw31WCUsU0v5GOWMTqwcApR2';
+
+      db.onceGetUser(teacherID)
+       .then(snapshot => this.setState( () => ({user: snapshot.val()} ) ))
+       .catch(error => {
+         this.setState({[error]: error});
+       });
+
+     // { this.context.authUser &&
+     //   firebase.db.onceGetUser(this.context.authUser.uid)
+     //     .then(snapshot => { console.log(snapshot.val())})
+     //     .error(error => {this.setState({error: error})})
+
+  }
+
   render() {
 
-    const {activeItem} = this.state
-    // const {courseKey} = this.props
+    const {activeItem, error, user} = this.state
+    console.log('1 error', error);
+    console.log('2 render user', user);
+    console.log('3 render auth user', this.context.authUser);
+    const {authUser} = this.context
+
+    // console.log('state auth User', {authUser&& });
     let courseKey = '123'
       return (
         <Grid container>
@@ -66,5 +90,10 @@ class Dashboard extends Component {
       );
     }
 }
+
+Dashboard.contextTypes ={
+  authUser: PropTypes.object,
+}
+
 
 export default withRouter(Dashboard)
