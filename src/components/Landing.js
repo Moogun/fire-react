@@ -13,8 +13,8 @@ class Landing extends Component {
   render() {
     return (
         <div>
-          <HomepageHeading />
-          <LandingBody />
+          {/* <HomepageHeading />
+          <LandingBody /> */}
         </div>
     );
   }
