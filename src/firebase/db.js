@@ -66,6 +66,12 @@ export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, ti
   return db.ref().update(updates)
 }
 
+export const doUpdateCourseCurri = (courseKey, tid, curri) => {
+  var updates = {}
+  updates[`courses/${courseKey}/curri/`] = curri
+  return db.ref().update(updates)
+}
+
 export const doUpdateCoursePrivacy = (courseKey, openCourse, password, tid) => {
   console.log('open', courseKey, openCourse, password, tid);
 

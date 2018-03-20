@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "draft-js": "^0.10.5",
     "firebase": "^4.9.1",
     "font-awesome": "^4.7.0",
+    "medium-draft": "^0.6.0-beta1",
     "popper.js": "^1.12.9",
     "prop-types": "^15.6.0",
     "query": "^0.2.0",
