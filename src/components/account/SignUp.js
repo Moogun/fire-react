@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link, withRouter, } from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
-import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment } from 'semantic-ui-react'
+import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment, Header } from 'semantic-ui-react'
 
 // import FacebookLogin from 'react-facebook-login';
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -86,7 +86,6 @@ class SignUpPage extends Component {
   render() {
 
     const {email, username, passwordOne, error} = this.state;
-    const { toLogin } = this.props
 
     const isInvalid =
           passwordOne === '' ||
@@ -94,10 +93,9 @@ class SignUpPage extends Component {
           username === '';
 
     return (
-        <Segment>
-          <Modal.Header color='teal'>Sign Up</Modal.Header>
           <Modal.Content>
-            <Form onSubmit={this.onSubmit}>
+            <Header as='h4' attached='top' block>Top Block Header</Header>
+            <Form attached onSubmit={this.onSubmit}>
 
                 <Form.Field>
                   <Button fluid size="tiny" onClick={this.signUpWithGoogle}>
@@ -159,14 +157,11 @@ class SignUpPage extends Component {
                   <Icon name='checkmark' /> Sign Up
                 </Button>
             </Form>
-
+            <Divider />
+            <Header as='h5'
+               // onClick={toLogIn}
+               textAlign='center'>Log In</Header>
           </Modal.Content>
-
-          <Modal.Actions>
-            have an account?
-            <p onClick={toLogin}>Sign In</p>
-          </Modal.Actions>
-        </Segment>
     );
   }
 }

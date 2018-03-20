@@ -5,7 +5,7 @@ import * as routes from '../../constants/routes';
 import PropTypes from 'prop-types'
 // import SignUp from './account/SignUp'
 // import SignIn from './account/SignIn'
-import AuthModal from '../account/AuthModal'
+
 import PasswordForget from '../account/PasswordForget'
 
 import Create from '../courseManage/Create'

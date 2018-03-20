@@ -5,11 +5,14 @@ import {Link, withRouter} from 'react-router-dom';
 import {SignUpLink} from './SignUp';
 import SignUp from './SignUp'
 import {PasswordForgetLink} from './PasswordForget'
-import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment } from 'semantic-ui-react'
+import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment, Header } from 'semantic-ui-react'
 
 const SignInPage = (props, {history}, ) => (
   <div>
-    <SignInForm toSignUp={props.toSignUp} toResetPass={props.toResetPass} history={history} />
+    <SignInForm
+      history={history}
+      toSignUp={props.toSignUp}
+      toResetPass={props.toResetPass} />
   </div>
 )
 
@@ -55,20 +58,18 @@ class SignInForm extends Component {
     password === '';
 
     return (
-
-        <Segment>
-          <Modal.Header>Log In to Your We Qna Account </Modal.Header>
           <Modal.Content>
+            <Header as='h2' content='header' />
+             <Divider />
             <Form onSubmit={this.onSubmit}>
-              <Form.Field>
-                <Button fluid size="tiny" >
-                  <Icon name='google' /> Continue with Google
-                </Button>
-              </Form.Field>
-
               <Form.Field>
                 <Button fluid size="tiny">
                   <Icon name='facebook' /> Continue with Facebook
+                </Button>
+              </Form.Field>
+              <Form.Field>
+                <Button fluid size="tiny" >
+                  <Icon name='google' /> Continue with Google
                 </Button>
               </Form.Field>
 
@@ -101,14 +102,16 @@ class SignInForm extends Component {
                 </Button>
                 <p onClick={toResetPass}>Forgot password?</p>
             </Form>
+            <p> Forgot your password? </p>
+            <Divider />
 
+                <Divider horizontal></Divider>
+                <Header as='h5' onClick={toSignUp} textAlign='center'>Sign Up</Header>
+                //or
+                {/* <Modal.Description>
+                  <Header as='h5' content='Login' textAlign='center' />
+                </Modal.Description> */}
           </Modal.Content>
-
-          <Modal.Actions>
-            <p onClick={toSignUp}>Sign Up</p>
-
-          </Modal.Actions>
-        </Segment>
     );
   }
 }
