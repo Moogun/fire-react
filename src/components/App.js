@@ -67,7 +67,7 @@ class App extends Component {
           />
 
           <Route
-            exact path='/teaching'
+            path='/teaching'
             render={() => <Dashboard />}
           />
 

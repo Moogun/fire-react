@@ -51,7 +51,10 @@ class NavAuth extends Component {
                       </Dropdown.Item>
                       <Dropdown.Divider />
                       <Dropdown.Item as={Link} to='/teaching'
-                        name='dashboard' active={activeItem === 'dashboard'} onClick={this.handleItemClick}>
+                        name='dashboard'
+                        active={activeItem === 'dashboard'}
+                        onClick={this.handleItemClick}
+                        >
                           Manage Courses
 
                       </Dropdown.Item>
