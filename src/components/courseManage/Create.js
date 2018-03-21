@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {db} from '../../firebase';
 import * as routes from '../../constants/routes';
 import {Link, withRouter} from 'react-router-dom';
-import { Button, Image, Modal, Form, Checkbox, Icon, Input } from 'semantic-ui-react'
+import { Button, Image, Modal, Form, Checkbox, Icon, Input, Grid, Header, Message, Segment } from 'semantic-ui-react'
 
 const CreatePage = ({history}, {authUser}) => {
   let create;
@@ -56,7 +56,7 @@ class CreateForm extends Component {
             this.handleClose()
 
             history.replace({
-              pathname: '/course/' + courseKey + '/edit',
+              pathname: '/course_manage/' + courseKey + '/edit',
               // search: '?query=' + title + name,
               state : {
                 courseKey: courseKey,
@@ -85,15 +85,15 @@ class CreateForm extends Component {
     const isInvalid = title === '';
 
     return (
-      <Modal size="mini"
-        trigger={<p onClick={this.handleOpen}>Create new course</p>}
-        open={this.state.modalOpen}
-        onClose={this.handleClose}
-         >
-          <Modal.Header>Create new course</Modal.Header>
-          <Modal.Content>
+        <Grid
+          textAlign='center'
+          style={{ height: '100%', margin: '10em'}}
+          verticalAlign='middle'
+        >
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as='h2' color='blue' textAlign='center' content='Create New Course' subheader='' attached='top' />
+            <Segment attached>
             <Form onSubmit={this.onSubmit}>
-
               <Form.Field>
                 <Input
                   icon='pencil'
@@ -105,13 +105,13 @@ class CreateForm extends Component {
                 />
                 </Form.Field>
                 <Button color='blue' fluid>
-                  <Icon name='checkmark' /> Create new course
+                  <Icon name='checkmark' /> Save and Go
                 </Button>
             </Form>
-          </Modal.Content>
-
-        </Modal>
-    );
+            </Segment>
+          </Grid.Column>
+        </Grid>
+      )
   }
 }
 
