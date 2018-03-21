@@ -19,7 +19,7 @@ export const onceGetCourses = () =>
 
 //get 1 course
 export const onceGetCourse = (courseKey) =>
-  db.ref('courses').child(courseKey).child('metadata').once('value');
+  db.ref('courses').child(courseKey).once('value');
 
 //course creation
 export const doCreateCourse = (title, teacherId) =>

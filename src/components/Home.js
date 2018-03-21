@@ -27,19 +27,15 @@ class HomePage extends Component {
         <Grid.Row>
           <Grid.Column>
 
-            <Header as='h5' style={{marginTop: '3em'}}>Header</Header>
+            {/* <Header as='h5' style={{marginTop: '3em'}}>Header</Header>
             <CourseCards />
 
-            <Header as='h5'>Header</Header>
-            <CourseCards />
+            <Header as='h5'>Header</Header> */}
+            {/* <CourseCards /> */}
 
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      // <div style={{minHeight: '700px'}}>
-      //   Header
-      //   <CourseCards />
-      // </div>
     );
   }
 }

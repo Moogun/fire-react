@@ -61,8 +61,7 @@ class App extends Component {
           />
 
           <Route
-            // path={routes.TEACHER}
-            path='/teacher/:teacherId'
+            exact path='/teacher/:teacherId'
             render={() => <Teacher />}
           />
 
@@ -78,23 +77,17 @@ class App extends Component {
 
 
           <Route
-            path='/question'
-            // path='/teacher/:teacherId/question/:questionId'
-            component={() => <Question />}
+            path='/teacher/:teacherId/question/:questionId'
+            render={() => <Question />}
           />
 
           <Route
-            path='/coursePage'
-            component={() => <CoursePage />}
+            eaact path='/create'
+            render={() => <Create />}
           />
 
           <Route
-            path='/create'
-            component={() => <Create />}
-          />
-
-          <Route
-            path='/course/:id/edit'
+            path='/course_manage/:id/edit'
             component={() => <CEdit />}
           />
 

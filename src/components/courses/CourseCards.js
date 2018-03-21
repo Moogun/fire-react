@@ -11,7 +11,7 @@ class CourseCards extends Component {
       courses: [
         {id: '1', title: '토익 700 1달 완성', subTitle: 'There is a no way to turn back', teacherId: '123', teacher: 'kim sam', rating: 5,  date: '18년 3월 1일 ~ 18년  3월 29일', time: 'AM 09~ 11', textbook: '해커스 노랭이', location: '해커스 빌딩 2, 504호', },
         {id: '2', title: '토익 800 1달 완성', subTitle: 'There is a no way to turn back', teacherId: '456', teacher: 'kim sam', date: '18년 3월 1일 ~ 18년  3월 29일', time: 'AM 09~ 11', textbook: '해커스 노랭이', location: '해커스 빌딩 2, 504호', },
-        {id: '3', title: '토익 800 1달 완성', subTitle: 'There is a no way to turn back', teacherId: '456', teacher: 'kim sam', date: '18년 3월 1일 ~ 18년  3월 29일', time: 'AM 09~ 11', textbook: '해커스 노랭이', location: '해커스 빌딩 2, 504호', },
+        {id: '3', title: '토익 800 1달 완성', subTitle: 'There is a no way to turn back', teacherId: '789', teacher: 'kim sam', date: '18년 3월 1일 ~ 18년  3월 29일', time: 'AM 09~ 11', textbook: '해커스 노랭이', location: '해커스 빌딩 2, 504호', },
         {id: '4', title: '토익 800 1달 완성', subTitle: 'There is a no way to turn back', teacherId: '456', teacher: 'kim sam', date: '18년 3월 1일 ~ 18년  3월 29일', time: 'AM 09~ 11', textbook: '해커스 노랭이', location: '해커스 빌딩 2, 504호', },
         {id: '5', title: '토익 800 1달 완성', subTitle: 'There is a no way to turn back', teacherId: '456', teacher: 'kim sam', date: '18년 3월 1일 ~ 18년  3월 29일', time: 'AM 09~ 11', textbook: '해커스 노랭이', location: '해커스 빌딩 2, 504호', },
         {id: '6', title: '토익 800 1달 완성', subTitle: 'There is a no way to turn back', teacherId: '456', teacher: 'kim sam', date: '18년 3월 1일 ~ 18년  3월 29일', time: 'AM 09~ 11', textbook: '해커스 노랭이', location: '해커스 빌딩 2, 504호', },

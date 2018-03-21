@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import {Link, Route, withRouter} from 'react-router-dom'
+import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 import CourseCards from '../courses/CourseCards'
 import CourseTeaching from './CourseTeaching'
 import QPanel from './QPanel'
 import {db} from '../../firebase';
-import { Grid, Header, Menu, Visibility, Responsive } from 'semantic-ui-react'
+import { Grid, Header, Menu, Visibility, Responsive,  } from 'semantic-ui-react'
 
 class Dashboard extends Component {
 
@@ -21,7 +21,7 @@ class Dashboard extends Component {
   handleCourseClick = (courseKey) => {
     const {history} = this.props;
     history.push({
-      pathname: '/course/' + courseKey + '/edit',
+      pathname: '/course_manage/' + courseKey + '/edit',
       // search: '?query=' + title + name,
       state : {
         courseKey: courseKey,
@@ -48,7 +48,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const {authUser} = this.props
+    const {authUser, match} = this.props
     const {activeItem, error, user, courseTeaching} = this.state
 
     console.log('1 render props authUser', authUser);
@@ -74,7 +74,6 @@ class Dashboard extends Component {
                             active={activeItem === 'courses'}
                             onClick={this.handleItemClick}
                             as={Link} to='/teaching/courses'
-                            click={this.handleCourseClick}
                           />
                           <Menu.Item
                             name='questions'
@@ -88,9 +87,17 @@ class Dashboard extends Component {
                             onClick={this.handleItemClick} />
                         </Menu>
 
-                    <Route path='/teaching/courses' render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
-                    <Route path='/teaching/questions' component = {QPanel} />
 
+                  </Grid.Column>
+                </Grid.Row>
+
+                <Grid.Row>
+                  <Grid.Column>
+                    <Switch>
+                      <Redirect exact from={match.url} to={`${match.url}/courses`} />
+                      <Route path='/teaching/courses' render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
+                      <Route path='/teaching/questions' component = {QPanel} />
+                    </Switch>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

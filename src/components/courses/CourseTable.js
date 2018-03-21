@@ -15,17 +15,12 @@ class CourseTable extends Component {
   render() {
     return (
       <div>
-        <Header as='h3'>Upcoming</Header>
+        {/* <Header as='h3'>Upcoming</Header> */}
           <Table basic='very' selectable>
             <Table.Body>
-              {/* <Link to="/"> */}
-              {this.props.courses.map(c => <CourseTableRow key={c.id} course={c} click={() => this.handleClick(c.id)}/>)}
-              {/* </Link> */}
+              {this.props.courses.map(c => <CourseTableRow key={c.id} course={c} click={() => this.handleClick(c.id, c.teacherId)}/>)}
             </Table.Body>
           </Table>
-
-          <Header as='h3'>Current</Header>
-          <Header as='h3'>Past</Header>
       </div>
     );
   }

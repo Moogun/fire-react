@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import {Link, Route, withRouter} from 'react-router-dom'
-import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input, Divider } from 'semantic-ui-react'
-import profile from '../../assets/profile-lg.png'
+import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
+import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input, Divider, Popup } from 'semantic-ui-react'
+
+import CEditTitle from './CEditTitle'
 import CEditMeta from './CEditMeta'
 import CEditCurri from './CEditCurri'
 import CEditSettings from './CEditSettings'
@@ -19,47 +20,39 @@ class CourseEdit extends Component {
     this.state = {
       isLoading: false,
       activeItem: 'info',
+      activePublish: true,
     };
   }
 
   componentDidMount() {
 
     const {isLoading } = this.state
-    // console.log('before 1',isLoading);
-    this.setState({isLoading: !isLoading})
-    // console.log('after 1',isLoading);
     const {match} = this.props
+
+    this.setState({isLoading: !isLoading})
 
     let courseId = match.params.id
     db.onceGetCourse(match.params.id)
       .then(snapshot => {
-        // console.log('sna', snapshot.val());
+        console.log('sna', snapshot.val());
 
-        db.onceGetUser(snapshot.val().teacherId)
+        db.onceGetUser(snapshot.val().metadata.teacherId)
           .then(user => {
             //console.log('user', user.val());
 
             let meta = user.val().courseTeaching[courseId].metadata
 
             this.setState ({
-              courseId: courseId,
-              title: snapshot.val().title,
+              courseId: courseId, title: snapshot.val().metadata.title,
+              teacherId: snapshot.val().metadata.teacherId, teacherName: user.val().username,
 
-              teacherId: snapshot.val().teacherId,
-              teacherName: user.val().username,
+              textbook: meta.textbook, date: meta.date, time: meta.time, location: meta.location,
+              openCourse: meta.openCourse, password: meta.password,
+              isPublished: meta.isPublished,
 
-              textbook: meta.textbook,
-              date: meta.date,
-              time: meta.time,
-              location: meta.location,
-              openCourse: meta.openCourse,
-              password: meta.password,
+              curri: snapshot.val().curri,
+              isLoading: !isLoading
               })
-
-            const {isLoading } = this.state
-            // console.log('before 1',isLoading);
-            this.setState({isLoading: !isLoading})
-            // console.log('after 1',isLoading);
           })
           .catch(error => {
             this.setState(byPropKey('error', error));
@@ -70,114 +63,139 @@ class CourseEdit extends Component {
   }
 
   handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
+
   handlePublish = () => {
-    const {courseId, teacherId} = this.state
-    const {isPublished} = this.props
-    db.doPublishCourse(courseId, teacherId, isPublished)
+
+    const {courseId, teacherId, isPublished, isLoading, textbook} = this.state
+      console.log('1 textbook', !!textbook);
+      // if (!!textbook) {
+      console.log('before 1',isLoading);
+
+      this.setState({isLoading: !isLoading})
+      console.log('handle publish', courseId, teacherId, isPublished);
+      db.doPublishCourse(courseId, teacherId, isPublished)
+        .then(response =>
+          // console.log('succeed uploading')
+          this.setState({isLoading: !isLoading})
+        )
+        .catch(error => {
+            this.setState(byPropKey('error', error))
+        })
   }
+
+  handleInfoUpdate = () => {
+
+  }
+
+  handleSettingsUpdate = () => {
+
+  }
+
+  
+
   render() {
 
-    const {activeItem, courseId, title, teacherName, teacherId, isLoading,
-      textbook,
-      date,
-      time,
-      location,
-      openCourse,
-      password } = this.state
+    const {activeItem, isLoading,
+      courseId, title, teacherName, teacherId,
+      textbook, date, time, location,
+      curri,
+      openCourse, password,
+      activePublish
+    } = this.state
     const {match} = this.props
-    // console.log('isLoading in render', isLoading, 'props', this.props);
+
+    console.log(' textbook', textbook);
 
     return (
       <Segment basic loading={isLoading} >
 
         <Container>
 
-              <Container>
+            <CEditTitle title={title} teacherName={teacherName} teacherId={teacherId} />
 
-                <Item.Group>
-                  <Item>
-                    <Item.Image size='tiny' src={profile} />
+            <Container>
+              <Grid celled stackable>
+                <Grid.Column width={3}>
+                  <Menu vertical fluid secondary>
+                    <Menu.Item name='info'
+                       active={activeItem === 'info'}
+                       onClick={this.handleItemClick}
+                       as={Link} to={`${match.url}/info`}
+                       >
+                       Info <Icon name='list' />
+                    </Menu.Item>
+                    <Menu.Item name='curri'
+                       active={activeItem === 'curri'}
+                       onClick={this.handleItemClick}
+                       as={Link} to={`${match.url}/curriculum`}
+                       >
+                       Curriculum  <Icon name='book' />
+                    </Menu.Item>
+                    <Menu.Item name='settings'
+                       active={activeItem === 'settings'}
+                       onClick={this.handleItemClick}
+                       as={Link} to={`${match.url}/settings`}
+                       >
+                       <Icon name='setting' />Settings
+                    </Menu.Item>
 
-                    <Item.Content>
-                      <Item.Header as='a'>{title}</Item.Header>
-                      <Item.Meta> {teacherName} 3) redirec to info </Item.Meta>
-                      <Item.Extra>Draft</Item.Extra>
-                    </Item.Content>
-                  </Item>
-                </Item.Group>
-              </Container>
+                    <Menu.Item name='assignment'
+                      disabled
+                       active={activeItem === 'assignment'}
+                       onClick={this.handleItemClick}
+                       as={Link} to={`${match.url}/assignment`}
+                       >
+                       Assignment (Coming soon)
+                    </Menu.Item>
+                    <Menu.Item>
+                       <Popup
+                          trigger={<Button primary fluid
+                            active={activePublish}
+                            onClick={this.handlePublish}
+                            >Publish</Button>}
+                          content='Need to update info first before publishing'
+                        />
+                     </Menu.Item>
+                   </Menu>
 
-              <Container>
-                <Grid celled stackable>
-                  <Grid.Column width={3}>
-                    <Menu vertical fluid  secondary>
-                      <Menu.Item name='info'
-                         active={activeItem === 'info'}
-                         onClick={this.handleItemClick}
-                         as={Link} to={`${match.url}/info`}
-                         >
-                         Info <Icon name='list' />
-                      </Menu.Item>
-                      <Menu.Item name='curri'
-                         active={activeItem === 'curri'}
-                         onClick={this.handleItemClick}
-                         as={Link} to={`${match.url}/curriculum`}
-                         >
-                         Curriculum  <Icon name='book' />
-                      </Menu.Item>
-                      <Menu.Item name='settings'
-                         active={activeItem === 'settings'}
-                         onClick={this.handleItemClick}
-                         as={Link} to={`${match.url}/settings`}
-                         >
-                         <Icon name='setting' />Settings
-                      </Menu.Item>
+                </Grid.Column>
 
-                      <Menu.Item name='assignment'
-                        disabled
-                         active={activeItem === 'assignment'}
-                         onClick={this.handleItemClick}
-                         as={Link} to={`${match.url}/assignment`}
-                         >
-                         Assignment (Coming soon)
-                      </Menu.Item>
-                      <Menu.Item>
-                         <Button primary fluid onClick={this.handlePublish}>Publish</Button>
-                       </Menu.Item>
-                     </Menu>
+                <Grid.Column width={10}>
+                    <Switch>
+                      <Redirect exact from={match.url} to={`${match.url}/info`} />
+                      <Route path={`${match.url}/info`} render={(props) => <CEditMeta
+                        {...props}
+                        courseId={courseId}
+                        teacherId={teacherId}
+                        textbook={textbook}
+                        date={date}
+                        time={time}
+                        location={location}
+                      /> }/>
+                      <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
+                        {...props}
+                        courseId={courseId}
+                        teacherId={teacherId}
+                        curri={curri}
+                      />} />
+                      <Route path={`${match.url}/settings`} render={() => <CEditSettings
+                        courseId={courseId}
+                        teacherId={teacherId}
+                        openCourse={openCourse}
+                        currentPassword={password}
+                      />} />
+                      <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
+                    </Switch>
+                </Grid.Column>
 
-                  </Grid.Column>
+                <Grid.Column width={3}>
 
-                  <Grid.Column width={10}>
+                </Grid.Column>
 
-                        <Route path={`${match.url}/info`} render={(props) => <CEditMeta
-                          {...props}
-                          courseId={courseId}
-                          teacherId={teacherId}
-                          textbook={textbook}
-                          date={date}
-                          time={time}
-                          location={location}
-                        /> }/>
-                        <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
-                          {...props}
-                          courseId={courseId}
-                          teacherId={teacherId}
-                        />} />
-                        <Route path={`${match.url}/settings`} render={() => <CEditSettings
-                          courseId={courseId}
-                          teacherId={teacherId}
-                          openCourse={openCourse}
-                          currentPassword={password}
-                        />} />
-                        <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
-
-                  </Grid.Column>
-
-                  <Grid.Column width={3}></Grid.Column>
-                </Grid>
-              </Container>
+              </Grid>
+            </Container>
         </Container>
+
       </Segment>
     );
   }

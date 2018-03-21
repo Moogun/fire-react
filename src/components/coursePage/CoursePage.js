@@ -32,6 +32,8 @@ class CoursePage extends Component {
 
   render() {
     const {menuFixed} = this.state
+    console.log('course page', this.props);
+    
     return (
       <Grid>
         <Grid.Row>
@@ -52,7 +54,7 @@ class CoursePage extends Component {
 
                       <Segment basic style={{margin: '3em' }} >
                         <Header as='h1'
-                          // style={{color: '#fff'}}
+                          style={{color: '#fff'}}
                           content='ChatBots: How to Make a Facebook Messenger Chat Bot in 1hr'
                           subheader='We will Create a Parrot Bot Together! This course is a Step by Step Guide in Building a Chat Bot for Facebook Messenger' />
 
@@ -82,30 +84,7 @@ class CoursePage extends Component {
 
       </Grid>
 
- //
- //            <Visibility
- //              onBottomPassed={this.stickTopMenu}
- //              onBottomVisible={this.unStickTopMenu}
- //              once={false}
- //            >
- //              <Menu inverted
- //                borderless
- //                fixed={menuFixed && 'top'}
- //                style={menuFixed ? fixedMenuStyle : menuStyle}
- //              >
- //                <Container text>
- //                  <Menu.Item header>meta</Menu.Item>
- //                  <Menu.Item as='a'>curri</Menu.Item>
- //                  <Menu.Item as='a'>comments</Menu.Item>
- //                </Container>
- //              </Menu>
- //          </Visibility>
- // */}
- //
- //
- //        </Grid>
- //        </Container>
     )
   }
 }
-export default CoursePage;
+export default withRouter(CoursePage);

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { Form, Input, Button, Segment, Icon, Header, Divider } from 'semantic-ui-react'
 import { ImageSideButton, Block, addNewBlock, Editor, createEditorState,} from 'medium-draft';
-import { convertToRaw, convertFromRaw } from 'draft-js';
+import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
 import 'medium-draft/lib/index.css';
 import {db} from '../../firebase';
 
@@ -28,6 +28,19 @@ class CEditCurri extends Component {
   }
 
   componentDidMount() {
+    const { curri } = this.props
+    if (curri) {
+      console.log('did mount curri', curri);
+      var d = convertFromRaw(curri)
+      console.log('d', d);
+      this.setState({
+        editorState: createEditorState(curri),
+      });
+
+      // this.setState({
+      //   editorState: EditorState.push(this.state.editorState, convertFromRaw(curri))
+      // });
+    }
     this.refs.editor.focus();
   }
 
@@ -36,17 +49,24 @@ class CEditCurri extends Component {
     console.log('course teacher', courseId, teacherId);
     var editorData = convertToRaw(this.state.editorState.getCurrentContent());
     console.log('editor data',editorData);
-    db.doUpdateCourseCurri(courseId, teacherId, editorData)
-      .then(response => console.log('succeded uploading',response))
-      .catch(error => {
-        this.setState(byPropKey('error', error));
-      });
+
+    var a = JSON.stringify(editorData)
+    console.log('a', a);
+    var b = JSON.parse(a)
+    console.log('b', b);
+    // this.setState({editorState: createEditorState(b)})
+    // db.doUpdateCourseCurri(courseId, teacherId, a)
+    //   .then(response => console.log('succeded uploading',response))
+    //   .catch(error => {
+    //     this.setState(byPropKey('error', error));
+    //   });
 
   }
 
   render() {
     const { editorState } = this.state;
-    const { } = this.props
+    const { curri } = this.props
+    console.log('render curri', curri);
     return (
       <Segment basic>
         <Header as='h2'>Curriculum</Header>
@@ -56,6 +76,7 @@ class CEditCurri extends Component {
            ref="editor"
            editorState={editorState}
            onChange={this.onChange}
+           placeholder="Start editing your curriculum"
          />
          <Button>Save</Button>
         </Form>

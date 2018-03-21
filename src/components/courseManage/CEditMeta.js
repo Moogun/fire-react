@@ -8,6 +8,7 @@ const INITIAL_STATE = {
   time: '',
   location: '',
   error: null,
+  isLoading: false,
 }
 
 const byPropKey = (propertyName, value) => ()=> ({
@@ -19,51 +20,57 @@ class CEditMeta extends Component {
     INITIAL_STATE,
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps',nextProps);
-      this.setState({
-        textbook: nextProps.textbook,
-        date: nextProps.date,
-        time: nextProps.time,
-        location: nextProps.location
-      });
-  }
-
-  shouldComponentUpdate(nextProps) {
-    console.log('nextProps ',nextProps);
-      return this.state.textbook !== nextProps.textbook ||
-      this.state.date !== nextProps.date ||
-      this.state.time !== nextProps.time ||
-      this.state.location !== nextProps.location ;
-  }
-
-  onSubmit = (event) => {
-    const {textbook, date, time, location} = this.state;
-    const { history, match, courseId, teacherId } = this.props;
-
-    db.doUpdateCourseMeta(courseId, date, time, location, textbook, teacherId )
-      .then((res)=> {
-        this.setState({...INITIAL_STATE})
-        console.log(' meta saved', res);
-      })
-      .catch(error => {
-        this.setState(byPropKey('error', error))
-      })
-      event.preventDefault();
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('nextProps',nextProps);
+  //     this.setState({
+  //       textbook: nextProps.textbook,
+  //       date: nextProps.date,
+  //       time: nextProps.time,
+  //       location: nextProps.location
+  //     });
+  // }
+  //
+  // shouldComponentUpdate(nextProps) {
+  //   console.log('nextProps ',nextProps);
+  //     return this.state.textbook !== nextProps.textbook ||
+  //     this.state.date !== nextProps.date ||
+  //     this.state.time !== nextProps.time ||
+  //     this.state.location !== nextProps.location ;
+  // }
+  //
+  // onSubmit = (event) => {
+  //   const {textbook, date, time, location, isLoading} = this.state;
+  //   const { history, match, courseId, teacherId } = this.props;
+  //   console.log('courseId', courseId, 'teacherId', teacherId);
+  //   this.setState({isLoading: !isLoading})
+  //   db.doUpdateCourseMeta(courseId, date, time, location, textbook, teacherId )
+  //     .then((res)=> {
+  //       this.setState({...INITIAL_STATE})
+  //       console.log(' meta saved', res);
+  //       this.setState({isLoading: !isLoading})
+  //     })
+  //     .catch(error => {
+  //       this.setState(byPropKey('error', error))
+  //     })
+  //     event.preventDefault();
+  // }
 
   render() {
     console.log('edit meta render props', this.props);
+    // const { textbook, date, location, time } = this.props
+    const { textbook } = this.state
     return (
       <Segment basic>
         <Header as='h2'>Basic Info</Header>
         <Divider />
 
-          <Form onSubmit={this.onSubmit}>
+          <Form
+            // onSubmit={this.onSubmit}
+            >
              <Form.Field>
                <label>Textbook</label>
                <Input placeholder='Textbook'
-                  value={this.state.textbook}
+                  value={textbook}
                   onChange={(event) => this.setState(byPropKey('textbook', event.target.value))}
                 />
              </Form.Field>

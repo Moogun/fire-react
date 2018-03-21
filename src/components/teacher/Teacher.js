@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Segment, Container, Header, Icon, Menu, Image, Grid, Breadcrumb, Rating} from 'semantic-ui-react'
-import {Link, Route, withRouter} from 'react-router-dom'
+import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
 import Courses from './Courses'
 import Questions from './Questions'
 import NewQ from '../questions/NewQ'
@@ -104,10 +104,15 @@ class Teacher extends Component {
 
                   <Grid.Row>
                     <Grid.Column>
-                      <Route path={`${match.url}/course`} component={Courses} />
-                      <Route path={`${match.url}/question`}
-                          render={ (props) =>  <Questions click={this.handleNewQ} {...props}/>} />
-                      <Route path='/teacher/newq' component={NewQ} />
+
+                      <Switch>
+                        <Redirect exact from={match.url} to={`${match.url}/course`} />
+                        <Route path={`${match.url}`} component={Teacher} />
+                        <Route path={`${match.url}/course`} component={Courses} />
+                        <Route path={`${match.url}/question`}
+                            render={ (props) =>  <Questions click={this.handleNewQ} {...props}/>} />
+                        <Route path='/teacher/newq' component={NewQ} />
+                      </Switch>
 
                     </Grid.Column>
                   </Grid.Row>
@@ -117,9 +122,6 @@ class Teacher extends Component {
             </Grid.Column>
         </Grid.Row>
       </Grid>
-    //   <div>
-    //     <Segment basic>
-    //       <Container>
     //         <Header
     //           as='h1'
     //           content='Teacher Name'
@@ -134,37 +136,7 @@ class Teacher extends Component {
     //           }}
     //           // color='yellow'
     //         />
-    //         <Menu pointing secondary size='large' text
-    //         >
-    //           <Container>
-    //             <Menu.Item
-    //               name='courses'
-    //               active={activeItem === 'courses'}
-    //               onClick={this.handleItemClick}
-    //               as={Link} to={`${match.url}/courses`}>Courses</Menu.Item>
-    //             <Menu.Item
-    //               name='questions'
-    //               active={activeItem === 'questions'}
-    //               onClick={this.handleItemClick}
-    //               as={Link} to={`${match.url}/questions`}>Questions</Menu.Item>
-    //             <Menu.Item
-    //               name='story'
-    //               active={activeItem === 'story'}
-    //               onClick={this.handleItemClick}
-    //               as={Link} to={`${match.url}/story`}>Story</Menu.Item>
-    //           </Container>
-    //         </Menu>
-    //
-    //       </Container>
-    //   </Segment>
-    //   <Segment basic>
-    //     <Container>
-    //       <Route path={`${match.url}/courses`} component={Courses} />
-    //       <Route path={`${match.url}/questions`} component={(props) => <Questions click={this.handleNewQ} {...props}/>} />
-    //       <Route path='/teacher/newq' component={NewQ} />
-    //     </Container>
-    //   </Segment>
-    // </div>
+
     );
   }
 }
