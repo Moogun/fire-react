@@ -13,18 +13,18 @@ const CourseCard = ({course, click}) => {
           <Card.Content>
             <Image floated='right' size='mini' src={profile} />
             <Card.Header>
-              모바일 앱 GUI 포트폴리오 디자인 LAB 5기
+              {course.metadata.title}
             </Card.Header>
-             <Card.Meta>Get your shits done</Card.Meta>
+             <Card.Meta>{course.metadata.title}</Card.Meta>
             <Card.Description>
-              18년 3월1일 ~ 4월 1일
+              {course.metadata.date}
             </Card.Description>
             <Card.Description>
-              끝내줄거야
+              {course.metadata.textbook}
             </Card.Description>
           </Card.Content>
            <Card.Content extra>
-          김봉두
+          {course.metadata.teacherName}
           <Rating icon='star' defaultRating={5} maxRating={5} size='mini'/>
              (230)
           </Card.Content>

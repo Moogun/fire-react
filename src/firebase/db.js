@@ -17,6 +17,9 @@ export const onceGetUser = (uid) =>
 export const onceGetCourses = () =>
   db.ref('courses').once('value');
 
+export const onceGetPublishedCourses = () =>
+  db.ref('courses').equalTo().once('value');
+
 //get 1 course
 export const onceGetCourse = (courseKey) =>
   db.ref('courses').child(courseKey).once('value');

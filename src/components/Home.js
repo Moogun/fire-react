@@ -11,31 +11,52 @@ class HomePage extends Component {
     super(props);
     this.state = {
       users: null,
+      courses: null,
+      isLoading: false
     };
   }
   componentDidMount(){
+    const {isLoading } = this.state
+    this.setState ({isLoading: !isLoading })
     db.onceGetUsers().then(snapshot=>
       this.setState(() => ({users: snapshot.val() }))
     )
+    db.onceGetCourses()
+      .then(snap => {
+        // this.setState ({courses: snap.val()})
+        console.log('courses', snap.val());
+        let courses = snap.val()
+        Object.keys(courses).map(key => {
+          console.log(courses[key].metadata.teacherId);
+          let tid = courses[key].metadata.teacherId
+          db.onceGetUser(tid)
+            .then(userSnap => {
+              console.log('courses[key]', courses[key])
+              courses[key].metadata.teacherName = userSnap.val().username
+              const {isLoading } = this.state
+              this.setState({courses: courses, isLoading: !isLoading})
+            })
+        })
+
+      })
   }
   render() {
 
-    const {users} = this.state;
-    console.log(users);
+    const {users, courses, isLoading} = this.state;
+    console.log('home', users);
     return (
-      <Grid container>
-        <Grid.Row>
-          <Grid.Column>
+      <Segment basic loading={isLoading}>
+        <Grid container>
+          <Grid.Row>
+            <Grid.Column>
 
-            {/* <Header as='h5' style={{marginTop: '3em'}}>Header</Header>
-            <CourseCards />
+              <Header as='h5' style={{marginTop: '3em'}}>Header</Header>
+              <CourseCards courses={courses}/>
 
-            <Header as='h5'>Header</Header> */}
-            {/* <CourseCards /> */}
-
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>
     );
   }
 }
