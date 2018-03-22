@@ -10,6 +10,16 @@ import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
 import withAuthorization from '../../HOC/withAuthorization'
 
+const INITIAL_STATE = {
+  open: true,
+  closed: false,
+  password: '',
+  isLoading: false,
+  activeItem: 'info',
+  openCourse: true,
+  error: null,
+}
+
 const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
 })
@@ -18,13 +28,12 @@ class CourseEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
-      activeItem: 'info',
-      activePublish: true,
+      ...INITIAL_STATE,
     };
   }
 
   componentDidMount() {
+    console.log(1);
 
     const {isLoading } = this.state
     const {match} = this.props
@@ -34,12 +43,11 @@ class CourseEdit extends Component {
     let courseId = match.params.id
     db.onceGetCourse(match.params.id)
       .then(snapshot => {
-        console.log('sna', snapshot.val());
+        // console.log('sna', snapshot.val());
 
         db.onceGetUser(snapshot.val().metadata.teacherId)
           .then(user => {
-            //console.log('user', user.val());
-
+            // setStateError 
             let meta = user.val().courseTeaching[courseId].metadata
 
             this.setState ({
@@ -51,8 +59,11 @@ class CourseEdit extends Component {
               isPublished: meta.isPublished,
 
               curri: snapshot.val().curri,
-              isLoading: !isLoading
               })
+
+            const {isLoading } = this.state
+            this.setState({isLoading: !isLoading})
+            console.log(2);
           })
           .catch(error => {
             this.setState(byPropKey('error', error));
@@ -62,7 +73,56 @@ class CourseEdit extends Component {
       });
   }
 
+  componentWillUnmount(){
+    console.log(0);
+  }
+
   handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
+
+  handleInputChange = (event) => {
+    this.setState(byPropKey(event.target.name, event.target.value))
+  }
+
+  handleSettingsOpenOrClose = (btn) => {
+    const { openCourse } = this.state
+    if (btn === 1) {
+      this.setState({openCourse: true})
+    } else {
+      this.setState({openCourse: false})
+    }
+  }
+
+  onInfoSubmit = (event) => {
+    const {courseId, teacherId, textbook, date, time, location, isLoading} = this.state
+    console.log('onInfoSubmit', courseId, teacherId, textbook, date, time, location, isLoading);
+    this.setState({isLoading: !isLoading})
+
+    db.doUpdateCourseMeta(courseId, teacherId, textbook, date, time, location)
+        .then((res)=> {
+          console.log(' meta saved', res);
+          const {isLoading} = this.state
+          console.log('is Loading', isLoading);
+          this.setState({isLoading: !isLoading})
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error))
+        })
+      event.preventDefault();
+  }
+
+  onSettingsSubmit = (event) => {
+      const {courseId, teacherId, open, password } = this.state;
+      console.log('on settings submit public', this.state.open );
+
+      db.doUpdateCoursePrivacy(courseId, open, password, courseId )
+        .then((res)=> {
+          console.log(' doUpdateCoursePrivacy', res);
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error))
+        })
+        event.preventDefault();
+  }
 
   handlePublish = () => {
 
@@ -83,15 +143,6 @@ class CourseEdit extends Component {
         })
   }
 
-  handleInfoUpdate = () => {
-
-  }
-
-  handleSettingsUpdate = () => {
-
-  }
-
-  
 
   render() {
 
@@ -100,14 +151,13 @@ class CourseEdit extends Component {
       textbook, date, time, location,
       curri,
       openCourse, password,
-      activePublish
     } = this.state
     const {match} = this.props
 
-    console.log(' textbook', textbook);
+    console.log('openCourse', openCourse);
 
     return (
-      <Segment basic loading={isLoading} >
+      <Segment basic loading={isLoading} ref="myRef">
 
         <Container>
 
@@ -150,7 +200,7 @@ class CourseEdit extends Component {
                     <Menu.Item>
                        <Popup
                           trigger={<Button primary fluid
-                            active={activePublish}
+                            // active={isPublished}
                             onClick={this.handlePublish}
                             >Publish</Button>}
                           content='Need to update info first before publishing'
@@ -165,12 +215,12 @@ class CourseEdit extends Component {
                       <Redirect exact from={match.url} to={`${match.url}/info`} />
                       <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                         {...props}
-                        courseId={courseId}
-                        teacherId={teacherId}
                         textbook={textbook}
                         date={date}
                         time={time}
                         location={location}
+                        change={this.handleInputChange}
+                        submit={this.onInfoSubmit}
                       /> }/>
                       <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
                         {...props}
@@ -179,10 +229,11 @@ class CourseEdit extends Component {
                         curri={curri}
                       />} />
                       <Route path={`${match.url}/settings`} render={() => <CEditSettings
-                        courseId={courseId}
-                        teacherId={teacherId}
                         openCourse={openCourse}
-                        currentPassword={password}
+                        password={password}
+                        change={this.handleInputChange}
+                        toggle={this.handleSettingsOpenOrClose}
+                        submit={this.onSettingsSubmit}
                       />} />
                       <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
                     </Switch>

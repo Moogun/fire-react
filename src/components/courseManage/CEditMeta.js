@@ -2,22 +2,9 @@ import React, {Component} from 'react'
 import { Form, Input, Button, Segment, Header, Divider } from 'semantic-ui-react'
 import {db} from '../../firebase';
 
-const INITIAL_STATE = {
-  textbook: '',
-  date: '',
-  time: '',
-  location: '',
-  error: null,
-  isLoading: false,
-}
-
-const byPropKey = (propertyName, value) => ()=> ({
-  [propertyName]: value
-})
-
 class CEditMeta extends Component {
   state = {
-    INITIAL_STATE,
+    // INITIAL_STATE,
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -57,45 +44,51 @@ class CEditMeta extends Component {
 
   render() {
     console.log('edit meta render props', this.props);
-    // const { textbook, date, location, time } = this.props
-    const { textbook } = this.state
+    const { textbook, date, location, time, submit } = this.props
+
     return (
       <Segment basic>
         <Header as='h2'>Basic Info</Header>
         <Divider />
 
-          <Form
-            // onSubmit={this.onSubmit}
-            >
+          <Form>
              <Form.Field>
                <label>Textbook</label>
                <Input placeholder='Textbook'
-                  value={textbook}
-                  onChange={(event) => this.setState(byPropKey('textbook', event.target.value))}
+                 value={textbook || ''}
+                  name='textbook'
+                  onChange={this.props.change}
                 />
              </Form.Field>
              <Form.Field>
                <label>Date</label>
                <Input placeholder='Date'
-                 onChange={(event) => this.setState(byPropKey('date', event.target.value))}/>
+                 value={date || ''}
+                 name='date'
+                 onChange={this.props.change}
+               />
              </Form.Field>
              <Form.Field>
                <label>Time</label>
                <Input placeholder='Time'
-                 onChange={(event) => this.setState(byPropKey('time', event.target.value))}/>
+                 value={time || ''}
+                 name='time'
+                 onChange={this.props.change}
+               />
              </Form.Field>
              <Form.Field>
                <label>Location</label>
                <Input placeholder='Location'
-                 onChange={(event) => this.setState(byPropKey('location', event.target.value))}/>
+                 value={location || ''}
+                 name='location'
+                 onChange={this.props.change}
+               />
              </Form.Field>
-             <Button>저장</Button>
+             <Button onClick={submit}>저장</Button>
            </Form>
          </Segment>
     );
   }
 }
-
-// }
 
 export default CEditMeta
