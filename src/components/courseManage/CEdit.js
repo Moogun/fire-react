@@ -10,7 +10,8 @@ import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
 import withAuthorization from '../../HOC/withAuthorization'
 
-import { Notification } from 'react-notification';
+import { NotificationStack } from 'react-notification';
+import { OrderedSet } from 'immutable';
 
 const INITIAL_STATE = {
   open: true,
@@ -31,6 +32,9 @@ class CourseEdit extends Component {
     super(props);
     this.state = {
       ...INITIAL_STATE,
+       notifications: OrderedSet(),
+       count: 0,
+       key: 0,
     };
   }
 
@@ -121,12 +125,6 @@ class CourseEdit extends Component {
       db.doUpdateCoursePrivacy(courseId, teacherId, openCourse, password)
         .then((res)=> {
           console.log(' doUpdateCoursePrivacy', res);
-          <Notification
-            isActive= true
-            message='dd'
-            action='close'
-            // onClick={myClickHander}
-          />
         })
         .catch(error => {
           this.setState(byPropKey('error', error))
@@ -140,20 +138,56 @@ class CourseEdit extends Component {
       console.log('1 textbook', !!textbook);
       // if (!!textbook) {
       console.log('before 1',isLoading);
-
       this.setState({isLoading: !isLoading})
       console.log('handle publish', courseId, teacherId, isPublished);
+
       db.doPublishCourse(courseId, teacherId, isPublished)
-        .then(response =>
-          // console.log('succeed uploading')
+        .then(response => {
+          console.log('succeed uploading')
+          const { isLoading } = this.state
           this.setState({isLoading: !isLoading})
-        )
+          this.addNotification()
+        })
         .catch(error => {
             this.setState(byPropKey('error', error))
         })
   }
 
+  barStyleFactory = (index, style) => {
+    return Object.assign(
+      {},
+      style,
+      { top: `${2 + (index * 4)}rem`, left: 'auto', right: '-100%', height: '3rem', backgroundColor: '#0E6EB8'}
+    );
+  }
 
+  activeBarStyleFactory = (index, style) => {
+    return Object.assign(
+      {},
+      style,
+      { top: `${2 + (index * 4)}rem`, left: 'auto', right: '1rem', height: '3rem', color: '#fff', font: 'Lato'}
+    );
+  }
+
+  addNotification = () => {
+    const {count, key} = this.state
+    const newCount = count + 1;
+    const newkey = key + 1
+
+    this.setState ({ key: newkey})
+      return this.setState({
+        notifications: this.state.notifications.add({
+          message: `Succesfully saved `,
+          key: newkey,
+        })
+      });
+    }
+
+  removeNotification = (count) => {
+    this.setState({
+      notifications: this.state.notifications.filter(n => n.key !== count)
+    })
+  }
   render() {
 
     const {activeItem, isLoading,
@@ -258,6 +292,14 @@ class CourseEdit extends Component {
             </Container>
         </Container>
 
+        <NotificationStack
+          barStyleFactory={this.barStyleFactory}
+          activeBarStyleFactory={this.activeBarStyleFactory}
+          notifications={this.state.notifications.toArray()}
+          onDismiss={notification => this.setState({
+            notifications: this.state.notifications.delete(notification)
+          })}
+        />
       </Segment>
     );
   }
