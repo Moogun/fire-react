@@ -7,6 +7,7 @@ class CEditSettings extends Component {
     render() {
       // const { open, closed, password } = this.state
       const { openCourse, password, change, submit } = this.props
+      console.log('settings passowrd', password);
       let open, closed
       if (openCourse) {
         open = true, closed =false
@@ -15,9 +16,8 @@ class CEditSettings extends Component {
         open = false, closed =true
         // console.log('open', open, 'closed', closed);
       }
-      const isInvalid =
-            closed && password.length < 4 ;
-    
+      const isInvalid = closed && password.length < 4 ;
+
       return (
         <Segment basic>
           <Header as='h3' content='Course privacy settings'></Header>

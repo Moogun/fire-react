@@ -10,6 +10,8 @@ import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
 import withAuthorization from '../../HOC/withAuthorization'
 
+import { Notification } from 'react-notification';
+
 const INITIAL_STATE = {
   open: true,
   closed: false,
@@ -49,13 +51,13 @@ class CourseEdit extends Component {
           .then(user => {
             // setStateError
             let meta = user.val().courseTeaching[courseId].metadata
-            if (this.refs.myRef) {
+
             this.setState ({
               courseId: courseId, title: snapshot.val().metadata.title,
               teacherId: snapshot.val().metadata.teacherId, teacherName: user.val().username,
 
               textbook: meta.textbook, date: meta.date, time: meta.time, location: meta.location,
-              openCourse: meta.openCourse, password: meta.password,
+              openCourse: meta.openCourse ? meta.openCourse : true, password: meta.password ? meta.password : '',
               isPublished: meta.isPublished,
 
               curri: snapshot.val().curri,
@@ -63,7 +65,7 @@ class CourseEdit extends Component {
 
             const {isLoading } = this.state
             this.setState({isLoading: !isLoading})
-            }
+
             console.log(2);
           })
           .catch(error => {
@@ -119,6 +121,12 @@ class CourseEdit extends Component {
       db.doUpdateCoursePrivacy(courseId, teacherId, openCourse, password)
         .then((res)=> {
           console.log(' doUpdateCoursePrivacy', res);
+          <Notification
+            isActive= true
+            message='dd'
+            action='close'
+            // onClick={myClickHander}
+          />
         })
         .catch(error => {
           this.setState(byPropKey('error', error))
@@ -163,7 +171,7 @@ class CourseEdit extends Component {
 
         <Container>
 
-            <CEditTitle ref="myRef"
+            <CEditTitle
               title={title} teacherName={teacherName} teacherId={teacherId} />
 
             <Container>
