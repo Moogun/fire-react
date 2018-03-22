@@ -50,18 +50,18 @@ export const doUpdateCourseTeaching = (newCourseKey, teacherId, title) =>
   return db.ref().update(updates)
 }
 
-export const doUpdateCourseMeta = (courseKey, date, time, location, textbook, tid) => {
+export const doUpdateCourseMeta = (courseKey, tid, textbook, date, time, location) => {
 
   var updates = {}
+  updates[`courses/${courseKey}/metadata/textbook`] = textbook
   updates[`courses/${courseKey}/metadata/date`] = date
   updates[`courses/${courseKey}/metadata/time`] = time
   updates[`courses/${courseKey}/metadata/location`] = location
-  updates[`courses/${courseKey}/metadata/textbook`] = textbook
 
+  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/textbook`] = textbook
   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/date`] = date
   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/time`] = time
   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/location`] = location
-  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/textbook`] = textbook
 
   return db.ref().update(updates)
 }
@@ -72,14 +72,16 @@ export const doUpdateCourseCurri = (courseKey, tid, curri) => {
   return db.ref().update(updates)
 }
 
-export const doUpdateCoursePrivacy = (courseKey, openCourse, password, tid) => {
-  console.log('open', courseKey, openCourse, password, tid);
+export const doUpdateCoursePrivacy = (courseKey, tid, openCourse, password) => {
+  console.log('open', courseKey, tid, openCourse, password);
 
   var updates = {}
   if (openCourse) {
     // console.log('tr', openCourse);
     updates[`courses/${courseKey}/metadata/openCourse`] = openCourse
+    updates[`courses/${courseKey}/metadata/password`] = ''
     updates[`users/${tid}/courseTeaching/${courseKey}/metadata/openCourse`] = openCourse
+    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/password`] = ''
   } else {
     // console.log('false',openCourse);
     updates[`courses/${courseKey}/metadata/openCourse`] = openCourse

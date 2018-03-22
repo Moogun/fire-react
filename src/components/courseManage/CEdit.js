@@ -47,9 +47,9 @@ class CourseEdit extends Component {
 
         db.onceGetUser(snapshot.val().metadata.teacherId)
           .then(user => {
-            // setStateError 
+            // setStateError
             let meta = user.val().courseTeaching[courseId].metadata
-
+            if (this.refs.myRef) {
             this.setState ({
               courseId: courseId, title: snapshot.val().metadata.title,
               teacherId: snapshot.val().metadata.teacherId, teacherName: user.val().username,
@@ -63,6 +63,7 @@ class CourseEdit extends Component {
 
             const {isLoading } = this.state
             this.setState({isLoading: !isLoading})
+            }
             console.log(2);
           })
           .catch(error => {
@@ -71,6 +72,7 @@ class CourseEdit extends Component {
       }).catch(error => {
         this.setState(byPropKey('error', error));
       });
+
   }
 
   componentWillUnmount(){
@@ -111,10 +113,10 @@ class CourseEdit extends Component {
   }
 
   onSettingsSubmit = (event) => {
-      const {courseId, teacherId, open, password } = this.state;
-      console.log('on settings submit public', this.state.open );
+      const {courseId, teacherId, openCourse, password } = this.state;
+      console.log('on settings submit public', this.state.openCourse );
 
-      db.doUpdateCoursePrivacy(courseId, open, password, courseId )
+      db.doUpdateCoursePrivacy(courseId, teacherId, openCourse, password)
         .then((res)=> {
           console.log(' doUpdateCoursePrivacy', res);
         })
@@ -157,11 +159,12 @@ class CourseEdit extends Component {
     console.log('openCourse', openCourse);
 
     return (
-      <Segment basic loading={isLoading} ref="myRef">
+      <Segment basic loading={isLoading}>
 
         <Container>
 
-            <CEditTitle title={title} teacherName={teacherName} teacherId={teacherId} />
+            <CEditTitle ref="myRef"
+              title={title} teacherName={teacherName} teacherId={teacherId} />
 
             <Container>
               <Grid celled stackable>
