@@ -27,6 +27,7 @@ export const doCreateCourse = (title, teacherId) =>
   var metadata = {
      title,
      teacherId,
+     isPublished: false,
    }
 
   // console.log('new course key generated in db file',newCourseKey);
