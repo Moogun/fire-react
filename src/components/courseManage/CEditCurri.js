@@ -31,15 +31,13 @@ class CEditCurri extends Component {
     const { curri } = this.props
     if (curri) {
       console.log('did mount curri', curri);
-      var d = convertFromRaw(curri)
-      console.log('d', d);
+      var parsedCurri = JSON.parse(curri)
+      console.log('parsed curri', parsedCurri);
+      var data = convertFromRaw(parsedCurri)
+      console.log('data', data);
       this.setState({
-        editorState: createEditorState(curri),
+        editorState: createEditorState(data),
       });
-
-      // this.setState({
-      //   editorState: EditorState.push(this.state.editorState, convertFromRaw(curri))
-      // });
     }
     this.refs.editor.focus();
   }
@@ -48,18 +46,20 @@ class CEditCurri extends Component {
     const {courseId, teacherId} = this.props
     console.log('course teacher', courseId, teacherId);
     var editorData = convertToRaw(this.state.editorState.getCurrentContent());
-    console.log('editor data',editorData);
+    console.log('editor1 data',editorData);
 
     var a = JSON.stringify(editorData)
     console.log('a', a);
     var b = JSON.parse(a)
     console.log('b', b);
-    // this.setState({editorState: createEditorState(b)})
-    // db.doUpdateCourseCurri(courseId, teacherId, a)
-    //   .then(response => console.log('succeded uploading',response))
-    //   .catch(error => {
-    //     this.setState(byPropKey('error', error));
-    //   });
+    this.setState({editorState: createEditorState(b)})
+    var editorData2 = convertToRaw(this.state.editorState.getCurrentContent());
+    console.log('editor data2',editorData2);
+    db.doUpdateCourseCurri(courseId, teacherId, a)
+      .then(response => console.log('succeded uploading',response))
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
 
   }
 
