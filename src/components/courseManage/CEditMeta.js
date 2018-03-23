@@ -5,7 +5,7 @@ import {db} from '../../firebase';
 class CEditMeta extends Component {
 
   render() {
-    console.log('edit meta render props', this.props);
+    // console.log('edit meta render props', this.props);
     const { textbook, date, location, time, submit } = this.props
 
     return (

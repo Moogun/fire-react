@@ -13,6 +13,10 @@ import withAuthorization from '../../HOC/withAuthorization'
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
 
+import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
+import { ImageSideButton, Block, addNewBlock, Editor, createEditorState,} from 'medium-draft';
+import 'medium-draft/lib/index.css';
+
 const INITIAL_STATE = {
   open: true,
   closed: false,
@@ -35,6 +39,16 @@ class CourseEdit extends Component {
        notifications: OrderedSet(),
        count: 0,
        key: 0,
+       editorState: createEditorState(), // for empty
+    };
+    this.sideButtons = [{
+      title: 'Image',
+      component: ImageSideButton,
+      // component: CustomImageSideButton,
+    }];
+
+    this.onChange = (editorState) => {
+      this.setState({ editorState });
     };
   }
 
@@ -56,6 +70,8 @@ class CourseEdit extends Component {
             // setStateError
             let meta = user.val().courseTeaching[courseId].metadata
 
+            let parsedCurri;
+
             this.setState ({
               courseId: courseId, title: snapshot.val().metadata.title,
               teacherId: snapshot.val().metadata.teacherId, teacherName: user.val().username,
@@ -64,7 +80,10 @@ class CourseEdit extends Component {
               openCourse: meta.openCourse ? meta.openCourse : true, password: meta.password ? meta.password : '',
               isPublished: meta.isPublished,
 
-              curri: snapshot.val().curri,
+
+              // curri: snapshot.val().curri,
+              // parsedCurri = JSON.parse(snapshot.val().curri),
+              editorState: createEditorState(JSON.parse(snapshot.val().curri)),
               })
 
             const {isLoading } = this.state
@@ -116,6 +135,29 @@ class CourseEdit extends Component {
           this.setState(byPropKey('error', error))
         })
       event.preventDefault();
+  }
+
+  onCurriSubmit = ( ) => {
+    const {courseId, teacherId} = this.state
+    console.log('course teacher', courseId, teacherId);
+
+    var editorData = convertToRaw(this.state.editorState.getCurrentContent());
+    console.log('editor1 data getCurrentContent',editorData);
+
+    var strData = JSON.stringify(editorData)
+    // console.log('a stringify', a);
+    //var b = JSON.parse(a)
+    //console.log('b parsed', b);
+
+    // this.setState({editorState: createEditorState(b)})
+    //var editorData2 = convertToRaw(this.state.editorState.getCurrentContent());
+
+    // console.log('editor data2',editorData2);
+    db.doUpdateCourseCurri(courseId, teacherId, strData)
+      .then(response => console.log('succeded uploading',response))
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
   }
 
   onSettingsSubmit = (event) => {
@@ -195,6 +237,7 @@ class CourseEdit extends Component {
       textbook, date, time, location,
       curri,
       openCourse, password,
+      editorState
     } = this.state
     const {match} = this.props
 
@@ -271,7 +314,9 @@ class CourseEdit extends Component {
                         {...props}
                         courseId={courseId}
                         teacherId={teacherId}
-                        curri={curri}
+                        editorState={editorState}
+                        change={this.onChange}
+                        submit={this.onCurriSubmit}
                       />} />
                       <Route path={`${match.url}/settings`} render={() => <CEditSettings
                         openCourse={openCourse}

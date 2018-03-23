@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "draft-convert": "^2.0.1",
     "draft-js": "^0.10.5",
     "firebase": "^4.9.1",
     "font-awesome": "^4.7.0",
