@@ -24,26 +24,29 @@ class HomePage extends Component {
     db.onceGetCourses()
       .then(snap => {
         // this.setState ({courses: snap.val()})
-        console.log('courses', snap.val());
+        // console.log('courses', snap.val());
         let courses = snap.val()
         Object.keys(courses).map(key => {
-          console.log(courses[key].metadata.teacherId);
+          // console.log(courses[key].metadata.teacherId);
           let tid = courses[key].metadata.teacherId
           db.onceGetUser(tid)
             .then(userSnap => {
-              console.log('courses[key]', courses[key])
+              // console.log('courses[key]', courses[key])
               courses[key].metadata.teacherName = userSnap.val().username
               const {isLoading } = this.state
               this.setState({courses: courses, isLoading: !isLoading})
             })
         })
-
       })
+
+    db.onceGetUserWithName()
+      .then(res => console.log('res', res.val()))
+
   }
   render() {
 
     const {users, courses, isLoading} = this.state;
-    console.log('home', users);
+    // console.log('home', users);
     return (
       <Segment basic loading={isLoading}>
         <Grid container>

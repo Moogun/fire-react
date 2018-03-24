@@ -13,6 +13,13 @@ export const onceGetUsers = () =>
 export const onceGetUser = (uid) =>
   db.ref('users').child(uid).once('value');
 
+export const onceGetUserWithName = () =>
+  // const events =
+  db.ref('users').orderByChild("username").equalTo('moo7').limitToFirst(1).once("value");
+
+
+
+
 //get multiple courses
 export const onceGetCourses = () =>
   db.ref('courses').once('value');
@@ -114,6 +121,8 @@ export const doPublishCourse = (courseKey, tid, isPublished) => {
 
   return db.ref().update(updates)
 }
+
+
 
 
 // 1. database snapshot contains data from a db location
