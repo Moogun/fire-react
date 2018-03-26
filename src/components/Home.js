@@ -17,10 +17,13 @@ class HomePage extends Component {
   }
   componentDidMount(){
     const {isLoading } = this.state
-    this.setState ({isLoading: !isLoading })
+    // console.log('home isLoading', isLoading);
+    // this.setState ({isLoading: !isLoading })
+
     db.onceGetUsers().then(snapshot=>
       this.setState(() => ({users: snapshot.val() }))
     )
+
     db.onceGetCourses()
       .then(snap => {
         // this.setState ({courses: snap.val()})
@@ -34,13 +37,15 @@ class HomePage extends Component {
               // console.log('courses[key]', courses[key])
               courses[key].metadata.teacherName = userSnap.val().username
               const {isLoading } = this.state
-              this.setState({courses: courses, isLoading: !isLoading})
+              console.log('home isLoading', isLoading);
+              // this.setState({courses: courses, isLoading: !isLoading})
+
             })
         })
       })
 
-    db.onceGetUserWithName()
-      .then(res => console.log('res', res.val()))
+    // db.onceGetUserWithName()
+    //   .then(res => console.log('res', res.val()))
 
   }
   render() {

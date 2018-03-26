@@ -22,7 +22,7 @@ class Dashboard extends Component {
   handleItemClick = (e, {name}) => this.setState({activeItem: name})
   handleCourseClick = (courseKey) => {
     const {history} = this.props;
-    console.log('coursekey', courseKey);
+    // console.log('coursekey', courseKey);
     history.push({
       pathname: '/course_manage/' + courseKey + '/edit',
     //   // search: '?query=' + title + name,
@@ -42,11 +42,11 @@ class Dashboard extends Component {
      const {isLoading } = this.state
      this.setState({isLoading: !isLoading})
      if (this.context.authUser ) {
-       console.log('authUser');
+       // console.log('authUser');
        db.onceGetUser(this.context.authUser.uid)
         .then(snapshot => {
           const {isLoading } = this.state
-          console.log('inside', isLoading);
+          // console.log('inside', isLoading);
           this.setState( () => ({courseTeaching: snapshot.val().courseTeaching, isLoading: !isLoading} ) )
         }
 
@@ -58,14 +58,18 @@ class Dashboard extends Component {
      }
   }
 
+  componentWillUnmount(){
+    console.log('dashboard will un mount 1 ', )
+  }
+
   render() {
     const {authUser, match} = this.props
     const {activeItem, error, user, courseTeaching} = this.state
 
-    console.log('1 render props authUser', authUser);
-    console.log('2 render state user', user);
-    console.log('2 render state courseTeaching', courseTeaching);
-    console.log('3 render context auth user', this.context.authUser);
+    // console.log('1 render props authUser', authUser);
+    // console.log('2 render state user', user);
+    // console.log('2 render state courseTeaching', courseTeaching);
+    // console.log('3 render context auth user', this.context.authUser);
 
       return (
 

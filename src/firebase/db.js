@@ -13,12 +13,15 @@ export const onceGetUsers = () =>
 export const onceGetUser = (uid) =>
   db.ref('users').child(uid).once('value');
 
-export const onceGetUserWithName = () =>
-  // const events =
-  db.ref('users').orderByChild("username").equalTo('moo7').limitToFirst(1).once("value");
+// export const onceGetUserWithName = () =>
+//   // const events =
+//   db.ref('users').orderByChild("username").equalTo('moo7').limitToFirst(1).once("value");
 
+export const onceGetUserWithName = (tName) =>
+  db.ref('users').orderByChild("username").equalTo(tName).limitToFirst(1).once("value");
 
-
+export const onceGetCourseWithTitle = (cTitle) =>
+  db.ref('courses').orderByChild("/metadata/title").equalTo(cTitle).limitToFirst(1).once("value");
 
 //get multiple courses
 export const onceGetCourses = () =>
@@ -122,6 +125,23 @@ export const doPublishCourse = (courseKey, tid, isPublished) => {
   return db.ref().update(updates)
 }
 
+export const doRegisterCourse = (courseKey, uid) => {
+  console.log('db', courseKey, uid);
+
+  // meta has
+  // teacher has questions, reviews, enrolled
+  // var updates = {}
+  //
+  // if (isPublished === true) {
+  //   updates[`courses/${courseKey}/metadata/isPublished`] = false
+  //   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/isPublished`] = false
+  // } else {
+  //   updates[`courses/${courseKey}/metadata/isPublished`] = true
+  //   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/isPublished`] = true
+  // }
+
+  return db.ref().update()
+}
 
 
 

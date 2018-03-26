@@ -13,12 +13,13 @@ class Courses extends Component {
       ]
     };
   }
-  handleClick = (id, tid) => {
+  handleClick = (id, tid, tName) => {
     console.log(id);
     // this.props.history.push("/teacher/:teacherId/course/:courseId'")
     this.props.history.push({
-      pathname: '/teacher/:' + tid + '/course/:' + id,
-      search: '?query=title',
+      // pathname: '/teacher/:' + tid + '/course/:' + id,
+      pathname: '/' + tName,
+      // search: '?query=title',
       state: {
         teacherId: tid,
       }

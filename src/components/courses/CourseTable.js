@@ -18,7 +18,7 @@ class CourseTable extends Component {
         {/* <Header as='h3'>Upcoming</Header> */}
           <Table basic='very' selectable>
             <Table.Body>
-              {this.props.courses.map(c => <CourseTableRow key={c.id} course={c} click={() => this.handleClick(c.id, c.teacherId)}/>)}
+              {this.props.courses.map(c => <CourseTableRow key={c.id} course={c} click={() => this.handleClick(c.id, c.teacherId, c.teacherName)}/>)}
             </Table.Body>
           </Table>
       </div>
