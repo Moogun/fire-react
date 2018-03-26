@@ -3,9 +3,10 @@ import CourseMeta from './CourseMeta'
 import CourseFeatures from './CourseFeatures'
 import CourseCurri from './CourseCurri'
 import CourseOpenQ from './CourseOpenQ'
-import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating } from 'semantic-ui-react'
+import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 import {Link, withRouter} from 'react-router-dom';
+import {db} from '../../firebase';
 
 const menuStyle = {
   border: 'none',
@@ -23,17 +24,38 @@ const fixedMenuStyle = {
 }
 
 class CoursePage extends Component {
+
   state = {
-  menuFixed: false,
+    menuFixed: false,
   }
 
   stickTopMenu = () => this.setState({ menuFixed: true })
   unStickTopMenu = () => this.setState({ menuFixed: false })
 
+  componentDidMount() {
+    console.log('course page', this.props.match);
+    const {teacherName, courseName} = this.props.match.params
+    console.log('t', teacherName, 'c', courseName);
+
+    db.onceGetUserWithName(teacherName)
+      .then(res => console.log('res', res.val()))
+
+    var titleUnDashed = courseName.replace(/-/g, ' ')
+    console.log('titleUnDashed', titleUnDashed);
+    
+    db.onceGetCourseWithTitle(titleUnDashed)
+      .then(res => console.log('res', res.val()))
+  }
+
+  handleEnroll = () => {
+    console.log();
+  }
+
   render() {
     const {menuFixed} = this.state
     console.log('course page', this.props);
-    
+    const {teacherName, courseName } = this.props.match.params
+    console.log('t', teacherName, 'c', courseName);
     return (
       <Grid>
         <Grid.Row>
@@ -41,11 +63,17 @@ class CoursePage extends Component {
               <Container>
 
                 <Breadcrumb style={{marginTop: '2em' }}>
-                   <Breadcrumb.Section link> <Link to='/'>Home </Link></Breadcrumb.Section>
+                   <Breadcrumb.Section link as={Link} to='/' >
+                     Home
+                   </Breadcrumb.Section>
                    <Breadcrumb.Divider icon='right angle' />
-                   <Breadcrumb.Section link><Link to='/teacher/456'>Teacher name</Link></Breadcrumb.Section>
+                   <Breadcrumb.Section link as={Link} to={`/${teacherName}`} >
+                     {teacherName}
+                   </Breadcrumb.Section>
                    <Breadcrumb.Divider icon='right angle' />
-                   <Breadcrumb.Section active>This course</Breadcrumb.Section>
+                   <Breadcrumb.Section link>
+                     {courseName}
+                   </Breadcrumb.Section>
                  </Breadcrumb>
 
                 <Grid style={{margin: '3em'}} stackable>
@@ -57,8 +85,8 @@ class CoursePage extends Component {
                           style={{color: '#fff'}}
                           content='ChatBots: How to Make a Facebook Messenger Chat Bot in 1hr'
                           subheader='We will Create a Parrot Bot Together! This course is a Step by Step Guide in Building a Chat Bot for Facebook Messenger' />
-
                       </Segment>
+                      <Button onClick={this.handleEnroll}>Register</Button>
                     </Grid.Column>
 
                     <Grid.Column width={3} textAlign='center'>

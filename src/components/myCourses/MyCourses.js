@@ -52,7 +52,9 @@ class MyCourses extends Component {
                               <Menu.Item name='messages' active={activeItem === 'messages'} onClick={this.handleItemClick} />
                               <Menu.Item name='friends' active={activeItem === 'friends'} onClick={this.handleItemClick} />
                             </Menu>
+
                         <CourseCards />
+
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>

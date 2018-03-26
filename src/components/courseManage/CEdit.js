@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
+import * as routes from '../../constants/routes';
 import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input, Divider, Popup } from 'semantic-ui-react'
 
 import CEditTitle from './CEditTitle'
@@ -53,43 +54,46 @@ class CourseEdit extends Component {
   }
 
   componentDidMount() {
-    console.log(1);
 
     const {isLoading } = this.state
     const {match} = this.props
-
+    console.log('did mount 1 ', 'beforeIsLoading')
     this.setState({isLoading: !isLoading})
 
-    let courseId = match.params.id
-    db.onceGetCourse(match.params.id)
+    let courseId = match.params.cid
+    db.onceGetCourse(match.params.cid)
       .then(snapshot => {
-        // console.log('sna', snapshot.val());
+        console.log('did mount 2 sna', snapshot.val());
+        let course = snapshot.val()
+        let meta = course.metadata
 
-        db.onceGetUser(snapshot.val().metadata.teacherId)
+        db.onceGetUser(course.metadata.teacherId)
           .then(user => {
-            // setStateError
-            let meta = user.val().courseTeaching[courseId].metadata
-
-            let parsedCurri;
-
-            this.setState ({
-              courseId: courseId, title: snapshot.val().metadata.title,
-              teacherId: snapshot.val().metadata.teacherId, teacherName: user.val().username,
-
-              textbook: meta.textbook, date: meta.date, time: meta.time, location: meta.location,
-              openCourse: meta.openCourse ? meta.openCourse : true, password: meta.password ? meta.password : '',
-              isPublished: meta.isPublished,
-
-
-              // curri: snapshot.val().curri,
-              // parsedCurri = JSON.parse(snapshot.val().curri),
-              editorState: createEditorState(JSON.parse(snapshot.val().curri)),
-              })
+            console.log('did mount 3 user', user.val().courseTeaching[courseId].metadata);
 
             const {isLoading } = this.state
-            this.setState({isLoading: !isLoading})
 
-            console.log(2);
+            this.setState ({
+              courseId: courseId,
+
+              title: meta.title,
+              teacherId: meta.teacherId,
+
+              teacherName: user.val().username,
+
+              textbook: meta.textbook,
+              date: meta.date,
+              time: meta.time,
+              location: meta.location,
+              openCourse: meta.openCourse ? meta.openCourse : false,
+              password: meta.password ? meta.password : '',
+              isPublished: meta.isPublished,
+
+              // editorState: creategEditorState(JSON.parse(course.curri)),
+              isLoading: !isLoading
+              })
+            this.onChange(createEditorState(JSON.parse(course.curri)))
+            console.log('did mount', 4);
           })
           .catch(error => {
             this.setState(byPropKey('error', error));
@@ -101,7 +105,7 @@ class CourseEdit extends Component {
   }
 
   componentWillUnmount(){
-    console.log(0);
+    console.log('will un mount', 0);
   }
 
   handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
@@ -145,14 +149,7 @@ class CourseEdit extends Component {
     console.log('editor1 data getCurrentContent',editorData);
 
     var strData = JSON.stringify(editorData)
-    // console.log('a stringify', a);
-    //var b = JSON.parse(a)
-    //console.log('b parsed', b);
 
-    // this.setState({editorState: createEditorState(b)})
-    //var editorData2 = convertToRaw(this.state.editorState.getCurrentContent());
-
-    // console.log('editor data2',editorData2);
     db.doUpdateCourseCurri(courseId, teacherId, strData)
       .then(response => console.log('succeded uploading',response))
       .catch(error => {
@@ -230,8 +227,9 @@ class CourseEdit extends Component {
       notifications: this.state.notifications.filter(n => n.key !== count)
     })
   }
-  render() {
 
+  render() {
+    console.log('render', 1);
     const {activeItem, isLoading,
       courseId, title, teacherName, teacherId,
       textbook, date, time, location,
@@ -241,7 +239,7 @@ class CourseEdit extends Component {
     } = this.state
     const {match} = this.props
 
-    console.log('openCourse', openCourse);
+    console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse);
 
     return (
       <Segment basic loading={isLoading}>
@@ -300,7 +298,8 @@ class CourseEdit extends Component {
 
                 <Grid.Column width={10}>
                     <Switch>
-                      <Redirect exact from={match.url} to={`${match.url}/info`} />
+                      <Redirect exact from={match.url} to={`${match.url}/info`}
+                     />
                       <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                         {...props}
                         textbook={textbook}
@@ -337,20 +336,50 @@ class CourseEdit extends Component {
             </Container>
         </Container>
 
-        <NotificationStack
+        {/* <NotificationStack
           barStyleFactory={this.barStyleFactory}
           activeBarStyleFactory={this.activeBarStyleFactory}
-          notifications={this.state.notifications.toArray()}
+          // notifications={this.state.notifications.toArray()}
           onDismiss={notification => this.setState({
             notifications: this.state.notifications.delete(notification)
           })}
-        />
+        /> */}
       </Segment>
     );
   }
 }
 
+// class CourseEdit extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//
+//     };
+//   }
+//   componentDidMount(){
+//     console.log('did mount 1 ', )
+//   }
+//
+//   componentWillUnmount(){
+//     console.log('will un mount 0 ', )
+//   }
+//
+//   shouldComponentUpdate(nextProps, nextState){
+//     console.log('should cpnt update', nextProps, nextState);
+//   }
+//
+//   render() {
+//     console.log('render 1 ', )
+//     return (
+//         <div>
+//
+//         </div>
+//     );
+//   }
+// }
+
 export default withRouter(CourseEdit)
+// export default CourseEdit
 
 
 // secure course key 1) from create page, 2) from the url match, 3)

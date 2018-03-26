@@ -27,10 +27,15 @@ class Teacher extends Component {
 
   componentDidMount() {
     // console.log(this.props.location.state.teacherId);
+    console.log(1);
+  }
 
+  componentWillUnmount(){
+    console.log(0);
   }
 
   render() {
+    console.log(2);
     const {coursesTeaching} = this.state
     const {match} = this.props
     // console.log('tea props',this.props);
@@ -46,7 +51,7 @@ class Teacher extends Component {
                 <Breadcrumb style={{marginTop: '2em' }}>
                    <Breadcrumb.Section link> <Link to='/'>Home </Link></Breadcrumb.Section>
                    <Breadcrumb.Divider icon='right angle' />
-                   <Breadcrumb.Section><Link to='/teacher/456'>Teacher name</Link></Breadcrumb.Section>
+                   <Breadcrumb.Section><Link to='/'>Teacher name</Link></Breadcrumb.Section>
                  </Breadcrumb>
 
                 <Grid style={{margin: '3em'}} stackable>
