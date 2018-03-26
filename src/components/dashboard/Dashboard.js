@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types';
+import * as routes from '../../constants/routes';
 
 import CourseCards from '../courses/CourseCards'
 import CourseTeaching from './CourseTeaching'
@@ -21,13 +22,14 @@ class Dashboard extends Component {
   handleItemClick = (e, {name}) => this.setState({activeItem: name})
   handleCourseClick = (courseKey) => {
     const {history} = this.props;
+    console.log('coursekey', courseKey);
     history.push({
       pathname: '/course_manage/' + courseKey + '/edit',
-      // search: '?query=' + title + name,
-      state : {
-        courseKey: courseKey,
-        title: 'title',
-      }
+    //   // search: '?query=' + title + name,
+    //   state : {
+    //     courseKey: courseKey,
+    //     title: 'title',
+    //   }
     })
   }
 
@@ -64,7 +66,7 @@ class Dashboard extends Component {
     console.log('2 render state user', user);
     console.log('2 render state courseTeaching', courseTeaching);
     console.log('3 render context auth user', this.context.authUser);
-    
+
       return (
 
         <Segment basic loading={this.state.isLoading}>
@@ -84,13 +86,15 @@ class Dashboard extends Component {
                               <Menu.Item name='courses'
                                 active={activeItem === 'courses'}
                                 onClick={this.handleItemClick}
-                                as={Link} to='/teaching/courses'
+                                // as={Link} to='/teaching/courses'
+                                as={Link} to={`${match.url}/courses`}
                               />
                               <Menu.Item
                                 name='questions'
                                 active={activeItem === 'questions'}
                                 onClick={this.handleItemClick}
-                                as={Link} to='/teaching/questions'
+                                // as={Link} to='/teaching/questions'
+                                as={Link} to={`${match.url}/questions`}
                               />
                               <Menu.Item
                                 name='announcement'
@@ -104,9 +108,12 @@ class Dashboard extends Component {
                     <Grid.Row>
                       <Grid.Column>
                         <Switch>
-                          <Redirect exact from={match.url} to={`${match.url}/courses`} />
-                          <Route path='/teaching/courses' render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
-                          <Route path='/teaching/questions' component = {QPanel} />
+                          {/* <Redirect exact from={match.url} to={`${match.url}/courses`} /> */}
+                          <Redirect exact from={match.url} to={routes.T_DASHBOARD_COURSES} />
+                          {/* <Route path='/teaching/courses' render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } /> */}
+                          <Route path={routes.T_DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
+                          {/* <Route path='/teaching/questions' component = {QPanel} /> */}
+                          <Route path={routes.T_DASHBOARD_Q_PANEL} component = {QPanel} />
                         </Switch>
                       </Grid.Column>
                     </Grid.Row>
