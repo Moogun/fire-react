@@ -16,42 +16,52 @@ class HomePage extends Component {
     };
   }
   componentDidMount(){
-    const {isLoading } = this.state
-    // console.log('home isLoading', isLoading);
-    // this.setState ({isLoading: !isLoading })
-
+    // 1. get all users value under at a single node
     db.onceGetUsers().then(snapshot=>
       this.setState(() => ({users: snapshot.val() }))
     )
 
+    //2. get all users and map with saved courses ,,
+    //** caution: local looping is far faster than another db fetching
+    // ex : below tid prints all tid, then db request get excuted
+
     db.onceGetCourses()
       .then(snap => {
-        // this.setState ({courses: snap.val()})
-        // console.log('courses', snap.val());
-        let courses = snap.val()
-        Object.keys(courses).map(key => {
-          // console.log(courses[key].metadata.teacherId);
-          let tid = courses[key].metadata.teacherId
+        let courseSnap = snap.val()
+
+        Object.keys(courseSnap).map(key => {
+          // console.log('course key', key);
+          // console.log('meta t id', courseSnap[key].metadata.teacherId);
+          let tid = courseSnap[key].metadata.teacherId
           db.onceGetUser(tid)
             .then(userSnap => {
-              // console.log('courses[key]', courses[key])
-              courses[key].metadata.teacherName = userSnap.val().username
-              const {isLoading } = this.state
-              console.log('home isLoading', isLoading);
-              // this.setState({courses: courses, isLoading: !isLoading})
-
-            })
+                // console.log('userSnap', userSnap.val())
+                let tName = userSnap.val().username
+                courseSnap[key].metadata.teacherName = tName
+                this.setState({courses: courseSnap})
+              })
         })
       })
 
-    // db.onceGetUserWithName()
-    //   .then(res => console.log('res', res.val()))
+    //3. get all keys of children
+    // db.onceGetPublishedCourses()
+    //   .then(res => {
+    //     console.log('res', res.val())
+    //     console.log('obj keys', Object.keys(res.val()))
+    //   }).
 
+    //3-1. get values of children and attach a data from other node
+      // db.fetchingCoursesThenAttach()
+      //   .then(res => {
+      //     console.log('res', res)
+      //   //   console.log('res', res.val())
+      //   })
   }
   render() {
 
     const {users, courses, isLoading} = this.state;
     // console.log('home', users);
+    console.log('render 1 ', courses)
     return (
       <Segment basic loading={isLoading}>
         <Grid container>

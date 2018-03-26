@@ -18,9 +18,9 @@ export const COURSE_MANAGE_SETTINGS = '/course_manage/:cid/edit/settings';
 export const COURSE_MANAGE_ASSIGNMENT = '/course_manage/:cid/edit/assignment';
 
 //3.
-export const T_DASHBOARD = '/t-dashboard/'; // fetch t info with authUser credential
-export const T_DASHBOARD_COURSES = '/t-dashboard/courses';
-export const T_DASHBOARD_Q_PANEL = '/t-dashboard/questions';
+export const T_DASHBOARD = '/dashboard/'; // fetch t info with authUser credential
+export const T_DASHBOARD_COURSES = '/dashboard/courses';
+export const T_DASHBOARD_Q_PANEL = '/dashboard/questions';
 
 export const DASHBOARD_Q_PANEL_BY_C_TITLE = '/t-dashboard/questions/:cTitle';
 export const DASHBOARD_Q_PANEL_BY_UNREAD = '/t-dashboard/questions/unread';
@@ -30,10 +30,10 @@ export const DASHBOARD_Q_PANEL_BY_UNREAD = '/t-dashboard/questions/unread';
 export const TEACHER_PAGE = '/teacher/:tName'; // query t info with t name
 export const TEACHER_PAGE_COURSES = '/teacher/:tName/courses';
 export const TEACHER_PAGE_QUESTIONS = '/teacher/:tName/questions';
+export const QUESTION_PAGE = '/teacher/:tName/questions/:qNum'; // q details, get access from TEACHER_PAGE_QUESTIONS, and fetch q detail from q list
 
 //5.
-export const COURSE_PAGE = '/teacher/:tName/:cTitle'; // query t info with c title
-export const QUESTION_PAGE = '/teacher/:tName/questions/:qNum'; // q details, get access from TEACHER_PAGE_QUESTIONS, and fetch q detail from q list
+export const COURSE_PAGE = '/:tName/:cTitle'; // query t info with c title
 
 
 //TEACHER DASHBOARD,

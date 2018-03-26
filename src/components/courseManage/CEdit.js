@@ -298,8 +298,7 @@ class CourseEdit extends Component {
 
                 <Grid.Column width={10}>
                     <Switch>
-                      <Redirect exact from={match.url} to={`${match.url}/info`}
-                     />
+                      <Redirect exact from={match.url} to={`${match.url}/info`} />
                       <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                         {...props}
                         textbook={textbook}

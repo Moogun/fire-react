@@ -23,6 +23,7 @@ class CourseCards extends Component {
     history.push({
       // pathname: '/teacher/' + teacherId + '/course/' + courseId,
       pathname: '/' + tName + '/' + titleDashed
+
       // search: '?query=title',
       // state: {
       //   teacherId: teacherId,

@@ -1,23 +1,21 @@
 import React from 'react'
-// import {Link, Route} from 'react-router-dom'
-
 import { Table, Rating} from 'semantic-ui-react'
 
 const CourseTableRow = ({course, click}) =>
   <Table.Row onClick={click}>
     <Table.Cell textAlign='left'>
-        {course.title} <br />
-        {course.subTitle}
+        {course.metadata.title} <br />
+        {course.metadata.subTitle}
     </Table.Cell>
     <Table.Cell>
-      {course.date}<br/>
-      {course.time}
+      {course.metadata.date}<br/>
+      {course.metadata.time}
     </Table.Cell>
     <Table.Cell>
-        {course.location}
+        {course.metadata.location}
     </Table.Cell>
     <Table.Cell>
-    {course.textbook}
+    {course.metadata.textbook}
     </Table.Cell>
     <Table.Cell>
       {/* {course.capacity} */}

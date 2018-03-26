@@ -33,29 +33,35 @@ class CoursePage extends Component {
   unStickTopMenu = () => this.setState({ menuFixed: false })
 
   componentDidMount() {
-    console.log('course page', this.props.match);
-    const {teacherName, courseName} = this.props.match.params
-    console.log('t', teacherName, 'c', courseName);
-
-    db.onceGetUserWithName(teacherName)
-      .then(res => console.log('res', res.val()))
-
-    var titleUnDashed = courseName.replace(/-/g, ' ')
-    console.log('titleUnDashed', titleUnDashed);
-    
-    db.onceGetCourseWithTitle(titleUnDashed)
-      .then(res => console.log('res', res.val()))
+    console.log('course page did mount', this.props.match);
+    // const {teacherName, courseName} = this.props.match.params
+    // console.log('t', teacherName, 'c', courseName);
+    //
+    // db.onceGetUserWithName(teacherName)
+    //   .then(res => console.log('res', res.val()))
+    //
+    // var titleUnDashed = courseName.replace(/-/g, ' ')
+    // console.log('titleUnDashed', titleUnDashed);
+    //
+    // db.onceGetCourseWithTitle(titleUnDashed)
+    //   .then(res => console.log('res', res.val()))
   }
 
   handleEnroll = () => {
     console.log();
   }
 
+  handleClick = () => {
+    const {tName, cTitle,} = this.props.match.params
+    this.props.history.push({pathname: '/' + 'teacher' + '/' + tName})
+  }
+
   render() {
-    const {menuFixed} = this.state
-    console.log('course page', this.props);
-    const {teacherName, courseName } = this.props.match.params
-    console.log('t', teacherName, 'c', courseName);
+    console.log('course page render 1 ', this.props)
+    // const {menuFixed} = this.state
+    // console.log('course page', this.props);
+    const {tName, cTitle,} = this.props.match.params
+    console.log('t', tName, 'c', cTitle);
     return (
       <Grid>
         <Grid.Row>
@@ -67,12 +73,12 @@ class CoursePage extends Component {
                      Home
                    </Breadcrumb.Section>
                    <Breadcrumb.Divider icon='right angle' />
-                   <Breadcrumb.Section link as={Link} to={`/${teacherName}`} >
-                     {teacherName}
+                   <Breadcrumb.Section link as={Link} to={`teacher/${tName}`} >
+                     {tName}
                    </Breadcrumb.Section>
                    <Breadcrumb.Divider icon='right angle' />
-                   <Breadcrumb.Section link>
-                     {courseName}
+                   <Breadcrumb.Section>
+                     {cTitle}
                    </Breadcrumb.Section>
                  </Breadcrumb>
 
@@ -93,7 +99,7 @@ class CoursePage extends Component {
                       <Image src={profile} circular centered />
                       <Header as="h3" content='Name' subheader='profile' />
                       <Rating icon='star' defaultRating={5} maxRating={4} />
-                      <p> '000 reviews' </p>
+                      <p onClick={this.handleClick}> '000 reviews' </p>
                     </Grid.Column>
                     <Grid.Column width={1}>
                     </Grid.Column>

@@ -13,10 +13,6 @@ export const onceGetUsers = () =>
 export const onceGetUser = (uid) =>
   db.ref('users').child(uid).once('value');
 
-// export const onceGetUserWithName = () =>
-//   // const events =
-//   db.ref('users').orderByChild("username").equalTo('moo7').limitToFirst(1).once("value");
-
 export const onceGetUserWithName = (tName) =>
   db.ref('users').orderByChild("username").equalTo(tName).limitToFirst(1).once("value");
 
@@ -25,10 +21,10 @@ export const onceGetCourseWithTitle = (cTitle) =>
 
 //get multiple courses
 export const onceGetCourses = () =>
-  db.ref('courses').once('value');
+  db.ref('courses').limitToFirst(5).once('value');
 
 export const onceGetPublishedCourses = () =>
-  db.ref('courses').equalTo().once('value');
+  db.ref('courses').limitToFirst(5).once('value');
 
 //get 1 course
 export const onceGetCourse = (courseKey) =>
