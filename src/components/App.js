@@ -61,36 +61,47 @@ class App extends Component {
           />
 
           <Route
-            exact path='/teacher/:teacherId'
-            render={() => <Teacher />}
-          />
-
-          <Route
-            path='/teaching'
+            // exact path='/teaching'
+            path={routes.T_DASHBOARD}
             render={() => <Dashboard />}
           />
 
           <Route
-            exact path='/teacher/:teacherId/course/:courseId'
-            render={() => <CoursePage />}
+            // path='/course_manage/:id/edit'
+            path={routes.COURSE_MANAGE}
+            component={() => <CEdit />}
+          />
+
+          <Route
+            // exact path='/teacher/:teacherId'
+            // exact path='/:teacherName'
+            path={routes.TEACHER_PAGE}
+            render={() => <Teacher />}
           />
 
 
+          {/* <Route
+            exact path='/teacher/:teacherId/course/:courseId'
+            render={() => <CoursePage />}
+          /> */}
+
           <Route
-            path='/teacher/:teacherId/question/:questionId'
+            // exact path='/:teacherName/courses/:courseName'
+            exact path={routes.COURSE_PAGE}
+            render={() => <CoursePage />}
+          />
+
+          <Route
+            // path='/teacher/:teacherId/question/:questionId'
+            exact path ={routes.QUESTION_PAGE}
             render={() => <Question />}
           />
 
           <Route
-            eaact path='/create'
+            // eaact path='/create'
+            exact path={routes.CREATE}
             render={() => <Create />}
           />
-
-          <Route
-            path='/course_manage/:id/edit'
-            component={() => <CEdit />}
-          />
-
 
           <Footer />
         </div>
