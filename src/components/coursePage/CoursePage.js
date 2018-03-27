@@ -33,18 +33,27 @@ class CoursePage extends Component {
   unStickTopMenu = () => this.setState({ menuFixed: false })
 
   componentDidMount() {
-    console.log('course page did mount', this.props.match);
-    // const {teacherName, courseName} = this.props.match.params
-    // console.log('t', teacherName, 'c', courseName);
-    //
-    // db.onceGetUserWithName(teacherName)
-    //   .then(res => console.log('res', res.val()))
-    //
-    // var titleUnDashed = courseName.replace(/-/g, ' ')
-    // console.log('titleUnDashed', titleUnDashed);
-    //
-    // db.onceGetCourseWithTitle(titleUnDashed)
-    //   .then(res => console.log('res', res.val()))
+    console.log('course page did mount', this.props.match.params);
+    let cTitle = this.props.match.params.cTitle
+    let title = cTitle.replace(/-/g, ' ');
+
+    db.onceGetCourseWithTitle(title)
+      .then(cSnap => {
+        let c = cSnap.val()
+
+        if (c) {
+          let key = Object.keys(c)
+          let course = c[key]
+          console.log('course', course);
+
+          this.setState ({
+            course: course
+          })
+        } else {
+          console.log('find a way to display course titles that have dash in it');
+        }
+      })
+
   }
 
   handleEnroll = () => {
@@ -57,11 +66,15 @@ class CoursePage extends Component {
   }
 
   render() {
-    console.log('course page render 1 ', this.props)
     // const {menuFixed} = this.state
-    // console.log('course page', this.props);
     const {tName, cTitle,} = this.props.match.params
-    console.log('t', tName, 'c', cTitle);
+    let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
+    let teacher = tName ? tName : 'Teacher'
+
+    const { course } = this.state
+    let meta = course ? course.metadata : null
+    // let features = course ? course.features : null
+    // let curri = course ? course.curri : null
     return (
       <Grid>
         <Grid.Row>
@@ -88,8 +101,8 @@ class CoursePage extends Component {
 
                       <Segment basic style={{margin: '3em' }} >
                         <Header as='h1'
-                          style={{color: '#fff'}}
-                          content='ChatBots: How to Make a Facebook Messenger Chat Bot in 1hr'
+                          // style={{color: '#fff'}}
+                          content={title}
                           subheader='We will Create a Parrot Bot Together! This course is a Step by Step Guide in Building a Chat Bot for Facebook Messenger' />
                       </Segment>
                       <Button onClick={this.handleEnroll}>Register</Button>
@@ -97,7 +110,7 @@ class CoursePage extends Component {
 
                     <Grid.Column width={3} textAlign='center'>
                       <Image src={profile} circular centered />
-                      <Header as="h3" content='Name' subheader='profile' />
+                      <Header as="h3" content={tName} subheader='profile' />
                       <Rating icon='star' defaultRating={5} maxRating={4} />
                       <p onClick={this.handleClick}> '000 reviews' </p>
                     </Grid.Column>
@@ -105,9 +118,11 @@ class CoursePage extends Component {
                     </Grid.Column>
                   </Grid.Row>
 
-                  <CourseMeta />
-                  <CourseFeatures />
-                  <CourseCurri />
+                  <CourseMeta meta={meta}/>
+                  <CourseFeatures
+                    // features={features}
+                  />
+                  <CourseCurri course={course}/>
 
                 </Grid>
 

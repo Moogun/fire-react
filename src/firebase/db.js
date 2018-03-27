@@ -13,11 +13,14 @@ export const onceGetUsers = () =>
 export const onceGetUser = (uid) =>
   db.ref('users').child(uid).once('value');
 
+
+//query
 export const onceGetUserWithName = (tName) =>
   db.ref('users').orderByChild("username").equalTo(tName).limitToFirst(1).once("value");
 
 export const onceGetCourseWithTitle = (cTitle) =>
   db.ref('courses').orderByChild("/metadata/title").equalTo(cTitle).limitToFirst(1).once("value");
+
 
 //get multiple courses
 export const onceGetCourses = () =>

@@ -2,11 +2,13 @@ import React from 'react'
 import { Segment, Table, Grid, Image, Button, Header, Container } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 
-const CourseMeta = ({mobile}) => {
-
+const CourseMeta = ({meta}) => {
+  console.log('course meta ', meta);
+  let date = meta ? meta.date : ''
+  let time = meta ? meta.time : ''
+  let textbook = meta ? meta.textbook : ''
+  let location = meta ? meta.location : ''
   return (
-    // <Grid.Row style={{margin: '3em 0em'}}>
-    //   <Container>
     <Grid.Row style={{margin: '3em 0em'}}>
         <Grid.Column >
 
@@ -15,24 +17,20 @@ const CourseMeta = ({mobile}) => {
             <Table definition attached>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>reset rating</Table.Cell>
-                  <Table.Cell>None</Table.Cell>
+                  <Table.Cell>Date</Table.Cell>
+                  <Table.Cell>{date}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>set rating</Table.Cell>
-                  <Table.Cell>Sets the current star rating to specified value</Table.Cell>
+                  <Table.Cell>Time</Table.Cell>
+                  <Table.Cell>{time}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>set rating</Table.Cell>
-                  <Table.Cell>Sets the current star rating to specified value</Table.Cell>
+                  <Table.Cell>Textbook</Table.Cell>
+                  <Table.Cell>{textbook}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>set rating</Table.Cell>
-                  <Table.Cell>Sets the current star rating to specified value</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>set rating</Table.Cell>
-                  <Table.Cell>Sets the current star rating to specified value</Table.Cell>
+                  <Table.Cell>Location</Table.Cell>
+                  <Table.Cell>{location}</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
@@ -40,8 +38,6 @@ const CourseMeta = ({mobile}) => {
 
         </Grid.Column>
       </Grid.Row>
-    //   </Container>
-    // </Grid.Row>
   )
 }
 export default CourseMeta;
