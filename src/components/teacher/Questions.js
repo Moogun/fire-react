@@ -19,13 +19,10 @@ class Questions extends Component {
     this.props.click()
   }
 
-  handleClick = (id) => {
-    console.log('questions testing', this.props);
-    console.log(id);
-    this.props.history.push("/question")
-    // this.props.history.push("/teacher/:teacherId/question/:questionId")
-    // => http://localhost:3001/teacher/:teacherId/question/:questionId renders teacher and menu too
-
+  handleQueClick = (qid) => {
+    console.log('questions qid', qid);
+    this.props.queClick(qid)
+    // this.props.history.push(`${this.props.match.url}/${qid}`)
   }
 
   render() {
@@ -33,7 +30,7 @@ class Questions extends Component {
     return (
         <div>
           <QSearch click={() => this.props.click()}/>
-          <QuestionTable questions={questions} click={this.handleClick} />
+          <QuestionTable questions={questions} click={this.handleQueClick} />
         </div>
     );
   }

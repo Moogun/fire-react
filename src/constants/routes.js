@@ -30,10 +30,9 @@ export const DASHBOARD_Q_PANEL_BY_UNREAD = '/t-dashboard/questions/unread';
 export const TEACHER_PAGE = '/teacher/:tName'; // query t info with t name
 export const TEACHER_PAGE_COURSES = '/teacher/:tName/courses';
 export const TEACHER_PAGE_QUESTIONS = '/teacher/:tName/questions';
-export const QUESTION_PAGE = '/teacher/:tName/questions/:qNum'; // q details, get access from TEACHER_PAGE_QUESTIONS, and fetch q detail from q list
 
 //5.
 export const COURSE_PAGE = '/:tName/:cTitle'; // query t info with c title
-
+export const QUESTION_PAGE = '/teacher/:tName/question/:qNum'; // q details, get access from TEACHER_PAGE_QUESTIONS, and fetch q detail from q list
 
 //TEACHER DASHBOARD,

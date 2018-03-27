@@ -24,13 +24,17 @@ class Teacher extends Component {
   handleCourseClick = (id, tName, cTitle) => {
     console.log('teacher', id, tName, cTitle);
     let title = cTitle.replace(/\s+/g, '-');
-    // this.props.history.push(`${this.props.match.url}/courses/${title}`)
     this.props.history.push('/' + tName + '/' + title)
+  }
+
+  handleQueClick = (qid) => {
+    console.log('teacher q click', qid);
+    this.props.history.push(`${this.props.match.url}/question/qid`)
   }
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   handleNewQ = () => {
-    this.props.history.push(`${this.props.match.url}/newq`)
+    this.props.history.push(`${this.props.match.url}/new-question`)
   }
 
   componentWillUnmount(){
@@ -138,8 +142,11 @@ class Teacher extends Component {
                               click={this.handleCourseClick}
                             />} />
                           <Route path={`${match.url}/questions`} render={ (props) =>
-                                <Questions click={this.handleNewQ} {...props}/>} />
-                         <Route path={`${match.url}/newq`} render={() => <NewQ />} />
+                                <Questions
+                                  click={this.handleNewQ} {...props}
+                                  queClick={this.handleQueClick}
+                                />} />
+                         <Route path={`${match.url}/new-question`} render={() => <NewQ />} />
                        </Switch>
 
                      </Grid.Column>

@@ -9,12 +9,11 @@ class QuestionTable extends Component {
     this.state = {
 
     };
-    this.handleClick = this.handleClick.bind(this)
   }
 
-  handleClick (id) {
-    console.log('table',id);
-    this.props.click(id)
+  handleQueClick = (qid) => {
+    console.log('q table',qid);
+    this.props.click(qid)
   }
 
   render() {
@@ -25,7 +24,7 @@ class QuestionTable extends Component {
             <Table basic='very' selectable>
             <Table.Body>
               {questions.map(q => <QuestionRow key={q.id} question={q}
-                click={()=> this.handleClick(q.id)} /> )
+                click={()=> this.handleQueClick(q.id)} /> )
               }
             </Table.Body>
           </Table>
