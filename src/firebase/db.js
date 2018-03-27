@@ -41,14 +41,6 @@ export const doCreateCourse = (title, teacherId) =>
      teacherId,
      isPublished: false,
    }
-
-  // console.log('new course key generated in db file',newCourseKey);
-  //
-  // var updates = {}
-  // updates[`courses/${newCourseKey}`] = info
-  // updates[`users/${instructorId}/courseTeaching/${newCourseKey}`] = 1
-  //
-  // return db.ref().update(updates)
   return db.ref('courses').push({metadata})
 }
 
@@ -126,19 +118,6 @@ export const doPublishCourse = (courseKey, tid, isPublished) => {
 
 export const doRegisterCourse = (courseKey, uid) => {
   console.log('db', courseKey, uid);
-
-  // meta has
-  // teacher has questions, reviews, enrolled
-  // var updates = {}
-  //
-  // if (isPublished === true) {
-  //   updates[`courses/${courseKey}/metadata/isPublished`] = false
-  //   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/isPublished`] = false
-  // } else {
-  //   updates[`courses/${courseKey}/metadata/isPublished`] = true
-  //   updates[`users/${tid}/courseTeaching/${courseKey}/metadata/isPublished`] = true
-  // }
-
   return db.ref().update()
 }
 
