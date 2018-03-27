@@ -130,6 +130,7 @@ class Teacher extends Component {
   render() {
     const {} = this.state
     const {match} = this.props
+    console.log('teacher render 1 match.url', match.url )
     const {tName} = this.props.match.params
     const { activeItem, teacherId, cTeaching, selectOption, questions } = this.state
     // console.log('teacher render 1 c teaching', cTeaching )
@@ -203,7 +204,7 @@ class Teacher extends Component {
                       <Grid.Column>
 
                         <Switch>
-                          <Redirect exact from={match.url} to={`${match.url}/courses`} />
+                          <Redirect exact strict from={match.url} to={`${match.url}/courses`} />
                           <Route path={`${match.url}/courses`} render={() =>
                             <Courses
                               tName={tName}
