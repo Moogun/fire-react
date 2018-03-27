@@ -9,18 +9,35 @@ import CoursePage from '../coursePage/CoursePage'
 import profile from '../../assets/profile-lg.png'
 import {db} from '../../firebase';
 
+const NEW_Q = {
+  text: '',
+  title:'',
+  cid: '',
+  error: null,
+}
+
+const byPropKey = (propertyName, value) => () => ({
+  [propertyName]: value
+})
+
 class Teacher extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeItem: 'courses',
-      teacherId: 1,
+      teacherId: '',
       tName: '',
-      courseTeaching: [1,2,3],
+      cTeaching: '',
       questionsAsked: [],
       answersGiving: [],
+      NEW_Q
     };
   }
+
+  //menu selection
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  //navigation  courses, questions, new question
   handleCourseClick = (id, tName, cTitle) => {
     console.log('teacher', id, tName, cTitle);
     let title = cTitle.replace(/\s+/g, '-');
@@ -31,12 +48,37 @@ class Teacher extends Component {
     console.log('teacher q click', qid);
     this.props.history.push(`${this.props.match.url}/question/qid`)
   }
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   handleNewQ = () => {
     this.props.history.push(`${this.props.match.url}/new-question`)
   }
 
+  // new question methods
+  onSubmit = (event) => {
+
+    const {teacherId, title, text, cid} = this.state;
+    const {authUser} = this.context
+
+    console.log(teacherId, 'on submit title, text', title, text, cid);
+
+    db.doSaveNewQ(teacherId, cid, authUser.uid, title, text, "createdAt", 'img')
+      .then(res => console.log('res', res))
+      
+    event.preventDefault();
+  }
+
+  handleChange = (e, { value }) => {
+    this.setState({[e.target.name]: e.target.value})
+    e.preventDefault()
+  }
+
+  handleQidSelection = (e, {value}) => {
+    this.setState({cid: value})
+    e.preventDefault()
+  }
+
+
+  //life cycle methods
   componentWillUnmount(){
     console.log(0);
   }
@@ -46,11 +88,22 @@ class Teacher extends Component {
     db.onceGetUserWithName(tName)
       .then(tSnap => {
         let t = tSnap.val()
+        // console.log('t did mount',t );
+        let teacherId = Object.keys(tSnap.val())
+        console.log('t did mount key', teacherId);
+        let cTeaching = t[teacherId].courseTeaching
 
-        let key = Object.keys(tSnap.val())
-        let courseTeaching = t[key].courseTeaching
+        let selectOption=[]
+        let item;
 
-        this.setState ({ coursesTeaching: courseTeaching})
+        Object.keys(cTeaching).map(key => {
+          item={key: key, text: cTeaching[key].metadata.title, value: key}
+          selectOption.push(item)
+        })
+
+        this.setState ({ cTeaching: cTeaching, teacherId: teacherId[0],
+          'selectOption': selectOption
+        })
       }
     )
   }
@@ -63,8 +116,9 @@ class Teacher extends Component {
     const {} = this.state
     const {match} = this.props
     const {tName} = this.props.match.params
-    const { activeItem, teacherId, coursesTeaching } = this.state
-    console.log('teacher render 1 ', coursesTeaching )
+    const { activeItem, teacherId, cTeaching, selectOption } = this.state
+    // console.log('teacher render 1 c teaching', cTeaching )
+    // console.log('teacher render 1 selectOption', selectOption )
 
     return (
       <Grid>
@@ -138,15 +192,24 @@ class Teacher extends Component {
                           <Route path={`${match.url}/courses`} render={() =>
                             <Courses
                               tName={tName}
-                              coursesTeaching={coursesTeaching}
+                              cTeaching={cTeaching}
                               click={this.handleCourseClick}
                             />} />
                           <Route path={`${match.url}/questions`} render={ (props) =>
                                 <Questions
+                                  tid={teacherId}
                                   click={this.handleNewQ} {...props}
                                   queClick={this.handleQueClick}
                                 />} />
-                         <Route path={`${match.url}/new-question`} render={() => <NewQ />} />
+                         <Route path={`${match.url}/new-question`} render={() =>
+                           <NewQ
+                             tid={teacherId}
+                             cTeaching={cTeaching}
+                             selectOption={selectOption}
+                             submit={this.onSubmit}
+                             change={this.handleChange}
+                             changeQid={this.handleQidSelection}
+                           />} />
                        </Switch>
 
                      </Grid.Column>
@@ -177,6 +240,8 @@ class Teacher extends Component {
   }
 }
 
-
+Teacher.contextTypes ={
+  authUser: PropTypes.object,
+}
 
 export default withRouter(Teacher)

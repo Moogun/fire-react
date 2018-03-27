@@ -142,6 +142,28 @@ export const doRegisterCourse = (courseKey, uid) => {
   return db.ref().update()
 }
 
+export const doSaveNewQ = (tid, cid, askedBy, title, text, createdAt, img) => {
+  console.log('db', tid, cid, askedBy, title, text, createdAt, img);
+
+  //1 where to save?
+  // var updates = {}
+  // updates[`courses/${courseKey}/questions/`] = textbook
+  // updates[`teachers/${tid}/courseTeaching/${courseKey}/metadata/textbook`] = textbook
+  // updates[`users/${uid}/questions/${courseKey}/metadata/textbook`] = textbook
+  // updates[`questions/${uid}/teacher/${tid}/${qid}`] =
+  // return db.ref().update()
+
+  //2 how to save
+  // updates[`questions/${tid}/${qid}/askedBy`] = askedBy
+  // updates[`questions/${tid}/${qid}/title`] = title
+  // updates[`questions/${tid}/${qid}/text`] = text
+  // updates[`questions/${tid}/${qid}/createdAt`] = createdAt
+  // updates[`questions/${tid}/${qid}/courseId`] = cid
+
+
+  return db.ref('questions').child(tid).push({tid, cid, askedBy, title, text, createdAt})
+}
+
 
 
 // 1. database snapshot contains data from a db location

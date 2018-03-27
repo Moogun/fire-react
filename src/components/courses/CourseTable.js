@@ -11,18 +11,18 @@ class CourseTable extends Component {
 
   render() {
 
-    const {coursesTeaching, tName, click,} = this.props
-    console.log('course table render 1 ', coursesTeaching)
+    const {cTeaching, tName, click,} = this.props
+    console.log('course table render 1 ', cTeaching)
 
     return (
       <div>
         {/* <Header as='h3'>Upcoming</Header> */}
           <Table basic='very' selectable>
             <Table.Body>
-              {Object.keys(coursesTeaching).map(id =>
-                <CourseTableRow key={id} course={coursesTeaching[id]}
-                  // cTitle={coursesTeaching[id].metadata.title}
-                  click={() => this.handleClick(id, tName, coursesTeaching[id].metadata.title)}
+              {Object.keys(cTeaching).map(id =>
+                <CourseTableRow key={id} course={cTeaching[id]}
+                  // cTitle={cTeaching[id].metadata.title}
+                  click={() => this.handleClick(id, tName, cTeaching[id].metadata.title)}
                 />
               )}
             </Table.Body>

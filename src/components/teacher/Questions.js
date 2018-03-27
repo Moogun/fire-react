@@ -27,10 +27,11 @@ class Questions extends Component {
 
   render() {
     const {questions} = this.state
+    const {tid} = this.props
     return (
         <div>
-          <QSearch click={() => this.props.click()}/>
-          <QuestionTable questions={questions} click={this.handleQueClick} />
+          <QSearch tid={tid} click={() => this.props.click()}/>
+          <QuestionTable tid={tid} questions={questions} click={this.handleQueClick} />
         </div>
     );
   }

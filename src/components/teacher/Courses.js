@@ -13,10 +13,10 @@ class Courses extends Component {
   }
 
   render() {
-    const {coursesTeaching, tName, } = this.props
-    console.log('courses render 1 ', coursesTeaching)
-    let courses = coursesTeaching
-    ? <CourseTable coursesTeaching={coursesTeaching} tName={tName}
+    const {cTeaching, tName, } = this.props
+    console.log('courses render 1 ', cTeaching)
+    let courses = cTeaching
+    ? <CourseTable cTeaching={cTeaching} tName={tName}
       click={this.handleCourseClick}
     />
     : <p>No courses yet</p>
