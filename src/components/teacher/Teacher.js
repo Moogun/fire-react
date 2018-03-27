@@ -28,9 +28,10 @@ class Teacher extends Component {
       teacherId: '',
       tName: '',
       cTeaching: '',
-      questionsAsked: [],
+      questions: null,
       answersGiving: [],
-      NEW_Q
+      NEW_Q: NEW_Q,
+      error: null,
     };
   }
 
@@ -63,7 +64,10 @@ class Teacher extends Component {
 
     db.doSaveNewQ(teacherId, cid, authUser.uid, title, text, "createdAt", 'img')
       .then(res => console.log('res', res))
-      
+      .catch(error => {
+        this.setState(byPropKey('error', error))
+      })
+
     event.preventDefault();
   }
 
@@ -77,7 +81,6 @@ class Teacher extends Component {
     e.preventDefault()
   }
 
-
   //life cycle methods
   componentWillUnmount(){
     console.log(0);
@@ -85,11 +88,12 @@ class Teacher extends Component {
 
   componentDidMount(){
     const {tName} = this.props.match.params
+    let teacherId
     db.onceGetUserWithName(tName)
       .then(tSnap => {
         let t = tSnap.val()
         // console.log('t did mount',t );
-        let teacherId = Object.keys(tSnap.val())
+        teacherId = Object.keys(tSnap.val())
         console.log('t did mount key', teacherId);
         let cTeaching = t[teacherId].courseTeaching
 
@@ -104,8 +108,19 @@ class Teacher extends Component {
         this.setState ({ cTeaching: cTeaching, teacherId: teacherId[0],
           'selectOption': selectOption
         })
-      }
-    )
+        this.handleFetchQuestions()
+      }).catch(error => {
+        this.setState(byPropKey('error', error))
+      })
+  }
+
+  handleFetchQuestions = () => {
+    const {teacherId} = this.state
+    db.doFetchRecentQuestions(teacherId)
+      .then(res => this.setState({questions: res.val() }) )
+      .catch(error => {
+        this.setState(byPropKey('error', error))
+      })
   }
 
   componentWillUnmount(){
@@ -116,7 +131,7 @@ class Teacher extends Component {
     const {} = this.state
     const {match} = this.props
     const {tName} = this.props.match.params
-    const { activeItem, teacherId, cTeaching, selectOption } = this.state
+    const { activeItem, teacherId, cTeaching, selectOption, questions } = this.state
     // console.log('teacher render 1 c teaching', cTeaching )
     // console.log('teacher render 1 selectOption', selectOption )
 
@@ -198,6 +213,7 @@ class Teacher extends Component {
                           <Route path={`${match.url}/questions`} render={ (props) =>
                                 <Questions
                                   tid={teacherId}
+                                  questions={questions}
                                   click={this.handleNewQ} {...props}
                                   queClick={this.handleQueClick}
                                 />} />

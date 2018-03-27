@@ -18,14 +18,15 @@ class QuestionTable extends Component {
 
   render() {
     const {questions} = this.props
+
     return (
       <Segment basic>
         <Container text>
             <Table basic='very' selectable>
             <Table.Body>
-              {questions.map(q => <QuestionRow key={q.id} question={q}
-                click={()=> this.handleQueClick(q.id)} /> )
-              }
+
+              {Object.keys(questions).map(qid =>  <QuestionRow key={qid} question={questions[qid]} click={()=> this.handleQueClick(qid)} /> )}
+
             </Table.Body>
           </Table>
         infinite scroll

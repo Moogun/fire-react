@@ -7,15 +7,11 @@ class Questions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      questions: [
-        {id:1, title:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, mollitia.', text: 'details', image: 'y', userAsking:'uid-1', answerCount:3,},
-        {id:2, title:'Lorem ipsum dolor sit amet, consectetur adipisicing elit.', text: 'details', image: 'x', userAsking:'uid-2', answerCount:0,},
-      ]
-    };
+      questions: null,
+    }
   }
 
   handleNewQ = () => {
-    // console.log('new q', this.props.click);
     this.props.click()
   }
 
@@ -26,12 +22,15 @@ class Questions extends Component {
   }
 
   render() {
-    const {questions} = this.state
-    const {tid} = this.props
+    const {tid, questions} = this.props
+    console.log('question render 1 ', questions )
+    let q = questions ? <QuestionTable tid={tid} questions={questions} click={this.handleQueClick} />
+     : <p>no question yet</p>
     return (
         <div>
           <QSearch tid={tid} click={() => this.props.click()}/>
-          <QuestionTable tid={tid} questions={questions} click={this.handleQueClick} />
+          {q}
+          {/* <QuestionTable tid={tid} questions={questions} click={this.handleQueClick} /> */}
         </div>
     );
   }
