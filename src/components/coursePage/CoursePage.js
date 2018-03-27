@@ -56,6 +56,11 @@ class CoursePage extends Component {
 
   }
 
+  handleRoute = () => {
+      const {tName,} = this.props.match.params
+      this.props.history.push('/teacher' + '/' + tName)
+  }
+
   handleEnroll = () => {
     console.log();
   }
@@ -86,7 +91,7 @@ class CoursePage extends Component {
                      Home
                    </Breadcrumb.Section>
                    <Breadcrumb.Divider icon='right angle' />
-                   <Breadcrumb.Section link as={Link} to={`teacher/${tName}`} >
+                   <Breadcrumb.Section link onClick={this.handleRoute} >
                      {tName}
                    </Breadcrumb.Section>
                    <Breadcrumb.Divider icon='right angle' />

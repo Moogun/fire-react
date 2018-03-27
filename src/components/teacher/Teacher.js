@@ -130,11 +130,9 @@ class Teacher extends Component {
   render() {
     const {} = this.state
     const {match} = this.props
-    console.log('teacher render 1 match.url', match.url )
     const {tName} = this.props.match.params
     const { activeItem, teacherId, cTeaching, selectOption, questions } = this.state
     // console.log('teacher render 1 c teaching', cTeaching )
-    // console.log('teacher render 1 selectOption', selectOption )
 
     return (
       <Grid>
@@ -146,7 +144,7 @@ class Teacher extends Component {
                <Breadcrumb style={{marginTop: '2em' }}>
                <Breadcrumb.Section link as={Link} to='/'> Home </Breadcrumb.Section>
                <Breadcrumb.Divider icon='right angle' />
-               <Breadcrumb.Section>Teacher name</Breadcrumb.Section>
+               <Breadcrumb.Section>{tName}</Breadcrumb.Section>
                </Breadcrumb>
 
                <Grid style={{margin: '3em'}} stackable>
