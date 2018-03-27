@@ -1,16 +1,38 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item, Label, Rating, TextArea, Input, Breadcrumb } from 'semantic-ui-react'
-// import ImageUpload from './ImageUpload'
+
+const INITIAL_STATE = {
+  text: '',
+  title:'',
+  error: null,
+}
+
+const byPropKey = (propertyName, value) => () => ({
+  [propertyName]: value
+})
 
 class NewQ extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      INITIAL_STATE,
     };
   }
+
+  onSubmit = (event) => {
+    const { title,text,} = this.state;
+    console.log('on submit title, text', title, text);
+    event.preventDefault();
+  }
+  handleChange = (e) => {
+    this.setState({[e.target.name]: e.target.value})
+    e.preventDefault()
+  }
+
   render() {
+    const {title, text} = this.state
+    console.log('title', this.state.title);
     return (
       <Segment basic>
         <Container text>
@@ -21,15 +43,12 @@ class NewQ extends Component {
             <Breadcrumb.Divider icon='right angle' />
           </Breadcrumb>
             <br/><br/>
-          <Form>
+          <Form onSubmit={this.onSubmit}>
             <Form.Field>
-              <input placeholder='Enter title' />
+              <Input placeholder='Enter title' name="title" onChange={this.handleChange}/>
             </Form.Field>
             <Form.Field>
-              {/* <ImageUpload /> */}
-            </Form.Field>
-            <Form.Field>
-              <TextArea placeholder='Tell us more' />
+              <TextArea placeholder='Tell us more' name="text" onChange={this.handleChange}/>
             </Form.Field>
             <Button>Cancel</Button>
             <Button type='submit'>Submit</Button>
