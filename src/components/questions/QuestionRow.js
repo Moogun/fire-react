@@ -12,7 +12,7 @@ const QuestionRow = ({question, click}) => (
       </Header>
     </Table.Cell>
     <Table.Cell>
-        <Header.Content>ss
+        <Header.Content>
              {question.title}
           <Header.Subheader>{question.text}</Header.Subheader>
         </Header.Content>

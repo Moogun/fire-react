@@ -1,15 +1,9 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import { Segment,Container, Table} from 'semantic-ui-react'
+import { Segment,Container, Table, Button} from 'semantic-ui-react'
 import QuestionRow from './QuestionRow'
 
 class QuestionTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
 
   handleQueClick = (qid) => {
     console.log('q table',qid);
@@ -29,7 +23,7 @@ class QuestionTable extends Component {
 
             </Table.Body>
           </Table>
-        infinite scroll
+          <Button>infinite scroll</Button>
       </Container>
       </Segment>
     );

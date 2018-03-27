@@ -46,8 +46,14 @@ class Teacher extends Component {
   }
 
   handleQueClick = (qid) => {
+    const { questions } = this.state
     console.log('teacher q click', qid);
-    this.props.history.push(`${this.props.match.url}/question/qid`)
+    console.log('teacher q click',questions[qid]);
+    this.props.history.push({
+      pathname: `${this.props.match.url}/question/${qid}`,
+      state:
+        {q: questions[qid]}
+    })
   }
 
   handleNewQ = () => {
@@ -94,7 +100,7 @@ class Teacher extends Component {
         let t = tSnap.val()
         // console.log('t did mount',t );
         teacherId = Object.keys(tSnap.val())
-        console.log('t did mount key', teacherId);
+        // console.log('t did mount key', teacherId);
         let cTeaching = t[teacherId].courseTeaching
 
         let selectOption=[]
@@ -117,11 +123,38 @@ class Teacher extends Component {
   handleFetchQuestions = () => {
     const {teacherId} = this.state
     db.doFetchRecentQuestions(teacherId)
-      .then(res => this.setState({questions: res.val() }) )
+      .then(snap => {
+        // this.setState({questions: res.val() })}
+        let qList = snap.val()
+        Object.keys(qList).map(key => {
+          let askedBy = qList[key].askedBy
+          db.onceGetUser(askedBy)
+            .then(userSnap => {
+              let username = userSnap.val().username
+              qList[key].username = username
+              this.setState({questions: qList})
+            })
+        })
+      })
       .catch(error => {
         this.setState(byPropKey('error', error))
       })
   }
+
+  // then(snap => {
+  //   let courseSnap = snap.val()
+  //
+  //   Object.keys(courseSnap).map(key => {
+      // console.log('course key', key);
+
+  // let tid = courseSnap[key].metadata.teacherId
+  // db.onceGetUser(tid)
+  //   .then(userSnap => {
+  //       // console.log('userSnap', userSnap.val())
+  //       let tName = userSnap.val().username
+  //       courseSnap[key].metadata.teacherName = tName
+  //       this.setState({courses: courseSnap})
+  //     })
 
   componentWillUnmount(){
     console.log('will un mount 0 ', )
@@ -132,7 +165,7 @@ class Teacher extends Component {
     const {match} = this.props
     const {tName} = this.props.match.params
     const { activeItem, teacherId, cTeaching, selectOption, questions } = this.state
-    // console.log('teacher render 1 c teaching', cTeaching )
+    // console.log('teacher render 1 questions', questions )
 
     return (
       <Grid>
