@@ -52,7 +52,10 @@ class Teacher extends Component {
     this.props.history.push({
       pathname: `${this.props.match.url}/question/${qid}`,
       state:
-        {q: questions[qid]}
+        {
+          q: questions[qid],
+          qid: qid
+        }
     })
   }
 
@@ -126,15 +129,32 @@ class Teacher extends Component {
       .then(snap => {
         // this.setState({questions: res.val() })}
         let qList = snap.val()
+
         Object.keys(qList).map(key => {
           let askedBy = qList[key].askedBy
           db.onceGetUser(askedBy)
             .then(userSnap => {
               let username = userSnap.val().username
               qList[key].username = username
+              // console.log('handle fetch questions, ', qList);
               this.setState({questions: qList})
             })
+
+          if (qList[key].answers){
+            // console.log('qList[key].answers', qList[key].answers);
+            Object.keys(qList[key].answers).map(aid => {
+              let answeredBy = qList[key].answers[aid].answeredBy
+              // console.log('answeredBy', answeredBy);
+              db.onceGetUser(answeredBy)
+                .then(userSnap => {
+                  let username = userSnap.val().username
+                  qList[key].answers[aid].username = username
+                  this.setState({questions: qList })
+                })
+            })
+          }
         })
+
       })
       .catch(error => {
         this.setState(byPropKey('error', error))
@@ -231,6 +251,8 @@ class Teacher extends Component {
                          </Segment>
                       </Grid.Column>
                  </Grid.Row>
+
+
                  <Grid.Row>
                       <Grid.Column>
 

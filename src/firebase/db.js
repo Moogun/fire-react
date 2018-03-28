@@ -137,8 +137,13 @@ export const doSaveNewQ = (tid, cid, askedBy, title, text, createdAt, img) => {
   // updates[`questions/${tid}/${qid}/createdAt`] = createdAt
   // updates[`questions/${tid}/${qid}/courseId`] = cid
 
-
   return db.ref('questions').child(tid).push({tid, cid, askedBy, title, text, createdAt})
+}
+
+export const doSaveAnswer = (tid, cid, qid, answeredBy, text, createdAt, img) => {
+  console.log('db', tid, cid, qid, answeredBy, text, createdAt, img);
+  var answer = {answeredBy, text, createdAt, img}
+  return db.ref('questions').child(tid).child(qid).child('answers').push(answer)
 }
 
 export const doFetchRecentQuestions = (tid) => {

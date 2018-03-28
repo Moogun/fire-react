@@ -1,61 +1,76 @@
-import React from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types';
 import { Segment,Container, Table, Header, Rating, Grid, Image, Menu, Item, Button, Comment, Form, Icon, Label } from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
-import profile from '../../assets/profile-lg.png'
 
+import Question from './Question'
+import CommentForm from './CommentForm'
 import AnswerList from './AnswerList'
+import {db} from '../../firebase';
 
-const QuestionPage = (props) => {
-  // console.log('q page render 1 ', props.location.state)
-  return (
-      <Segment basic>
-        <Container text>
+const INITIAL_STATE = {
+  answerText: '333',
+  error: null,
+}
 
-          <Question question={props.location.state.q}/>
-          <AnswerList />
-          <CommentForm />
+const byPropKey = (propertyName, value) => () => ({
+  [propertyName]: value
+})
 
-        </Container>
-      </Segment>
-    )
+class QuestionPage extends Component {
+  state = {
+    INITIAL_STATE,
+
+  }
+
+  handleSubmit = (event) => {
+
+    const {answerText} = this.state;
+    const {tid, cid,} = this.props.location.state.q
+    const qid = this.props.location.state.qid
+    const {authUser} = this.context
+
+    db.doSaveAnswer(tid, cid, qid, authUser.uid, answerText, "2days ago", 'img')
+      .then(res => {
+        console.log('res', res)
+        this.setState({...INITIAL_STATE})
+      })
+      .catch(error => {
+        this.setState(byPropKey('error', error))
+      })
+
+    event.preventDefault();
+  }
+
+  handleChange = (e, { value }) => {
+    this.setState({[e.target.name]: e.target.value})
+    e.preventDefault()
+  }
+
+  componentDidMount(){
+    const {answers} = this.props.location.state.q
+    this.setState({answers: answers})
+  }
+
+  render() {
+    const { answerText, answers } = this.state
+    let answerList = answers ? answers : null
+      return (
+          <Segment basic>
+            <Container text>
+
+              <Question question={this.props.location.state.q}/>
+              <AnswerList answers={answerList}/>
+              <CommentForm value={answerText} submit={this.handleSubmit} change={this.handleChange}/>
+
+            </Container>
+          </Segment>
+        )
+    }
+}
+
+QuestionPage.contextTypes ={
+  authUser: PropTypes.object,
 }
 
 export default withRouter(QuestionPage)
-
-const Question = (props) => {
-  return (
-    <Comment.Group>
-      <Comment>
-        <Comment.Avatar src={profile} />
-        <Comment.Content>
-          <Comment.Author as='a'>{props.question.username}</Comment.Author>
-          <Comment.Metadata>
-            <div>5days ago</div>
-          </Comment.Metadata>
-          <Comment.Text>{props.question.title}
-            {/* <Image src={profile}/> */}
-          </Comment.Text>
-          <Comment.Text>
-            {props.question.text}
-          </Comment.Text>
-          <Comment.Actions>
-            <Button as='div' labelPosition='right'>
-              <Button basic color='blue'>
-                <Icon name='bookmark' />
-                궁금
-              </Button>
-              <Label as='a' basic color='blue' pointing='left'>11</Label>
-            </Button>
-
-          </Comment.Actions>
-        </Comment.Content>
-      </Comment>
-  </Comment.Group>
-  )
-}
-
-const CommentForm = () =>
-  <Form reply>
-    <Form.TextArea />
-    <Button content='Add Reply' labelPosition='left' icon='edit' primary />
-  </Form>
