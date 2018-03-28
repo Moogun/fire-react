@@ -35,8 +35,8 @@ class NavAuth extends Component {
 
         <Responsive {...Responsive.onlyComputer}>
           <Visibility once={false} onBottomPassed={this.showFixedMenu} onBottomPassedReverse={this.hideFixedMenu}>
-            <Menu >
-              <Container>
+            <Menu style={{borderRadius: '0rem', padding: '0.5rem'}} secondary>
+              <Container color='blue'>
 
                   <Menu.Item as={Link} to={routes.HOME}
                     name='Weqna' active={activeItem === 'home'} onClick={this.handleItemClick} />

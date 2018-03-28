@@ -60,15 +60,14 @@ class HomePage extends Component {
   render() {
 
     const {users, courses, isLoading} = this.state;
-    // console.log('home', users);
-    console.log('render 1 ', courses)
+    //console.log('render 1 ', courses)
     return (
-      <Segment basic loading={isLoading}>
+      <Segment basic loading={isLoading} style={{backgroundColor: '#f2f2f2', margin: '0rem'}}>
         <Grid container>
           <Grid.Row>
             <Grid.Column>
 
-              <Header as='h5' style={{marginTop: '3em'}}>Header</Header>
+              <Header as='h5' style={{marginTop: '2rem'}}>Header</Header>
               <CourseCards courses={courses}/>
 
             </Grid.Column>
