@@ -45,7 +45,7 @@ class Teacher extends Component {
     this.props.history.push('/' + tName + '/' + title)
   }
 
-  handleQueClick = (qid) => {
+  handleQuestionClick = (qid) => {
     const { questions } = this.state
     console.log('teacher q click', qid);
     console.log('teacher q click',questions[qid]);
@@ -92,8 +92,24 @@ class Teacher extends Component {
   }
 
   handleSearchQueryChange =(value) => {
-    this.setState({searchQuery: value})
-    // e.preventDefault()
+
+    this.setState({ isLoading: true, value })
+    setTimeout( () => {
+      const {teacherId} = this.state
+      db.doSearchForQuestions(teacherId, value)
+        .then(res => {
+          let searchResult = res.val()
+          if (searchResult){
+            console.log('search result', 1);
+            this.saveFechedQuestionsToState(searchResult)
+          } else {
+            console.log('search result', 2);
+            this.setState({questions: null})
+          }
+          this.setState({ isLoading: false,  })
+          // console.log('search', res.val())
+        })
+    }, 1000)
   }
 
   //life cycle methods
@@ -135,36 +151,39 @@ class Teacher extends Component {
       .then(snap => {
         // this.setState({questions: res.val() })}
         let qList = snap.val()
-
-        Object.keys(qList).map(key => {
-          let askedBy = qList[key].askedBy
-          db.onceGetUser(askedBy)
-            .then(userSnap => {
-              let username = userSnap.val().username
-              qList[key].username = username
-              // console.log('handle fetch questions, ', qList);
-              this.setState({questions: qList})
-            })
-
-          if (qList[key].answers){
-            // console.log('qList[key].answers', qList[key].answers);
-            Object.keys(qList[key].answers).map(aid => {
-              let answeredBy = qList[key].answers[aid].answeredBy
-              // console.log('answeredBy', answeredBy);
-              db.onceGetUser(answeredBy)
-                .then(userSnap => {
-                  let username = userSnap.val().username
-                  qList[key].answers[aid].username = username
-                  this.setState({questions: qList })
-                })
-            })
-          }
-        })
-
+        this.saveFechedQuestionsToState(qList)
       })
       .catch(error => {
         this.setState(byPropKey('error', error))
       })
+  }
+
+  saveFechedQuestionsToState = (qList) => {
+    console.log('save fetched q to state qlist', qList);
+    Object.keys(qList).map(key => {
+      let askedBy = qList[key].askedBy
+      db.onceGetUser(askedBy)
+        .then(userSnap => {
+          let username = userSnap.val().username
+          qList[key].username = username
+          // console.log('handle fetch questions, ', qList);
+          this.setState({questions: qList})
+        })
+
+      if (qList[key].answers){
+        // console.log('qList[key].answers', qList[key].answers);
+        Object.keys(qList[key].answers).map(aid => {
+          let answeredBy = qList[key].answers[aid].answeredBy
+          // console.log('answeredBy', answeredBy);
+          db.onceGetUser(answeredBy)
+            .then(userSnap => {
+              let username = userSnap.val().username
+              qList[key].answers[aid].username = username
+              this.setState({questions: qList })
+            })
+        })
+      }
+    })
   }
 
   componentWillUnmount(){
@@ -175,7 +194,7 @@ class Teacher extends Component {
     const {} = this.state
     const {match} = this.props
     const {tName} = this.props.match.params
-    const { activeItem, teacherId, cTeaching, selectOption, questions } = this.state
+    const { activeItem, teacherId, cTeaching, selectOption, questions, isLoading } = this.state
     // console.log('teacher render 1 questions', questions )
 
     return (
@@ -260,9 +279,9 @@ class Teacher extends Component {
                                   tid={teacherId}
                                   questions={questions}
                                   click={this.handleNewQ} {...props}
-                                  queClick={this.handleQueClick}
+                                  queClick={this.handleQuestionClick}
                                   searchQueryChange={this.handleSearchQueryChange}
-                                  searchClick={this.handleSearchQuestion}
+                                  isLoading={isLoading}
                                 />} />
                          <Route path={`${match.url}/new-question`} render={() =>
                            <NewQ

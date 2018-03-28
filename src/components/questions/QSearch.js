@@ -7,7 +7,7 @@ const QSearch = (props) =>
       <Grid>
         <Grid.Row>
           <Grid.Column width={12}>
-            <Input type="text" fluid icon="search" placeholder="search" onChange={props.change}/>
+            <Input type="text" fluid icon="search" placeholder="search" onChange={props.change} loading={props.isLoading}/>
           </Grid.Column>
           <Grid.Column width={4} verticalAlign="middle">
             <Button size="large" onClick={props.click}>New question</Button>

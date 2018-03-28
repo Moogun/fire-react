@@ -149,3 +149,7 @@ export const doSaveAnswer = (tid, cid, qid, answeredBy, text, createdAt, img) =>
 export const doFetchRecentQuestions = (tid) => {
   return db.ref('questions').child(tid).limitToFirst(5).once('value')
 }
+
+export const doSearchForQuestions = (tid, queryText) => {
+  return db.ref('questions').child(tid).orderByChild('title').startAt(queryText).endAt(queryText+"\uf8ff").once('value')
+}

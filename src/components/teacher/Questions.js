@@ -15,25 +15,26 @@ class Questions extends Component {
     this.props.click()
   }
 
-  handleQueClick = (qid) => {
+  handleQuestionClick = (qid) => {
     this.props.queClick(qid)
   }
 
   handleSearchQueryChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     this.props.searchQueryChange(e.target.value)
     e.preventDefault()
   }
 
   render() {
-    const {tid, questions, searchClick} = this.props
+    const {tid, questions, searchClick, isLoading} = this.props
     // console.log('question render 1 ', questions )
-    let qTable = questions ? <QuestionTable tid={tid} questions={questions} click={this.handleQueClick} />
+    let qTable = questions ? <QuestionTable tid={tid} questions={questions} click={this.handleQuestionClick} />
      : <p>no question yet</p>
     return (
         <div>
           <QSearch tid={tid} click={() => this.props.click()} change={this.handleSearchQueryChange}
-          searchClick={this.handleSearchClick}/>
+          searchClick={this.handleSearchClick}
+          isLoading={isLoading}/>
           {qTable}
         </div>
     );
