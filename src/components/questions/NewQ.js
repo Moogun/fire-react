@@ -8,7 +8,7 @@ class NewQ extends Component {
     state: {}
   }
   render() {
-    const { selectOption, submit, change, changeQid} = this.props
+    const { selectOption, submit, change, chooseCourse} = this.props
     let options = selectOption ? selectOption : [{}]
 
     return (
@@ -23,7 +23,7 @@ class NewQ extends Component {
             <br/><br/>
           <Form onSubmit={submit}>
             <Form.Field>
-              <Select placeholder='Select a course' name="cid" search selection options={options} onChange={changeQid} />
+              <Select placeholder='Select a course' name="cid" search selection options={options} onChange={chooseCourse} />
             </Form.Field>
             <Form.Field>
               <Input placeholder='Enter title' name="title" onChange={change}/>

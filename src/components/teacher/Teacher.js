@@ -64,7 +64,13 @@ class Teacher extends Component {
   }
 
   // new question methods
-  onSubmit = (event) => {
+
+  handleQuestionChange = (e, { value }) => {
+    this.setState({[e.target.name]: e.target.value})
+    e.preventDefault()
+  }
+
+  handleQuestionSubmit = (event) => {
 
     const {teacherId, title, text, cid} = this.state;
     const {authUser} = this.context
@@ -80,14 +86,14 @@ class Teacher extends Component {
     event.preventDefault();
   }
 
-  handleChange = (e, { value }) => {
-    this.setState({[e.target.name]: e.target.value})
+  handleCourseSelect = (e, {value}) => {
+    this.setState({cid: value})
     e.preventDefault()
   }
 
-  handleQidSelection = (e, {value}) => {
-    this.setState({cid: value})
-    e.preventDefault()
+  handleSearchQueryChange =(value) => {
+    this.setState({searchQuery: value})
+    // e.preventDefault()
   }
 
   //life cycle methods
@@ -160,21 +166,6 @@ class Teacher extends Component {
         this.setState(byPropKey('error', error))
       })
   }
-
-  // then(snap => {
-  //   let courseSnap = snap.val()
-  //
-  //   Object.keys(courseSnap).map(key => {
-      // console.log('course key', key);
-
-  // let tid = courseSnap[key].metadata.teacherId
-  // db.onceGetUser(tid)
-  //   .then(userSnap => {
-  //       // console.log('userSnap', userSnap.val())
-  //       let tName = userSnap.val().username
-  //       courseSnap[key].metadata.teacherName = tName
-  //       this.setState({courses: courseSnap})
-  //     })
 
   componentWillUnmount(){
     console.log('will un mount 0 ', )
@@ -270,15 +261,17 @@ class Teacher extends Component {
                                   questions={questions}
                                   click={this.handleNewQ} {...props}
                                   queClick={this.handleQueClick}
+                                  searchQueryChange={this.handleSearchQueryChange}
+                                  searchClick={this.handleSearchQuestion}
                                 />} />
                          <Route path={`${match.url}/new-question`} render={() =>
                            <NewQ
                              tid={teacherId}
                              cTeaching={cTeaching}
                              selectOption={selectOption}
-                             submit={this.onSubmit}
-                             change={this.handleChange}
-                             changeQid={this.handleQidSelection}
+                             submit={this.handleQuestionSubmit}
+                             change={this.handleQuestionChange}
+                             chooseCourse={this.handleCourseSelect}
                            />} />
                        </Switch>
 
