@@ -93,6 +93,7 @@ class CoursePage extends Component {
   handleRegister () {
     const {tid, cid, coursePass, password} = this.state;
     let uid = this.context.authUser.uid
+    console.log('register', tid, cid, coursePass, password, uid);
     if (coursePass === password) {
       db.doEnrollInCourse(tid, cid, password, uid)
         .then(res => {
@@ -174,7 +175,7 @@ class CoursePage extends Component {
             <Grid.Column>
 
                 <Grid style={{ backgroundColor: '#34495e', marginTop: '0rem'}} stackable centered>
-                  
+
                       <Grid.Row
                         style={{ marginTop: '2rem', marginBottom: '2rem'}}
                         >

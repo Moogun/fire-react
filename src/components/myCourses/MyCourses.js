@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-
+import PropTypes from 'prop-types';
+import {db} from '../../firebase';
 import CourseCards from '../courses/CourseCards'
 
 import { Grid, Header, Menu, Visibility, Responsive } from 'semantic-ui-react'
@@ -25,16 +26,77 @@ class MyCourses extends Component {
 
   handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
+  componentDidMount(){
+    console.log('my courses did mount 1 ', )
+    const {authUser} = this.context
+    if (!!authUser) {
+
+      let myCourses = []
+
+      db.onceGetUser(authUser.uid)
+        .then(userSnap => {
+          console.log('user snap', userSnap.val())
+          let cAttending = userSnap.val().courseAttending
+
+          // this.handleFetchMyCourses(cAttending)
+          Object.keys(cAttending).map(key => {
+            db.onceGetCourse(key)
+              .then(res => {
+                console.log('get course', res.val());
+                let course = res.val()
+                let tid = res.val().metadata.teacherId
+                // console.log('return', this.handleFetchTeacher(tid))
+                db.onceGetUser(tid)
+                  .then(res => {
+                    console.log('res teacher', res.val())
+                    let tName = res.val().username
+                    course.metadata.username = tName
+                    console.log('c meta username',course.metadata.username)
+                    myCourses.push(course)
+                    this.setState ({attendingCourses: myCourses})
+                  })
+              })
+          })
+        })
+    }
+  }
+
+  handleFetchMyCourses(cAttending){
+    console.log('course attending', cAttending);
+    console.log('attending', Object.keys(cAttending));
+
+    let myCourses = []
+
+    // Object.keys(cAttending).map(key => {
+    //   db.onceGetCourse(key)
+    //     .then(res => {
+    //       console.log('get course', res.val());
+    //       let course = res.val()
+    //       let tid = res.val().metadata.teacherId
+    //       // console.log('return', this.handleFetchTeacher(tid))
+    //       db.onceGetUser(tid)
+    //         .then(res => {
+    //           console.log('res teacher', res.val())
+    //           let tName = res.val().username
+    //           course.metadata.username = tName
+    //           console.log('c meta username',course.metadata.username)
+    //           myCourses.push(course)
+    //         })
+    //     })
+    // })
+  }
+
   render() {
-    // const { calculations, contextRef } = this.state
-    const {calculations, activeItem} = this.state
-    console.log('width', calculations.width);
+
+    const {calculations, activeItem, attendingCourses} = this.state
+    console.log('width', calculations.width, 'attendingCourses', attendingCourses);
     let margin;
     if (calculations.width > 1127 ) {
       margin = '3em'
     } else if (calculations.width > 933) {
       margin = '0em'
     }
+
       return (
         <Grid container>
           <Grid.Row>
@@ -53,7 +115,7 @@ class MyCourses extends Component {
                               <Menu.Item name='friends' active={activeItem === 'friends'} onClick={this.handleItemClick} />
                             </Menu>
 
-                        <CourseCards />
+                        <CourseCards courses={attendingCourses}/>
 
                       </Grid.Column>
                     </Grid.Row>
@@ -66,6 +128,10 @@ class MyCourses extends Component {
         </Grid>
       );
     }
+}
+
+MyCourses.contextTypes ={
+  authUser: PropTypes.object,
 }
 
 export default MyCourses
