@@ -18,12 +18,12 @@ export const COURSE_MANAGE_SETTINGS = '/course_manage/:cid/edit/settings';
 export const COURSE_MANAGE_ASSIGNMENT = '/course_manage/:cid/edit/assignment';
 
 //3.
-export const T_DASHBOARD = '/dashboard/'; // fetch t info with authUser credential
-export const T_DASHBOARD_COURSES = '/dashboard/courses';
-export const T_DASHBOARD_Q_PANEL = '/dashboard/questions';
+export const DASHBOARD = '/dashboard/'; // fetch t info with authUser credential
+export const DASHBOARD_COURSES = '/dashboard/courses';
+export const DASHBOARD_Q_PANEL = '/dashboard/questions';
 
-export const DASHBOARD_Q_PANEL_BY_C_TITLE = '/t-dashboard/questions/:cTitle';
-export const DASHBOARD_Q_PANEL_BY_UNREAD = '/t-dashboard/questions/unread';
+// export const DASHBOARD_Q_PANEL_BY_C_TITLE = '/t-dashboard/questions/:cTitle';
+// export const DASHBOARD_Q_PANEL_BY_UNREAD = '/t-dashboard/questions/unread';
 
 
 //4. external pages nested routes

@@ -32,10 +32,12 @@ class Questions extends Component {
      : <p>no question yet</p>
     return (
         <div>
-          <QSearch tid={tid} click={() => this.props.click()} change={this.handleSearchQueryChange}
-          searchClick={this.handleSearchClick}
-          isLoading={isLoading}/>
-          {qTable}
+          <QSearch 
+            tid={tid}
+            click={() => this.props.click()} change={this.handleSearchQueryChange}
+            searchClick={this.handleSearchClick}
+            isLoading={isLoading}/>
+            {qTable}
         </div>
     );
   }

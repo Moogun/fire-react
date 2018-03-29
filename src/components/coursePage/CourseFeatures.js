@@ -1,7 +1,7 @@
 import React from 'react'
 import { Segment, Grid, Header } from 'semantic-ui-react'
 
-const CourseMeta = ({mobile}) => {
+const CourseFeatures = ({mobile}) => {
 
   return (
     <Grid.Row style={{margin: '3em 0em'}}>
@@ -38,4 +38,4 @@ const CourseMeta = ({mobile}) => {
       </Grid.Row>
   )
 }
-export default CourseMeta;
+export default CourseFeatures;

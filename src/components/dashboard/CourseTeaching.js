@@ -4,7 +4,17 @@ import { Table  } from 'semantic-ui-react'
 const CourseTeaching = ({click, courses}) => {
   console.log('course teaching', courses);
   let courseList = courses ?
-    <Table basic='very' selectable striped>
+    <Table selectable attached celled textAlign='center'>
+        <Table.Header >
+          <Table.Row >
+            <Table.HeaderCell width={3}>Status</Table.HeaderCell>
+            <Table.HeaderCell width='six'>Title</Table.HeaderCell>
+            <Table.HeaderCell width='six'>Date</Table.HeaderCell>
+            <Table.HeaderCell width='six'>Students Enrolled</Table.HeaderCell>
+            <Table.HeaderCell width='six'>Questions</Table.HeaderCell>
+            <Table.HeaderCell width='six'>reviews</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
         <Table.Body>
           {Object.keys(courses).map(key =>
           <Table.Row  key={key} onClick={()=> click(key)}>
@@ -12,11 +22,20 @@ const CourseTeaching = ({click, courses}) => {
               {courses[key].metadata.isPublished ? <p>Published</p> : <p>draft</p>}
             </Table.Cell>
             <Table.Cell textAlign='left' >
-              date
-            </Table.Cell>
-            <Table.Cell>
               {courses[key].metadata.title}
-              </Table.Cell>
+            </Table.Cell>
+            <Table.Cell textAlign='left' >
+              {courses[key].metadata.date}
+            </Table.Cell>
+            <Table.Cell textAlign='left' >
+              26
+            </Table.Cell>
+            <Table.Cell textAlign='left' >
+              30
+            </Table.Cell>
+            <Table.Cell textAlign='left' >
+              14
+            </Table.Cell>
           </Table.Row>
         )}
       </Table.Body>

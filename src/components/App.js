@@ -62,7 +62,7 @@ class App extends Component {
 
           <Route
             // exact path='/teaching'
-            path={routes.T_DASHBOARD}
+            path={routes.DASHBOARD}
             render={() => <Dashboard />}
           />
 

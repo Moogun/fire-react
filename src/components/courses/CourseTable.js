@@ -17,7 +17,7 @@ class CourseTable extends Component {
     return (
       <div>
         {/* <Header as='h3'>Upcoming</Header> */}
-          <Table basic='very' selectable>
+          <Table basic='very' selectable attached celled textAlign='center'>
             <Table.Body>
               {Object.keys(cTeaching).map(id =>
                 <CourseTableRow key={id} course={cTeaching[id]}

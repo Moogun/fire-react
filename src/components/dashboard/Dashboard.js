@@ -22,14 +22,8 @@ class Dashboard extends Component {
   handleItemClick = (e, {name}) => this.setState({activeItem: name})
   handleCourseClick = (courseKey) => {
     const {history} = this.props;
-    // console.log('coursekey', courseKey);
     history.push({
       pathname: '/course_manage/' + courseKey + '/edit',
-    //   // search: '?query=' + title + name,
-    //   state : {
-    //     courseKey: courseKey,
-    //     title: 'title',
-    //   }
     })
   }
 
@@ -73,62 +67,62 @@ class Dashboard extends Component {
 
       return (
 
-        <Segment basic loading={this.state.isLoading}>
-        <Grid container >
+        <Grid >
           <Grid.Row>
             <Grid.Column>
 
               {/* <Responsive minWidth={320}>
                 <Visibility onUpdate={this.handleUpdate}> */}
-                  <Grid style={{margin: '3em'}} color='teal'>
-                    <Grid.Row>
-                      <Grid.Column>
+                  <Grid style={{marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}} centered>
+                      <Grid.Row>
+                        <Grid.Column width={12}>
 
-                          <Header as='h1'>Dashboard</Header>
+                            <Header as='h1' style={{color: '#fff'}}>Dashboard</Header>
 
-                          <Menu size='small' secondary>
-                              <Menu.Item name='courses'
-                                active={activeItem === 'courses'}
-                                onClick={this.handleItemClick}
-                                // as={Link} to='/teaching/courses'
-                                as={Link} to={`${match.url}/courses`}
-                              />
-                              <Menu.Item
-                                name='questions'
-                                active={activeItem === 'questions'}
-                                onClick={this.handleItemClick}
-                                // as={Link} to='/teaching/questions'
-                                as={Link} to={`${match.url}/questions`}
-                              />
-                              <Menu.Item
-                                name='announcement'
-                                active={activeItem === 'announcement'}
-                                onClick={this.handleItemClick} />
-                            </Menu>
+                            <Menu size='small' secondary pointing inverted color='#2980b9'
+                              style={{borderColor: '#2980b9'}} >
+                                <Menu.Item name='courses'
+                                  active={activeItem === 'courses'}
+                                  onClick={this.handleItemClick}
+                                  // as={Link} to='/teaching/courses'
+                                  as={Link} to={`${match.url}/courses`}
+                                />
+                                <Menu.Item
+                                  name='questions'
+                                  active={activeItem === 'questions'}
+                                  onClick={this.handleItemClick}
+                                  // as={Link} to='/teaching/questions'
+                                  as={Link} to={`${match.url}/questions`}
+                                />
+                                <Menu.Item
+                                  name='announcement'
+                                  active={activeItem === 'announcement'}
+                                  onClick={this.handleItemClick} />
+                              </Menu>
 
-                      </Grid.Column>
-                    </Grid.Row>
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
 
-                    <Grid.Row>
-                      <Grid.Column>
-                        <Switch>
-                          {/* <Redirect exact from={match.url} to={`${match.url}/courses`} /> */}
-                          <Redirect exact from={match.url} to={routes.T_DASHBOARD_COURSES} />
-                          {/* <Route path='/teaching/courses' render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } /> */}
-                          <Route path={routes.T_DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
-                          {/* <Route path='/teaching/questions' component = {QPanel} /> */}
-                          <Route path={routes.T_DASHBOARD_Q_PANEL} component = {QPanel} />
-                        </Switch>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
+                    <Grid style={{marginTop: '0rem', backgroundColor: '#ecf0f1'}} centered>
+                      <Grid.Row>
+                        <Grid.Column width={12}>
+
+                          <Switch>
+                            <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
+                            <Route path={routes.DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
+                            <Route path={routes.DASHBOARD_Q_PANEL} component = {QPanel} />
+                          </Switch>
+
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                 {/* </Visibility>
               </Responsive> */}
 
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Segment>
 
       );
     }

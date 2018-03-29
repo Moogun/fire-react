@@ -2,9 +2,10 @@ import React, {Component} from 'react'
 import CourseMeta from './CourseMeta'
 import CourseFeatures from './CourseFeatures'
 import CourseCurri from './CourseCurri'
+import CourseTeacherSection from './CourseTeacherSection'
 import CourseOpenQ from './CourseOpenQ'
 import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item } from 'semantic-ui-react'
-import profile from '../../assets/profile-lg.png'
+
 import {Link, withRouter} from 'react-router-dom';
 import {db} from '../../firebase';
 import './CoursePage.css';
@@ -104,8 +105,6 @@ class CoursePage extends Component {
                      </Breadcrumb>
                   </Grid> */}
 
-                  {/* <Grid container stackable centered> */}
-
                       <Grid.Row
                         style={{ marginTop: '2rem', marginBottom: '2rem'}}
                         >
@@ -122,26 +121,7 @@ class CoursePage extends Component {
 
                         </Grid.Column>
 
-                        {/* <Grid.Column width={3} textAlign='center'> */}
-                                {/* <Image src={profile} fluid circular verticalAlign='middle'/> */}
-                        {/* </Grid.Column> */}
-                        {/* <Grid.Column width={4} textAlign='center'> */}
-                           {/* <Item.Group style={{color: '#fff'}}>
-                              <Item>
-                                  <Item.Content >
-                                    <Item.Header as='h3' content={tName} style={{color: '#fff'}}/>
-                                    <Item.Meta style={{color: '#fff'}}>profile</Item.Meta>
-                                    <Item.Extra ><Rating icon='star' defaultRating={5} maxRating={4} />
-                                    <p onClick={this.handleClick} style={{color: '#fff'}}> '000 reviews' </p></Item.Extra>
-                                  </Item.Content>
-                                </Item>
-                          </Item.Group> */}
 
-{/*
-                                                         <Header as="h3" content={tName} subheader='profile' />
-                                                        <Rating icon='star' defaultRating={5} maxRating={4} />
-                                                        <p onClick={this.handleClick}> '000 reviews' </p> */}
-                        {/* </Grid.Column> */}
                       </Grid.Row>
                   </Grid>
 
@@ -154,12 +134,15 @@ class CoursePage extends Component {
                             // features={features}
                           />
                           <CourseCurri course={course}/>
+                          {/* <CourseTeacherSection
+                          />
+                          <CourseOpenQ
+                          /> */}
                       </Grid.Column>
                   </Grid>
 
             </Grid.Column>
         </Grid.Row>
-
       </Grid>
 
     )

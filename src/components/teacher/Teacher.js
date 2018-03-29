@@ -198,23 +198,21 @@ class Teacher extends Component {
     // console.log('teacher render 1 questions', questions )
 
     return (
-      <Grid>
-        <Grid.Row>
+      <Grid style={{backgroundColor: '#ecf0f1', marginTop: '0rem' }}>
+        <Grid.Row style={{paddingTop: '0rem'}}>
             <Grid.Column>
 
-              <Container>
-
-               <Breadcrumb style={{marginTop: '2em' }}>
+               {/* <Breadcrumb style={{marginTop: '2em' }}>
                <Breadcrumb.Section link as={Link} to='/'> Home </Breadcrumb.Section>
                <Breadcrumb.Divider icon='right angle' />
                <Breadcrumb.Section>{tName}</Breadcrumb.Section>
-               </Breadcrumb>
+               </Breadcrumb> */}
 
-               <Grid style={{margin: '3em'}} stackable>
-                   <Grid.Row>
-                     <Grid.Column width={12}>
-
-                       <Segment basic style={{margin: '3em' }} >
+               <Grid
+                 style={{ backgroundColor: '#34495e', marginTop: '0rem'}} stackable centered
+                 >
+                   <Grid.Column width={12} >
+                       <Segment basic style={{margin: '2em' }} >
                          <Header as='h1'
                            // style={{color: '#fff'}}
                            content={tName}
@@ -224,17 +222,17 @@ class Teacher extends Component {
                        </Segment>
                      </Grid.Column>
 
-                     <Grid.Column width={3} textAlign='center'>
+                     {/* <Grid.Column width={3} textAlign='center'>
                        <Image src={profile} circular centered/>
                      </Grid.Column>
                      <Grid.Column width={1}>
-                     </Grid.Column>
-                   </Grid.Row>
+                     </Grid.Column> */}
+                   </Grid>
 
-                   <Grid.Row>
-                    <Grid.Column>
+                   <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} stackable centered>
+                    <Grid.Column width={12}>
                       <Segment basic>
-                        <Menu size='large'>
+                        <Menu size='large' inverted>
                           <Container>
                             <Menu.Item
                               name='course'
@@ -260,11 +258,11 @@ class Teacher extends Component {
                           </Menu>
                          </Segment>
                       </Grid.Column>
-                 </Grid.Row>
+                 </Grid>
 
 
-                 <Grid.Row>
-                      <Grid.Column>
+                 <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} stackable centered>
+                  <Grid.Column width={12}>
 
                         <Switch>
                           <Redirect exact strict from={match.url} to={`${match.url}/courses`} />
@@ -295,14 +293,11 @@ class Teacher extends Component {
                        </Switch>
 
                      </Grid.Column>
-                   </Grid.Row>
+                   </Grid>
 
-                 </Grid>
-              </Container>
-
-            </Grid.Column>
-        </Grid.Row>
-      </Grid>
+           </Grid.Column>
+       </Grid.Row>
+     </Grid>
 
     //         <Header
     //           as='h1'
