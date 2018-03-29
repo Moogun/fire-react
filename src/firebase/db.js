@@ -114,9 +114,13 @@ export const doPublishCourse = (courseKey, tid, isPublished) => {
   return db.ref().update(updates)
 }
 
-export const doRegisterCourse = (courseKey, uid) => {
-  console.log('db', courseKey, uid);
-  return db.ref().update()
+export const doEnrollInCourse = (tid, cid, password, uid) => {
+  console.log('db', tid, cid, password, uid);
+  var updates = {}
+  updates[`courses/${cid}/attendee/${uid}`] = 1
+  updates[`users/${tid}/courseTeaching/${cid}/attendee/${uid}`] = 1
+  updates[`users/${uid}/courseAttending/${cid}`] = 1
+  return db.ref().update(updates)
 }
 
 export const doSaveNewQ = (tid, cid, askedBy, title, text, createdAt, img) => {
