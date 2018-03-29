@@ -9,7 +9,7 @@ const CourseMeta = ({mobile}) => {
         <Segment basic>
 
           <Header as="h1" dividing>Course Features</Header>
-             <Grid columns={3} stackable doubling>
+             <Grid columns={2} stackable doubling>
 
               <Grid.Column>
                 <Header as="h2" attached='top'>something</Header>

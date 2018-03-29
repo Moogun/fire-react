@@ -3,10 +3,11 @@ import CourseMeta from './CourseMeta'
 import CourseFeatures from './CourseFeatures'
 import CourseCurri from './CourseCurri'
 import CourseOpenQ from './CourseOpenQ'
-import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button } from 'semantic-ui-react'
+import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 import {Link, withRouter} from 'react-router-dom';
 import {db} from '../../firebase';
+import './CoursePage.css';
 
 const menuStyle = {
   border: 'none',
@@ -84,54 +85,77 @@ class CoursePage extends Component {
       <Grid>
         <Grid.Row>
             <Grid.Column>
-              <Container>
 
-                <Breadcrumb style={{marginTop: '2em' }}>
-                   <Breadcrumb.Section link as={Link} to='/' >
-                     Home
-                   </Breadcrumb.Section>
-                   <Breadcrumb.Divider icon='right angle' />
-                   <Breadcrumb.Section link onClick={this.handleRoute} >
-                     {tName}
-                   </Breadcrumb.Section>
-                   <Breadcrumb.Divider icon='right angle' />
-                   <Breadcrumb.Section>
-                     {cTitle}
-                   </Breadcrumb.Section>
-                 </Breadcrumb>
+                <Grid style={{ backgroundColor: '#34495e', marginTop: '0rem'}} stackable centered>
 
-                <Grid style={{margin: '3em'}} stackable>
-                  <Grid.Row>
-                    <Grid.Column width={12}>
+                  {/* <Grid container>
+                    <Breadcrumb style={{marginTop: '2rem' }}>
+                       <Breadcrumb.Section link as={Link} to='/' >
+                         Home
+                       </Breadcrumb.Section>
+                       <Breadcrumb.Divider icon='right angle' />
+                       <Breadcrumb.Section link onClick={this.handleRoute} >
+                         {tName}
+                       </Breadcrumb.Section>
+                       <Breadcrumb.Divider icon='right angle' />
+                       <Breadcrumb.Section>
+                         {cTitle}
+                       </Breadcrumb.Section>
+                     </Breadcrumb>
+                  </Grid> */}
 
-                      <Segment basic style={{margin: '3em' }} >
-                        <Header as='h1'
-                          // style={{color: '#fff'}}
-                          content={title}
-                          subheader='We will Create a Parrot Bot Together! This course is a Step by Step Guide in Building a Chat Bot for Facebook Messenger' />
-                      </Segment>
-                      <Button onClick={this.handleEnroll}>Register</Button>
-                    </Grid.Column>
+                  {/* <Grid container stackable centered> */}
 
-                    <Grid.Column width={3} textAlign='center'>
-                      <Image src={profile} circular centered />
-                      <Header as="h3" content={tName} subheader='profile' />
-                      <Rating icon='star' defaultRating={5} maxRating={4} />
-                      <p onClick={this.handleClick}> '000 reviews' </p>
-                    </Grid.Column>
-                    <Grid.Column width={1}>
-                    </Grid.Column>
-                  </Grid.Row>
+                      <Grid.Row
+                        style={{ marginTop: '2rem', marginBottom: '2rem'}}
+                        >
+                        <Grid.Column width={12} >
 
-                  <CourseMeta meta={meta}/>
-                  <CourseFeatures
-                    // features={features}
-                  />
-                  <CourseCurri course={course}/>
+                          <Segment basic style={{margin: '0rem'}} color='teal'>
+                            <Header as='h1'
+                              style={{color: '#fff'}}
+                              content={title}
+                             />
+                             <Header as='h4' style={{marginTop: '0', color: '#fff'}}>  그로스해킹과 구글 애널리틱스 실전</Header>
+                             <Button onClick={this.handleEnroll}>Register</Button>
+                          </Segment>
 
-                </Grid>
+                        </Grid.Column>
 
-              </Container>
+                        {/* <Grid.Column width={3} textAlign='center'> */}
+                                {/* <Image src={profile} fluid circular verticalAlign='middle'/> */}
+                        {/* </Grid.Column> */}
+                        {/* <Grid.Column width={4} textAlign='center'> */}
+                           {/* <Item.Group style={{color: '#fff'}}>
+                              <Item>
+                                  <Item.Content >
+                                    <Item.Header as='h3' content={tName} style={{color: '#fff'}}/>
+                                    <Item.Meta style={{color: '#fff'}}>profile</Item.Meta>
+                                    <Item.Extra ><Rating icon='star' defaultRating={5} maxRating={4} />
+                                    <p onClick={this.handleClick} style={{color: '#fff'}}> '000 reviews' </p></Item.Extra>
+                                  </Item.Content>
+                                </Item>
+                          </Item.Group> */}
+
+{/*
+                                                         <Header as="h3" content={tName} subheader='profile' />
+                                                        <Rating icon='star' defaultRating={5} maxRating={4} />
+                                                        <p onClick={this.handleClick}> '000 reviews' </p> */}
+                        {/* </Grid.Column> */}
+                      </Grid.Row>
+                  </Grid>
+
+                {/* </Grid> */}
+
+                  <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} stackable centered>
+                      <Grid.Column width={10} >
+                          <CourseMeta meta={meta}/>
+                          <CourseFeatures
+                            // features={features}
+                          />
+                          <CourseCurri course={course}/>
+                      </Grid.Column>
+                  </Grid>
 
             </Grid.Column>
         </Grid.Row>
