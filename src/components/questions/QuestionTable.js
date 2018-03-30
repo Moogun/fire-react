@@ -14,9 +14,9 @@ class QuestionTable extends Component {
     const {questions} = this.props
 
     return (
-      <Segment basic>
+      <Segment basic textAlign='center'>
         <Container text>
-            <Table basic='very' selectable>
+            <Table attached celled padded>
             <Table.Body>
 
               {Object.keys(questions).map(qid =>
@@ -26,8 +26,9 @@ class QuestionTable extends Component {
 
             </Table.Body>
           </Table>
-          <Button>infinite scroll</Button>
-      </Container>
+          <br/>
+          <Button primary>Load more</Button>
+        </Container>
       </Segment>
     );
   }
