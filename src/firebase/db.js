@@ -151,7 +151,7 @@ export const doSaveAnswer = (tid, cid, qid, answeredBy, text, createdAt, img) =>
 }
 
 export const doFetchRecentQuestions = (tid) => {
-  return db.ref('questions').child(tid).limitToFirst(5).once('value')
+  return db.ref('questions').child(tid).limitToFirst(10).once('value')
 }
 
 export const doSearchForQuestions = (tid, queryText) => {

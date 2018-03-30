@@ -33,12 +33,16 @@ class Dashboard extends Component {
     })
   }
 
+  handleDidChooseCourse = (e, {value}) => {
+    // console.log('c select 1');
+    // console.log('couse select', value);
+    this.setState({cid: value})
+    e.preventDefault()
+  }
+
   componentDidMount() {
-
-    console.log('4 did mount context authUser ', this.context.authUser);
-
      //fetch teaching course with user id,
-     //if no id was provided redirect to signin
+     //if no id was provided redirect to <signin></signin>
      const {isLoading } = this.state
      this.setState({isLoading: !isLoading})
      if (this.context.authUser ) {
@@ -47,11 +51,25 @@ class Dashboard extends Component {
         .then(snapshot => {
           const {isLoading } = this.state
           // console.log('inside', isLoading);
-          this.setState( () => ({courseTeaching: snapshot.val().courseTeaching, isLoading: !isLoading} ) )
+          let cTeaching = snapshot.val().courseTeaching
+          let selectOption=[{key: 'default', text: 'All', value: 'default'}]
+          let item;
+
+          Object.keys(cTeaching).map(key => {
+
+            item={key: key, text: cTeaching[key].metadata.title, value: key}
+            selectOption.push(item)
+          })
+          console.log('did mount c teaching', cTeaching);
+          this.setState( () => ({courseTeaching: cTeaching, 'selectOption': selectOption, isLoading: !isLoading}) )
         })
         .catch(error => {
           this.setState({[error]: error});
         });
+
+        db.doFetchRecentQuestions(this.context.authUser.uid)
+          .then(qSnap => this.setState ({questions: qSnap.val() }))
+            // console.log('q snap', qSnap.val()))
      }
   }
 
@@ -61,12 +79,7 @@ class Dashboard extends Component {
 
   render() {
     const {authUser, match} = this.props
-    const {activeItem, error, user, courseTeaching} = this.state
-
-    // console.log('1 render props authUser', authUser);
-    // console.log('2 render state user', user);
-    // console.log('2 render state courseTeaching', courseTeaching);
-    // console.log('3 render context auth user', this.context.authUser);
+    const {activeItem, error, user, courseTeaching, selectOption, questions, cid} = this.state
 
       return (
 
@@ -116,7 +129,12 @@ class Dashboard extends Component {
                           <Switch>
                             <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
                             <Route path={routes.DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
-                            <Route path={routes.DASHBOARD_Q_PANEL} component = {QPanel} />
+                            <Route path={routes.DASHBOARD_Q_PANEL} render = {() => <QPanel
+                              options={selectOption}
+                              questions={questions}
+                              didChooseCourse={this.handleDidChooseCourse}
+                              selectedCourse={cid}
+                             />} />
                           </Switch>
 
                         </Grid.Column>

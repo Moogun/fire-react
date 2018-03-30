@@ -5,29 +5,20 @@ import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, G
 import QuestionTable from '../questions/QuestionTable'
 
 class QPanel extends Component {
-  state = {
-    courses: [
-      {key: 'all', title: 'all courses'},
-      {key: 'c id', title: 'abc'},
-      {key: 'c id 2', title: 'abc'},
-      {key: 'c id 3', title: 'abc'},
-    ],
-
-    questions: [
-        {id:1, title:'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, mollitia.', text: 'details', image: 'y', userAsking:'uid-1', answerCount:3,},
-        {id:2, title:'Lorem ipsum dolor sit amet, consectetur adipisicing elit.', text: 'details', image: 'x', userAsking:'uid-2', answerCount:0,},
-      ],
-  }
 
   render() {
-    const {courses, questions} = this.state
+    const {options, questions, didChooseCourse, selectedCourse} = this.props
+    console.log('selectedCourse', 'questions', selectedCourse, questions);
+
+    let qList = questions ? <QuestionTable options={options} questions={questions}/>
+      : <p>No question yet</p>
 
     return (
       <Grid celled stackable>
         <Grid.Row centered>
 
           <Grid.Column width={4}>
-            <Select placeholder='Select your course' options={courses} fluid />
+            <Select placeholder='Select a course' name="cid" fluid search selection options={options} onChange={didChooseCourse}/>
             <Menu vertical fluid>
               <Menu.Item><Checkbox label='Unread' /> <Label content='10'/></Menu.Item>
               <Menu.Item><Checkbox label='Not top answer' /> <Label content='10'/></Menu.Item>
@@ -38,13 +29,8 @@ class QPanel extends Component {
           <Grid.Column width={12}>
             <Header as='h1' content='Course title' />
             <Divider />
-            <QuestionTable questions={questions}/>
+            {qList}
 
-              {/* <Route path='/account/profile' render={(props) => <Profile {...props} authUser={authUser}/>} />
-              <Route path='/account/photo' render={() => <Photo />} />
-              <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
-              <Route path='/account/passwordForget' render={ () => <PasswordForgetForm />} />
-              <Route path='/account/danger' render={() => <Danger />} /> */}
 
           </Grid.Column>
 

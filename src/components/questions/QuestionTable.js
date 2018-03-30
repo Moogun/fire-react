@@ -19,7 +19,10 @@ class QuestionTable extends Component {
             <Table basic='very' selectable>
             <Table.Body>
 
-              {Object.keys(questions).map(qid =>  <QuestionRow key={qid} question={questions[qid]} click={()=> this.handleQueClick(qid)} /> )}
+              {Object.keys(questions).map(qid =>
+                <QuestionRow key={qid}
+                  question={questions[qid]}
+                  click={()=> this.handleQueClick(qid)} /> )}
 
             </Table.Body>
           </Table>
