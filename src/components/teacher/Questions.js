@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import QSearch from '../questions/QSearch'
 import QuestionTable from '../questions/QuestionTable'
 import profile from '../../assets/profile-lg.png'
+import { Grid} from 'semantic-ui-react'
 
 class Questions extends Component {
   constructor(props) {
@@ -32,12 +33,26 @@ class Questions extends Component {
      : <p>no question yet</p>
     return (
         <div>
-          <QSearch 
-            tid={tid}
-            click={() => this.props.click()} change={this.handleSearchQueryChange}
-            searchClick={this.handleSearchClick}
-            isLoading={isLoading}/>
-            {qTable}
+          <Grid centered>
+            <Grid.Row>
+              <Grid.Column width={12}>
+                <QSearch
+                  tid={tid}
+                  click={() => this.props.click()} change={this.handleSearchQueryChange}
+                  searchClick={this.handleSearchClick}
+                  isLoading={isLoading}/>
+
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+
+            <Grid centered>
+              <Grid.Row>
+                <Grid.Column width={12}>
+                {qTable}
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </div>
     );
   }
