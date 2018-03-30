@@ -12,6 +12,7 @@ import { Grid, Header, Menu, Visibility, Responsive, Segment  } from 'semantic-u
 const dashboardHeader = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
 const dashboardHeaderColor = {color: '#fff'}
 const dashboardHeaderMenuBorderColor = {borderColor: '#2980b9'}
+const dashboardHeaderMenuItemBorder = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
 const dashboardBody = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
 
 class Dashboard extends Component {
@@ -47,10 +48,7 @@ class Dashboard extends Component {
           const {isLoading } = this.state
           // console.log('inside', isLoading);
           this.setState( () => ({courseTeaching: snapshot.val().courseTeaching, isLoading: !isLoading} ) )
-        }
-
-
-        )
+        })
         .catch(error => {
           this.setState({[error]: error});
         });
@@ -89,20 +87,22 @@ class Dashboard extends Component {
                                 <Menu.Item name='courses'
                                   active={activeItem === 'courses'}
                                   onClick={this.handleItemClick}
-                                  // as={Link} to='/teaching/courses'
                                   as={Link} to={`${match.url}/courses`}
+                                  style={dashboardHeaderMenuItemBorder}
                                 />
                                 <Menu.Item
                                   name='questions'
                                   active={activeItem === 'questions'}
                                   onClick={this.handleItemClick}
-                                  // as={Link} to='/teaching/questions'
                                   as={Link} to={`${match.url}/questions`}
+                                  style={dashboardHeaderMenuItemBorder}
                                 />
                                 <Menu.Item
                                   name='announcement'
                                   active={activeItem === 'announcement'}
-                                  onClick={this.handleItemClick} />
+                                  onClick={this.handleItemClick}
+                                  style={dashboardHeaderMenuItemBorder}
+                                />
                               </Menu>
 
                         </Grid.Column>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {db} from '../../firebase';
 import CourseCards from '../courses/CourseCards'
 import { Grid, Header, Menu, Visibility, Responsive } from 'semantic-ui-react'
+import {Link, withRouter} from 'react-router-dom'
 
 const dashboardHeader = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
 const dashboardHeaderColor = {color: '#fff'}
@@ -114,12 +115,32 @@ class MyCourses extends Component {
 
                         <Header as='h1' style={dashboardHeaderColor}x>My Courses</Header>
 
-                          <Menu size='small' secondary style={dashboardHeaderMenuBorderColor}>
+                          {/* <Menu size='small' secondary style={dashboardHeaderMenuBorderColor}>
                               <Menu.Item name='home'
                                 active={activeItem === 'home'} onClick={this.handleItemClick}/>
                               <Menu.Item name='messages' active={activeItem === 'messages'} onClick={this.handleItemClick} />
                               <Menu.Item name='friends' active={activeItem === 'friends'} onClick={this.handleItemClick} />
-                          </Menu>
+                          </Menu> */}
+
+                          <Menu size='small' secondary pointing inverted
+                            style={dashboardHeaderMenuBorderColor} >
+                              <Menu.Item name='courses'
+                                active={activeItem === 'courses'}
+                                onClick={this.handleItemClick}
+                                // as={Link} to={`${match.url}/courses`}
+                              />
+                              <Menu.Item
+                                name='questions'
+                                active={activeItem === 'questions'}
+                                onClick={this.handleItemClick}
+                                // as={Link} to={`${match.url}/questions`}
+                              />
+                              <Menu.Item
+                                name='announcement'
+                                active={activeItem === 'announcement'}
+                                onClick={this.handleItemClick} />
+                            </Menu>
+
 
                       </Grid.Column>
                     </Grid.Row>
@@ -152,4 +173,4 @@ MyCourses.contextTypes ={
   authUser: PropTypes.object,
 }
 
-export default MyCourses
+export default withRouter(MyCourses)
