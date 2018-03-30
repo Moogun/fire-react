@@ -9,6 +9,11 @@ import QPanel from './QPanel'
 import {db} from '../../firebase';
 import { Grid, Header, Menu, Visibility, Responsive, Segment  } from 'semantic-ui-react'
 
+const dashboardHeader = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
+const dashboardHeaderColor = {color: '#fff'}
+const dashboardHeaderMenuBorderColor = {borderColor: '#2980b9'}
+const dashboardBody = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
+
 class Dashboard extends Component {
 
   constructor(props) {
@@ -73,14 +78,14 @@ class Dashboard extends Component {
 
               {/* <Responsive minWidth={320}>
                 <Visibility onUpdate={this.handleUpdate}> */}
-                  <Grid style={{marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}} centered>
+                  <Grid style={dashboardHeader} centered>
                       <Grid.Row>
                         <Grid.Column width={12}>
 
-                            <Header as='h1' style={{color: '#fff'}}>Dashboard</Header>
+                            <Header as='h1' style={dashboardHeaderColor}>Dashboard</Header>
 
-                            <Menu size='small' secondary pointing inverted color='#2980b9'
-                              style={{borderColor: '#2980b9'}} >
+                            <Menu size='small' secondary pointing inverted
+                              style={dashboardHeaderMenuBorderColor} >
                                 <Menu.Item name='courses'
                                   active={activeItem === 'courses'}
                                   onClick={this.handleItemClick}
@@ -104,7 +109,7 @@ class Dashboard extends Component {
                       </Grid.Row>
                     </Grid>
 
-                    <Grid style={{marginTop: '0rem', backgroundColor: '#ecf0f1'}} centered>
+                    <Grid style={dashboardBody} centered>
                       <Grid.Row>
                         <Grid.Column width={12}>
 

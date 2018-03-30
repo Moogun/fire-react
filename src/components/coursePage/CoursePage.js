@@ -31,6 +31,8 @@ const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
 })
 
+const coursePageHeader = { backgroundColor: '#34495e', marginTop: '0rem'}
+
 class CoursePage extends Component {
 
   state = {
@@ -174,7 +176,7 @@ class CoursePage extends Component {
         <Grid.Row>
             <Grid.Column>
 
-                <Grid style={{ backgroundColor: '#34495e', marginTop: '0rem'}} stackable centered>
+                <Grid style={coursePageHeader} stackable centered>
 
                       <Grid.Row
                         style={{ marginTop: '2rem', marginBottom: '2rem'}}
