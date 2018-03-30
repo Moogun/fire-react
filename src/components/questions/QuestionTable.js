@@ -3,6 +3,8 @@ import {withRouter} from 'react-router-dom'
 import { Segment,Container, Table, Button} from 'semantic-ui-react'
 import QuestionRow from './QuestionRow'
 
+const qPanelQuestionTablePadding = {paddingTop: '0px', 'paddingLeft': '0px'}
+
 class QuestionTable extends Component {
 
   handleQueClick = (qid) => {
@@ -14,8 +16,8 @@ class QuestionTable extends Component {
     const {questions} = this.props
 
     return (
-      <Segment basic textAlign='center'>
-        <Container text>
+      <Segment basic textAlign='center' style={qPanelQuestionTablePadding}>
+        <Container >
             <Table attached celled padded>
             <Table.Body>
 

@@ -1,41 +1,48 @@
 import React, {Component} from 'react'
 
-import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item, Select, Checkbox, Label } from 'semantic-ui-react'
+import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item, Select, Checkbox, Label, } from 'semantic-ui-react'
 
 import QuestionTable from '../questions/QuestionTable'
 
+
 class QPanel extends Component {
+
+  handleQuestionClick = (qid) => {
+    this.props.queClick(qid)
+  }
 
   render() {
     const {options, questions, didChooseCourse, selectedCourse} = this.props
     console.log('selectedCourse', 'questions', selectedCourse, questions);
 
-    let qList = questions ? <QuestionTable options={options} questions={questions}/>
+    let qList = questions ? <QuestionTable options={options} questions={questions} click={this.handleQuestionClick} />
       : <p>No question yet</p>
 
     return (
-      <Grid celled stackable>
+
+      <Grid stackable>
         <Grid.Row centered>
 
           <Grid.Column width={4}>
             <Select placeholder='Select a course' name="cid" fluid search selection options={options} onChange={didChooseCourse}/>
-            <Menu vertical fluid>
+            <Divider />
+            <Menu vertical text fluid>
               <Menu.Item><Checkbox label='Unread' /> <Label content='10'/></Menu.Item>
               <Menu.Item><Checkbox label='Not top answer' /> <Label content='10'/></Menu.Item>
               <Menu.Item><Checkbox label='No response' /> <Label content='10'/></Menu.Item>
             </Menu>
+            <Divider />
           </Grid.Column>
 
           <Grid.Column width={12}>
-            <Header as='h1' content='Course title' />
-            <Divider />
+            <Header as='h1' content='Course title' dividing/>
             {qList}
-
 
           </Grid.Column>
 
         </Grid.Row>
       </Grid>
+
     );
   }
 

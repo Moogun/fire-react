@@ -40,6 +40,20 @@ class Dashboard extends Component {
     e.preventDefault()
   }
 
+  handleQuestionClick = (qid) => {
+    const { questions } = this.state
+    console.log('teacher q click', qid);
+    console.log('teacher q click',questions[qid]);
+  //   this.props.history.push({
+  //     pathname: `${this.props.match.url}/question/${qid}`,
+  //     state:
+  //       {
+  //         q: questions[qid],
+  //         qid: qid
+  //       }
+  //   })
+  }
+
   componentDidMount() {
      //fetch teaching course with user id,
      //if no id was provided redirect to <signin></signin>
@@ -134,6 +148,7 @@ class Dashboard extends Component {
                               questions={questions}
                               didChooseCourse={this.handleDidChooseCourse}
                               selectedCourse={cid}
+                              queClick={this.handleQuestionClick}
                              />} />
                           </Switch>
 
