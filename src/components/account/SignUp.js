@@ -4,12 +4,12 @@ import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
 import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment, Header, Grid } from 'semantic-ui-react'
 import {SignInLink} from './SignIn';
-// import FacebookLogin from 'react-facebook-login';
-// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-//
-// const responseFacebook = (response) => {
-//   console.log(response);
-// }
+
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+
+const responseFacebook = (response) => {
+  console.log('fb login', response);
+}
 
 const SignUpPage = ({history}) => (
   <div className='login-form'>
@@ -108,8 +108,28 @@ class SignUpForm extends Component {
       });
   }
 
-  componentClicked = () => {
+  signUpWithFB = () => {
+
+    const {history} = this.props;
     console.log('fbSignin');
+    auth.doCreateUserWithFB()
+    .then(result => {
+      console.log('sign up fb');
+      var token = result.credential.accessToken;
+       //This gives you a Google Access Token. You can use it to access the Google API.
+      var authUser = result.user;
+      db.doCreateUser(authUser.uid, authUser.displayName, authUser.email)
+      .then(() => {
+        this.setState(() => ({ ...INITIAL_STATE }));
+        history.push(routes.HOME);
+      })
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
+    })
+    .catch(error => {
+      this.setState(byPropKey('error', error));
+    });
   }
 
   render() {
@@ -123,27 +143,27 @@ class SignUpForm extends Component {
 
     return (
       <div>
-  <Form size='large' onSubmit={this.onSubmit}>
-<Segment stacked>
+        <Form size='large' onSubmit={this.onSubmit}>
+          <Segment stacked>
                 <Form.Field>
                   <Button fluid size="tiny" onClick={this.signUpWithGoogle}>
                     <Icon name='google' /> Continue with Google
                   </Button>
                 </Form.Field>
 
-                <Form.Field>
-                  <Button fluid size="tiny">
-                    <Icon name='facebook' /> Continue with Facebook
-                  </Button>
-                </Form.Field>
-                {/* <FacebookLogin
+                <FacebookLogin
                     appId="1329723160399765"
                     autoLoad={true}
                     fields="name,email,picture"
                     render={renderProps => (
-                    <Button onClick={renderProps.onClick}>Facebook Sign up</Button> )}
-                    onClick={this.componentClicked}
-                    callback={responseFacebook} /> */}
+                    <Button
+                      onClick={renderProps.onClick}>
+                      <Icon name='facebook' />
+                      Facebook Sign up
+                    </Button>
+                    )}
+                    onClick={this.signUpWithFB}
+                    callback={responseFacebook} />
 
               <Divider horizontal>Or</Divider>
 

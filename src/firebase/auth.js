@@ -1,4 +1,4 @@
-import {auth, google} from './firebase';
+import {auth, google, facebook} from './firebase';
 
 // Sign Up
 export const doCreateUserWithEmailAndPassword = (email, password) =>
@@ -6,6 +6,9 @@ export const doCreateUserWithEmailAndPassword = (email, password) =>
 
 export const doCreateUserWithGoogle = () =>
   auth.signInWithPopup(google);
+
+export const doCreateUserWithFB = () =>
+  auth.signInWithPopup(facebook);
 
 // Sign In
 export const doSignInWithEmailAndPassword = (email, password) =>

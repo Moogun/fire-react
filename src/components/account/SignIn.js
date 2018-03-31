@@ -1,12 +1,3 @@
-// import React, {Component} from 'react';
-// import {auth} from '../../firebase';
-// import * as routes from '../../constants/routes';
-// import {Link, withRouter} from 'react-router-dom';
-// import {SignUpLink} from './SignUp';
-// import SignUp from './SignUp'
-// import {PasswordForgetLink} from './PasswordForget'
-// import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment, Header } from 'semantic-ui-react'
-
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
@@ -16,7 +7,6 @@ import * as routes from '../../constants/routes';
 
 import {SignUpLink} from './SignUp';
 import {PasswordForgetLink} from './PasswordForget'
-
 
 const SignInPage = ({history}) => (
   <div className='login-form'>
@@ -92,6 +82,7 @@ class SignInForm extends Component {
     return (
         <div>
           <Form size='large' onSubmit={this.onSubmit}>
+
             <Segment stacked>
               <Form.Input
                 fluid

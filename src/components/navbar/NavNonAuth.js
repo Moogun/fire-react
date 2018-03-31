@@ -50,24 +50,12 @@ class NavNonAuth extends Component {
                       name='Sign In' active={activeItem === 'signin'}
                       onClick={this.handleItemClick}
                        >
-
-                      {/* <Modal trigger={<p>Log In</p>} size='mini' closeIcon >
-                        <Modal.Header>Log In to We Qna</Modal.Header>
-                        <AuthModal authReq={'signin'} />
-                      </Modal> */}
-
                     </Menu.Item>
 
-
-                    {/* <Menu.Item as='a' name='Sign Up' active={activeItem === 'signup'}> */}
                     <Menu.Item as={Link} to={routes.SIGN_UP}
                       name='Sign Up' active={activeItem === 'signup'}
                       onClick={this.handleItemClick}
                        >
-                      {/* <Modal trigger={<p>Sign Up</p>} size='mini'>
-                        <AuthModal authReq={'signup'}/>
-                      </Modal>
-                       */}
                     </Menu.Item>
 
                   </Menu.Menu>
