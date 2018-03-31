@@ -6,7 +6,7 @@ class CEditMeta extends Component {
 
   render() {
     // console.log('edit meta render props', this.props);
-    const { textbook, date, location, time, submit } = this.props
+    const { title, subTitle, textbook, date, location, time, submit } = this.props
 
     return (
       <Segment basic>
@@ -14,6 +14,22 @@ class CEditMeta extends Component {
         <Divider />
 
           <Form>
+            <Form.Field>
+              <label>Title</label>
+              <Input placeholder='Title'
+                value={title || ''}
+                 name='title'
+                 onChange={this.props.change}
+               />
+            </Form.Field>
+            <Form.Field>
+              <label>Subtitle</label>
+              <Input placeholder='Subtitle'
+                value={subTitle || ''}
+                 name='subTitle'
+                 onChange={this.props.change}
+               />
+            </Form.Field>
              <Form.Field>
                <label>Textbook</label>
                <Input placeholder='Textbook'

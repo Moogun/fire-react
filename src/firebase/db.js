@@ -24,10 +24,10 @@ export const onceGetCourseWithTitle = (cTitle) =>
 
 //get multiple courses
 export const onceGetCourses = () =>
-  db.ref('courses').limitToFirst(5).once('value');
+  db.ref('courses').limitToFirst(20).once('value');
 
 export const onceGetPublishedCourses = () =>
-  db.ref('courses').limitToFirst(5).once('value');
+  db.ref('courses').orderByChild("/metadata/isPublished").equalTo(true).limitToFirst(20).once('value');
 
 //get 1 course
 export const onceGetCourse = (courseKey) =>
@@ -114,12 +114,19 @@ export const doPublishCourse = (courseKey, tid, isPublished) => {
   return db.ref().update(updates)
 }
 
+export const doRemoveCourse = (tid, cid) => {
+  var updates = {}
+  updates[`courses/${cid}/`] = null
+  updates[`users/${tid}/courseTeaching/${cid}/`] = null
+  return db.ref().update(updates)
+}
+
 export const doEnrollInCourse = (tid, cid, password, uid) => {
   console.log('db', tid, cid, password, uid);
   var updates = {}
   updates[`courses/${cid}/attendee/${uid}`] = 1
   updates[`users/${tid}/courseTeaching/${cid}/attendee/${uid}`] = 1
-  updates[`users/${uid}/courseAttending/${cid}`] = 1
+  updates[`users/${uid}/courseAttending/${tid}/${cid}`] = 1
   return db.ref().update(updates)
 }
 

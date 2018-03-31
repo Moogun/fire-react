@@ -5,22 +5,21 @@ import {db} from '../../firebase';
 class CEditSettings extends Component {
 
     render() {
-      // const { open, closed, password } = this.state
-      const { openCourse, password, change, submit } = this.props
+
+      const { teacherId, courseId, openCourse, password, change, submit, remove } = this.props
       console.log('settings passowrd', password);
+
       let open, closed
       if (openCourse) {
         open = true, closed =false
-        // console.log('open', open, 'closed', closed);
       } else {
         open = false, closed =true
-        // console.log('open', open, 'closed', closed);
       }
       const isInvalid = closed && password.length < 4 ;
 
       return (
         <Segment basic>
-          <Header as='h3' content='Course privacy settings'></Header>
+          <Header as='h3' content='Course settings'></Header>
           <Divider />
            <Segment basic>
               <Form>
@@ -47,6 +46,21 @@ class CEditSettings extends Component {
                    onClick={submit}>저장</Button>
                </Form>
              </Segment>
+             <Divider />
+             <Segment>
+               <Header as='h5' content='Course status'></Header>
+               <Button>Unpublish</Button>
+               {/* <Popup
+                  trigger={<Button primary fluid
+                    // active={isPublished}
+                    onClick={this.handlePublish}
+                    >{published}</Button>}
+                  content='Need to update info first before publishing'
+                /> */}
+               <Button onClick={remove}>Delete</Button>
+
+             </Segment>
+
            </Segment>
       );
     }

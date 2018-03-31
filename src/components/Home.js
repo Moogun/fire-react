@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Segment, Container, Grid, Header } from 'semantic-ui-react'
+import { Segment, Container, Grid, Header, Button } from 'semantic-ui-react'
 import withAuthorization from '../HOC/withAuthorization';
 import {db} from '../firebase';
 
@@ -25,7 +25,7 @@ class HomePage extends Component {
     //** caution: local looping is far faster than another db fetching
     // ex : below tid prints all tid, then db request get excuted
 
-    db.onceGetCourses()
+    db.onceGetPublishedCourses()
       .then(snap => {
         let courseSnap = snap.val()
 
@@ -69,7 +69,8 @@ class HomePage extends Component {
 
               <Header as='h5' style={{marginTop: '2rem'}}>Header</Header>
               <CourseCards courses={courses}/>
-
+              <br/>
+              <Button primary>Load more</Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>

@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {db} from '../../firebase';
 import CourseCards from '../courses/CourseCards'
-import { Grid, Header, Menu, Visibility, Responsive } from 'semantic-ui-react'
+import { Grid, Header, Menu, Visibility, Responsive, Card, Button } from 'semantic-ui-react'
 import {Link, withRouter} from 'react-router-dom'
 
 const dashboardHeader = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
@@ -41,8 +41,12 @@ class MyCourses extends Component {
       db.onceGetUser(authUser.uid)
         .then(userSnap => {
           console.log('user snap', userSnap.val())
+
           let cAttending = userSnap.val().courseAttending
 
+          // if (!!cAttending) {
+          //   return
+          // }
           // this.handleFetchMyCourses(cAttending)
           Object.keys(cAttending).map(key => {
             db.onceGetCourse(key)
@@ -91,10 +95,17 @@ class MyCourses extends Component {
     // })
   }
 
+  handleQuestion = () => {
+    const { history } = this.props
+    console.log('my courses match', this.props);
+    history.push({pathname: 'teacher/moo6/questions'})
+  }
+
   render() {
 
     const {calculations, activeItem, attendingCourses} = this.state
     console.log('width', calculations.width, 'attendingCourses', attendingCourses);
+    console.log('setting high min width removes the error', 'getBoundingClientRect');
     let margin;
     if (calculations.width > 1127 ) {
       margin = '3em'
@@ -106,7 +117,7 @@ class MyCourses extends Component {
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              //setting high min width removes the error 'getBoundingClientRect'
+
               {/* <Responsive minWidth={320}>
                 <Visibility onUpdate={this.handleUpdate}> */}
                   <Grid style={dashboardHeader} centered>
@@ -114,13 +125,6 @@ class MyCourses extends Component {
                       <Grid.Column width={12}>
 
                         <Header as='h1' style={dashboardHeaderColor}x>My Courses</Header>
-
-                          {/* <Menu size='small' secondary style={dashboardHeaderMenuBorderColor}>
-                              <Menu.Item name='home'
-                                active={activeItem === 'home'} onClick={this.handleItemClick}/>
-                              <Menu.Item name='messages' active={activeItem === 'messages'} onClick={this.handleItemClick} />
-                              <Menu.Item name='friends' active={activeItem === 'friends'} onClick={this.handleItemClick} />
-                          </Menu> */}
 
                           <Menu size='small' secondary pointing inverted
                             style={dashboardHeaderMenuBorderColor} >
@@ -155,7 +159,74 @@ class MyCourses extends Component {
                           <Route path={routes.DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
                           <Route path={routes.DASHBOARD_Q_PANEL} component = {QPanel} />
                         </Switch> */}
-                        <CourseCards courses={attendingCourses}/>
+                        {/* <CourseCards courses={attendingCourses}/> */}
+
+                        <Card>
+                            <Card.Content>
+                             <a>
+                             {/* <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' /> */}
+                               <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
+                              <Card.Header> Steve Sanders</Card.Header>
+                              <Card.Meta> Friends of Elliot </Card.Meta>
+                              </a>
+                            </Card.Content>
+
+                            <Card.Content extra>
+                              <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
+                            </Card.Content>
+                            <Card.Content extra>
+                              <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
+                            </Card.Content>
+                            <Card.Content extra>
+                              <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
+                            </Card.Content>
+                          </Card>
+
+                          <Card>
+                              <Card.Content>
+                               <a>
+                               {/* <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' /> */}
+                                 <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
+                                <Card.Header> Steve Sanders</Card.Header>
+                                <Card.Meta> Friends of Elliot </Card.Meta>
+                                </a>
+                              </Card.Content>
+
+                              <Card.Content extra>
+                                <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
+                              </Card.Content>
+                            </Card>
+
+                            <Card>
+                                <Card.Content>
+                                 <a>
+                                 {/* <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' /> */}
+                                   <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
+                                  <Card.Header> Steve Sanders</Card.Header>
+                                  <Card.Meta> Friends of Elliot </Card.Meta>
+                                  </a>
+                                </Card.Content>
+
+                                <Card.Content extra>
+                                  <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
+                                </Card.Content>
+                              </Card>
+
+                              <Card>
+                                  <Card.Content>
+                                   <a>
+                                   {/* <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' /> */}
+                                     <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
+                                    <Card.Header> Steve Sanders</Card.Header>
+                                    <Card.Meta> Friends of Elliot </Card.Meta>
+                                    </a>
+                                  </Card.Content>
+
+                                  <Card.Content extra>
+                                    <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
+                                  </Card.Content>
+                                </Card>
+
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>

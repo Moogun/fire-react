@@ -171,6 +171,18 @@ class CourseEdit extends Component {
         event.preventDefault();
   }
 
+  handleRemoveCourse = () => {
+
+    const { teacherId, courseId} = this.state
+    const {history} = this.props
+    db.doRemoveCourse(teacherId, courseId)
+      .then(res => {
+        console.log('remove', res)
+        console.log('history', history)
+        history.replace({pathname: '/dashboard/courses'})
+        })
+  }
+
   handlePublish = () => {
 
     const {courseId, teacherId, isPublished, isLoading, textbook} = this.state
@@ -231,23 +243,23 @@ class CourseEdit extends Component {
   render() {
     console.log('render', 1);
     const {activeItem, isLoading,
-      courseId, title, teacherName, teacherId,
+      courseId, title, subTitle, teacherName, teacherId,
       textbook, date, time, location,
       curri,
-      openCourse, password,
+      openCourse, password, isPublished,
       editorState
     } = this.state
     const {match} = this.props
 
     console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse);
-
+    let published = isPublished ? 'Unpublish' : 'Publish'
     return (
       <Segment basic loading={isLoading}>
 
         <Container>
 
             <CEditTitle
-              title={title} teacherName={teacherName} teacherId={teacherId} />
+              title={title} teacherName={teacherName} teacherId={teacherId} isPublished={isPublished}/>
 
             <Container>
               <Grid celled stackable>
@@ -283,15 +295,9 @@ class CourseEdit extends Component {
                        >
                        Assignment (Coming soon)
                     </Menu.Item>
-                    <Menu.Item>
-                       <Popup
-                          trigger={<Button primary fluid
-                            // active={isPublished}
-                            onClick={this.handlePublish}
-                            >Publish</Button>}
-                          content='Need to update info first before publishing'
-                        />
-                     </Menu.Item>
+                    <Menu.Item name='save'>
+                      Save
+                    </Menu.Item>
                    </Menu>
 
                 </Grid.Column>
@@ -301,6 +307,8 @@ class CourseEdit extends Component {
                       <Redirect exact from={match.url} to={`${match.url}/info`} />
                       <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                         {...props}
+                        title={title}
+                        subTitle={subTitle}
                         textbook={textbook}
                         date={date}
                         time={time}
@@ -317,13 +325,17 @@ class CourseEdit extends Component {
                         submit={this.onCurriSubmit}
                       />} />
                       <Route path={`${match.url}/settings`} render={() => <CEditSettings
+                        courseId={courseId}
+                        teacherId={teacherId}
                         openCourse={openCourse}
                         password={password}
                         change={this.handleInputChange}
                         toggle={this.handleSettingsOpenOrClose}
                         submit={this.onSettingsSubmit}
+                        remove={this.handleRemoveCourse}
                       />} />
                       <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
+
                     </Switch>
                 </Grid.Column>
 

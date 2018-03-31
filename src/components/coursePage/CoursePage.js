@@ -10,7 +10,6 @@ import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visib
 
 import {Link, withRouter} from 'react-router-dom';
 import {db} from '../../firebase';
-import './CoursePage.css';
 
 const menuStyle = {
   border: 'none',

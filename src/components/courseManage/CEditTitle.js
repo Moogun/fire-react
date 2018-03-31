@@ -10,7 +10,8 @@ class CEditTitle extends Component {
     };
   }
   render() {
-    const {title, teacherName} = this.props
+    const {title, teacherName, isPublished} = this.props
+    let published = isPublished ? 'published' : 'draft'
     return (
       <Container>
         <Item.Group>
@@ -20,7 +21,7 @@ class CEditTitle extends Component {
             <Item.Content>
               <Item.Header as='a'>{title}</Item.Header>
               <Item.Meta> {teacherName} </Item.Meta>
-              <Item.Extra>Draft</Item.Extra>
+              <Item.Extra>{published}</Item.Extra>
             </Item.Content>
           </Item>
         </Item.Group>
