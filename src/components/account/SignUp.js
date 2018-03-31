@@ -146,25 +146,26 @@ class SignUpForm extends Component {
         <Form size='large' onSubmit={this.onSubmit}>
           <Segment stacked>
                 <Form.Field>
-                  <Button fluid size="tiny" onClick={this.signUpWithGoogle}>
-                    <Icon name='google' /> Continue with Google
-                  </Button>
-                </Form.Field>
 
                 <FacebookLogin
                     appId="1329723160399765"
                     autoLoad={true}
                     fields="name,email,picture"
                     render={renderProps => (
-                    <Button
+                    <Button size='tiny'
+                      color='facebook'
                       onClick={renderProps.onClick}>
                       <Icon name='facebook' />
-                      Facebook Sign up
+                      Continue with Facebook
                     </Button>
                     )}
                     onClick={this.signUpWithFB}
                     callback={responseFacebook} />
+              <Button color='google plus' size='tiny' onClick={this.signUpWithGoogle}>
+                <Icon name='google plus' />Continue with Google
+              </Button>
 
+              </Form.Field>
               <Divider horizontal>Or</Divider>
 
               <Form.Field>
