@@ -46,6 +46,16 @@ class App extends Component {
           />
 
           <Route
+            path={routes.SIGN_IN}
+            render={() => <SignInPage />}
+          />
+
+          <Route
+            path={routes.SIGN_UP}
+            render={() => <SignUpPage />}
+          />
+
+          <Route
             path={routes.ACCOUNT}
             render={() => <AccountPage />}
           />

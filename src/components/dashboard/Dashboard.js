@@ -36,6 +36,7 @@ class Dashboard extends Component {
   handleDidChooseCourse = (e, {value}) => {
     // console.log('c select 1');
     // console.log('couse select', value);
+    console.log('value', value);
     this.setState({cid: value})
     e.preventDefault()
   }
@@ -74,7 +75,7 @@ class Dashboard extends Component {
             item={key: key, text: cTeaching[key].metadata.title, value: key}
             selectOption.push(item)
           })
-          console.log('did mount c teaching', cTeaching);
+          // console.log('did mount c teaching', cTeaching);
           this.setState( () => ({courseTeaching: cTeaching, 'selectOption': selectOption, isLoading: !isLoading}) )
         })
         .catch(error => {
@@ -95,6 +96,30 @@ class Dashboard extends Component {
     const {authUser, match} = this.props
     const {activeItem, error, user, courseTeaching, selectOption, questions, cid} = this.state
 
+    console.log('cid 1 ', cid);
+
+    let qList;
+    if (!!cid) {
+
+    } else {
+      qList = questions
+    }
+
+    // if (!!cid) {
+      // console.log('cid 2', cid);
+    //   if ( cid === 'default'){
+    //     qList = questions
+    //     console.log('q list', qList);
+    //   } else {
+    //     Object.keys(questions).map(key => {
+    //       if (questions[key].cid === cid) {
+    //         qList.key = questions[key]
+    //         console.log('q list', qList);
+    //       }
+    //
+    //     })
+    //   }
+    // }
       return (
 
         <Grid >

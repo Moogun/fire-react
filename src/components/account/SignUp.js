@@ -2,14 +2,43 @@ import React, {Component} from 'react';
 import {Link, withRouter, } from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
-import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment, Header } from 'semantic-ui-react'
-
+import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment, Header, Grid } from 'semantic-ui-react'
+import {SignInLink} from './SignIn';
 // import FacebookLogin from 'react-facebook-login';
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 //
 // const responseFacebook = (response) => {
 //   console.log(response);
 // }
+
+const SignUpPage = ({history}) => (
+  <div className='login-form'>
+    <style>{`
+      body > div,
+      body > div > div,
+      body > div > div > div.login-form {
+        height: 100%;
+      }
+    `}</style>
+    <Grid
+      textAlign='center'
+      style={{ height: '100%' }}
+      verticalAlign='middle'
+    >
+      <Grid.Column style={{ maxWidth: 450 }}>
+        <Header as='h2' color='teal' textAlign='center'>
+          <Image src='/logo.png' />
+          {' '}Sign Up
+        </Header>
+
+        <SignUpForm history={history} />
+        <br/>
+        <SignInLink />
+
+      </Grid.Column>
+    </Grid>
+  </div>
+)
 
 const INITIAL_STATE = {
   email: '',
@@ -22,7 +51,7 @@ const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value
 })
 
-class SignUpPage extends Component {
+class SignUpForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -93,10 +122,9 @@ class SignUpPage extends Component {
           username === '';
 
     return (
-          <Modal.Content>
-            <Header as='h4' attached='top' block>Top Block Header</Header>
-            <Form attached onSubmit={this.onSubmit}>
-
+      <div>
+  <Form size='large' onSubmit={this.onSubmit}>
+<Segment stacked>
                 <Form.Field>
                   <Button fluid size="tiny" onClick={this.signUpWithGoogle}>
                     <Icon name='google' /> Continue with Google
@@ -156,12 +184,12 @@ class SignUpPage extends Component {
                 <Button color='teal' fluid>
                   <Icon name='checkmark' /> Sign Up
                 </Button>
-            </Form>
-            <Divider />
-            <Header as='h5'
-               // onClick={toLogIn}
-               textAlign='center'>Log In</Header>
-          </Modal.Content>
+
+              </Segment>
+        </Form>
+
+        </div>
+
     );
   }
 }

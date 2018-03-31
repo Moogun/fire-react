@@ -29,9 +29,10 @@ class NavNonAuth extends Component {
 
   render() {
 
-    const {activeItem, searchFieldActive, sidebarOpened, authReq} = this.state
-    let authModalHeader = authReq === 'signin' ? "Login" : "Sign Up"
-    console.log('auth req', this.state.authReq);
+    const {activeItem, searchFieldActive, sidebarOpened} = this.state
+    // , authReq
+    // let authModalHeader = authReq === 'signin' ? "Login" : "Sign Up"
+    // console.log('auth req', this.state.authReq);
 
     let searchField = searchFieldActive ? <Grid.Column><Input className='icon' icon='search' placeholder='Search...' fluid transparent iconPosition='left'/></Grid.Column> : null
 
@@ -45,22 +46,28 @@ class NavNonAuth extends Component {
                   <Category />
 
                   <Menu.Menu position='right'>
-                    <Menu.Item as='a' name='Sign In' active={activeItem === 'signin'} >
+                    <Menu.Item as={Link} to={routes.SIGN_IN}
+                      name='Sign In' active={activeItem === 'signin'}
+                      onClick={this.handleItemClick}
+                       >
 
-                      <Modal trigger={<p>Log In</p>} size='mini' closeIcon >
+                      {/* <Modal trigger={<p>Log In</p>} size='mini' closeIcon >
                         <Modal.Header>Log In to We Qna</Modal.Header>
                         <AuthModal authReq={'signin'} />
-                      </Modal>
+                      </Modal> */}
 
                     </Menu.Item>
 
 
-                    <Menu.Item as='a' name='Sign Up' active={activeItem === 'signup'}>
-
-                      <Modal trigger={<p>Sign Up</p>} size='mini'>
-                        {/* <Modal.Header>Sign Up for We QnA</Modal.Header> */}
+                    {/* <Menu.Item as='a' name='Sign Up' active={activeItem === 'signup'}> */}
+                    <Menu.Item as={Link} to={routes.SIGN_UP}
+                      name='Sign Up' active={activeItem === 'signup'}
+                      onClick={this.handleItemClick}
+                       >
+                      {/* <Modal trigger={<p>Sign Up</p>} size='mini'>
                         <AuthModal authReq={'signup'}/>
                       </Modal>
+                       */}
                     </Menu.Item>
 
                   </Menu.Menu>
