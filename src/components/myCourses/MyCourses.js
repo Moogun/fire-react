@@ -44,28 +44,26 @@ class MyCourses extends Component {
 
           let cAttending = userSnap.val().courseAttending
 
-          // if (!!cAttending) {
-          //   return
-          // }
-          // this.handleFetchMyCourses(cAttending)
-          Object.keys(cAttending).map(key => {
-            db.onceGetCourse(key)
-              .then(res => {
-                console.log('get course', res.val());
-                let course = res.val()
-                let tid = res.val().metadata.teacherId
-                // console.log('return', this.handleFetchTeacher(tid))
-                db.onceGetUser(tid)
-                  .then(res => {
-                    console.log('res teacher', res.val())
-                    let tName = res.val().username
-                    course.metadata.username = tName
-                    console.log('c meta username',course.metadata.username)
-                    myCourses.push(course)
-                    this.setState ({attendingCourses: myCourses})
-                  })
-              })
-          })
+          if (cAttending) {
+            Object.keys(cAttending).map(key => {
+              db.onceGetCourse(key)
+                .then(res => {
+                  console.log('get course', res.val());
+                  let course = res.val()
+                  let tid = res.val().metadata.teacherId
+                  // console.log('return', this.handleFetchTeacher(tid))
+                  db.onceGetUser(tid)
+                    .then(res => {
+                      console.log('res teacher', res.val())
+                      let tName = res.val().username
+                      course.metadata.username = tName
+                      console.log('c meta username',course.metadata.username)
+                      myCourses.push(course)
+                      this.setState ({attendingCourses: myCourses})
+                    })
+                })
+            })
+          }
         })
     }
   }

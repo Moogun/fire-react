@@ -32,6 +32,8 @@ class AccountPage extends Component {
     console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
     const { activeItem } = this.state
+    console.log('authUser.photoURL', authUser.photoURL);
+    let profileImgUrl = authUser.photoURL ? authUser.photoURL : profile
     return (
       <Container text>
         <Grid celled stackable>
@@ -39,7 +41,7 @@ class AccountPage extends Component {
             <Grid.Column width={4}>
                 <Menu vertical secondary fluid>
                 <br/>
-                <Image src={profile} circular centered fluid/>
+                <Image src={profileImgUrl} circular centered fluid/>
                 <br/>
                 <Menu.Item name='profile'
                   active
@@ -70,7 +72,7 @@ class AccountPage extends Component {
             <Grid.Column width={12}>
 
                 <Route path='/account/profile' render={(props) => <Profile {...props} authUser={authUser}/>} />
-                <Route path='/account/photo' render={() => <Photo />} />
+                <Route path='/account/photo' render={() => <Photo photo={profileImgUrl}/>} />
                 <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
                 <Route path='/account/passwordForget' render={ () => <PasswordForgetForm />} />
                 <Route path='/account/danger' render={() => <Danger />} />
