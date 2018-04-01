@@ -4,9 +4,10 @@ import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
 import * as routes from '../../constants/routes';
 import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input, Divider, Popup, Checkbox } from 'semantic-ui-react'
 
+import CEditTop from './CEditTop'
 import CEditTitle from './CEditTitle'
-import CEditTitleEdit from './CEditTitleEdit'
 import CEditMeta from './CEditMeta'
+import CEditFeatures from './CEditFeatures'
 import CEditCurri from './CEditCurri'
 import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
@@ -289,7 +290,7 @@ class CourseEdit extends Component {
 
             <Grid >
               <Grid.Column style={CEditTitleBg}>
-                <CEditTitle
+                <CEditTop
                   title={title} teacherName={teacherName} teacherId={teacherId} isPublished={isPublished}
                   settingsClick={this.handleSettingsClick}/>
               </Grid.Column>
@@ -298,10 +299,10 @@ class CourseEdit extends Component {
               <Grid container stackable>
                 <Grid.Column width={3}>
                   <Menu vertical fluid style={CEditMenu} >
-                    <Menu.Item name='titleEdit'
-                       active={activeItem === 'titleEdit'}
+                    <Menu.Item name='title'
+                       active={activeItem === 'title'}
                        onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/titleEdit`}
+                       as={Link} to={`${match.url}/title`}
                        >
                        <Icon name='check circle outline'  size='large'/> title
                     </Menu.Item>
@@ -342,7 +343,7 @@ class CourseEdit extends Component {
                 <Grid.Column width={11}>
                     <Switch>
                       <Redirect exact from={match.url} to={`${match.url}/info`} />
-                      <Route path={`${match.url}/titleEdit`} render={(props) => <CEditTitleEdit
+                      <Route path={`${match.url}/title`} render={(props) => <CEditTitle
                         {...props}
                         title={title}
                         subTitle={subTitle}
@@ -359,6 +360,11 @@ class CourseEdit extends Component {
                         location={location}
                         change={this.handleInputChange}
                         submit={this.onInfoSubmit}
+                      /> }/>
+                      <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
+                        {...props}
+                        // change={this.handleInputChange}
+                        // submit={this.onInfoSubmit}
                       /> }/>
                       <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
                         {...props}

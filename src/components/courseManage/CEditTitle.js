@@ -1,43 +1,42 @@
 import React, {Component} from 'react'
-import profile from '../../assets/profile-lg.png'
-import {Image, Item, Grid, Button, Icon} from 'semantic-ui-react'
+import { Form, Input, Button, Segment, Header, Divider } from 'semantic-ui-react'
 
-const textColor = {color: '#fff'}
+const CEditMetaBorder = {borderRadius: '0px'}
 
 class CEditTitle extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
 
-    };
-  }
   render() {
-    const {title, teacherName, isPublished, settingsClick} = this.props
-    let published = isPublished ? 'published' : 'draft'
+    const { title, subTitle, titleSubmit } = this.props
+    console.log('props', title);
+    // let prevTitle = title
+    // const isInvalid =
+    // title === '' ||
+    // password === '';
     return (
-      <Grid container verticalAlign='middle'>
-        <Grid.Column floated='left' width={5}>
-        <Item.Group>
-          <Item>
-            <Item.Image size='tiny' src={profile} />
+      <Segment style={CEditMetaBorder}>
+        <Header as='h2'>Basic Info</Header>
+        <Divider />
 
-            <Item.Content>
-              <Item.Header as='a' style={textColor}>{title}</Item.Header>
-              <Item.Extra style={textColor}>{published}</Item.Extra>
-              <Item.Meta style={textColor}> {teacherName} </Item.Meta>
-
-            </Item.Content>
-          </Item>
-        </Item.Group>
-        </Grid.Column>
-        <Grid.Column floated='right' width={5} centered>
-          <Button.Group floated='right' >
-            <Button inverted style={{margin: '1px'}}>Preview</Button>
-            <Button  style={{margin: '1px'}}>Save</Button>
-            <Button  icon style={{margin: '1px'}} onClick={settingsClick}><Icon name='settings' /></Button>
-          </Button.Group>
-        </Grid.Column>
-      </Grid>
+          <Form>
+            <Form.Field>
+              <label>Title</label>
+              <Input placeholder='Title'
+                value={title || ''}
+                 name='title'
+                 onChange={this.props.change}
+               />
+            </Form.Field>
+            <Form.Field>
+              <label>Subtitle</label>
+              <Input placeholder='Subtitle'
+                value={subTitle || ''}
+                 name='subTitle'
+                 onChange={this.props.change}
+               />
+            </Form.Field>
+             <Button onClick={titleSubmit}>저장</Button>
+           </Form>
+         </Segment>
     );
   }
 }
