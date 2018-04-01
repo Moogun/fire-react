@@ -1,4 +1,4 @@
-import {db} from './firebase';
+import {db, storage} from './firebase';
 
 export const doCreateUser = (id, username, email) =>
   db.ref(`users/${id}`).set({
@@ -44,12 +44,24 @@ export const doCreateCourse = (title, teacherId) =>
   return db.ref('courses').push({metadata})
 }
 
-export const doUpdateCourseTeaching = (newCourseKey, teacherId, title) =>
+export const doUpdateCourseTeaching = (courseId, teacherId, title) =>
 {
   var updates = {}
-    // before Mar 1 updates[`users/${instructorId}/courseTeaching/${newCourseKey}`] = 1
-  updates[`teachers/${teacherId}/courseTeaching/${newCourseKey}/metadata/title`] = title
-  updates[`users/${teacherId}/courseTeaching/${newCourseKey}/metadata/title`] = title
+  updates[`users/${teacherId}/courseTeaching/${courseId}/metadata/title`] = title
+  return db.ref().update(updates)
+}
+
+
+export const doUpdateCourseTitle = (courseKey, tid, title, subTitle) =>
+{
+  console.log('courseKey, tid, title, subTitle', courseKey, tid, title, subTitle);
+  var updates = {}
+  updates[`courses/${courseKey}/metadata/title`] = title
+  updates[`courses/${courseKey}/metadata/subTitle`] = subTitle
+
+  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/title`] = title
+  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/subTitle`] = subTitle
+
   return db.ref().update(updates)
 }
 
@@ -163,4 +175,11 @@ export const doFetchRecentQuestions = (tid) => {
 
 export const doSearchForQuestions = (tid, queryText) => {
   return db.ref('questions').child(tid).orderByChild('title').startAt(queryText).endAt(queryText+"\uf8ff").once('value')
+}
+
+
+export const doProfileImgUpload = (file) => {
+  // console.log('file', file);
+  return storage.put(file)
+  // return db.ref('questions').child(tid).orderByChild('title').startAt(queryText).endAt(queryText+"\uf8ff").once('value')
 }

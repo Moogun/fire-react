@@ -2,9 +2,10 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
 import * as routes from '../../constants/routes';
-import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input, Divider, Popup } from 'semantic-ui-react'
+import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input, Divider, Popup, Checkbox } from 'semantic-ui-react'
 
 import CEditTitle from './CEditTitle'
+import CEditTitleEdit from './CEditTitleEdit'
 import CEditMeta from './CEditMeta'
 import CEditCurri from './CEditCurri'
 import CEditSettings from './CEditSettings'
@@ -17,6 +18,10 @@ import { OrderedSet } from 'immutable';
 import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
 import { ImageSideButton, Block, addNewBlock, Editor, createEditorState,} from 'medium-draft';
 import 'medium-draft/lib/index.css';
+
+const CEditBody = {backgroundColor: '#ecf0f1', marginTop: '0px', minHeight: '700px'}
+const CEditTitleBg = {backgroundColor: '#2c3e50'}
+const CEditMenu = {marginTop: '4rem'}
 
 const INITIAL_STATE = {
   open: true,
@@ -53,6 +58,7 @@ class CourseEdit extends Component {
     };
   }
 
+  //life cycle
   componentDidMount() {
 
     const {isLoading } = this.state
@@ -77,6 +83,7 @@ class CourseEdit extends Component {
               courseId: courseId,
 
               title: meta.title,
+              subTitle: meta.subTitle,
               teacherId: meta.teacherId,
 
               teacherName: user.val().username,
@@ -108,19 +115,24 @@ class CourseEdit extends Component {
     console.log('will un mount', 0);
   }
 
+  //
   handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
 
+  // course edit
   handleInputChange = (event) => {
     this.setState(byPropKey(event.target.name, event.target.value))
   }
 
-  handleSettingsOpenOrClose = (btn) => {
-    const { openCourse } = this.state
-    if (btn === 1) {
-      this.setState({openCourse: true})
-    } else {
-      this.setState({openCourse: false})
-    }
+  onTitleSubmit = (e) => {
+    console.log('title submit');
+    const { courseId, teacherId, title, subTitle } = this.state
+    db.doUpdateCourseTitle(courseId, teacherId, title, subTitle)
+      .then(res => {
+        console.log('title submit res', res)
+      }).catch(error => {
+        this.setState(byPropKey('error', error))
+      })
+    e.preventDefault()
   }
 
   onInfoSubmit = (event) => {
@@ -171,6 +183,15 @@ class CourseEdit extends Component {
         event.preventDefault();
   }
 
+  handleSettingsOpenOrClose = (btn) => {
+    const { openCourse } = this.state
+    if (btn === 1) {
+      this.setState({openCourse: true})
+    } else {
+      this.setState({openCourse: false})
+    }
+  }
+
   handleRemoveCourse = () => {
 
     const { teacherId, courseId} = this.state
@@ -204,6 +225,7 @@ class CourseEdit extends Component {
         })
   }
 
+  //notification
   barStyleFactory = (index, style) => {
     return Object.assign(
       {},
@@ -240,6 +262,11 @@ class CourseEdit extends Component {
     })
   }
 
+  handleSettingsClick = () => {
+    const { history, match } = this.props
+    history.push({ pathname: `${match.url}/settings`})
+  }
+
   render() {
     console.log('render', 1);
     const {activeItem, isLoading,
@@ -254,37 +281,50 @@ class CourseEdit extends Component {
     console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse);
     let published = isPublished ? 'Unpublish' : 'Publish'
     return (
-      <Segment basic loading={isLoading}>
+      <Segment basic loading={isLoading} style={CEditBody}>
 
-        <Container>
+        <Grid centered>
+          {/* <Grid.Row centered> */}
+            <Grid.Column>
 
-            <CEditTitle
-              title={title} teacherName={teacherName} teacherId={teacherId} isPublished={isPublished}/>
+            <Grid >
+              <Grid.Column style={CEditTitleBg}>
+                <CEditTitle
+                  title={title} teacherName={teacherName} teacherId={teacherId} isPublished={isPublished}
+                  settingsClick={this.handleSettingsClick}/>
+              </Grid.Column>
+            </Grid>
 
-            <Container>
-              <Grid celled stackable>
+              <Grid container stackable>
                 <Grid.Column width={3}>
-                  <Menu vertical fluid secondary>
+                  <Menu vertical fluid style={CEditMenu} >
+                    <Menu.Item name='titleEdit'
+                       active={activeItem === 'titleEdit'}
+                       onClick={this.handleItemClick}
+                       as={Link} to={`${match.url}/titleEdit`}
+                       >
+                       <Icon name='check circle outline'  size='large'/> title
+                    </Menu.Item>
                     <Menu.Item name='info'
                        active={activeItem === 'info'}
                        onClick={this.handleItemClick}
                        as={Link} to={`${match.url}/info`}
                        >
-                       Info <Icon name='list' />
+                       <Icon name='check circle outline'  size='large'/> Info
+                    </Menu.Item>
+                    <Menu.Item name='features'
+                       active={activeItem === 'features'}
+                       onClick={this.handleItemClick}
+                       as={Link} to={`${match.url}/features`}
+                       >
+                      <Icon name='radio'  size='large'/> Features
                     </Menu.Item>
                     <Menu.Item name='curri'
                        active={activeItem === 'curri'}
                        onClick={this.handleItemClick}
                        as={Link} to={`${match.url}/curriculum`}
                        >
-                       Curriculum  <Icon name='book' />
-                    </Menu.Item>
-                    <Menu.Item name='settings'
-                       active={activeItem === 'settings'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/settings`}
-                       >
-                       <Icon name='setting' />Settings
+                       <Icon name='radio'  size='large'/> Curriculum
                     </Menu.Item>
 
                     <Menu.Item name='assignment'
@@ -295,16 +335,20 @@ class CourseEdit extends Component {
                        >
                        Assignment (Coming soon)
                     </Menu.Item>
-                    <Menu.Item name='save'>
-                      Save
-                    </Menu.Item>
                    </Menu>
 
                 </Grid.Column>
 
-                <Grid.Column width={10}>
+                <Grid.Column width={11}>
                     <Switch>
                       <Redirect exact from={match.url} to={`${match.url}/info`} />
+                      <Route path={`${match.url}/titleEdit`} render={(props) => <CEditTitleEdit
+                        {...props}
+                        title={title}
+                        subTitle={subTitle}
+                        change={this.handleInputChange}
+                        titleSubmit={this.onTitleSubmit}
+                      /> }/>
                       <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                         {...props}
                         title={title}
@@ -339,13 +383,7 @@ class CourseEdit extends Component {
                     </Switch>
                 </Grid.Column>
 
-                <Grid.Column width={3}>
-
-                </Grid.Column>
-
               </Grid>
-            </Container>
-        </Container>
 
         {/* <NotificationStack
           barStyleFactory={this.barStyleFactory}
@@ -355,6 +393,10 @@ class CourseEdit extends Component {
             notifications: this.state.notifications.delete(notification)
           })}
         /> */}
+              </Grid.Column>
+          {/* </Grid.Row> */}
+
+        </Grid>
       </Segment>
     );
   }

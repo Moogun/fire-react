@@ -6,6 +6,7 @@ import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
 import { ImageSideButton, Block, addNewBlock, Editor, createEditorState,} from 'medium-draft';
 import 'medium-draft/lib/index.css';
 
+const CEditMetaBorder = {borderRadius: '0px'}
 
 class CEditCurri extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class CEditCurri extends Component {
     const { editorState, change, submit } = this.props;
     console.log('curri editorState', editorState, change);
     return (
-      <Segment basic>
+      <Segment style={CEditMetaBorder}>
         <Header as='h2'>Curriculum</Header>
         <Divider />
         <Form onSubmit={submit}>

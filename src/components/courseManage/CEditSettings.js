@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import { Form, Input, Button, Segment, Label, Header, Divider } from 'semantic-ui-react'
 import {db} from '../../firebase';
 
+const CEditMetaBorder = {borderRadius: '0px'}
+
 class CEditSettings extends Component {
 
     render() {
@@ -18,7 +20,7 @@ class CEditSettings extends Component {
       const isInvalid = closed && password.length < 4 ;
 
       return (
-        <Segment basic>
+        <Segment style={CEditMetaBorder}>
           <Header as='h3' content='Course settings'></Header>
           <Divider />
            <Segment basic>

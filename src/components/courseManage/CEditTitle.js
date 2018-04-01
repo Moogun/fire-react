@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import profile from '../../assets/profile-lg.png'
-import { Container,Image, Item, } from 'semantic-ui-react'
+import {Image, Item, Grid, Button, Icon} from 'semantic-ui-react'
+
+const textColor = {color: '#fff'}
 
 class CEditTitle extends Component {
   constructor(props) {
@@ -10,22 +12,32 @@ class CEditTitle extends Component {
     };
   }
   render() {
-    const {title, teacherName, isPublished} = this.props
+    const {title, teacherName, isPublished, settingsClick} = this.props
     let published = isPublished ? 'published' : 'draft'
     return (
-      <Container>
+      <Grid container verticalAlign='middle'>
+        <Grid.Column floated='left' width={5}>
         <Item.Group>
           <Item>
             <Item.Image size='tiny' src={profile} />
 
             <Item.Content>
-              <Item.Header as='a'>{title}</Item.Header>
-              <Item.Meta> {teacherName} </Item.Meta>
-              <Item.Extra>{published}</Item.Extra>
+              <Item.Header as='a' style={textColor}>{title}</Item.Header>
+              <Item.Extra style={textColor}>{published}</Item.Extra>
+              <Item.Meta style={textColor}> {teacherName} </Item.Meta>
+
             </Item.Content>
           </Item>
         </Item.Group>
-      </Container>
+        </Grid.Column>
+        <Grid.Column floated='right' width={5} centered>
+          <Button.Group floated='right' >
+            <Button inverted style={{margin: '1px'}}>Preview</Button>
+            <Button  style={{margin: '1px'}}>Save</Button>
+            <Button  icon style={{margin: '1px'}} onClick={settingsClick}><Icon name='settings' /></Button>
+          </Button.Group>
+        </Grid.Column>
+      </Grid>
     );
   }
 }
