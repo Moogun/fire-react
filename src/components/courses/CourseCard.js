@@ -6,14 +6,21 @@ import Teacher from '../teacher/Teacher'
 import profile from '../../assets/profile-lg.png'
 
 const CourseCard = ({course, click}) => {
+
+    let profileImg;
+    if (course.tProfileImg) {
+      profileImg = course.tProfileImg
+    } else {
+      profileImg = profile
+    }
     return (
       <Grid.Column>
 
         <Card fluid onClick={click} style={{borderRadius: '0rem'}} >
 
          <Card.Content>
-            <Image floated='left' size='mini' src={profile} style={{marginBottom:'0rem'}}/>
-             {course.metadata.teacherName}
+            <Image floated='left' size='mini' src={profileImg} style={{marginBottom:'0rem'}}/>
+             {course.metadata.tName}
                 <br/>
             <Rating icon='star' defaultRating={5} maxRating={5} size='mini'/> (230)
          </Card.Content>

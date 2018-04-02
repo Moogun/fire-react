@@ -43,7 +43,7 @@ export const doCreateCourse = (title, tid, tName, tProfileImg, tEmail) =>
      tProfileImg,
      tEmail,
      isPublished: false,
-     readyToPublish: false, 
+     readyToPublish: false,
    }
   return db.ref('courses').push({metadata})
 }
@@ -97,22 +97,22 @@ export const doUpdateCourseCurri = (tid, cid, curri) => {
   return db.ref().update(updates)
 }
 
-export const doUpdateCoursePrivacy = (courseKey, tid, openCourse, password) => {
-  console.log('open', courseKey, tid, openCourse, password);
+export const doUpdateCoursePrivacy = (tid, cid, openCourse, password) => {
+  console.log('open', cid, tid, openCourse, password);
 
   var updates = {}
   if (openCourse) {
     // console.log('tr', openCourse);
-    updates[`courses/${courseKey}/metadata/openCourse`] = openCourse
-    updates[`courses/${courseKey}/metadata/password`] = ''
-    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/openCourse`] = openCourse
-    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/password`] = ''
+    updates[`courses/${cid}/metadata/openCourse`] = openCourse
+    updates[`courses/${cid}/metadata/password`] = ''
+    updates[`teaching/${tid}/${cid}/metadata/openCourse`] = openCourse
+    updates[`teaching/${tid}/${cid}/metadata/password`] = ''
   } else {
     // console.log('false',openCourse);
-    updates[`courses/${courseKey}/metadata/openCourse`] = openCourse
-    updates[`courses/${courseKey}/metadata/password`] = password
-    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/openCourse`] = openCourse
-    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/password`] = password
+    updates[`courses/${cid}/metadata/openCourse`] = openCourse
+    updates[`courses/${cid}/metadata/password`] = password
+    updates[`teaching/${tid}/${cid}/metadata/openCourse`] = openCourse
+    updates[`teaching/${tid}/${cid}/metadata/password`] = password
   }
 
   return db.ref().update(updates)

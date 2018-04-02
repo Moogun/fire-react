@@ -24,13 +24,15 @@ class CourseCards extends Component {
   render() {
     // const {courses} = this.state
     const {courses} = this.props
+
     let courseList = courses ?
       <Grid stackable doubling columns={3} style={{marginTop: '0em'}}>{Object.keys(courses).map(key =>
         <CourseCard
-          key={key} course={courses[key]} click={() => this.handleClick( key,
-        courses[key].metadata.teacherId,
-        courses[key].metadata.title,
-        courses[key].metadata.teacherName)} />)} </Grid>
+          key={key} 
+          course={courses[key]} click={() => this.handleClick( key,
+          courses[key].metadata.tid,
+          courses[key].metadata.title,
+          courses[key].metadata.tName)} />)} </Grid>
       : <p> no course</p>
 
     return (

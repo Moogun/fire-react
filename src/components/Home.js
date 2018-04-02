@@ -28,38 +28,13 @@ class HomePage extends Component {
     db.onceGetPublishedCourses()
       .then(snap => {
         let courseSnap = snap.val()
-
+        console.log('courseSnap', courseSnap);
         if (courseSnap) {
-          Object.keys(courseSnap).map(key => {
-            // console.log('course key', key);
-            // console.log('meta t id', courseSnap[key].metadata.teacherId);
-            let tid = courseSnap[key].metadata.teacherId
-            db.onceGetUser(tid)
-              .then(userSnap => {
-                  // console.log('userSnap', userSnap.val())
-                  let tName = userSnap.val().username
-                  courseSnap[key].metadata.teacherName = tName
-                  this.setState({courses: courseSnap})
-                })
-          })
+          this.setState({courses: courseSnap})
         }
-
       })
-
-    //3. get all keys of children
-    // db.onceGetPublishedCourses()
-    //   .then(res => {
-    //     console.log('res', res.val())
-    //     console.log('obj keys', Object.keys(res.val()))
-    //   }).
-
-    //3-1. get values of children and attach a data from other node
-      // db.fetchingCoursesThenAttach()
-      //   .then(res => {
-      //     console.log('res', res)
-      //   //   console.log('res', res.val())
-      //   })
   }
+
   render() {
 
     const {users, courses, isLoading} = this.state;
