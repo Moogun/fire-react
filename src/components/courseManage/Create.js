@@ -11,7 +11,7 @@ const CreatePage = ({history}, {authUser}) => {
     create = <CreateForm history={history}
       tid={authUser.uid}
       tName={authUser.displayName}
-      photo={authUser.profileImage}
+      photo={authUser.photoURL}
       tEmail={authUser.email}
     />
   } else {
@@ -50,12 +50,12 @@ class CreateForm extends Component {
     const {title} = this.state;
     const {history, tid, tName, photo, tEmail,} = this.props;
     // console.log('create', uid, name, profileImage, email);
-    let tProfileImg = photo ? photo : ''
-    db.doCreateCourse(title, tid, tName, tProfileImg, tEmail)
+    let tProfileImgUrl = photo ? photo : null
+    db.doCreateCourse(title, tid, tName, tProfileImgUrl, tEmail)
       .then((res) => {
         console.log('res', res);
         let cid = res.path.pieces_[1]
-        db.doUpdateTeaching(title, tid, cid, tName, tProfileImg, tEmail)
+        db.doUpdateTeaching(title, tid, cid, tName, tProfileImgUrl, tEmail)
           .then((res) => {
             this.setState(() => ({ ...INITIAL_STATE }));
             this.handleClose()

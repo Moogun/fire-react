@@ -70,11 +70,11 @@ class CourseEdit extends Component {
     let courseId = match.params.cid
     db.onceGetCourse(match.params.cid)
       .then(snapshot => {
-
         let course = snapshot.val()
         let meta = course.metadata
         let curri = course.curri
         console.log('meta', meta);
+        console.log('curri', curri);
         const {isLoading } = this.state
         this.setState ({
           courseId: courseId,
@@ -84,6 +84,7 @@ class CourseEdit extends Component {
           teacherId: meta.tid,
 
           teacherName: meta.tName,
+          teacherPhoto: meta.tProfileImg,
 
           textbook: meta.textbook,
           date: meta.date,
@@ -93,13 +94,9 @@ class CourseEdit extends Component {
           password: meta.password ? meta.password : '',
           isPublished: meta.isPublished,
 
-          editorState: createEditorState(JSON.parse(curri)),
           isLoading: !isLoading
           })
-
-          // this.onChange(createEditorState(JSON.parse(  curri)))
-          //   console.log('did mount', 4);
-          // })
+          this.onChange(createEditorState(JSON.parse(curri)))
       }).catch(error => {
         this.setState(byPropKey('error', error));
       });
@@ -166,9 +163,9 @@ class CourseEdit extends Component {
 
   onSettingsSubmit = (event) => {
       const {courseId, teacherId, openCourse, password } = this.state;
-      console.log('on settings submit public', this.state.openCourse );
+      // console.log('on settings submit public', this.state.openCourse );
 
-      db.doUpdateCoursePrivacy(courseId, teacherId, openCourse, password)
+      db.doUpdateCoursePrivacy(teacherId, courseId, openCourse, password)
         .then((res)=> {
           console.log(' doUpdateCoursePrivacy', res);
         })
@@ -273,8 +270,8 @@ class CourseEdit extends Component {
     } = this.state
     const {match} = this.props
 
-    console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse);
-
+    console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse, isLoading);
+    console.log('is loading render', isLoading );
     return (
       <Segment basic loading={isLoading} style={CEditBody}>
 
