@@ -61,30 +61,25 @@ class Dashboard extends Component {
      const {isLoading } = this.state
      this.setState({isLoading: !isLoading})
      if (this.context.authUser ) {
-       // console.log('authUser');
-       db.onceGetUser(this.context.authUser.uid)
-        .then(snapshot => {
-          const {isLoading } = this.state
-          // console.log('inside', isLoading);
-          let cTeaching = snapshot.val().courseTeaching
+
+       db.doFetchTeaching(this.context.authUser.uid)
+        .then(snap => {
+          let teaching = snap.val()
           let selectOption=[{key: 'default', text: 'All', value: 'default'}]
           let item;
-
-          Object.keys(cTeaching).map(key => {
-
-            item={key: key, text: cTeaching[key].metadata.title, value: key}
+          Object.keys(teaching).map(key => {
+            item={key: key, text: teaching[key].metadata.title, value: key}
             selectOption.push(item)
           })
-          // console.log('did mount c teaching', cTeaching);
-          this.setState( () => ({courseTeaching: cTeaching, 'selectOption': selectOption, isLoading: !isLoading}) )
+          this.setState( () => ({courseTeaching: teaching, 'selectOption': selectOption, isLoading: !isLoading}) )
         })
         .catch(error => {
           this.setState({[error]: error});
         });
-
-        db.doFetchRecentQuestions(this.context.authUser.uid)
-          .then(qSnap => this.setState ({questions: qSnap.val() }))
-            // console.log('q snap', qSnap.val()))
+       //
+       //  db.doFetchRecentQuestions(this.context.authUser.uid)
+       //    .then(qSnap => this.setState ({questions: qSnap.val() }))
+       //      // console.log('q snap', qSnap.val()))
      }
   }
 
@@ -105,21 +100,6 @@ class Dashboard extends Component {
       qList = questions
     }
 
-    // if (!!cid) {
-      // console.log('cid 2', cid);
-    //   if ( cid === 'default'){
-    //     qList = questions
-    //     console.log('q list', qList);
-    //   } else {
-    //     Object.keys(questions).map(key => {
-    //       if (questions[key].cid === cid) {
-    //         qList.key = questions[key]
-    //         console.log('q list', qList);
-    //       }
-    //
-    //     })
-    //   }
-    // }
       return (
 
         <Grid >
