@@ -29,6 +29,7 @@ import withAuthentication from '../HOC/withAuthentication';
 
 
 class App extends Component {
+
   render() {
     return (
       <Router>

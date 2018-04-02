@@ -9,7 +9,7 @@ class CEditSettings extends Component {
     render() {
 
       const { teacherId, courseId, openCourse, password, change, submit, remove } = this.props
-      console.log('settings passowrd', password);
+      console.log('settings passowrd', password, teacherId, courseId, openCourse, password);
 
       let open, closed
       if (openCourse) {

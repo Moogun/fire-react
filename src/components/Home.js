@@ -29,18 +29,21 @@ class HomePage extends Component {
       .then(snap => {
         let courseSnap = snap.val()
 
-        Object.keys(courseSnap).map(key => {
-          // console.log('course key', key);
-          // console.log('meta t id', courseSnap[key].metadata.teacherId);
-          let tid = courseSnap[key].metadata.teacherId
-          db.onceGetUser(tid)
-            .then(userSnap => {
-                // console.log('userSnap', userSnap.val())
-                let tName = userSnap.val().username
-                courseSnap[key].metadata.teacherName = tName
-                this.setState({courses: courseSnap})
-              })
-        })
+        if (courseSnap) {
+          Object.keys(courseSnap).map(key => {
+            // console.log('course key', key);
+            // console.log('meta t id', courseSnap[key].metadata.teacherId);
+            let tid = courseSnap[key].metadata.teacherId
+            db.onceGetUser(tid)
+              .then(userSnap => {
+                  // console.log('userSnap', userSnap.val())
+                  let tName = userSnap.val().username
+                  courseSnap[key].metadata.teacherName = tName
+                  this.setState({courses: courseSnap})
+                })
+          })
+        }
+
       })
 
     //3. get all keys of children
@@ -60,7 +63,8 @@ class HomePage extends Component {
   render() {
 
     const {users, courses, isLoading} = this.state;
-    //console.log('render 1 ', courses)
+    let cList = courses ? <CourseCards courses={courses}/>
+    : <p>No course yet</p>
     return (
       <Segment basic loading={isLoading} style={{backgroundColor: '#f2f2f2', margin: '0rem'}}>
         <Grid container>
@@ -68,7 +72,7 @@ class HomePage extends Component {
             <Grid.Column>
 
               <Header as='h5' style={{marginTop: '2rem'}}>Header</Header>
-              <CourseCards courses={courses}/>
+              {cList}
               <br/>
               <Button primary>Load more</Button>
             </Grid.Column>

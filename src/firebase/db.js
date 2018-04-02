@@ -43,6 +43,7 @@ export const doCreateCourse = (title, tid, tName, tProfileImg, tEmail) =>
      tProfileImg,
      tEmail,
      isPublished: false,
+     readyToPublish: false, 
    }
   return db.ref('courses').push({metadata})
 }
@@ -56,6 +57,7 @@ export const doUpdateTeaching = (title, tid, cid, tName, tProfileImg, tEmail) =>
   updates[`teaching/${tid}/${cid}/metadata/tProfileImg`] = tProfileImg
   updates[`teaching/${tid}/${cid}/metadata/tEmail`] = tEmail
   updates[`teaching/${tid}/${cid}/metadata/isPublished`] = false
+  updates[`teaching/${tid}/${cid}/metadata/readyToPublish`] = false
   return db.ref().update(updates)
 }
 
@@ -88,9 +90,10 @@ export const doUpdateCourseMeta = (tid, cid, textbook, date, time, location) => 
   return db.ref().update(updates)
 }
 
-export const doUpdateCourseCurri = (courseKey, tid, curri) => {
+export const doUpdateCourseCurri = (tid, cid, curri) => {
   var updates = {}
-  updates[`courses/${courseKey}/curri/`] = curri
+  updates[`courses/${cid}/curri/`] = curri
+  updates[`teaching/${tid}/${cid}/curri/`] = curri
   return db.ref().update(updates)
 }
 
@@ -117,26 +120,24 @@ export const doUpdateCoursePrivacy = (courseKey, tid, openCourse, password) => {
 }
 
 //publish course
-export const doPublishCourse = (courseKey, tid, isPublished) => {
-  console.log('db', courseKey, isPublished);
+export const doPublishCourse = (tid, cid, isPublished) => {
 
   var updates = {}
 
   if (isPublished === true) {
-    updates[`courses/${courseKey}/metadata/isPublished`] = false
-    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/isPublished`] = false
+    updates[`courses/${cid}/metadata/isPublished`] = false
+    updates[`teaching/${tid}/${cid}/metadata/isPublished`] = false
   } else {
-    updates[`courses/${courseKey}/metadata/isPublished`] = true
-    updates[`users/${tid}/courseTeaching/${courseKey}/metadata/isPublished`] = true
+    updates[`courses/${cid}/metadata/isPublished`] = true
+    updates[`teaching/${tid}/${cid}/metadata/isPublished`] = true
   }
-
   return db.ref().update(updates)
 }
 
 export const doRemoveCourse = (tid, cid) => {
   var updates = {}
   updates[`courses/${cid}/`] = null
-  updates[`users/${tid}/courseTeaching/${cid}/`] = null
+  updates[`teaching/${tid}/${cid}/`] = null
   return db.ref().update(updates)
 }
 

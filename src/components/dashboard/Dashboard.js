@@ -34,8 +34,6 @@ class Dashboard extends Component {
   }
 
   handleDidChooseCourse = (e, {value}) => {
-    // console.log('c select 1');
-    // console.log('couse select', value);
     console.log('value', value);
     this.setState({cid: value})
     e.preventDefault()
@@ -91,7 +89,7 @@ class Dashboard extends Component {
     const {authUser, match} = this.props
     const {activeItem, error, user, courseTeaching, selectOption, questions, cid} = this.state
 
-    console.log('cid 1 ', cid);
+    console.log('dashboard props', this.props);
 
     let qList;
     if (!!cid) {

@@ -73,31 +73,33 @@ class CourseEdit extends Component {
 
         let course = snapshot.val()
         let meta = course.metadata
+        let curri = course.curri
         console.log('meta', meta);
-            const {isLoading } = this.state
-            this.setState ({
-              courseId: courseId,
+        const {isLoading } = this.state
+        this.setState ({
+          courseId: courseId,
 
-              title: meta.title,
-              subTitle: meta.subTitle,
-              teacherId: meta.tid,
+          title: meta.title,
+          subTitle: meta.subTitle,
+          teacherId: meta.tid,
 
-              teacherName: meta.tName,
+          teacherName: meta.tName,
 
-              textbook: meta.textbook,
-              date: meta.date,
-              time: meta.time,
-              location: meta.location,
-              openCourse: meta.openCourse ? meta.openCourse : false,
-              password: meta.password ? meta.password : '',
-              isPublished: meta.isPublished,
+          textbook: meta.textbook,
+          date: meta.date,
+          time: meta.time,
+          location: meta.location,
+          openCourse: meta.openCourse ? meta.openCourse : false,
+          password: meta.password ? meta.password : '',
+          isPublished: meta.isPublished,
 
-              // editorState: creategEditorState(JSON.parse(course.curri)),
-              isLoading: !isLoading
-              })
-        //     this.onChange(createEditorState(JSON.parse(course.curri)))
-        //     console.log('did mount', 4);
-        //   })
+          editorState: createEditorState(JSON.parse(curri)),
+          isLoading: !isLoading
+          })
+
+          // this.onChange(createEditorState(JSON.parse(  curri)))
+          //   console.log('did mount', 4);
+          // })
       }).catch(error => {
         this.setState(byPropKey('error', error));
       });
@@ -155,7 +157,7 @@ class CourseEdit extends Component {
 
     var strData = JSON.stringify(editorData)
 
-    db.doUpdateCourseCurri(courseId, teacherId, strData)
+    db.doUpdateCourseCurri(teacherId, courseId, strData)
       .then(response => console.log('succeded uploading',response))
       .catch(error => {
         this.setState(byPropKey('error', error));
@@ -206,7 +208,7 @@ class CourseEdit extends Component {
       this.setState({isLoading: !isLoading})
       console.log('handle publish', courseId, teacherId, isPublished);
 
-      db.doPublishCourse(courseId, teacherId, isPublished)
+      db.doPublishCourse(teacherId, courseId, isPublished)
         .then(response => {
           console.log('succeed uploading')
           const { isLoading } = this.state
@@ -272,7 +274,7 @@ class CourseEdit extends Component {
     const {match} = this.props
 
     console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse);
-    let published = isPublished ? 'Unpublish' : 'Publish'
+
     return (
       <Segment basic loading={isLoading} style={CEditBody}>
 
@@ -327,6 +329,12 @@ class CourseEdit extends Component {
                        as={Link} to={`${match.url}/assignment`}
                        >
                        Assignment (Coming soon)
+                    </Menu.Item>
+                    <Menu.Item name='assignment'
+                       active={activeItem === 'assignment'}
+                       onClick={this.handleItemClick}
+                       >
+                       <Button fluid color='red' onClick={this.handlePublish}>Publish</Button>
                     </Menu.Item>
                    </Menu>
 
