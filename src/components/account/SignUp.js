@@ -7,9 +7,9 @@ import {SignInLink} from './SignIn';
 
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
-const responseFacebook = (response) => {
-  console.log('fb login', response);
-}
+// const responseFacebook = (response) => {
+//   console.log('fb login', response);
+// }
 
 const SignUpPage = ({history}) => (
   <div className='login-form'>
@@ -20,7 +20,7 @@ const SignUpPage = ({history}) => (
         height: 100%;
       }
     `}</style>
-    <Grid
+    <Grid container
       textAlign='center'
       style={{ height: '100%' }}
       verticalAlign='middle'
@@ -145,27 +145,20 @@ class SignUpForm extends Component {
       <div>
         <Form size='large' onSubmit={this.onSubmit}>
           <Segment stacked>
-                <Form.Field>
-
-                <FacebookLogin
-                    appId="1329723160399765"
-                    autoLoad={true}
-                    fields="name,email,picture"
-                    render={renderProps => (
-                    <Button size='tiny'
-                      color='facebook'
-                      onClick={renderProps.onClick}>
-                      <Icon name='facebook' />
-                      Continue with Facebook
-                    </Button>
-                    )}
-                    onClick={this.signUpWithFB}
-                    callback={responseFacebook} />
-              <Button color='google plus' size='tiny' onClick={this.signUpWithGoogle}>
-                <Icon name='google plus' />Continue with Google
-              </Button>
-
-              </Form.Field>
+            <FacebookLogin
+              appId="1329723160399765"
+              autoLoad
+              render={renderProps => (
+                <Button
+                  fluid size='tiny'
+                  color='facebook'
+                  onClick={this.signUpWithFB}>Continue with Facebook</Button>
+              )}
+            />
+            <br/>
+            <Button fluid color='google plus' size='tiny' onClick={this.signUpWithGoogle}>
+              <Icon name='google plus' />Continue with Google
+            </Button>
               <Divider horizontal>Or</Divider>
 
               <Form.Field>
