@@ -70,24 +70,19 @@ class CourseEdit extends Component {
     let courseId = match.params.cid
     db.onceGetCourse(match.params.cid)
       .then(snapshot => {
-        console.log('did mount 2 sna', snapshot.val());
+
         let course = snapshot.val()
         let meta = course.metadata
-
-        db.onceGetUser(course.metadata.teacherId)
-          .then(user => {
-            console.log('did mount 3 user', user.val().courseTeaching[courseId].metadata);
-
+        console.log('meta', meta);
             const {isLoading } = this.state
-
             this.setState ({
               courseId: courseId,
 
               title: meta.title,
               subTitle: meta.subTitle,
-              teacherId: meta.teacherId,
+              teacherId: meta.tid,
 
-              teacherName: user.val().username,
+              teacherName: meta.tName,
 
               textbook: meta.textbook,
               date: meta.date,
@@ -100,12 +95,9 @@ class CourseEdit extends Component {
               // editorState: creategEditorState(JSON.parse(course.curri)),
               isLoading: !isLoading
               })
-            this.onChange(createEditorState(JSON.parse(course.curri)))
-            console.log('did mount', 4);
-          })
-          .catch(error => {
-            this.setState(byPropKey('error', error));
-          });
+        //     this.onChange(createEditorState(JSON.parse(course.curri)))
+        //     console.log('did mount', 4);
+        //   })
       }).catch(error => {
         this.setState(byPropKey('error', error));
       });
@@ -127,7 +119,7 @@ class CourseEdit extends Component {
   onTitleSubmit = (e) => {
     console.log('title submit');
     const { courseId, teacherId, title, subTitle } = this.state
-    db.doUpdateCourseTitle(courseId, teacherId, title, subTitle)
+    db.doUpdateCourseTitle(teacherId, courseId, title, subTitle)
       .then(res => {
         console.log('title submit res', res)
       }).catch(error => {
@@ -141,7 +133,7 @@ class CourseEdit extends Component {
     console.log('onInfoSubmit', courseId, teacherId, textbook, date, time, location, isLoading);
     this.setState({isLoading: !isLoading})
 
-    db.doUpdateCourseMeta(courseId, teacherId, textbook, date, time, location)
+    db.doUpdateCourseMeta(teacherId, courseId, textbook, date, time, location)
         .then((res)=> {
           console.log(' meta saved', res);
           const {isLoading} = this.state
@@ -408,37 +400,7 @@ class CourseEdit extends Component {
   }
 }
 
-// class CourseEdit extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//
-//     };
-//   }
-//   componentDidMount(){
-//     console.log('did mount 1 ', )
-//   }
-//
-//   componentWillUnmount(){
-//     console.log('will un mount 0 ', )
-//   }
-//
-//   shouldComponentUpdate(nextProps, nextState){
-//     console.log('should cpnt update', nextProps, nextState);
-//   }
-//
-//   render() {
-//     console.log('render 1 ', )
-//     return (
-//         <div>
-//
-//         </div>
-//     );
-//   }
-// }
-
 export default withRouter(CourseEdit)
-// export default CourseEdit
 
 
 // secure course key 1) from create page, 2) from the url match, 3)

@@ -30,7 +30,7 @@ class CEditTop extends Component {
           </Item>
         </Item.Group>
         </Grid.Column>
-        <Grid.Column floated='right' width={5} centered>
+        <Grid.Column floated='right' width={5} centered={true}>
           <Button.Group floated='right' >
             <Button inverted style={{margin: '1px'}}>Preview</Button>
             <Button  style={{margin: '1px'}}>Save</Button>

@@ -34,49 +34,56 @@ export const onceGetCourse = (courseKey) =>
   db.ref('courses').child(courseKey).once('value');
 
 //course creation
-export const doCreateCourse = (title, teacherId) =>
+export const doCreateCourse = (title, tid, tName, tProfileImg, tEmail) =>
 {
   var metadata = {
      title,
-     teacherId,
+     tid,
+     tName,
+     tProfileImg,
+     tEmail,
      isPublished: false,
    }
   return db.ref('courses').push({metadata})
 }
 
-export const doUpdateCourseTeaching = (courseId, teacherId, title) =>
+export const doUpdateTeaching = (title, tid, cid, tName, tProfileImg, tEmail) =>
 {
   var updates = {}
-  updates[`users/${teacherId}/courseTeaching/${courseId}/metadata/title`] = title
+  updates[`teaching/${tid}/${cid}/metadata/title`] = title
+  updates[`teaching/${tid}/${cid}/metadata/tid`] = tid
+  updates[`teaching/${tid}/${cid}/metadata/tName`] = tName
+  updates[`teaching/${tid}/${cid}/metadata/tProfileImg`] = tProfileImg
+  updates[`teaching/${tid}/${cid}/metadata/tEmail`] = tEmail
+  updates[`teaching/${tid}/${cid}/metadata/isPublished`] = false
   return db.ref().update(updates)
 }
 
 
-export const doUpdateCourseTitle = (courseKey, tid, title, subTitle) =>
+export const doUpdateCourseTitle = (tid, cid, title, subTitle) =>
 {
-  console.log('courseKey, tid, title, subTitle', courseKey, tid, title, subTitle);
   var updates = {}
-  updates[`courses/${courseKey}/metadata/title`] = title
-  updates[`courses/${courseKey}/metadata/subTitle`] = subTitle
+  updates[`courses/${cid}/metadata/title`] = title
+  updates[`courses/${cid}/metadata/subTitle`] = subTitle
 
-  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/title`] = title
-  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/subTitle`] = subTitle
+  updates[`teaching/${tid}/${cid}/metadata/title`] = title
+  updates[`teaching/${tid}/${cid}/metadata/subTitle`] = subTitle
 
   return db.ref().update(updates)
 }
 
-export const doUpdateCourseMeta = (courseKey, tid, textbook, date, time, location) => {
+export const doUpdateCourseMeta = (tid, cid, textbook, date, time, location) => {
 
   var updates = {}
-  updates[`courses/${courseKey}/metadata/textbook`] = textbook
-  updates[`courses/${courseKey}/metadata/date`] = date
-  updates[`courses/${courseKey}/metadata/time`] = time
-  updates[`courses/${courseKey}/metadata/location`] = location
+  updates[`courses/${cid}/metadata/textbook`] = textbook
+  updates[`courses/${cid}/metadata/date`] = date
+  updates[`courses/${cid}/metadata/time`] = time
+  updates[`courses/${cid}/metadata/location`] = location
 
-  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/textbook`] = textbook
-  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/date`] = date
-  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/time`] = time
-  updates[`users/${tid}/courseTeaching/${courseKey}/metadata/location`] = location
+  updates[`teaching/${tid}/${cid}/metadata/textbook`] = textbook
+  updates[`teaching/${tid}/${cid}/metadata//date`] = date
+  updates[`teaching/${tid}/${cid}/metadata/time`] = time
+  updates[`teaching/${tid}/${cid}/metadata/location`] = location
 
   return db.ref().update(updates)
 }

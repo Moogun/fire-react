@@ -8,14 +8,18 @@ import { Button, Image, Modal, Form, Checkbox, Icon, Input, Grid, Header, Messag
 const CreatePage = ({history}, {authUser}) => {
   let create;
   if (authUser) {
-    create = <CreateForm history={history} uid={authUser.uid} name={authUser.displayName}/>
+    create = <CreateForm history={history}
+      tid={authUser.uid}
+      tName={authUser.displayName}
+      photo={authUser.profileImage}
+      tEmail={authUser.email}
+    />
   } else {
     create = <p>You are not signed in </p>
   }
   return (
     <div>
       {create}
-      {/* <CreateForm history={history} uid={authUser.uid} name={authUser.displayName}/> */}
     </div>
   )
 }
@@ -44,22 +48,23 @@ class CreateForm extends Component {
 
   onSubmit = (event) => {
     const {title} = this.state;
-    const {history, uid, name} = this.props;
-
-    db.doCreateCourse(title, uid)
+    const {history, tid, tName, photo, tEmail,} = this.props;
+    // console.log('create', uid, name, profileImage, email);
+    let tProfileImg = photo ? photo : ''
+    db.doCreateCourse(title, tid, tName, tProfileImg, tEmail)
       .then((res) => {
         console.log('res', res);
-        let courseKey = res.path.pieces_[1]
-        db.doUpdateCourseTeaching(courseKey, uid, title)
+        let cid = res.path.pieces_[1]
+        db.doUpdateTeaching(title, tid, cid, tName, tProfileImg, tEmail)
           .then((res) => {
             this.setState(() => ({ ...INITIAL_STATE }));
             this.handleClose()
 
             history.replace({
-              pathname: '/course_manage/' + courseKey + '/edit',
+              pathname: '/course_manage/' + cid + '/edit',
               // search: '?query=' + title + name,
               state : {
-                courseKey: courseKey,
+                courseKey: cid,
                 title: title,
               }
             })
