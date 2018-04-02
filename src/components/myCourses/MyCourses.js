@@ -118,11 +118,14 @@ class MyCourses extends Component {
 
               {/* <Responsive minWidth={320}>
                 <Visibility onUpdate={this.handleUpdate}> */}
-                  <Grid style={dashboardHeader} centered>
+                  <Grid
+                    style={dashboardHeader} 
+                    centered>
                     <Grid.Row>
                       <Grid.Column width={12}>
 
-                        <Header as='h1' style={dashboardHeaderColor}x>My Courses</Header>
+                        <Header as='h1'
+                          style={dashboardHeaderColor}>My Courses</Header>
 
                           <Menu size='small' secondary pointing inverted
                             style={dashboardHeaderMenuBorderColor} >

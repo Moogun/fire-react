@@ -91,17 +91,17 @@ class NavAuth extends Component {
            <Menu style={menuStyle} icon size='tiny'>
              <Container>
                <Menu.Item  as={Link} to={routes.LANDING}
-                 active={activeItem === 'weqna'} onClick={this.handleItemClick}> <Icon name='gamepad' /> </Menu.Item>
+                 active={activeItem === 'weqna'} onClick={this.handleItemClick}> Wq</Menu.Item>
                <Menu.Item  as={Link} to={routes.LANDING}
                  active={activeItem === 'weqna'} onClick={this.handleItemClick}> <Icon name='browser' /> </Menu.Item>
                <Menu.Item>
                    <Input placeholder='Search...' action={{ icon: 'search' }}/>
                </Menu.Item>
                <Menu.Menu position='right'>
-                 <Menu.Item>
+                 <Menu.Item  as={Link} to={routes.MY_COURSES}>
                      <Icon name='book' />
                  </Menu.Item>
-                 <Menu.Item as={Link} to={routes.SIGN_IN}
+                 <Menu.Item as={Link} to={routes.ACCOUNT}
                    active={activeItem === 'signin'}
                    onClick={this.handleItemClick}
                     >

@@ -60,7 +60,7 @@ class NavNonAuth extends Component {
           <Menu style={menuStyle} icon size='tiny'>
             <Container>
               <Menu.Item  as={Link} to={routes.LANDING}
-                active={activeItem === 'weqna'} onClick={this.handleItemClick}> <Icon name='gamepad' /> </Menu.Item>
+                active={activeItem === 'weqna'} onClick={this.handleItemClick}> Wq </Menu.Item>
               <Menu.Item  as={Link} to={routes.LANDING}
                 active={activeItem === 'weqna'} onClick={this.handleItemClick}> <Icon name='browser' /> </Menu.Item>
               <Menu.Item>
@@ -69,8 +69,7 @@ class NavNonAuth extends Component {
               <Menu.Menu position='right'>
                 <Menu.Item as={Link} to={routes.SIGN_IN}
                   active={activeItem === 'signin'}
-                  onClick={this.handleItemClick}
-                   >
+                  onClick={this.handleItemClick}>
                      <Icon name='signup' />
                 </Menu.Item>
 
