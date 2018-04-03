@@ -22,6 +22,13 @@ class CEditGallery extends Component {
   this.state = {
 
     }
+    this.textInput = null;
+    this.setTextInputRef = element => {
+      this.textInput = element
+    }
+    this.focusTextInput = () => {
+      if (this.textInput) this.textInput.click()
+    }
   }
 
   handleShow = () => this.setState({ active: true })
@@ -104,7 +111,9 @@ class CEditGallery extends Component {
           this.setState(byPropKey('error', error));
         });
     });
+  }
 
+  handleClick2 = () => {
 
   }
 
@@ -133,7 +142,7 @@ class CEditGallery extends Component {
         />
       );
        } else {
-         $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+         $imagePreview = (<div>Please select an Image for Preview</div>);
        }
 
     return (
@@ -141,12 +150,16 @@ class CEditGallery extends Component {
 
         {$imagePreview}
 
-        <Input placeholder='iage...' type='file' input={{ accept: 'image/*', multiple: 'true'}}
-        id="file"  name='img'
-        // style={{display: "none"}}
+        <input placeholder='iage...'
+          type='file' input={{ accept: 'image/*', multiple: 'true'}}
+          ref={this.setTextInputRef}
+          style={{display: "none"}}
         onChange={(e) => this.handleChange(e)}
        />
         <Button onClick={this.handleSubmit}>Save</Button>
+
+        <Button onClick={this.focusTextInput}>open up</Button>
+
       </Segment>
     );
   }
