@@ -8,5 +8,5 @@ import * as newCourse from './newCourse'
 export {
   firebase,
   auth,
-  db, 
+  db,
 }

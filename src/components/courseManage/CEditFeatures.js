@@ -36,7 +36,7 @@ class CEditFeatures extends Component {
 
   handleAddNewFeature = () => {
 
-     var newKey = db.newKey();
+     let newKey = db.newKey();
      let id = newKey
 
      const {features, header, sub} = this.state
@@ -56,6 +56,9 @@ class CEditFeatures extends Component {
 
     db.doUpdateFeatures(teacherId, courseId, features)
       .then(res => console.log('res', res))
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
   }
 
   render() {

@@ -184,7 +184,19 @@ export const doProfileImgUpload = (file, name) => {
   return storage.ref(name).put(file)
 }
 
+export const doImgUpload = (file, name) => {
+  console.log('file', file);
+  var uploadTask = storage.ref().child('images').child(name).put(file)
+}
+
+export const doUpdateCourseImages = (tid, cid, newKey, downloadsUrl) => {
+
+  var updates = {}
+    updates[`courses/${cid}/images/${newKey}`] = downloadsUrl
+    updates[`teaching/${tid}/${cid}/images/${newKey}`] = downloadsUrl
+  return db.ref().update(updates)
+}
+
 export const newKey = () => {
-  // console.log('file', file);
   return db.ref('courses').push().key
 }

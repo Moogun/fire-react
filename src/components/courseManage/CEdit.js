@@ -8,6 +8,7 @@ import CEditTop from './CEditTop'
 import CEditTitle from './CEditTitle'
 import CEditMeta from './CEditMeta'
 import CEditFeatures from './CEditFeatures'
+import CEditGallery from './CEditGallery'
 import CEditCurri from './CEditCurri'
 import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
@@ -311,6 +312,13 @@ class CourseEdit extends Component {
                        >
                       <Icon name='radio'  size='large'/> Features
                     </Menu.Item>
+                    <Menu.Item name='gallery'
+                       active={activeItem === 'gallery'}
+                       onClick={this.handleItemClick}
+                       as={Link} to={`${match.url}/gallery`}
+                       >
+                      <Icon name='radio'  size='large'/> Gallery
+                    </Menu.Item>
                     <Menu.Item name='curri'
                        active={activeItem === 'curri'}
                        onClick={this.handleItemClick}
@@ -359,6 +367,13 @@ class CourseEdit extends Component {
                         submit={this.onInfoSubmit}
                       /> }/>
                       <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
+                        {...props}
+                        courseId={courseId}
+                        teacherId={teacherId}
+                        // change={this.handleInputChange}
+                        // submit={this.onInfoSubmit}
+                      /> }/>
+                      <Route path={`${match.url}/gallery`} render={(props) => <CEditGallery
                         {...props}
                         courseId={courseId}
                         teacherId={teacherId}
