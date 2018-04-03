@@ -360,6 +360,8 @@ class CourseEdit extends Component {
                       /> }/>
                       <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
                         {...props}
+                        courseId={courseId}
+                        teacherId={teacherId}
                         // change={this.handleInputChange}
                         // submit={this.onInfoSubmit}
                       /> }/>

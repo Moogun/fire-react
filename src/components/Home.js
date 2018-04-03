@@ -42,14 +42,22 @@ class HomePage extends Component {
     : <p>No course yet</p>
     return (
       <Segment basic loading={isLoading} style={{backgroundColor: '#f2f2f2', margin: '0rem'}}>
-        <Grid container>
+        <Grid>
           <Grid.Row>
             <Grid.Column>
-
-              <Header as='h5' style={{marginTop: '2rem'}}>Header</Header>
+              <Grid container>
+                <Grid.Column>
+                  <Header as='h5' style={{marginTop: '2rem'}}>Header</Header>
+                </Grid.Column>
+              </Grid>
               {cList}
               <br/>
-              <Button primary>Load more</Button>
+
+              <Grid container>
+                <Grid.Column >
+                  <Button primary>Load more</Button>
+                </Grid.Column>
+              </Grid>
             </Grid.Column>
           </Grid.Row>
         </Grid>

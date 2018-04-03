@@ -11,6 +11,9 @@ import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visib
 import {Link, withRouter} from 'react-router-dom';
 import {db} from '../../firebase';
 
+import { createEditorState, Editor,} from 'medium-draft';
+import mediumDraftExporter from 'medium-draft/lib/exporter';
+
 const menuStyle = {
   border: 'none',
   borderRadius: 0,
@@ -33,19 +36,26 @@ const byPropKey = (propertyName, value) => ()=> ({
 const coursePageHeader = { backgroundColor: '#34495e', marginTop: '0rem'}
 
 class CoursePage extends Component {
-
-  state = {
-    menuFixed: false,
-    openCourse: false,
-    modalOpen: false,
-    registered: false,
+  constructor(props){
+    super(props)
+    this.state = {
+      menuFixed: false,
+      openCourse: false,
+      modalOpen: false,
+      registered: false,
+      editorState: createEditorState(),
+    }
+    this.onChange = (editorState) => {
+      this.setState({ editorState });
+    };
   }
+
 
   stickTopMenu = () => this.setState({ menuFixed: true })
   unStickTopMenu = () => this.setState({ menuFixed: false })
 
   componentDidMount() {
-    console.log('course page did mount', this.props.match.params);
+    // console.log('course page did mount', this.props.match.params);
     let cTitle = this.props.match.params.cTitle
     let title = cTitle.replace(/-/g, ' ');
 
@@ -58,13 +68,20 @@ class CoursePage extends Component {
           let course = c[key]
           console.log('course', course);
           this.setState ({
-            tid: course.metadata.teacherId,
+            tid: course.metadata.tid,
+            tName: course.metadata.tName,
+            tEmail: course.metadata.tEmail,
+            tProfileImg: course.metadata.tProfileImg,
             cid: key[0],
             course: course,
             openCourse: course.metadata.openCourse,
             coursePass: course.metadata.password,
             attendee: course.attendee,
           })
+
+          let curri = course.curri
+          console.log('curri', curri);
+          this.onChange(createEditorState(JSON.parse(curri)))
         } else {
           console.log('find a way to display course titles that have dash in it');
         }
@@ -133,8 +150,11 @@ class CoursePage extends Component {
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacher = tName ? tName : 'Teacher'
 
-    const { course, cid, openCourse, coursePass, attendee, modalOpen } = this.state
+    const { course, cid, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState } = this.state
     console.log('c page render course modalOpen', modalOpen);
+    console.log('edi state', mediumDraftExporter(editorState.getCurrentContent()) );
+    const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
+
 
     let meta = course ? course.metadata : null
 
@@ -182,12 +202,13 @@ class CoursePage extends Component {
                         >
                         <Grid.Column width={12} >
 
-                          <Segment basic style={{margin: '0rem'}} color='teal'>
+                          <Segment basic style={{margin: '0rem'}}>
                             <Header as='h1'
                               style={{color: '#fff'}}
                               content={title}
                              />
                              <Header as='h4' style={{marginTop: '0', color: '#fff'}}>  to be filled with subheader </Header>
+                             <Header as='h4' style={{marginTop: '0', color: '#fff'}}>   {tName} </Header>
                              {register}
                           </Segment>
 
@@ -202,7 +223,7 @@ class CoursePage extends Component {
                       <Grid.Column width={10} >
                           <CourseMeta meta={meta}/>
                           <CourseFeatures/>
-                          <CourseCurri course={course}/>
+                          <CourseCurri curri={renderedHtml}/>
                       </Grid.Column>
                   </Grid>
 

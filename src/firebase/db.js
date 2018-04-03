@@ -90,6 +90,13 @@ export const doUpdateCourseMeta = (tid, cid, textbook, date, time, location) => 
   return db.ref().update(updates)
 }
 
+export const doUpdateFeatures = (tid, cid, features) => {
+  var updates = {}
+  updates[`courses/${cid}/features/`] = features
+  updates[`teaching/${tid}/${cid}/features/`] = features
+  return db.ref().update(updates)
+}
+
 export const doUpdateCourseCurri = (tid, cid, curri) => {
   var updates = {}
   updates[`courses/${cid}/curri/`] = curri
@@ -148,9 +155,7 @@ export const doFetchTeaching = (tid) => {
 export const doEnrollInCourse = (tid, cid, password, uid) => {
   console.log('db', tid, cid, password, uid);
   var updates = {}
-  updates[`courses/${cid}/attendee/${uid}`] = 1
-  updates[`users/${tid}/courseTeaching/${cid}/attendee/${uid}`] = 1
-  updates[`users/${uid}/courseAttending/${tid}/${cid}`] = 1
+  updates[`attending/${tid}/${cid}/attendee/${uid}`] = 1
   return db.ref().update(updates)
 }
 
@@ -174,8 +179,12 @@ export const doSearchForQuestions = (tid, queryText) => {
 }
 
 
-export const doProfileImgUpload = (file) => {
+export const doProfileImgUpload = (file, name) => {
   // console.log('file', file);
-  return storage.put(file)
-  // return db.ref('questions').child(tid).orderByChild('title').startAt(queryText).endAt(queryText+"\uf8ff").once('value')
+  return storage.ref(name).put(file)
+}
+
+export const newKey = () => {
+  // console.log('file', file);
+  return db.ref('courses').push().key
 }
