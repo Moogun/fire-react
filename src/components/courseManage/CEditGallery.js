@@ -31,8 +31,6 @@ class CEditGallery extends Component {
     }
   }
 
-  handleShow = () => this.setState({ active: true })
-  handleHide = () => this.setState({ active: false })
 
   handleChange = (e) => {
     const {images} = this.state
@@ -41,23 +39,13 @@ class CEditGallery extends Component {
     console.log(e.target.files[0]);
     let reader = new FileReader()
     let file =  e.target.files[0]
-    let files = e.target.files
 
     reader.onloadend = () => {
       console.log('reader', reader.result);
 
-      // if(e.target.files[0]){
-      //   Object.keys(files).map(f => {
-      //     let file = e.target.files[f]
-      //     let localUrl = reader.readAsDataURL(file[f])
-      //   })
-      //  }
-      images[newKey] = { file: file, imagePreviewUrl: reader.result}
+      images[newKey] = { file: file, imagePreviewUrl: reader.result, progress: 0}
       this.setState ({images})
-      // this.setState({
-      //     file: file,
-      //     imagePreviewUrl: [reader.result],
-      // })
+
     }
 
     if(e.target.files[0]){
@@ -65,30 +53,37 @@ class CEditGallery extends Component {
     }
 
   }
+  handleTest() {
+    console.log('111');
+  }
 
-  handleSubmit = () => {
-    // let newKey = db.newKey();
+  handleImageSubmit = () => {
+
     const {images} = this.state
-    // console.log('newkey', newKey, 'file', file);
     const {teacherId, courseId } = this.props
 
     Object.keys(images).map(i => {
-      console.log('images[i]', 'i', i, 'file', images[i].file)
+      console.log('images[i]', 'i', i, 'file', images[i].file, images[i].progress)
 
-      var uploadTask= storage.ref().child('images').child(i).put(images[i].file)
-      uploadTask.on('state_changed', function(snapshot){
+      var uploadTask= storage.ref().child('images').child(images[i].file.name).put(images[i].file)
+      uploadTask.on('state_changed', (snapshot) => {
+        // console.log('snapshot', snapshot.bytesTransferred);
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
+
         switch (snapshot.state) {
-          case 'paused': // or 'paused'
+          case 'paused':
             console.log('Upload is paused');
             break;
-          case 'running': // or 'running'
-            console.log('Upload is running');
+          case 'running':
+            console.log('Upload is running progress', progress);
+            let roundedProgress = Math.round(progress)
+            images[i].progress = roundedProgress
+            console.log('images[i]', images[i].progress);
+            this.handleTest = () => {console.log('12345')
+            this.setState ({ images })} //called multiple tiems
             break;
-        }
-      }, function(error) {
-        // Handle unsuccessful uploads
+          }
+      }, (error) => {
           switch (error.code) {
              case 'storage/unauthorized':
                // User doesn't have permission to access the object
@@ -100,15 +95,15 @@ class CEditGallery extends Component {
                // Unknown error occurred, inspect error.serverResponse
                break;
            }
-      }, function() {
+      }, () => {
         var downloadURL = uploadTask.snapshot.downloadURL;
-        console.log('down', downloadURL);
-        db.doUpdateCourseImages(teacherId, courseId, i, downloadURL)
-          .then(res => console.log('res', res))
-          .catch(error => {
-            this.setState(byPropKey('error', error));
-          });
-      });
+          console.log('down', downloadURL);
+          db.doUpdateCourseImages(teacherId, courseId, i, downloadURL)
+            .then(res => console.log('res', res))
+            .catch(error => {
+              this.setState(byPropKey('error', error));
+            })
+      })
     })
   }
 
@@ -127,16 +122,10 @@ class CEditGallery extends Component {
 
   render() {
 
-    const {images } = this.state
-
-    let img = Object.keys(images).map(i => images[i].imagePreviewUrl)
-    console.log('img', img);
-
-    const content = (
-      <div>
-        <Button color='red'>Remove?</Button>
-      </div>
-    )
+    const {images} = this.state
+    if (images) {
+      {Object.keys(images).map(i => console.log('images[i].pro', images[i].progress))}
+    }
 
     return (
       <Segment style={CEditMetaBorder}>
@@ -152,6 +141,7 @@ class CEditGallery extends Component {
                     size='medium'
                     src={images[i].imagePreviewUrl}
                   />
+                <Progress percent={images[i].progress} attached='bottom' color='blue' />
                 </Grid.Column>
             )}
             <Grid.Column>
@@ -169,15 +159,11 @@ class CEditGallery extends Component {
         </Segment>
         <Divider />
 
-        <input placeholder='iage...'
-          type='file'
-          accept='image/*'
-
-          ref={this.setTextInputRef}
-          style={{display: "none"}}
+        <input placeholder='iage...' type='file' accept='image/*'
+          ref={this.setTextInputRef} style={{display: "none"}}
           onChange={(e) => this.handleChange(e)} />
-        <Button primary onClick={this.handleSubmit}>Save</Button>
-        {/* <Progress percent={11} /> */}
+        <Button primary onClick={this.handleImageSubmit}>Save</Button>
+
       </Segment>
     );
   }
