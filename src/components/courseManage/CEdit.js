@@ -35,6 +35,11 @@ const INITIAL_STATE = {
   error: null,
 }
 
+const INITIAL_FEATURE_STATE = {
+  header: '',
+  sub: '',
+}
+
 const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
 })
@@ -74,8 +79,12 @@ class CourseEdit extends Component {
         let course = snapshot.val()
         let meta = course.metadata
         let curri = course.curri
+        let features = course.features
+        let images = course.images
         console.log('meta', meta);
         console.log('curri', curri);
+        console.log('features', features);
+        console.log('curri', images);
         const {isLoading } = this.state
         this.setState ({
           courseId: courseId,
@@ -95,7 +104,9 @@ class CourseEdit extends Component {
           password: meta.password ? meta.password : '',
           isPublished: meta.isPublished,
 
-          isLoading: !isLoading
+          isLoading: !isLoading,
+          features: features,
+          images: images,
           })
           this.onChange(createEditorState(JSON.parse(curri)))
       }).catch(error => {
@@ -260,6 +271,42 @@ class CourseEdit extends Component {
     history.push({ pathname: `${match.url}/settings`})
   }
 
+  handleDismiss = (e) => {
+      console.log('e', e);
+
+      let fList = this.state.features
+      delete fList[e]
+      console.log('new lsit', fList);
+      this.setState ({ features: fList })
+      console.log('state', this.state.features);
+   }
+
+  handleAddNewFeature = () => {
+
+     let newKey = db.newKey();
+     let id = newKey
+
+     const {features, header, sub} = this.state
+     features[newKey] = {header: header, sub: sub}
+
+     this.setState ({
+       features: features,
+       ...INITIAL_FEATURE_STATE,
+     })
+     console.log('state', this.state.features);
+  }
+
+  onFeaturesSubmit = () => {
+    const {courseId, teacherId, features } = this.state
+    console.log('courseId, tid, features', features, courseId, teacherId);
+
+    db.doUpdateFeatures(teacherId, courseId, features)
+      .then(res => console.log('res', res))
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
+  }
+
   render() {
     console.log('render', 1);
     const {activeItem, isLoading,
@@ -267,7 +314,8 @@ class CourseEdit extends Component {
       textbook, date, time, location,
       curri,
       openCourse, password, isPublished,
-      editorState
+      features, images,
+      editorState,
     } = this.state
     const {match} = this.props
 
@@ -370,13 +418,17 @@ class CourseEdit extends Component {
                         {...props}
                         courseId={courseId}
                         teacherId={teacherId}
-                        // change={this.handleInputChange}
-                        // submit={this.onInfoSubmit}
+                        features={features}
+                        change={this.handleInputChange}
+                        dismiss={this.handleDismiss}
+                        addNewFeature={this.handleAddNewFeature}
+                        submit={this.onFeaturesSubmit}
                       /> }/>
                       <Route path={`${match.url}/gallery`} render={(props) => <CEditGallery
                         {...props}
                         courseId={courseId}
                         teacherId={teacherId}
+                        images={images}
                         // change={this.handleInputChange}
                         // submit={this.onInfoSubmit}
                       /> }/>
