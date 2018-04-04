@@ -284,13 +284,16 @@ class CourseEdit extends Component {
   handleAddNewFeature = () => {
 
      let newKey = db.newKey();
+     console.log('newkey', newKey);
      let id = newKey
 
      const {features, header, sub} = this.state
-     features[newKey] = {header: header, sub: sub}
+     let feats = !!features ? features : {}
+     console.log('featuers', feats);
+     feats[newKey] = {header: header, sub: sub}
 
      this.setState ({
-       features: features,
+       features: feats,
        ...INITIAL_FEATURE_STATE,
      })
      console.log('state', this.state.features);
@@ -319,8 +322,9 @@ class CourseEdit extends Component {
     } = this.state
     const {match} = this.props
 
-    console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse, isLoading);
-    console.log('is loading render', isLoading );
+    // console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse, isLoading);
+    // console.log('is loading render', isLoading );
+    console.log('render 1 ', 'features', !!features)
     return (
       <Segment basic loading={isLoading} style={CEditBody}>
 
