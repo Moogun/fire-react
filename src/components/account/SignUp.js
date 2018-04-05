@@ -12,20 +12,13 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 // }
 
 const SignUpPage = ({history}) => (
-  <div className='login-form'>
-    <style>{`
-      body > div,
-      body > div > div,
-      body > div > div > div.login-form {
-        height: 100%;
-      }
-    `}</style>
+
     <Grid container
       textAlign='center'
-      style={{ height: '100%' }}
+      style={{ height: '80%', margin: '5rem' }}
       verticalAlign='middle'
     >
-      <Grid.Column style={{ maxWidth: 450 }}>
+      <Grid.Column style={{ maxWidth: 350 }}>
         <Header as='h2' color='teal' textAlign='center'>
           <Image src='/logo.png' />
           {' '}Sign Up
@@ -37,7 +30,7 @@ const SignUpPage = ({history}) => (
 
       </Grid.Column>
     </Grid>
-  </div>
+
 )
 
 const INITIAL_STATE = {
@@ -71,30 +64,25 @@ class SignUpForm extends Component {
   auth.doCreateUserWithEmailAndPassword(email, passwordOne)
     .then(authUser => {
       // Create a user in your own accessible Firebase Database too
-        db.doCreateUser(authUser.uid, username, email)
-          .then(() => {
-            this.setState(() => ({ ...INITIAL_STATE }));
-            history.push(routes.HOME);
+        db.doSearchForUsername(username)
+          .then(res => {
+            console.log('res', res.val())
+            let usernameUnique = res.val()
+            let providedName = ''
+            this.handleUsername(res.val(), authUser.uid, username, email, providedName)
           })
-          .catch(error => {
-            this.setState(byPropKey('error', error));
-          });
     })
     .catch(error => {
       this.setState(byPropKey('error', error));
     });
-
     event.preventDefault();
   }
 
-  signUpWithGoogle = () => {
-    console.log('google signing');
+  handleUsername(usernameUnique, uid, username, email, providedName){
     const {history} = this.props;
-    auth.doCreateUserWithGoogle()
-      .then(result => {
-        var token = result.credential.accessToken; //This gives you a Google Access Token. You can use it to access the Google API.
-        var authUser = result.user;
-        db.doCreateUser(authUser.uid, authUser.displayName, authUser.email)
+    if (usernameUnique === null) {
+    //   //means username is not taken
+      db.doCreateUser(uid, username, email, providedName)
         .then(() => {
           this.setState(() => ({ ...INITIAL_STATE }));
           history.push(routes.HOME);
@@ -102,6 +90,42 @@ class SignUpForm extends Component {
         .catch(error => {
           this.setState(byPropKey('error', error));
         });
+    } else {
+      console.log('taken', usernameUnique);
+      let randomNum = Math.floor(Math.random()*1000)
+      let newUsername = username + '_' + randomNum
+
+      db.doCreateUser(uid, newUsername, email, providedName)
+        .then(() => {
+          this.setState(() => ({ ...INITIAL_STATE }));
+          history.push(routes.HOME);
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error));
+        });
+    }
+  }
+
+  signUpWithGoogle = () => {
+    console.log('google signing');
+    const {history} = this.props;
+    auth.doCreateUserWithGoogle()
+      .then(result => {
+        console.log('result', result);
+        var token = result.credential.accessToken; //This gives you a Google Access Token. You can use it to access the Google API.
+        var authUser = result.user;
+          console.log('authUser', authUser);
+        let str = authUser.displayName
+        console.log('str', str);
+        let username = str.split(' ').join('_');
+        console.log('username', username);
+
+        db.doSearchForUsername(username)
+          .then(res => {
+            console.log('res', res.val())
+            let usernameUnique = res.val()
+            this.handleUsername(usernameUnique, authUser.uid, username, authUser.email, str)
+          })
       })
       .catch(error => {
         this.setState(byPropKey('error', error));
@@ -118,36 +142,43 @@ class SignUpForm extends Component {
       var token = result.credential.accessToken;
        //This gives you a Google Access Token. You can use it to access the Google API.
       var authUser = result.user;
-      db.doCreateUser(authUser.uid, authUser.displayName, authUser.email)
-      .then(() => {
-        this.setState(() => ({ ...INITIAL_STATE }));
-        history.push(routes.HOME);
-      })
-      .catch(error => {
-        this.setState(byPropKey('error', error));
-      });
+      console.log('authUser', authUser);
+      let str = authUser.displayName
+      console.log('str', str);
+      let username = str.split(' ').join('_');
+      console.log('username', username);
+
+      db.doSearchForUsername(username)
+        .then(res => {
+          console.log('res', res.val())
+          let usernameUnique = res.val()
+          this.handleUsername(usernameUnique, authUser.uid, username, authUser.email, str)
+        })
     })
     .catch(error => {
       this.setState(byPropKey('error', error));
     });
   }
 
+  test = (e) => {
+    db.doSearchForUsername(e.target.value)
+      .then(res => console.log('res', res.val()))
+  }
   render() {
 
     const {email, username, passwordOne, error} = this.state;
-
     const isInvalid =
           passwordOne === '' ||
           passwordOne.length < 6 ||
           email === '' ||
           username === '' ||
           username.length < 6 ;
-          
+
     let err = error ? true : false
     console.log('err', err, passwordOne.length)
     return (
       <div>
-        <Form size='large' onSubmit={this.onSubmit}>
+        <Form size='tiny' onSubmit={this.onSubmit}>
           <Segment stacked>
             <FacebookLogin
               appId="1329723160399765"
@@ -201,17 +232,17 @@ class SignUpForm extends Component {
                 </Form.Field>
 
                 <Form.Field>
-                  <Checkbox label='I agree to the Terms and Conditions' />
+                  By signing up, you agree to our Terms of Conditions.
                 </Form.Field>
-                <Button color='teal' fluid disable={isInvalid}>
+                <Button color='teal' fluid disabled={isInvalid}>
                   <Icon name='checkmark' /> Sign Up
                 </Button>
-
+                <Form>
+                  <Input type='text' onChange={(e) => this.test(e)}></Input>
+                </Form>
               </Segment>
-        </Form>
-
+          </Form>
         </div>
-
     );
   }
 }
