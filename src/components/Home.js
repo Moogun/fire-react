@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Segment, Container, Grid, Header, Button } from 'semantic-ui-react'
 import withAuthorization from '../HOC/withAuthorization';
 import {db} from '../firebase';
-import ResponsiveContainers from './navbar/Containers';
 
 import CourseCards from './courses/CourseCards'
 
@@ -42,7 +41,6 @@ class HomePage extends Component {
     let cList = courses ? <CourseCards courses={courses}/>
     : <p>No course yet</p>
     return (
-      <ResponsiveContainers>
       <Segment basic loading={isLoading} style={{backgroundColor: '#f2f2f2', margin: '0rem'}}>
         <Grid>
           <Grid.Row>
@@ -64,7 +62,6 @@ class HomePage extends Component {
           </Grid.Row>
         </Grid>
       </Segment>
-      </ResponsiveContainers>
     );
   }
 }

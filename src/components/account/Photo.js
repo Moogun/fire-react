@@ -43,7 +43,7 @@ class Photo extends Component {
         <Header as='h2'>Photo</Header>
         <Divider />
 
-        <Form onSubmit>
+        <Form>
           <Image src={photo} circular centered size='small'/>
           <br/>
           <Form.Field>

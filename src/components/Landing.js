@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Segment, Container, Grid, Header, Button, Icon, Image, Divider } from 'semantic-ui-react'
 import './color.css'
-import ResponsiveContainers from './navbar/Containers';
 
 class Landing extends Component {
   constructor(props) {
@@ -13,10 +12,7 @@ class Landing extends Component {
 
   render() {
     return (
-        <ResponsiveContainers>
-          {/* <HomepageHeading /> */}
           <LandingBody />
-        </ResponsiveContainers>
     );
   }
 }

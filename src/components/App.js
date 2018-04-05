@@ -26,14 +26,14 @@ import Dashboard from './dashboard/Dashboard';
 
 import {firebase} from '../firebase';
 import withAuthentication from '../HOC/withAuthentication';
-
+import ResponsiveContainer from './navbar/ResponsiveContainer';
 
 class App extends Component {
 
   render() {
     return (
       <Router>
-        <div>
+        <ResponsiveContainer>
           {/* <Navigation/> */}
 
           <Route
@@ -115,7 +115,7 @@ class App extends Component {
           />
 
           <Footer />
-        </div>
+        </ResponsiveContainer>
 
       </Router>
     );
