@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import profile from '../../assets/profile-lg.png'
 
-import { Segment, Container, Button, Header, Icon, Menu, Divider, Image, Form} from 'semantic-ui-react'
+import { Segment, Button, Header, Icon, Divider, Form, Input} from 'semantic-ui-react'
 
-const Profile = (props) => {
+const Profile = ({email, username, displayName}) => {
   return (
       <Segment basic>
         <Header as='h2'>Profile</Header>
@@ -11,15 +11,16 @@ const Profile = (props) => {
         <Form size='small'>
           <Form.Field>
             <label>Email</label>
-            <input placeholder='Email' defaultValue={props.authUser.email}/>
+            {/* <input placeholder='Email' defaultValue={email}/> */}
+            <Input placeholder='Email' value={email}/>
           </Form.Field>
           <Form.Field>
             <label>Username</label>
-            <input placeholder='Username'/>
+            <Input placeholder='Username' value={username}/>
           </Form.Field>
           <Form.Field>
             <label>displayName</label>
-            <input placeholder='Name' defaultValue={props.authUser.displayName}/>
+            <Input placeholder='Name' value={displayName}/>
           </Form.Field>
 
           <Button type='submit'>Update</Button>

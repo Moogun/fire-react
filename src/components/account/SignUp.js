@@ -69,7 +69,8 @@ class SignUpForm extends Component {
             console.log('res', res.val())
             let usernameUnique = res.val()
             let providedName = ''
-            this.handleUsername(res.val(), authUser.uid, username, email, providedName)
+            let photoUrl = ''
+            this.handleUsername(res.val(), authUser.uid, username, email, providedName, photoUrl)
           })
     })
     .catch(error => {
@@ -78,11 +79,11 @@ class SignUpForm extends Component {
     event.preventDefault();
   }
 
-  handleUsername(usernameUnique, uid, username, email, providedName){
+  handleUsername(usernameUnique, uid, username, email, providedName, photoUrl){
     const {history} = this.props;
     if (usernameUnique === null) {
     //   //means username is not taken
-      db.doCreateUser(uid, username, email, providedName)
+      db.doCreateUser(uid, username, email, providedName, photoUrl)
         .then(() => {
           this.setState(() => ({ ...INITIAL_STATE }));
           history.push(routes.HOME);
@@ -119,12 +120,12 @@ class SignUpForm extends Component {
         console.log('str', str);
         let username = str.split(' ').join('_');
         console.log('username', username);
-
+        let photoUrl = authUser.photoURL ? authUser.photoURL : ''
         db.doSearchForUsername(username)
           .then(res => {
             console.log('res', res.val())
             let usernameUnique = res.val()
-            this.handleUsername(usernameUnique, authUser.uid, username, authUser.email, str)
+            this.handleUsername(usernameUnique, authUser.uid, username, authUser.email, str, photoUrl)
           })
       })
       .catch(error => {
@@ -147,12 +148,13 @@ class SignUpForm extends Component {
       console.log('str', str);
       let username = str.split(' ').join('_');
       console.log('username', username);
+      let photoUrl = authUser.photoURL ? authUser.photoURL : ''
 
       db.doSearchForUsername(username)
         .then(res => {
           console.log('res', res.val())
           let usernameUnique = res.val()
-          this.handleUsername(usernameUnique, authUser.uid, username, authUser.email, str)
+          this.handleUsername(usernameUnique, authUser.uid, username, authUser.email, str, photoUrl)
         })
     })
     .catch(error => {

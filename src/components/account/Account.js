@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
-import {Link, Route} from 'react-router-dom'
+import {Link, Route, Switch, Redirect} from 'react-router-dom'
 import withAuthorization from '../../HOC/withAuthorization';
 import profile from '../../assets/profile-lg.png'
 
@@ -9,8 +9,13 @@ import Photo from './Photo'
 import {PasswordForgetForm} from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
 import Danger from './Danger'
+import {db} from '../../firebase';
 
-import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item } from 'semantic-ui-react'
+import { Container, Menu, Grid, Image} from 'semantic-ui-react'
+
+const byPropKey = (propertyName, value) => ()=> ({
+  [propertyName]: value
+})
 
 class AccountPage extends Component {
   constructor(props) {
@@ -24,16 +29,29 @@ class AccountPage extends Component {
 
   componentDidMount(){
     console.log('did mount');
+    const {authUser} = this.context
+    db.onceGetUser(authUser.uid)
+      .then(res => {
+           console.log('res', res.val())
+           this.setState ({
+             email: res.val().email,
+              username: res.val().username,
+              displayName: res.val().displayName,
+              profileImgUrl: res.val().profileImgUrl ? res.val().profileImgUrl : profile, })
+      })
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      })
   }
 
   render() {
     const {match} = this.props
-    console.log('account props',this.props);
-    console.log('account authUser',this.context.authUser);
+    console.log('account props',this.props.match);
+    // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
-    const { activeItem } = this.state
-    console.log('authUser.photoURL', authUser.photoURL);
-    let profileImgUrl = authUser.photoURL ? authUser.photoURL : profile
+    const { activeItem, email, username, displayName, profileImgUrl } = this.state
+    // console.log('authUser.photoURL', authUser.photoURL);
+    // let profileImgUrl = authUser.photoURL ? authUser.photoURL : profile
     return (
       <Container text>
         <Grid celled stackable>
@@ -70,13 +88,18 @@ class AccountPage extends Component {
             </Grid.Column>
 
             <Grid.Column width={12}>
-
-                <Route path='/account/profile' render={(props) => <Profile {...props} authUser={authUser}/>} />
+              <Switch>
+                <Redirect exact from={match.url} to={`${match.url}/profile`} />
+                <Route path='/account/profile' render={(props) => <Profile {...props}          email={email}
+                  username={username}
+                  displayName={displayName}
+                />}
+                />
                 <Route path='/account/photo' render={() => <Photo photo={profileImgUrl}/>} />
                 <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
                 <Route path='/account/passwordForget' render={ () => <PasswordForgetForm />} />
                 <Route path='/account/danger' render={() => <Danger />} />
-
+              </Switch>
             </Grid.Column>
 
           </Grid.Row>

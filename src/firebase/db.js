@@ -1,15 +1,17 @@
 import {db, storage} from './firebase';
 
-export const doCreateUser = (id, username, email, providerName) =>
+export const doCreateUser = (id, username, email, providerName, photoURL) =>
   {
     let displayName = providerName.length > 0 ? providerName : ''
+    let photoUrl = photoURL.length > 0 ? photoURL : ''
     let lowercaseUsername = username.toLowerCase()
-    
+
     return db.ref(`users/${id}`).set({
     username,
     email,
     displayName,
-    lowercaseUsername
+    lowercaseUsername,
+    photoUrl,
   });}
 
 export const doSearchForUsername = (queryText) =>
