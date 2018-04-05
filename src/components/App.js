@@ -34,7 +34,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Navigation/>
+          {/* <Navigation/> */}
 
           <Route
           exact path={routes.LANDING}
