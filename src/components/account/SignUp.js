@@ -162,10 +162,6 @@ class SignUpForm extends Component {
     });
   }
 
-  test = (e) => {
-    db.doSearchForUsername(e.target.value)
-      .then(res => console.log('res', res.val()))
-  }
   render() {
 
     const {email, username, passwordOne, error} = this.state;
@@ -239,9 +235,6 @@ class SignUpForm extends Component {
                 <Button color='teal' fluid disabled={isInvalid}>
                   <Icon name='checkmark' /> Sign Up
                 </Button>
-                <Form>
-                  <Input type='text' onChange={(e) => this.test(e)}></Input>
-                </Form>
               </Segment>
           </Form>
         </div>
