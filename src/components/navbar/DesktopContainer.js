@@ -9,6 +9,9 @@ import HomepageHeading from './HomepageHeading'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import {auth} from '../../firebase'
 
+const segmentBorder={padding: '0'}
+const menuBorder={borderRadius: '0'}
+
 class DesktopContainer extends Component {
   state = {}
 
@@ -42,13 +45,18 @@ export default DesktopContainer
 
 const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
   return (
-    <Segment inverted textAlign='center' style={st} vertical>
+    <Segment
+      // inverted
+      basic
+      textAlign='center' vertical
+      style={segmentBorder}>
       <Menu
+        style={menuBorder}
         fixed={fixed ? 'top' : null}
-        inverted={!fixed}
-        pointing={!fixed}
-        secondary={!fixed}
-        size='large'
+        // inverted={!fixed}
+        // pointing={!fixed}
+        // secondary={!fixed}
+        // size='large'
       >
         <Container>
           <Menu.Item as={Link} to={routes.HOME}
@@ -99,13 +107,20 @@ const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
 
 const DesktopNonAuth = ({fixed, activeItem, st}) => {
   return (
-    <Segment inverted textAlign='center' style={st} vertical>
+    <Segment
+      // inverted
+       textAlign='center' vertical
+       basic
+       style={segmentBorder}
+       >
       <Menu
         fixed={fixed ? 'top' : null}
-        inverted={!fixed}
-        pointing={!fixed}
-        secondary={!fixed}
-        size='large'
+        // inverted={!fixed}
+        // color='blue'
+        // pointing={!fixed}
+        // secondary={!fixed}
+        // size='large'
+        style={menuBorder}
       >
         <Container>
           <Menu.Item  as={Link} to={routes.LANDING}

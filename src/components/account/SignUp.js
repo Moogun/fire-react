@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link, withRouter, } from 'react-router-dom';
 import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
-import { Button, Image, Modal, Form, Checkbox, Icon, Input, Divider, Segment, Header, Grid } from 'semantic-ui-react'
+import { Button, Image, Form, Checkbox, Icon, Input, Divider, Segment, Header, Grid, Message } from 'semantic-ui-react'
 import {SignInLink} from './SignIn';
 
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -138,9 +138,13 @@ class SignUpForm extends Component {
 
     const isInvalid =
           passwordOne === '' ||
+          passwordOne.length < 6 ||
           email === '' ||
-          username === '';
-
+          username === '' ||
+          username.length < 6 ;
+          
+    let err = error ? true : false
+    console.log('err', err, passwordOne.length)
     return (
       <div>
         <Form size='large' onSubmit={this.onSubmit}>
@@ -162,40 +166,44 @@ class SignUpForm extends Component {
               <Divider horizontal>Or</Divider>
 
               <Form.Field>
-                <Input
+                <Form.Input
                     icon='mail'
                     iconPosition='left'
                     value={email}
                     onChange={(event) => this.setState(byPropKey('email', event.target.value))}
                     type="email"
                     placeholder="Email"
+                    error={err}
                   />
+                {error && <Message negative>
+                    <Message.Header>{error.message}</Message.Header>
+                </Message> }
               </Form.Field>
               <Form.Field>
-                <Input
+                <Form.Input
                   icon='user'
                   iconPosition='left'
                   value={username}
                   onChange={event => this.setState(byPropKey('username', event.target.value))}
                   type="text"
-                  placeholder="Username"
+                  placeholder="Username (more than 6 characters)"
                 />
               </Form.Field>
               <Form.Field>
-                <Input
+                <Form.Input
                   icon='lock'
                   iconPosition='left'
                   value={passwordOne}
                   onChange={event => this.setState(byPropKey('passwordOne', event.target.value))}
                   type="password"
-                  placeholder="Password"
+                  placeholder="Password (more than 6 characters)"
                 />
                 </Form.Field>
 
                 <Form.Field>
                   <Checkbox label='I agree to the Terms and Conditions' />
                 </Form.Field>
-                <Button color='teal' fluid>
+                <Button color='teal' fluid disable={isInvalid}>
                   <Icon name='checkmark' /> Sign Up
                 </Button>
 

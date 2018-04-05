@@ -50,12 +50,11 @@ class CoursePage extends Component {
     };
   }
 
-
   stickTopMenu = () => this.setState({ menuFixed: true })
   unStickTopMenu = () => this.setState({ menuFixed: false })
 
   componentDidMount() {
-    // console.log('course page did mount', this.props.match.params);
+    console.log('course page did mount', this.props.match.params);
     let cTitle = this.props.match.params.cTitle
     let title = cTitle.replace(/-/g, ' ');
 

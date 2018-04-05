@@ -15,7 +15,7 @@ class ResponsiveContainer extends Component {
     };
   }
   render() {
-    console.log('authUser respsonvie', this.context.authUser);
+    // console.log('authUser respsonvie', this.context.authUser);
     return (
         <div>
           <DesktopContainer authUser={this.context.authUser}>{this.props.children}</DesktopContainer>
