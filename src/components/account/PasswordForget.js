@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
 import {auth} from '../../firebase'
-import { Modal, Form, Input, Button, Segment } from 'semantic-ui-react'
+import { Modal, Form, Input, Button, Segment, Header, Message } from 'semantic-ui-react'
 
 const PasswordForgetPage = (props) =>
   <div>
@@ -24,13 +24,14 @@ class PasswordForgetForm extends Component {
     super(props);
     this.state = {
       ...INITIAL_STATE,
+      sentMsgHidden: true,
     };
   }
 
   onSubmit =(event) => {
     const { email } = this.state;
     auth.doPasswordReset(email)
-      .then(() => {this.setState( () => ({...INITIAL_STATE}))
+      .then(() => {this.setState( () => ({...INITIAL_STATE, sentMsgHidden: false}))
       })
       .catch( (error) => {this.setState(byPropKey('error', error))
       });
@@ -39,31 +40,18 @@ class PasswordForgetForm extends Component {
 
   render() {
 
-    const { email, error, } = this.state;
+    const { email, error, sentMsgHidden} = this.state;
     const { click, open, } = this.props;
     const isInvalid = email === '';
 
     return (
-        // <div>
-        //     <Form onSubmit={this.onSubmit}>
-        //       <Input
-        //       value={this.state.email}
-        //       onChange={event => this.setState(byPropKey('email', event.target.value))}
-        //       type="text"
-        //       placeholder="Registered Email Address"
-        //     />
-        //     <Button disabled={isInvalid} type="submit">
-        //       Reset My Password
-        //     </Button>
-        //
-        //     { error && <p>{error.message}</p> }
-        //   </Form>
-        // </div>
 
       <Segment basic>
-            <Modal.Header>Reset your password</Modal.Header>
+            <Header as='h2'>Reset your password</Header>
+            <Message positive hidden={sentMsgHidden}>'Email was sent. Please check your email'</Message>
             <Modal.Content>
               <Form onSubmit={this.onSubmit}>
+                { error && <Message negative>{error.message}</Message> }
                 <Form.Field>
                   <Input
                       icon='mail'
@@ -77,15 +65,9 @@ class PasswordForgetForm extends Component {
                 <Button disabled={isInvalid} type="submit">
                   Reset My Password
                 </Button>
-                { error && <p>{error.message}</p> }
+
               </Form>
-
             </Modal.Content>
-
-            {/* <Modal.Actions>
-              <p onClick={click}> do some other than resetting</p>
-            </Modal.Actions> */}
-
         </Segment>
     );
   }

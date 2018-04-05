@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import { Button, Form, Grid, Header, Image, Message, Segment, Icon, Divider } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Image, Message, Segment, Icon, Divider, Modal } from 'semantic-ui-react'
 
 import {auth} from '../../firebase';
 import * as routes from '../../constants/routes';
 
 import {SignUpLink} from './SignUp';
-import {PasswordForgetLink} from './PasswordForget'
+import {PasswordForgetLink, PasswordForgetForm } from './PasswordForget'
 
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
@@ -15,35 +15,28 @@ const responseFacebook = (response) => {
 }
 
 const SignInPage = ({history}) => (
-  <div className='login-form'>
-
-    <style>{`
-      body > div,
-      body > div > div,
-      body > div > div > div.login-form {
-        height: 100%;
-      }
-    `}</style>
 
     <Grid container
       textAlign='center'
-      style={{ height: '100%' }}
+      style={{ height: '80%', margin: '5rem' }}
       verticalAlign='middle'
     >
-      <Grid.Column style={{ maxWidth: 450 }}>
+      <Grid.Column style={{ maxWidth: 350 }}>
         <Header as='h2' color='teal' textAlign='center'>
           <Image src='/logo.png' />
           {' '}Sign-in to your account
         </Header>
 
           <SignInForm history={history}/>
-          <PasswordForgetLink />
+          {/* <PasswordForgetLink /> */}
+          <Modal trigger={<p>Forgot password ? </p>}>
+            <PasswordForgetForm />
+          </Modal>
           <SignUpLink />
 
       </Grid.Column>
 
     </Grid>
-  </div>
 )
 
 const INITIAL_STATE = {
@@ -137,7 +130,6 @@ class SignInForm extends Component {
               </Button>
                 <Divider horizontal>Or</Divider>
 
-
               <Form.Input
                 fluid
                 icon='mail'
@@ -156,8 +148,9 @@ class SignInForm extends Component {
                 onChange = {(event) => this.setState(byPropKey('password', event.target.value))}
                 type="password"
                 placeholder="Password"/>
+                {error && <Message>{error.message}</Message>}
               <Button color='teal' fluid size='large' disabled = {isInvalid} type="submit">Sign In</Button>
-              {error && <p>{error.message}</p>}
+
             </Segment>
           </Form>
         </div>

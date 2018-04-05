@@ -37,7 +37,7 @@ class AccountPage extends Component {
              email: res.val().email,
               username: res.val().username,
               displayName: res.val().displayName,
-              profileImgUrl: res.val().profileImgUrl ? res.val().profileImgUrl : profile, })
+              photoUrl: res.val().photoUrl ? res.val().photoUrl : profile, })
       })
       .catch(error => {
         this.setState(byPropKey('error', error));
@@ -49,9 +49,9 @@ class AccountPage extends Component {
     console.log('account props',this.props.match);
     // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
-    const { activeItem, email, username, displayName, profileImgUrl } = this.state
-    // console.log('authUser.photoURL', authUser.photoURL);
-    // let profileImgUrl = authUser.photoURL ? authUser.photoURL : profile
+    const { activeItem, email, username, displayName, photoUrl } = this.state
+    console.log('photoUrl', photoUrl);
+    // let photoUrl = authUser.photoURL ? authUser.photoURL : profile
     return (
       <Container text>
         <Grid celled stackable>
@@ -59,7 +59,7 @@ class AccountPage extends Component {
             <Grid.Column width={4}>
                 <Menu vertical secondary fluid>
                 <br/>
-                <Image src={profileImgUrl} circular centered fluid/>
+                <Image src={photoUrl} circular centered fluid/>
                 <br/>
                 <Menu.Item name='profile'
                   active
@@ -95,7 +95,7 @@ class AccountPage extends Component {
                   displayName={displayName}
                 />}
                 />
-                <Route path='/account/photo' render={() => <Photo photo={profileImgUrl}/>} />
+                <Route path='/account/photo' render={() => <Photo photo={photoUrl}/>} />
                 <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
                 <Route path='/account/passwordForget' render={ () => <PasswordForgetForm />} />
                 <Route path='/account/danger' render={() => <Danger />} />
