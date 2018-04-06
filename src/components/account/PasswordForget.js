@@ -47,7 +47,7 @@ class PasswordForgetForm extends Component {
     return (
 
       <Segment basic>
-            <Header as='h2'>Reset your password</Header>
+            <Header as='h2' dividing>Reset your password</Header>
             <Message positive hidden={sentMsgHidden}>'Email was sent. Please check your email'</Message>
             <Modal.Content>
               <Form onSubmit={this.onSubmit}>

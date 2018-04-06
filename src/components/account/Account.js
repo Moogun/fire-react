@@ -6,7 +6,7 @@ import profile from '../../assets/profile-lg.png'
 
 import Profile from './Profile'
 import Photo from './Photo'
-import {PasswordForgetForm} from './PasswordForget';
+import PasswordForgetPage from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
 import Danger from './Danger'
 import {db} from '../../firebase';
@@ -163,7 +163,7 @@ class AccountPage extends Component {
             <Grid.Column width={4}>
                 <Menu vertical secondary fluid>
                 <br/>
-                <Image src={photoUrl} circular centered fluid/>
+                <Image src={photoUrl} circular centered size='small'/>
                 <br/>
                 <Menu.Item name='profile'
                   active
@@ -183,7 +183,7 @@ class AccountPage extends Component {
                 />
                 <Menu.Item name='passwordForget'
                  // as={Link} to='/account/passwordForget'
-                  as={Link} to={`${match.url}/passwordChange`}
+                  as={Link} to={`${match.url}/passwordForget`}
                    active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
                  />
                 <Menu.Item name='danger'
@@ -212,7 +212,7 @@ class AccountPage extends Component {
                   submit={this.onPhotoSubmit}
                   />} />
                 <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
-                <Route path='/account/passwordForget' render={ () => <PasswordForgetForm />} />
+                <Route path='/account/passwordForget' render={ () => <PasswordForgetPage />} />
                 <Route path='/account/danger' render={() => <Danger />} />
               </Switch>
             </Grid.Column>

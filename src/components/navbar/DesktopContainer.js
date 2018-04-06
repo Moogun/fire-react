@@ -63,7 +63,7 @@ const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
             name='Weqna' active={activeItem === 'home'} onClick={this.handleItemClick} />
           <Category />
           <Menu.Item>
-              <Input placeholder='Search...' action={{ icon: 'search' }}/>
+              <Input placeholder='Search...' action={{ icon: 'search' }} style={{width: '350px'}}/>
           </Menu.Item>
           <Menu.Menu  position='right'>
             <Dropdown item text='Teacher' >
