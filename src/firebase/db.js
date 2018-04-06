@@ -24,6 +24,10 @@ export const doUpdateUserProfile = (uid, username, displayName) =>
     lowercaseUsername,
   });}
 
+export const doUpdateUserPhoto = (uid, downloadURL) =>
+  db.ref(`users/${uid}/`).update({ photoUrl: downloadURL })
+
+
 export const doSearchForUsername = (queryText) =>
   // db.ref('users').orderByChild('lowercaseUsername').startAt(queryText.toLowerCase()).endAt(queryText.toLowerCase()+"\uf8ff").once('value')
   db.ref('users').orderByChild('lowercaseUsername').equalTo(queryText.toLowerCase()).once('value')

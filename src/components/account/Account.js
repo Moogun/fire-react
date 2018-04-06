@@ -10,6 +10,7 @@ import {PasswordForgetForm} from './PasswordForget';
 import PasswordChangeForm from './PasswordChange';
 import Danger from './Danger'
 import {db} from '../../firebase';
+import {storage} from '../../firebase/firebase';
 
 import { Container, Menu, Grid, Image} from 'semantic-ui-react'
 
@@ -39,7 +40,9 @@ class AccountPage extends Component {
               email: res.val().email,
               username: res.val().username,
               displayName: res.val().displayName,
-              photoUrl: res.val().photoUrl ? res.val().photoUrl : profile, })
+              photoUrl: res.val().photoUrl ? res.val().photoUrl : profile,
+              images: {},
+            })
       })
       .catch(error => {
         this.setState(byPropKey('error', error));
@@ -76,13 +79,82 @@ class AccountPage extends Component {
       });
   }
 
+  handlePhotoChange = (e) => {
+    const {images} = this.state
+    let img = {}
+    let newKey = db.newKey();
+
+    console.log(e.target.files[0]);
+    let reader = new FileReader()
+    let file =  e.target.files[0]
+
+    reader.onloadend = () => {
+      console.log('reader', reader.result);
+      img[newKey] = { file: file, imagePreviewUrl: reader.result, progress: 0}
+      this.setState ({images: img})
+    }
+
+    if(e.target.files[0]){
+      reader.readAsDataURL(file)
+    }
+  }
+
+  onPhotoSubmit = () => {
+    const { uid } = this.state
+    const {images} = this.state
+    const {teacherId, courseId } = this.props
+
+    Object.keys(images).map(i => {
+      console.log('images[i]', 'i', i, 'file', images[i].file, images[i].progress)
+
+      var uploadTask= storage.ref().child('images').child(images[i].file.name).put(images[i].file)
+      uploadTask.on('state_changed', (snapshot) => {
+        // console.log('snapshot', snapshot.bytesTransferred);
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running progress', progress);
+            let roundedProgress = Math.round(progress)
+            images[i].progress = roundedProgress
+            console.log('images[i]', images[i].progress);
+            this.setState ({ images }) //called multiple tiems
+            break;
+          }
+      }, (error) => {
+          switch (error.code) {
+             case 'storage/unauthorized':
+               // User doesn't have permission to access the object
+               break;
+             case 'storage/canceled':
+               // User canceled the upload
+               break;
+             case 'storage/unknown':
+               // Unknown error occurred, inspect error.serverResponse
+               break;
+           }
+      }, () => {
+        var downloadURL = uploadTask.snapshot.downloadURL;
+          console.log('down', downloadURL);
+          db.doUpdateUserPhoto(uid, downloadURL)
+             .then(res => console.log('res', res))
+             .catch(error => {
+               this.setState(byPropKey('error', error));
+             })
+      })
+    })
+  }
+
   render() {
     const {match} = this.props
     console.log('account props',this.props.match);
     // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
-    const { activeItem, user, email, username, displayName, photoUrl, usernameTaken } = this.state
-    console.log('photoUrl', photoUrl);
+    const { activeItem, user, email, username, displayName, photoUrl, usernameTaken, images } = this.state
+    console.log('photoUrl', photoUrl, 'image', images);
 
     return (
       <Container text>
@@ -132,9 +204,13 @@ class AccountPage extends Component {
                   displayName={displayName}
                   change={this.handleProfileInfoChange}
                   submit={this.onProfileInfoSubmit}
-                />}
-                />
-                <Route path='/account/photo' render={() => <Photo photo={photoUrl} />} />
+                  />} />
+                <Route path='/account/photo' render={() => <Photo
+                  image={images}
+                  photo={photoUrl}
+                  photoChange={this.handlePhotoChange}
+                  submit={this.onPhotoSubmit}
+                  />} />
                 <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
                 <Route path='/account/passwordForget' render={ () => <PasswordForgetForm />} />
                 <Route path='/account/danger' render={() => <Danger />} />

@@ -51,11 +51,8 @@ class CEditGallery extends Component {
     if(e.target.files[0]){
       reader.readAsDataURL(file)
     }
+  }
 
-  }
-  handleTest() {
-    console.log('111');
-  }
 
   handleImageSubmit = () => {
 
@@ -79,8 +76,7 @@ class CEditGallery extends Component {
             let roundedProgress = Math.round(progress)
             images[i].progress = roundedProgress
             console.log('images[i]', images[i].progress);
-            this.handleTest = () => {console.log('12345')
-            this.setState ({ images })} //called multiple tiems
+            this.setState ({ images }) //called multiple tiems
             break;
           }
       }, (error) => {
