@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Navigation from './navbar/Navigation';
+// import Navigation from './navbar/Navigation';
 import Footer from './footer/Footer';
 import * as routes from '../constants/routes';
 
@@ -61,13 +61,13 @@ class App extends Component {
             render={() => <AccountPage />}
           />
 
-          <Route
+          {/* <Route
             exact path={routes.PASSWORD_FORGET}
             component={() => <PasswordForgetPage />}
-          />
+          /> */}
 
           <Route
-            exact path={routes.MY_COURSES}
+            exact path={routes.LEARNING}
             component={() => <MyCourses />}
           />
 

@@ -104,7 +104,7 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
                   We qna
                 </Menu.Item>
                 <Menu.Menu position='right'>
-                  <Menu.Item  as={Link} to={routes.MY_COURSES}>
+                  <Menu.Item  as={Link} to={routes.LEARNING}>
                       <Icon name='book' />
                   </Menu.Item>
                   <Menu.Item as={Link} to={routes.ACCOUNT}

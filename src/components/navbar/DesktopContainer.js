@@ -82,8 +82,7 @@ const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
               </Dropdown.Menu>
             </Dropdown>
 
-
-            <Menu.Item as={Link} to={routes.MY_COURSES}
+            <Menu.Item as={Link} to={routes.LEARNING}
               name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick} />
 
             <Dropdown item text='Account' >

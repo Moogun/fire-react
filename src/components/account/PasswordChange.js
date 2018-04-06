@@ -88,24 +88,4 @@ class PasswordChangeForm extends Component {
   }
 }
 
-
-//   <br/>
-//   <Divider />
-//   <Form size='big'>
-//     <Form.Field>
-//       <label>Old password</label>
-//       <input placeholder='First Name' />
-//     </Form.Field>
-//     <Form.Field>
-//       <label>New password</label>
-//       <input placeholder='Last Name' />
-//     </Form.Field>
-//     <Form.Field>
-//       <label>Confirm password</label>
-//       <input placeholder='Last Name' />
-//     </Form.Field>
-//     <Button type='submit'>Update</Button>
-//   </Form>
-// </Segment>
-
 export default PasswordChangeForm;

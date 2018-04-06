@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Link, Route, Switch, Redirect} from 'react-router-dom'
 import withAuthorization from '../../HOC/withAuthorization';
 import profile from '../../assets/profile-lg.png'
+import * as routes from '../../constants/routes';
 
 import Profile from './Profile'
 import Photo from './Photo'
@@ -178,16 +179,16 @@ class AccountPage extends Component {
                  />
                  <Menu.Item name='passwordChange'
                   // as={Link} to='/account/passwordChange'
-                   as={Link} to={`${match.url}/passwordChange`}
+                   as={Link} to={`${match.url}/pw-change`}
                     active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
                 />
                 <Menu.Item name='passwordForget'
                  // as={Link} to='/account/passwordForget'
-                  as={Link} to={`${match.url}/passwordForget`}
+                  as={Link} to={`${match.url}/pw-forget`}
                    active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
                  />
                 <Menu.Item name='danger'
-                  as={Link} to='/account/danger'
+                  as={Link} to={`${match.url}/danger`}
                   active={activeItem === 'danger'} onClick={this.handleItemClick}
                  />
               </Menu>
@@ -195,8 +196,8 @@ class AccountPage extends Component {
 
             <Grid.Column width={12}>
               <Switch>
-                <Redirect exact from={match.url} to={`${match.url}/profile`} />
-                <Route path='/account/profile' render={(props) => <Profile {...props}
+                <Redirect exact from={match.url} to={routes.ACCOUNT_PROFILE} />
+                <Route path={routes.ACCOUNT_PROFILE} render={(props) => <Profile {...props}
                   user={user}
                   email={email}
                   username={username}
@@ -205,15 +206,17 @@ class AccountPage extends Component {
                   change={this.handleProfileInfoChange}
                   submit={this.onProfileInfoSubmit}
                   />} />
-                <Route path='/account/photo' render={() => <Photo
+                <Route path={routes.ACCOUNT_PHOTO} render={() => <Photo
                   image={images}
                   photo={photoUrl}
                   photoChange={this.handlePhotoChange}
                   submit={this.onPhotoSubmit}
                   />} />
-                <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
-                <Route path='/account/passwordForget' render={ () => <PasswordForgetPage />} />
-                <Route path='/account/danger' render={() => <Danger />} />
+                <Route path={routes.ACCOUNT_PASSWORD_CHANGE} render={ () => <PasswordChangeForm />} />
+                <Route
+                  path={routes.ACCOUNT_PASSWORD_FORGET}
+                  render={ () => <PasswordForgetPage />} />
+                <Route path={routes.ACCOUNT_DANGER} render={() => <Danger />} />
               </Switch>
             </Grid.Column>
 

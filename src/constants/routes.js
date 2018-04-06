@@ -3,11 +3,16 @@ export const SIGN_IN = '/signin';
 
 export const LANDING = '/';
 export const HOME = '/home';
-export const ACCOUNT = '/account';
-export const PASSWORD_FORGET = '/pw-forget';
+export const ACCOUNT = '/account/my/';
+export const ACCOUNT_PROFILE = '/account/my/profile';
+export const ACCOUNT_PHOTO = '/account/my/photo';
+export const ACCOUNT_PASSWORD_FORGET = '/account/my/pw-forget';
+export const ACCOUNT_PASSWORD_CHANGE = '/account/my/pw-change';
+export const ACCOUNT_DANGER = '/account/my/danger';
 
 //1.
-export const MY_COURSES = '/my_courses';
+export const LEARNING = '/learning/my/';
+export const LEARNING_MY_COURSES = '/learning/my/courses';
 
 //2. internal pages nested routes
 export const CREATE = '/create';
@@ -18,9 +23,9 @@ export const COURSE_MANAGE_SETTINGS = '/course_manage/:cid/edit/settings';
 export const COURSE_MANAGE_ASSIGNMENT = '/course_manage/:cid/edit/assignment';
 
 //3.
-export const DASHBOARD = '/dashboard/'; // fetch t info with authUser credential
-export const DASHBOARD_COURSES = '/dashboard/courses';
-export const DASHBOARD_Q_PANEL = '/dashboard/questions';
+export const DASHBOARD = '/teaching/dashboard/'; // fetch t info with authUser credential
+export const DASHBOARD_COURSES = '/teaching/dashboard/courses';
+export const DASHBOARD_Q_PANEL = '/teaching/dashboard/questions';
 
 // export const DASHBOARD_Q_PANEL_BY_C_TITLE = '/t-dashboard/questions/:cTitle';
 // export const DASHBOARD_Q_PANEL_BY_UNREAD = '/t-dashboard/questions/unread';
