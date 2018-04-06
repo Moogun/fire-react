@@ -56,7 +56,7 @@ const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
         // inverted={!fixed}
         // pointing={!fixed}
         // secondary={!fixed}
-        // size='large'
+        size='large'
       >
         <Container>
           <Menu.Item as={Link} to={routes.HOME}
@@ -119,7 +119,7 @@ const DesktopNonAuth = ({fixed, activeItem, st}) => {
         // color='blue'
         // pointing={!fixed}
         // secondary={!fixed}
-        // size='large'
+        size='large'
         style={menuBorder}
       >
         <Container>

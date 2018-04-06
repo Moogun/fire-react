@@ -34,7 +34,9 @@ class AccountPage extends Component {
       .then(res => {
            console.log('res', res.val())
            this.setState ({
-             email: res.val().email,
+              user: res.val(),
+              uid: authUser.uid,
+              email: res.val().email,
               username: res.val().username,
               displayName: res.val().displayName,
               photoUrl: res.val().photoUrl ? res.val().photoUrl : profile, })
@@ -44,14 +46,44 @@ class AccountPage extends Component {
       })
   }
 
+  handleProfileInfoChange = (event) => {
+    this.setState(byPropKey(event.target.name, event.target.value))
+    this.setState ({
+      usernameTaken: null,
+    })
+  }
+
+  onProfileInfoSubmit = () => {
+    const { uid, username, displayName} = this.state
+    db.doSearchForUsername(username)
+      .then(res => {
+        console.log('res', res)
+        if (res.val() === null) {
+          db.doUpdateUserProfile(uid, username, displayName)
+            .then(res => {
+              console.log('res', res)
+              this.setState ({ buttonContent: 'Saved'})
+            })
+            .catch(error => {
+              this.setState(byPropKey('error', error));
+            });
+        } else {
+          this.setState ({ usernameTaken: username + ' is already taken'})
+        }
+      })
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
+  }
+
   render() {
     const {match} = this.props
     console.log('account props',this.props.match);
     // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
-    const { activeItem, email, username, displayName, photoUrl } = this.state
+    const { activeItem, user, email, username, displayName, photoUrl, usernameTaken } = this.state
     console.log('photoUrl', photoUrl);
-    // let photoUrl = authUser.photoURL ? authUser.photoURL : profile
+
     return (
       <Container text>
         <Grid celled stackable>
@@ -63,21 +95,23 @@ class AccountPage extends Component {
                 <br/>
                 <Menu.Item name='profile'
                   active
-                  as={Link} to='/account/profile'
+                  // as={Link} to='/account/profile'
+                  as={Link} to={`${match.url}/profile`}
                   active={activeItem === 'profile'} onClick={this.handleItemClick}
                  />
                 <Menu.Item name='photo'
-                  as={Link} to='/account/photo'
+                  // as={Link} to='/account/photo'
+                  as={Link} to={`${match.url}/photo`}
                     active={activeItem === 'photo'} onClick={this.handleItemClick}
                  />
                  <Menu.Item name='passwordChange'
-                  as={Link} to='/account/passwordChange'
-                   // as={Link} to={`${match.url}/passwordChange`}
+                  // as={Link} to='/account/passwordChange'
+                   as={Link} to={`${match.url}/passwordChange`}
                     active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
                 />
                 <Menu.Item name='passwordForget'
-                 as={Link} to='/account/passwordForget'
-                  // as={Link} to={`${match.url}/passwordChange`}
+                 // as={Link} to='/account/passwordForget'
+                  as={Link} to={`${match.url}/passwordChange`}
                    active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
                  />
                 <Menu.Item name='danger'
@@ -90,12 +124,17 @@ class AccountPage extends Component {
             <Grid.Column width={12}>
               <Switch>
                 <Redirect exact from={match.url} to={`${match.url}/profile`} />
-                <Route path='/account/profile' render={(props) => <Profile {...props}          email={email}
+                <Route path='/account/profile' render={(props) => <Profile {...props}
+                  user={user}
+                  email={email}
                   username={username}
+                  usernameTaken={usernameTaken}
                   displayName={displayName}
+                  change={this.handleProfileInfoChange}
+                  submit={this.onProfileInfoSubmit}
                 />}
                 />
-                <Route path='/account/photo' render={() => <Photo photo={photoUrl}/>} />
+                <Route path='/account/photo' render={() => <Photo photo={photoUrl} />} />
                 <Route path='/account/passwordChange' render={ () => <PasswordChangeForm />} />
                 <Route path='/account/passwordForget' render={ () => <PasswordForgetForm />} />
                 <Route path='/account/danger' render={() => <Danger />} />

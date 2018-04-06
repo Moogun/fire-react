@@ -1,29 +1,36 @@
 import React, { Component } from 'react'
 import profile from '../../assets/profile-lg.png'
 
-import { Segment, Button, Header, Icon, Divider, Form, Input} from 'semantic-ui-react'
+import { Segment, Button, Header, Icon, Divider, Form, Input, Message} from 'semantic-ui-react'
 
-const Profile = ({email, username, displayName}) => {
+const Profile = ({user, email, username, usernameTaken, displayName, change, submit}) => {
+  const isInvalid =
+        !!user && user.username === username && !!user && user.displayName === displayName
+        !!username && username === '' ||
+        !!username && username.length < 6 ;
   return (
       <Segment basic>
         <Header as='h2'>Profile</Header>
         <Divider />
-        <Form size='small'>
+        <Form size='small' onSubmit={submit}>
           <Form.Field>
             <label>Email</label>
-            {/* <input placeholder='Email' defaultValue={email}/> */}
-            <Input placeholder='Email' value={email}/>
+            <Input placeholder='Email' name='email' value={email} readOnly />
           </Form.Field>
           <Form.Field>
             <label>Username</label>
-            <Input placeholder='Username' value={username}/>
+            {usernameTaken && <Message negative>
+                <Message.Header>{usernameTaken}</Message.Header>
+            </Message> }
+            <Input placeholder='Username' name='username' value={username} onChange={change}
+            />
           </Form.Field>
           <Form.Field>
-            <label>displayName</label>
-            <Input placeholder='Name' value={displayName}/>
+            <label>DisplayName</label>
+            <Input placeholder='DisplayName' name='displayName' value={displayName} onChange={change} />
           </Form.Field>
 
-          <Button type='submit'>Update</Button>
+          <Button type='submit' disabled={isInvalid} >Update</Button>
         </Form>
       </Segment>
   )

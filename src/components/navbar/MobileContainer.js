@@ -25,9 +25,7 @@ class MobileContainer extends Component {
   handleSearchField = () => {this.setState ({ searchFieldActive: !this.state.searchFieldActive})
     console.log('s field', this.state.searchFieldActive);
   }
-  handleSearchClick = () => {
-    console.log('search clicked');
-  }
+  handleSearchClick = () => { console.log('search clicked')}
 
   render() {
     const { children, st, authUser } = this.props
@@ -37,6 +35,7 @@ class MobileContainer extends Component {
       <Responsive {...Responsive.onlyMobile}>
           { authUser
               ? <MobileAuth
+                activeItem={activeItem}
                 children={children}
                 sidebarOpened={sidebarOpened}
                 handlePusherClick={this.handlePusherClick}
@@ -46,6 +45,7 @@ class MobileContainer extends Component {
                 handleSearchClick={this.handleSearchClick}
               />
               : <MobileNonAuth
+                activeItem={activeItem}
                 children={children}
                 sidebarOpened={sidebarOpened}
                 handlePusherClick={this.handlePusherClick}
@@ -66,7 +66,7 @@ MobileContainer.propTypes = {
 export default MobileContainer
 
 
-const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick}) => {
+const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
   return (
     <Sidebar.Pushable>
        <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
@@ -76,7 +76,7 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
          <Menu.Item as='a'>My Notifications</Menu.Item>
          <Menu.Item as='a'>Instructor Dashboard</Menu.Item>
          <Menu.Item as='a'>Help</Menu.Item>
-         <Menu.Item as='a'>Log out</Menu.Item>
+         <Menu.Item as='a' onClick={auth.doSignOut}>Log out</Menu.Item>
       </Sidebar>
 
       <Sidebar.Pusher dimmed={sidebarOpened} onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
@@ -91,7 +91,7 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
                 // inverted
                 // pointing
                 // secondary
-                // size='large'
+                size='large'
                 style={menuBorder}
                 >
                 <Menu.Item onClick={handleToggle}>
@@ -128,7 +128,7 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
   );
 }
 
-const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick}) => {
+const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
   return (
     <Sidebar.Pushable>
        <Sidebar as={Menu} animation='uncover' inverted vertical visible={sidebarOpened}>
@@ -136,13 +136,27 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
           <Menu.Item as='a'>Category</Menu.Item>
           <Menu.Item as='a'>Are you teaching?</Menu.Item>
           <Menu.Item as='a'>Help</Menu.Item>
-          <Menu.Item as='a'>Sign Up</Menu.Item>
-          <Menu.Item as='a'>Log in</Menu.Item>
+          {/* <Menu.Item as='a'>Sign Up</Menu.Item>
+          <Menu.Item as='a'>Log in</Menu.Item> */}
+          <Menu.Item as={Link} to={routes.SIGN_IN}
+            name='Log in' active={activeItem === 'signin'}
+            onClick={handlePusherClick}
+             >
+          </Menu.Item>
+
+          <Menu.Item as={Link} to={routes.SIGN_UP}
+            name='Sign Up' active={activeItem === 'signup'}
+            onClick={handleToggle}
+             >
+          </Menu.Item>
       </Sidebar>
 
       <Sidebar.Pusher dimmed={sidebarOpened} onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
-        <Segment inverted textAlign='center' style={{ minHeight: 350, padding: '1em 0em' }} vertical>
-          <Container>
+        <Segment inverted textAlign='center'
+          style={segmentBorder}
+          // style={{ minHeight: 350, padding: '1em 0em' }}
+          vertical>
+          {/* <Container> */}
               <Menu inverted pointing secondary size='large'>
                 <Menu.Item onClick={handleToggle}>
                   <Icon name='sidebar' />
@@ -156,8 +170,8 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
                   size='large'
                 icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>}
                /> : null}
-          </Container>
-          <HomepageHeading mobile />
+          {/* </Container>
+          <HomepageHeading mobile /> */}
         </Segment>
       {children}
       </Sidebar.Pusher>

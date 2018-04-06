@@ -14,8 +14,19 @@ export const doCreateUser = (id, username, email, providerName, photoURL) =>
     photoUrl,
   });}
 
+export const doUpdateUserProfile = (uid, username, displayName) =>
+  {
+    let lowercaseUsername = username.toLowerCase()
+
+    return db.ref(`users/${uid}`).update({
+    username,
+    displayName,
+    lowercaseUsername,
+  });}
+
 export const doSearchForUsername = (queryText) =>
-  db.ref('users').orderByChild('lowercaseUsername').startAt(queryText.toLowerCase()).endAt(queryText.toLowerCase()+"\uf8ff").once('value')
+  // db.ref('users').orderByChild('lowercaseUsername').startAt(queryText.toLowerCase()).endAt(queryText.toLowerCase()+"\uf8ff").once('value')
+  db.ref('users').orderByChild('lowercaseUsername').equalTo(queryText.toLowerCase()).once('value')
 
 
 export const onceGetUsers = () =>
