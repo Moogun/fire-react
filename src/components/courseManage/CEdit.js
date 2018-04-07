@@ -1,8 +1,6 @@
-import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
-import * as routes from '../../constants/routes';
-import { Segment,Container, Table, Header, Grid, Image, Menu, Item, Button, Form, Icon, Input, Divider, Popup, Checkbox } from 'semantic-ui-react'
+import { Segment,Grid, Menu, Button, Icon, } from 'semantic-ui-react'
 
 import CEditTop from './CEditTop'
 import CEditTitle from './CEditTitle'
@@ -12,7 +10,6 @@ import CEditGallery from './CEditGallery'
 import CEditCurri from './CEditCurri'
 import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
-import withAuthorization from '../../HOC/withAuthorization'
 
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';

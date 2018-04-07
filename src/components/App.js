@@ -18,7 +18,8 @@ import Courses from './teacher/Courses';
 import Question from './questionPage/QuestionPage';
 
 import CEdit from './courseManage/CEdit';
-import Create from './courseManage/Create';
+// import Create from './courseManage/Create';
+import Create from './courseManage/CreateC';
 import CoursePage from './coursePage/CoursePage';
 
 import MyCourses from './myCourses/MyCourses';

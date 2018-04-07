@@ -23,7 +23,12 @@ class AccountPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      user: '',
+      uid: '',
+      email: '',
+      username: '',
+      displayName: '',
+      photoUrl: '',
     };
   }
 
@@ -34,7 +39,7 @@ class AccountPage extends Component {
     const {authUser} = this.context
     db.onceGetUser(authUser.uid)
       .then(res => {
-           console.log('res', res.val())
+           // console.log('res', res.val())
            this.setState ({
               user: res.val(),
               uid: authUser.uid,
@@ -151,11 +156,11 @@ class AccountPage extends Component {
 
   render() {
     const {match} = this.props
-    console.log('account props',this.props.match);
+    console.log('account props',this.props.match, this.props.user);
     // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
     const { activeItem, user, email, username, displayName, photoUrl, usernameTaken, images } = this.state
-    console.log('photoUrl', photoUrl, 'image', images);
+    // console.log('photoUrl', photoUrl, 'image', images);
 
     return (
       <Container text>

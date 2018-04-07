@@ -4,6 +4,8 @@ import {db} from '../../firebase';
 import * as routes from '../../constants/routes';
 import {Link, withRouter} from 'react-router-dom';
 import { Button, Image, Modal, Form, Checkbox, Icon, Input, Grid, Header, Message, Segment } from 'semantic-ui-react'
+import withAuthorization from '../../HOC/withAuthorization';
+import withAuthentication from '../../HOC/withAuthentication';
 
 const CreatePage = ({history}, {authUser}) => {
   let create;
@@ -120,4 +122,4 @@ class CreateForm extends Component {
   }
 }
 
-export default withRouter(CreatePage);
+export default CreatePage;

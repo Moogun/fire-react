@@ -60,29 +60,32 @@ export const onceGetPublishedCourses = () =>
 export const onceGetCourse = (courseKey) =>
   db.ref('courses').child(courseKey).once('value');
 
+
 //course creation
-export const doCreateCourse = (title, tid, tName, tProfileImg, tEmail) =>
+export const doCreateCourse = (title, tid,  tEmail, tName, tDisplayName, tProfileImg,) =>
 {
   var metadata = {
      title,
      tid,
-     tName,
-     tProfileImg,
      tEmail,
+     tName,
+     tDisplayName,
+     tProfileImg,
      isPublished: false,
      readyToPublish: false,
    }
   return db.ref('courses').push({metadata})
 }
 
-export const doUpdateTeaching = (title, tid, cid, tName, tProfileImg, tEmail) =>
+export const doUpdateTeaching = (title, tid, tEmail, tName, tDisplayName, tProfileImg, cid) =>
 {
   var updates = {}
   updates[`teaching/${tid}/${cid}/metadata/title`] = title
   updates[`teaching/${tid}/${cid}/metadata/tid`] = tid
+    updates[`teaching/${tid}/${cid}/metadata/tEmail`] = tEmail
   updates[`teaching/${tid}/${cid}/metadata/tName`] = tName
+  updates[`teaching/${tid}/${cid}/metadata/tDisplayName`] = tDisplayName
   updates[`teaching/${tid}/${cid}/metadata/tProfileImg`] = tProfileImg
-  updates[`teaching/${tid}/${cid}/metadata/tEmail`] = tEmail
   updates[`teaching/${tid}/${cid}/metadata/isPublished`] = false
   updates[`teaching/${tid}/${cid}/metadata/readyToPublish`] = false
   return db.ref().update(updates)
