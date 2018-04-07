@@ -67,7 +67,7 @@ class Create extends Component {
 
   render() {
     const {match} = this.props
-    console.log('create c props',this.props, this.props.user);
+    // console.log('create c props',this.props, this.props.user);
     const {authUser} = this.context
     const {title, error} = this.state;
     const isInvalid = title === '';
@@ -92,7 +92,7 @@ class Create extends Component {
                 placeholder="Title"
               />
               </Form.Field>
-              <Button color='blue' fluid>
+              <Button color='blue' fluid disabled={isInvalid}>
                 <Icon name='checkmark' /> Save and Go
               </Button>
           </Form>

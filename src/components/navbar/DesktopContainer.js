@@ -19,15 +19,14 @@ class DesktopContainer extends Component {
   showFixedMenu = () => this.setState({ fixed: true })
 
   render() {
-    const { children, st, authUser } = this.props
+    const { children, authUser } = this.props
     const { fixed, activeItem } = this.state
-    console.log('st', st);
     return (
       <Responsive {...Responsive.onlyComputer}>
         <Visibility once={false} onBottomPassed={this.showFixedMenu} onBottomPassedReverse={this.hideFixedMenu}>
             { authUser
-                ? <DesktopAuth fixed={fixed} activeItem={activeItem} st={st} authUser={authUser}/>
-                : <DesktopNonAuth fixed={fixed} activeItem={activeItem} st={st}/>
+                ? <DesktopAuth fixed={fixed} activeItem={activeItem} authUser={authUser}/>
+                : <DesktopNonAuth fixed={fixed} activeItem={activeItem} />
             }
 
         </Visibility>
