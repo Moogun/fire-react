@@ -29,7 +29,6 @@ export const doUpdateUserPhoto = (uid, downloadURL) =>
 
 
 export const doSearchForUsername = (queryText) =>
-  // db.ref('users').orderByChild('lowercaseUsername').startAt(queryText.toLowerCase()).endAt(queryText.toLowerCase()+"\uf8ff").once('value')
   db.ref('users').orderByChild('lowercaseUsername').equalTo(queryText.toLowerCase()).once('value')
 
 
@@ -219,9 +218,10 @@ export const doImgUpload = (file, name) => {
   var uploadTask = storage.ref().child('images').child(name).put(file)
 }
 
-export const doUpdateCourseImages = (tid, cid, newKey, downloadUrl, thumbnail, thumbnailWidth, thumbnailHeight, catpion, progress) => {
+export const doUpdateCourseImages = (tid, cid, newKey, fileName, downloadUrl, thumbnail, thumbnailWidth, thumbnailHeight, catpion, progress) => {
 
   var updates = {}
+    updates[`courses/${cid}/images/${newKey}/fileName`] = fileName
     updates[`courses/${cid}/images/${newKey}/src`] = downloadUrl
     updates[`courses/${cid}/images/${newKey}/thumbnail`] = downloadUrl
     updates[`courses/${cid}/images/${newKey}/thumbnailWidth`] = thumbnailWidth
@@ -229,12 +229,21 @@ export const doUpdateCourseImages = (tid, cid, newKey, downloadUrl, thumbnail, t
     updates[`courses/${cid}/images/${newKey}/catpion`] = catpion
     updates[`courses/${cid}/images/${newKey}/progress`] = progress
 
+    updates[`teaching/${tid}/${cid}/images/${newKey}/fileName`] = fileName
     updates[`teaching/${tid}/${cid}/images/${newKey}/src`] = downloadUrl
     updates[`teaching/${tid}/${cid}/images/${newKey}/thumbnail`] = downloadUrl
     updates[`teaching/${tid}/${cid}/images/${newKey}/thumbnailWidth`] = thumbnailWidth
     updates[`teaching/${tid}/${cid}/images/${newKey}/thumbnailHeight`] = thumbnailHeight
     updates[`teaching/${tid}/${cid}/images/${newKey}/catpion`] = catpion
     updates[`teaching/${tid}/${cid}/images/${newKey}/progress`] = progress
+  return db.ref().update(updates)
+}
+
+export const doRemoveCourseImage = (tid, cid, newKey, fileName) => {
+  console.log('tid, cid, newKey, fileName', tid, cid, newKey, fileName);
+  var updates = {}
+    updates[`courses/${cid}/images/${newKey}`] = null
+    updates[`teaching/${tid}/${cid}/images/${newKey}/`] = null
   return db.ref().update(updates)
 }
 

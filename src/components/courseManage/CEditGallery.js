@@ -32,7 +32,7 @@ class CEditGallery extends Component {
   render() {
 
     const {images, confirmOpen, selectedImage, handleImageChange, submit, show, handleConfirm, handleCancel } = this.props
-    console.log('imgaes');
+    console.log('rdr c edit gallery imgaes', images);
     return (
       <Segment style={CEditMetaBorder}>
         <Header as='h2'>Gallery</Header>

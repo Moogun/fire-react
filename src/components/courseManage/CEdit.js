@@ -68,19 +68,25 @@ class CourseEdit extends Component {
 
   handleImageChange = (e) => {
     const {images, key, count} = this.state
-    let newKey = db.newKey();
-    // console.log('handle item change', newKey, images, key, count);
-    console.log(e.target.files[0]);
-    let reader = new FileReader()
-    let file =  e.target.files[0]
 
+    let file = e.target.files[0]
+    let existing = Object.keys(images).map(i => images[i].fileName)
+    let found = existing.find((el) => el == file.name )
+
+    if (found) {
+      console.log('found', found);
+      return
+    }
+
+    let newKey = db.newKey();
+    let reader = new FileReader()
     reader.onloadend = () => {
       // console.log('reader', reader.result);
-      images[newKey] = { file: file, imagePreviewUrl: reader.result, progress: 0}
+      images[newKey] = { file: file, src: reader.result, progress: 0, }
       this.setState ({images})
     }
 
-    if(e.target.files[0]){
+    if (e.target.files[0]) {
       reader.readAsDataURL(file)
     }
   }
@@ -93,7 +99,10 @@ class CourseEdit extends Component {
     Object.keys(images).map(i => {
       console.log('images[i]', 'i', i, 'file', images[i].file, images[i].progress)
 
-      var uploadTask= storage.ref().child('images').child(images[i].file.name).put(images[i].file)
+      if (images[i].progress == '100') {
+         return
+      }
+      var uploadTask= storage.ref().child('images').child(teacherId).child('<course></course>').child(images[i].file.name).put(images[i].file)
       uploadTask.on('state_changed', (snapshot) => {
         // console.log('snapshot', snapshot.bytesTransferred);
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -124,9 +133,9 @@ class CourseEdit extends Component {
            }
       }, () => {
         var downloadURL = uploadTask.snapshot.downloadURL;
-
-          console.log('down', downloadURL);
-          db.doUpdateCourseImages(teacherId, courseId, i, downloadURL, downloadURL, '320', '240', 'catpion', '100')
+        let fileName = images[i].file.name
+        console.log('filename to db', fileName);
+          db.doUpdateCourseImages(teacherId, courseId, i, fileName, downloadURL, downloadURL, '320', '240', 'catpion', '100')
             .then(res => console.log('res', res))
             .catch(error => {
               this.setState(byPropKey('error', error));
@@ -141,9 +150,37 @@ class CourseEdit extends Component {
   }
 
   handleConfirm = () => {
-    const {images, selectedImage} = this.state
-    let newImages = delete images[selectedImage]
-    this.setState({ confirmOpen: false, newImages })
+    const {teacherId, courseId, images, selectedImage} = this.state
+    let fileName = images[selectedImage].fileName
+    console.log('filename', fileName, selectedImage);
+
+    if (!fileName) {
+      // console.log('here', fileName);
+      let newImages = delete images[selectedImage]
+      this.setState({ confirmOpen: false, newImages })
+    } else {
+      // console.log('there');
+      // // Create a reference to the file to delete
+      // var desertRef = storageRef.child('images/desert.jpg');
+      //
+      // // Delete the file
+      // desertRef.delete().then(function() {
+      //   // File deleted successfully
+      // }).catch(function(error) {
+      //   // Uh-oh, an error occurred!
+      // });
+      
+      db.doRemoveCourseImage(teacherId, courseId, selectedImage, fileName)
+        .then(res => {
+          // console.log('res', res)
+          //remove download url
+          let newImages = delete images[selectedImage]
+          this.setState({ confirmOpen: false, newImages })
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error));
+        });
+    }
   }
 
   handleCancel = () => {
@@ -168,7 +205,7 @@ class CourseEdit extends Component {
         // console.log('meta', meta);
         // console.log('curri', curri);
         // console.log('features', features);
-        console.log('dmt images', images);
+        // console.log('dmt images', images);
         const {isLoading } = this.state
         this.setState ({
           courseId: courseId,
