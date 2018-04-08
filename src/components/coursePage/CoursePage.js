@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import CourseMeta from './CourseMeta'
 import CourseFeatures from './CourseFeatures'
+import CourseGallery from './CourseGallery'
 import CourseCurri from './CourseCurri'
 import CourseTeacherSection from './CourseTeacherSection'
 import CourseOpenQ from './CourseOpenQ'
@@ -239,6 +240,7 @@ class CoursePage extends Component {
                       <Grid.Column width={10} >
                           <CourseMeta meta={meta}/>
                           <CourseFeatures features={features}/>
+                          <CourseGallery images={images}/>
                           <CourseCurri curri={renderedHtml}/>
                       </Grid.Column>
                   </Grid>
