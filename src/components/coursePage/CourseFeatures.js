@@ -22,7 +22,7 @@ const CourseFeatures = ({mobile, features}) => {
 
           <Header as="h1" dividing>Course Features</Header>
             {featureList}
-            </Segment>
+          </Segment>
 
         </Grid.Column>
       </Grid.Row>

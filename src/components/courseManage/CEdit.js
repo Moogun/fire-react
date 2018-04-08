@@ -10,6 +10,7 @@ import CEditGallery from './CEditGallery'
 import CEditCurri from './CEditCurri'
 import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
+import {storage} from '../../firebase/firebase';
 
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
@@ -49,7 +50,10 @@ class CourseEdit extends Component {
        notifications: OrderedSet(),
        count: 0,
        key: 0,
-       editorState: createEditorState(), // for empty
+       images: {},
+       confirmOpen: false,
+       selectedImage: null,
+       editorState: createEditorState(),
     };
     this.sideButtons = [{
       title: 'Image',
@@ -62,12 +66,95 @@ class CourseEdit extends Component {
     };
   }
 
+  handleImageChange = (e) => {
+    const {images, key, count} = this.state
+    let newKey = db.newKey();
+    // console.log('handle item change', newKey, images, key, count);
+    console.log(e.target.files[0]);
+    let reader = new FileReader()
+    let file =  e.target.files[0]
+
+    reader.onloadend = () => {
+      // console.log('reader', reader.result);
+      images[newKey] = { file: file, imagePreviewUrl: reader.result, progress: 0}
+      this.setState ({images})
+    }
+
+    if(e.target.files[0]){
+      reader.readAsDataURL(file)
+    }
+  }
+
+  onImageSubmit = () => {
+    console.log('submit clicked');
+    const {images} = this.state
+    const {teacherId, courseId} = this.state
+
+    Object.keys(images).map(i => {
+      console.log('images[i]', 'i', i, 'file', images[i].file, images[i].progress)
+
+      var uploadTask= storage.ref().child('images').child(images[i].file.name).put(images[i].file)
+      uploadTask.on('state_changed', (snapshot) => {
+        // console.log('snapshot', snapshot.bytesTransferred);
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running progress', progress);
+            let roundedProgress = Math.round(progress)
+            images[i].progress = roundedProgress
+            console.log('images[i]', images[i].progress);
+            this.setState ({ images }) //called multiple tiems
+            break;
+          }
+      }, (error) => {
+          switch (error.code) {
+             case 'storage/unauthorized':
+               // User doesn't have permission to access the object
+               break;
+             case 'storage/canceled':
+               // User canceled the upload
+               break;
+             case 'storage/unknown':
+               // Unknown error occurred, inspect error.serverResponse
+               break;
+           }
+      }, () => {
+        var downloadURL = uploadTask.snapshot.downloadURL;
+
+          console.log('down', downloadURL);
+          db.doUpdateCourseImages(teacherId, courseId, i, downloadURL, downloadURL, '320', '240', 'catpion', '100')
+            .then(res => console.log('res', res))
+            .catch(error => {
+              this.setState(byPropKey('error', error));
+            })
+      })
+    })
+  }
+
+  show = (id) => {
+    console.log(id);
+    this.setState ({ confirmOpen: true, selectedImage: id})
+  }
+
+  handleConfirm = () => {
+    const {images, selectedImage} = this.state
+    let newImages = delete images[selectedImage]
+    this.setState({ confirmOpen: false, newImages })
+  }
+
+  handleCancel = () => {
+    this.setState({ confirmOpen: false })
+  }
   //life cycle
   componentDidMount() {
 
     const {isLoading } = this.state
     const {match} = this.props
-    console.log('did mount 1 ', 'beforeIsLoading')
+    // console.log('did mount 1 ', 'beforeIsLoading')
     this.setState({isLoading: !isLoading})
 
     let courseId = match.params.cid
@@ -77,11 +164,11 @@ class CourseEdit extends Component {
         let meta = course.metadata
         let curri = course.curri
         let features = course.features
-        let images = course.images
-        console.log('meta', meta);
-        console.log('curri', curri);
-        console.log('features', features);
-        console.log('curri', images);
+        let images = course.images ? course.images : {}
+        // console.log('meta', meta);
+        // console.log('curri', curri);
+        // console.log('features', features);
+        console.log('dmt images', images);
         const {isLoading } = this.state
         this.setState ({
           courseId: courseId,
@@ -308,20 +395,21 @@ class CourseEdit extends Component {
   }
 
   render() {
-    console.log('render', 1);
     const {activeItem, isLoading,
       courseId, title, subTitle, teacherName, teacherId, teacherPhoto,
       textbook, date, time, location,
       curri,
       openCourse, password, isPublished,
-      features, images,
+      features,
       editorState,
+      images, confirmOpen, selectedImage, show, handleConfirm, handleCancel,
     } = this.state
     const {match} = this.props
 
     // console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse, isLoading);
     // console.log('is loading render', isLoading );
-    console.log('render 1 ', 'features', !!features)
+    // console.log('render 1 ', 'features', !!features)
+    console.log('render 1 ', 'images', images)
     return (
       <Segment basic loading={isLoading} style={CEditBody}>
 
@@ -430,6 +518,13 @@ class CourseEdit extends Component {
                         courseId={courseId}
                         teacherId={teacherId}
                         images={images}
+                        handleImageChange={this.handleImageChange}
+                        submit={this.onImageSubmit}
+                        confirmOpen={confirmOpen}
+                        selectedImage={selectedImage}
+                        show={this.show}
+                        handleConfirm={this.handleConfirm}
+                        handleCancel={this.handleCancel}
                         // change={this.handleInputChange}
                         // submit={this.onInfoSubmit}
                       /> }/>

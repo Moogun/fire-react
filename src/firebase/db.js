@@ -219,11 +219,22 @@ export const doImgUpload = (file, name) => {
   var uploadTask = storage.ref().child('images').child(name).put(file)
 }
 
-export const doUpdateCourseImages = (tid, cid, newKey, downloadsUrl) => {
+export const doUpdateCourseImages = (tid, cid, newKey, downloadUrl, thumbnail, thumbnailWidth, thumbnailHeight, catpion, progress) => {
 
   var updates = {}
-    updates[`courses/${cid}/images/${newKey}`] = downloadsUrl
-    updates[`teaching/${tid}/${cid}/images/${newKey}`] = downloadsUrl
+    updates[`courses/${cid}/images/${newKey}/src`] = downloadUrl
+    updates[`courses/${cid}/images/${newKey}/thumbnail`] = downloadUrl
+    updates[`courses/${cid}/images/${newKey}/thumbnailWidth`] = thumbnailWidth
+    updates[`courses/${cid}/images/${newKey}/thumbnailHeight`] = thumbnailHeight
+    updates[`courses/${cid}/images/${newKey}/catpion`] = catpion
+    updates[`courses/${cid}/images/${newKey}/progress`] = progress
+
+    updates[`teaching/${tid}/${cid}/images/${newKey}/src`] = downloadUrl
+    updates[`teaching/${tid}/${cid}/images/${newKey}/thumbnail`] = downloadUrl
+    updates[`teaching/${tid}/${cid}/images/${newKey}/thumbnailWidth`] = thumbnailWidth
+    updates[`teaching/${tid}/${cid}/images/${newKey}/thumbnailHeight`] = thumbnailHeight
+    updates[`teaching/${tid}/${cid}/images/${newKey}/catpion`] = catpion
+    updates[`teaching/${tid}/${cid}/images/${newKey}/progress`] = progress
   return db.ref().update(updates)
 }
 
