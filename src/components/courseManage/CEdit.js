@@ -134,12 +134,12 @@ class CourseEdit extends Component {
         var downloadURL = uploadTask.snapshot.downloadURL;
         let fileName = images[i].file.name
         // console.log('filename to db', fileName);
-          db.doUpdateCourseImages(teacherId, courseId, i, fileName, downloadURL, downloadURL, '320', '240', 'catpion', '100')
+          db.doUpdateCourseImages(teacherId, courseId, i, fileName, downloadURL, downloadURL, 320, 240, 'catpion', 100)
             .then(res => {
               // console.log('1 after uploading success images', images);
               const { images } = this.state
               // console.log('2 after uploading success images', images);
-              images[i] = { caption: 'file', fileName: fileName, src: downloadURL, progress: 100, thumbnail: downloadURL, thumbnailHeight: '240', thumbnailWidth: '320'}
+              images[i] = { caption: 'file', fileName: fileName, src: downloadURL, progress: 100, thumbnail: downloadURL, thumbnailHeight: 240, thumbnailWidth: 320}
               // console.log('update image success', res)
               this.setState ({ images })
               // console.log('3 after uploading success images', images);
