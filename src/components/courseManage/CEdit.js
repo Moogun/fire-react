@@ -102,7 +102,7 @@ class CourseEdit extends Component {
       if (images[i].progress == '100') {
          return
       }
-      var uploadTask= storage.ref().child('images').child(teacherId).child('<course></course>').child(images[i].file.name).put(images[i].file)
+      var uploadTask= storage.ref().child('images').child(teacherId).child('course').child(images[i].file.name).put(images[i].file)
       uploadTask.on('state_changed', (snapshot) => {
         // console.log('snapshot', snapshot.bytesTransferred);
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -115,7 +115,6 @@ class CourseEdit extends Component {
             console.log('Upload is running progress', progress);
             let roundedProgress = Math.round(progress)
             images[i].progress = roundedProgress
-            console.log('images[i]', images[i].progress);
             this.setState ({ images }) //called multiple tiems
             break;
           }
@@ -134,9 +133,17 @@ class CourseEdit extends Component {
       }, () => {
         var downloadURL = uploadTask.snapshot.downloadURL;
         let fileName = images[i].file.name
-        console.log('filename to db', fileName);
+        // console.log('filename to db', fileName);
           db.doUpdateCourseImages(teacherId, courseId, i, fileName, downloadURL, downloadURL, '320', '240', 'catpion', '100')
-            .then(res => console.log('res', res))
+            .then(res => {
+              // console.log('1 after uploading success images', images);
+              const { images } = this.state
+              // console.log('2 after uploading success images', images);
+              images[i] = { caption: 'file', fileName: fileName, src: downloadURL, progress: 100, thumbnail: downloadURL, thumbnailHeight: '240', thumbnailWidth: '320'}
+              // console.log('update image success', res)
+              this.setState ({ images })
+              // console.log('3 after uploading success images', images);
+            })
             .catch(error => {
               this.setState(byPropKey('error', error));
             })
@@ -159,23 +166,23 @@ class CourseEdit extends Component {
       let newImages = delete images[selectedImage]
       this.setState({ confirmOpen: false, newImages })
     } else {
-      // console.log('there');
-      // // Create a reference to the file to delete
-      // var desertRef = storageRef.child('images/desert.jpg');
-      //
-      // // Delete the file
-      // desertRef.delete().then(function() {
-      //   // File deleted successfully
-      // }).catch(function(error) {
-      //   // Uh-oh, an error occurred!
-      // });
-      
-      db.doRemoveCourseImage(teacherId, courseId, selectedImage, fileName)
+      console.log('there');
+      // Create a reference to the file to delete
+      var desertRef =  storage.ref().child('images').child(teacherId).child('course').child(fileName)
+      console.log('desertRef', desertRef);
+      // Delete the file
+      desertRef.delete()
         .then(res => {
-          // console.log('res', res)
-          //remove download url
-          let newImages = delete images[selectedImage]
-          this.setState({ confirmOpen: false, newImages })
+          db.doRemoveCourseImage(teacherId, courseId, selectedImage, fileName)
+            .then(res => {
+              // console.log('res', res)
+              //remove download url
+              let newImages = delete images[selectedImage]
+              this.setState({ confirmOpen: false, newImages })
+            })
+            .catch(error => {
+              this.setState(byPropKey('error', error));
+            });
         })
         .catch(error => {
           this.setState(byPropKey('error', error));
