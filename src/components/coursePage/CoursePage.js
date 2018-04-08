@@ -7,6 +7,7 @@ import CourseCurri from './CourseCurri'
 import CourseTeacherSection from './CourseTeacherSection'
 import CourseOpenQ from './CourseOpenQ'
 import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item, Modal, Form, Input, Icon } from 'semantic-ui-react'
+import profile from '../../assets/profile-lg.png'
 
 import {Link, withRouter} from 'react-router-dom';
 import {db} from '../../firebase';
@@ -29,6 +30,8 @@ const fixedMenuStyle = {
   boxShadow: '0px 1px rgba(0,0,0, 0.2)',
 }
 
+const textColor = {color: '#fff'}
+
 const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
 })
@@ -39,6 +42,7 @@ class CoursePage extends Component {
   constructor(props){
     super(props)
     this.state = {
+      subTitle: '',
       menuFixed: false,
       openCourse: false,
       modalOpen: false,
@@ -68,6 +72,7 @@ class CoursePage extends Component {
           console.log('course', course);
           this.setState ({
             tid: course.metadata.tid,
+            subTitle: course.metadata.subTitle,
             tName: course.metadata.tName,
             tEmail: course.metadata.tEmail,
             tProfileImg: course.metadata.tProfileImg,
@@ -76,6 +81,8 @@ class CoursePage extends Component {
             openCourse: course.metadata.openCourse,
             coursePass: course.metadata.password,
             attendee: course.attendee,
+            features: course.features,
+            images: course.images,
           })
 
           let curri = course.curri
@@ -147,9 +154,11 @@ class CoursePage extends Component {
     // const {menuFixed} = this.state
     const {tName, cTitle,} = this.props.match.params
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
-    let teacher = tName ? tName : 'Teacher'
+    let teacherName = tName ? tName : 'Teacher'
 
-    const { course, cid, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState } = this.state
+    const { course, cid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images } = this.state
+    // let subTitle = subTitle ? subTitle : ''
+    let teacherProfile = tProfileImg ? tProfileImg : profile
     console.log('c page render course modalOpen', modalOpen);
     console.log('edi state', mediumDraftExporter(editorState.getCurrentContent()) );
     const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
@@ -195,7 +204,6 @@ class CoursePage extends Component {
             <Grid.Column>
 
                 <Grid style={coursePageHeader} stackable centered>
-
                       <Grid.Row
                         style={{ marginTop: '2rem', marginBottom: '2rem'}}
                         >
@@ -206,14 +214,23 @@ class CoursePage extends Component {
                               style={{color: '#fff'}}
                               content={title}
                              />
-                             <Header as='h4' style={{marginTop: '0', color: '#fff'}}>  to be filled with subheader </Header>
+                             <Header as='h4' style={{marginTop: '0', color: '#fff'}}>  {subTitle} </Header>
                              <Header as='h4' style={{marginTop: '0', color: '#fff'}}>   {tName} </Header>
                              {register}
                           </Segment>
-
+                          {/* <Segment basic style={{margin: '0rem'}}>
+                              <Item.Group>
+                                <Item>
+                                  <Item.Image size='tiny' src={teacherProfile} />
+                                  <Item.Content>
+                                    <Item.Header as='h2' style={textColor}>{title}</Item.Header>
+                                    <Item.Header as='h3' style={textColor}>{subTitle}</Item.Header>
+                                    <Item.Meta style={textColor}> {teacherName} </Item.Meta>
+                                  </Item.Content>
+                                </Item>
+                              </Item.Group>
+                            </Segment> */}
                         </Grid.Column>
-
-
                       </Grid.Row>
                   </Grid>
 
@@ -221,7 +238,7 @@ class CoursePage extends Component {
                     >
                       <Grid.Column width={10} >
                           <CourseMeta meta={meta}/>
-                          <CourseFeatures/>
+                          <CourseFeatures features={features}/>
                           <CourseCurri curri={renderedHtml}/>
                       </Grid.Column>
                   </Grid>

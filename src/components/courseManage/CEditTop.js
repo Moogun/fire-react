@@ -12,14 +12,16 @@ class CEditTop extends Component {
     };
   }
   render() {
-    const {title, teacherName, isPublished, settingsClick} = this.props
+    const {title, teacherName, teacherPhoto, isPublished, settingsClick} = this.props
+    let teacherProfile = teacherPhoto ? teacherPhoto : profile
     let published = isPublished ? 'published' : 'draft'
+
     return (
       <Grid container verticalAlign='middle'>
         <Grid.Column floated='left' width={5}>
         <Item.Group>
           <Item>
-            <Item.Image size='tiny' src={profile} />
+            <Item.Image size='tiny' src={teacherProfile} />
 
             <Item.Content>
               <Item.Header as='a' style={textColor}>{title}</Item.Header>

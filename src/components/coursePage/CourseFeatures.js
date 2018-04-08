@@ -1,7 +1,19 @@
 import React from 'react'
 import { Segment, Grid, Header } from 'semantic-ui-react'
 
-const CourseFeatures = ({mobile}) => {
+const CourseFeatures = ({mobile, features}) => {
+  // console.log('features', features && Object.keys(features).map(i => features[i].header) )
+
+  let featureList = features ?
+    <Grid stackable doubling columns={2} style={{marginTop: '0em'}}>
+      {Object.keys(features).map(key =>
+        <Grid.Column key={key} >
+          <Header as="h3" attached='top'> {features[key].header}</Header>
+          <Segment attached>{features[key].sub}</Segment>
+        </Grid.Column>
+      )}
+      </Grid>
+    : <p> no feature yet</p>
 
   return (
     <Grid.Row style={{margin: '3em 0em'}}>
@@ -9,29 +21,7 @@ const CourseFeatures = ({mobile}) => {
         <Segment basic>
 
           <Header as="h1" dividing>Course Features</Header>
-             <Grid columns={2} stackable doubling>
-
-              <Grid.Column>
-                <Header as="h2" attached='top'>something</Header>
-                <Segment attached> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas nulla, omnis. Libero laboriosam delectus, recusandae, quo neque quisquam molestiae ut!</Segment>
-              </Grid.Column>
-
-              <Grid.Column>
-                <Header as="h2" attached='top'>something</Header>
-                <Segment attached> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas nulla, omnis. Libero laboriosam delectus, recusandae, quo neque quisquam molestiae ut!</Segment>
-              </Grid.Column>
-
-              <Grid.Column>
-                <Header as="h2" attached='top'>something</Header>
-                <Segment attached> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas nulla, omnis. Libero laboriosam delectus, recusandae, quo neque quisquam molestiae ut!</Segment>
-              </Grid.Column>
-
-              <Grid.Column>
-                <Header as="h2" attached='top'>something</Header>
-                <Segment attached> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas nulla, omnis. Libero laboriosam delectus, recusandae, quo neque quisquam molestiae ut!</Segment>
-              </Grid.Column>
-
-              </Grid>
+            {featureList}
             </Segment>
 
         </Grid.Column>

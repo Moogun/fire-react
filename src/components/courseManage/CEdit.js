@@ -310,7 +310,7 @@ class CourseEdit extends Component {
   render() {
     console.log('render', 1);
     const {activeItem, isLoading,
-      courseId, title, subTitle, teacherName, teacherId,
+      courseId, title, subTitle, teacherName, teacherId, teacherPhoto,
       textbook, date, time, location,
       curri,
       openCourse, password, isPublished,
@@ -332,7 +332,7 @@ class CourseEdit extends Component {
             <Grid >
               <Grid.Column style={CEditTitleBg}>
                 <CEditTop
-                  title={title} teacherName={teacherName} teacherId={teacherId} isPublished={isPublished}
+                  title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
                   settingsClick={this.handleSettingsClick}/>
               </Grid.Column>
             </Grid>
