@@ -17,12 +17,42 @@ export const doCreateUser = (id, username, email, providerName, photoURL) =>
 export const doUpdateUserProfile = (uid, username, displayName) =>
   {
     let lowercaseUsername = username.toLowerCase()
+    console.log('uid, username, displayName', uid, username, displayName)
+    const teachingList = db.ref(`teachingList/${uid}`)
 
-    return db.ref(`users/${uid}`).update({
-    username,
-    displayName,
-    lowercaseUsername,
-  });}
+    return teachingList.once('value').then(snap => {
+      let updateObj = {}
+      if (snap.val()) {
+        console.log('db t list snap4');
+        let cList = Object.keys(snap.val())
+        console.log('db t list snap5');
+        cList.forEach(cid => {
+          updateObj[`teaching/${uid}/${cid}/metadata/tName`] = username
+          updateObj[`teaching/${uid}/${cid}/metadata/lowercaseUsername`] = lowercaseUsername
+          updateObj[`teaching/${uid}/${cid}/metadata/displayName`] = displayName
+          updateObj[`courses/${cid}/metadata/tName`] = username
+          updateObj[`courses/${cid}/metadata/lowercaseUsername`] = lowercaseUsername
+          updateObj[`courses/${cid}/metadata/displayName`] = displayName
+        })
+        console.log('db t list updateObj', updateObj);
+        updateObj[`users/${uid}/username`] = username
+        updateObj[`users/${uid}/lowercaseUsername`] = lowercaseUsername
+        updateObj[`users/${uid}/displayName`] = displayName
+        console.log('db t list updateObj', updateObj);
+      }
+
+      updateObj[`users/${uid}/username`] = username
+      updateObj[`users/${uid}/lowercaseUsername`] = lowercaseUsername
+      updateObj[`users/${uid}/displayName`] = displayName
+      console.log('db t list updateObj', updateObj);
+      return db.ref().update(updateObj)
+    })
+  //   return db.ref(`users/${uid}`).update({
+  //   username,
+  //   displayName,
+  //   lowercaseUsername,
+  // })
+}
 
 export const doUpdateUserPhoto = (uid, downloadURL) =>
   db.ref(`users/${uid}/`).update({ photoUrl: downloadURL })

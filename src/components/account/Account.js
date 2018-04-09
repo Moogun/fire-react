@@ -66,11 +66,11 @@ class AccountPage extends Component {
     const { uid, username, displayName} = this.state
     db.doSearchForUsername(username)
       .then(res => {
-        console.log('res', res)
+        console.log('res', res.val())
         if (res.val() === null) {
           db.doUpdateUserProfile(uid, username, displayName)
             .then(res => {
-              console.log('res', res)
+              console.log('res update user profile', res)
               this.setState ({ buttonContent: 'Saved'})
             })
             .catch(error => {
@@ -156,7 +156,7 @@ class AccountPage extends Component {
 
   render() {
     const {match} = this.props
-    console.log('account props',this.props.match, this.props.user);
+    // console.log('account props',this.props.match, this.props.user);
     // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
     const { activeItem, user, email, username, displayName, photoUrl, usernameTaken, images } = this.state
