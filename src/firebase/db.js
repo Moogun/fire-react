@@ -236,9 +236,14 @@ export const doFetchTeaching = (tid) => {
 export const doEnrollInCourse = (tid, cid, password, uid) => {
   console.log('db', tid, cid, password, uid);
   var updates = {}
-  updates[`attending/${tid}/${cid}/attendee/${uid}`] = 1
+  // updates[`attending/${tid}/${cid}/attendee/${uid}`] = 1
+  updates[`attendingList/${uid}/${cid}`] = true
+  updates[`teaching/${tid}/${cid}/attendee/${uid}`] = true
+  updates[`courses/${cid}/attendee/${uid}`] = true
   return db.ref().update(updates)
 }
+
+
 
 export const doSaveNewQ = (tid, cid, askedBy, title, text, createdAt, img) => {
   console.log('db', tid, cid, askedBy, title, text, createdAt, img);

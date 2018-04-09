@@ -85,7 +85,8 @@ class CoursePage extends Component {
             features: course.features,
             images: course.images,
           })
-
+          const {tid, cid} = this.state
+          console.log('tid, cid', tid, cid);
           let curri = course.curri
           console.log('curri', curri);
           this.onChange(createEditorState(JSON.parse(curri)))
@@ -96,26 +97,21 @@ class CoursePage extends Component {
 
   }
 
-  handleRoute = () => {
-      const {tName,} = this.props.match.params
-      this.props.history.push('/teacher' + '/' + tName)
-  }
-
-  onSubmit = (event) => {
+  handleRegisterSubmit = (event) => {
     const {openCourse} = this.state;
-
+    console.log('handleRegisterSubmit open course?', openCourse);
     if (openCourse) {
       //register
       console.log('on submit openCourse', openCourse);
       // route to teacher page ? to ask a question ?
     } else {
       console.log('on submit closed Course', openCourse);
-      this.handleRegister()
+      this.handleRegisterForClosed()
     }
       event.preventDefault();
   }
 
-  handleRegister () {
+  handleRegisterForClosed () {
     const {tid, cid, coursePass, password} = this.state;
     let uid = this.context.authUser.uid
     console.log('register', tid, cid, coursePass, password, uid);
@@ -123,7 +119,7 @@ class CoursePage extends Component {
       db.doEnrollInCourse(tid, cid, password, uid)
         .then(res => {
           console.log('enroll in res succedded ', res);
-          this.handleModalClose()
+          this.handleRegisterModalClose ()
         })
         .catch(error => {
           this.setState(byPropKey('error', error))
@@ -133,19 +129,27 @@ class CoursePage extends Component {
     }
   }
 
-  handleModalOpen = () => {
-    console.log('modal open');
-    this.setState({ modalOpen: true })
+  handleRegisterForOpenCourse = () => {
+    console.log('handleRegisterForOpenCourse');
+    const {tid, cid} = this.state;
+    let uid = this.context.authUser.uid
+    console.log('register', tid, cid, uid);
+      db.doEnrollInCourse(tid, cid, '', uid)
+        .then(res => {
+          console.log('enroll in res succedded ', res);
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error))
+        })
   }
 
-  handleModalClose = () => {
-    console.log('modal close');
-    this.setState({ modalOpen: false })
-  }
+  handleRegisterModalOpen = () => this.setState({ modalOpen: true })
 
-  handleClick = () => {
+  handleRegisterModalClose  = () => this.setState({ modalOpen: false })
+
+  handleNavToTeacher = () => {
     const {tName, cTitle,} = this.props.match.params
-    this.props.history.push({pathname: '/' + 'teacher' + '/' + tName})
+    this.props.history.push({pathname: '/' + 'teacher' + '/' + tName })
   }
 
   // componentWillReceiveProps(nextProps){
@@ -156,35 +160,36 @@ class CoursePage extends Component {
   //   console.log('should Component Update', nextProps, nextState);
   //   return true
   // }
-
+  componentWillUnMount(){
+    console.log('UnMount');
+  }
   render() {
     // const {menuFixed} = this.state
+    console.log('render');
     const {tName, cTitle,} = this.props.match.params
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacherName = tName ? tName : 'Teacher'
 
     const { course, cid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images } = this.state
-    // let subTitle = subTitle ? subTitle : ''
-    let teacherProfile = tProfileImg ? tProfileImg : profile
-    console.log('c page render course modalOpen', modalOpen);
-    // console.log('edi state', mediumDraftExporter(editorState.getCurrentContent()) );
-    const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
 
+    let teacherProfile = tProfileImg ? tProfileImg : profile
+
+    const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
 
     let meta = course ? course.metadata : null
 
     let lock = openCourse ? 'unlock' : 'lock'
 
-    let register = openCourse ? <Button icon={lock} content='Register' onClick={this.handleModalOpen} />
+    let register = openCourse ? <Button icon={lock} content='Register' onClick={this.handleRegisterForOpenCourse} />
     : <Modal size='mini'
-        trigger={<Button icon={lock} content='Register' onClick={this.handleModalOpen}/>}
+        trigger={<Button icon={lock} content='Register' onClick={this.handleRegisterModalOpen}/>}
         open={modalOpen}
-        onClose={this.handleModalClose}
+        onClose={this.handleRegisterModalClose }
       >
        <Modal.Header>Enter the password </Modal.Header>
        <Modal.Content image>
          <Modal.Description>
-           <Form onSubmit={this.onSubmit}>
+           <Form onSubmit={this.handleRegisterSubmit}>
              <Form.Field>
                <Input
                    icon='lock'
@@ -221,7 +226,7 @@ class CoursePage extends Component {
                               content={title}
                              />
                              <Header as='h4' style={{marginTop: '0', color: '#fff'}}>  {subTitle} </Header>
-                             <Header as='h4' style={{marginTop: '0', color: '#fff'}}>   {tName} </Header>
+                             <Header as='h4' style={{marginTop: '0', color: '#fff'}} onClick={this.handleNavToTeacher}>  {tName} </Header>
                              {register}
                           </Segment>
                           {/* <Segment basic style={{margin: '0rem'}}>

@@ -38,33 +38,33 @@ class MyCourses extends Component {
 
       let myCourses = []
 
-      db.onceGetUser(authUser.uid)
-        .then(userSnap => {
-          console.log('user snap', userSnap.val())
-
-          let cAttending = userSnap.val().courseAttending
-
-          if (cAttending) {
-            Object.keys(cAttending).map(key => {
-              db.onceGetCourse(key)
-                .then(res => {
-                  console.log('get course', res.val());
-                  let course = res.val()
-                  let tid = res.val().metadata.teacherId
-                  // console.log('return', this.handleFetchTeacher(tid))
-                  db.onceGetUser(tid)
-                    .then(res => {
-                      console.log('res teacher', res.val())
-                      let tName = res.val().username
-                      course.metadata.username = tName
-                      console.log('c meta username',course.metadata.username)
-                      myCourses.push(course)
-                      this.setState ({attendingCourses: myCourses})
-                    })
-                })
-            })
-          }
-        })
+        // db.onceGetUser(authUser.uid)
+        // .then(userSnap => {
+        //   console.log('user snap', userSnap.val())
+        //
+        //   let cAttending = userSnap.val().courseAttending
+        //
+        //   if (cAttending) {
+        //     Object.keys(cAttending).map(key => {
+        //       db.onceGetCourse(key)
+        //         .then(res => {
+        //           console.log('get course', res.val());
+        //           let course = res.val()
+        //           let tid = res.val().metadata.teacherId
+        //           // console.log('return', this.handleFetchTeacher(tid))
+        //           db.onceGetUser(tid)
+        //             .then(res => {
+        //               console.log('res teacher', res.val())
+        //               let tName = res.val().username
+        //               course.metadata.username = tName
+        //               console.log('c meta username',course.metadata.username)
+        //               myCourses.push(course)
+        //               this.setState ({attendingCourses: myCourses})
+        //             })
+        //         })
+        //     })
+        //   }
+        // })
     }
   }
 
@@ -145,7 +145,6 @@ class MyCourses extends Component {
                                 active={activeItem === 'announcement'}
                                 onClick={this.handleItemClick} />
                             </Menu>
-
 
                       </Grid.Column>
                     </Grid.Row>
