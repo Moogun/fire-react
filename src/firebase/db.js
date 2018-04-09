@@ -34,11 +34,11 @@ export const doUpdateUserProfile = (uid, username, displayName) =>
           updateObj[`courses/${cid}/metadata/lowercaseUsername`] = lowercaseUsername
           updateObj[`courses/${cid}/metadata/displayName`] = displayName
         })
-        console.log('db t list updateObj', updateObj);
-        updateObj[`users/${uid}/username`] = username
-        updateObj[`users/${uid}/lowercaseUsername`] = lowercaseUsername
-        updateObj[`users/${uid}/displayName`] = displayName
-        console.log('db t list updateObj', updateObj);
+        // console.log('db t list updateObj', updateObj);
+        // updateObj[`users/${uid}/username`] = username
+        // updateObj[`users/${uid}/lowercaseUsername`] = lowercaseUsername
+        // updateObj[`users/${uid}/displayName`] = displayName
+        // console.log('db t list updateObj', updateObj);
       }
 
       updateObj[`users/${uid}/username`] = username
@@ -55,7 +55,27 @@ export const doUpdateUserProfile = (uid, username, displayName) =>
 }
 
 export const doUpdateUserPhoto = (uid, downloadURL) =>
-  db.ref(`users/${uid}/`).update({ photoUrl: downloadURL })
+  {
+    const teachingList = db.ref(`teachingList/${uid}`)
+
+    return teachingList.once('value').then(snap => {
+      let updateObj = {}
+      if (snap.val()) {
+        console.log('db t list snap4');
+        let cList = Object.keys(snap.val())
+        console.log('db t list snap5');
+        cList.forEach(cid => {
+          updateObj[`teaching/${uid}/${cid}/metadata/tProfileImg`] = downloadURL
+          updateObj[`courses/${cid}/metadata/tProfileImg`] = downloadURL
+        })
+      }
+
+        updateObj[`users/${uid}/photoUrl`] = downloadURL
+      return db.ref().update(updateObj)
+    })
+
+    // db.ref(`users/${uid}/`).update({ photoUrl: downloadURL })
+  }
 
 
 export const doSearchForUsername = (queryText) =>

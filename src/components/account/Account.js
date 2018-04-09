@@ -146,7 +146,7 @@ class AccountPage extends Component {
         var downloadURL = uploadTask.snapshot.downloadURL;
           console.log('down', downloadURL);
           db.doUpdateUserPhoto(uid, downloadURL)
-             .then(res => console.log('res', res))
+             .then(res => this.setState ({photoUrl: downloadURL }))
              .catch(error => {
                this.setState(byPropKey('error', error));
              })
