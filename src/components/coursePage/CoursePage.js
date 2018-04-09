@@ -133,23 +133,29 @@ class CoursePage extends Component {
     }
   }
 
-  handleModalOpen = () => this.setState({ modalOpen: true })
+  handleModalOpen = () => {
+    console.log('modal open');
+    this.setState({ modalOpen: true })
+  }
 
-  handleModalClose = () => this.setState({ modalOpen: false })
+  handleModalClose = () => {
+    console.log('modal close');
+    this.setState({ modalOpen: false })
+  }
 
   handleClick = () => {
     const {tName, cTitle,} = this.props.match.params
     this.props.history.push({pathname: '/' + 'teacher' + '/' + tName})
   }
 
-  componentWillReceiveProps(nextProps){
-    console.log('will receive props', nextProps);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('should Component Update', nextProps, nextState);
-    return true
-  }
+  // componentWillReceiveProps(nextProps){
+  //   console.log('will receive props', nextProps);
+  // }
+  //
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('should Component Update', nextProps, nextState);
+  //   return true
+  // }
 
   render() {
     // const {menuFixed} = this.state
@@ -161,7 +167,7 @@ class CoursePage extends Component {
     // let subTitle = subTitle ? subTitle : ''
     let teacherProfile = tProfileImg ? tProfileImg : profile
     console.log('c page render course modalOpen', modalOpen);
-    console.log('edi state', mediumDraftExporter(editorState.getCurrentContent()) );
+    // console.log('edi state', mediumDraftExporter(editorState.getCurrentContent()) );
     const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
 
 
@@ -171,11 +177,10 @@ class CoursePage extends Component {
 
     let register = openCourse ? <Button icon={lock} content='Register' onClick={this.handleModalOpen} />
     : <Modal size='mini'
-        trigger={<Button icon={lock} content='Register'
-        onClick={this.handleModalOpen}
+        trigger={<Button icon={lock} content='Register' onClick={this.handleModalOpen}/>}
         open={modalOpen}
         onClose={this.handleModalClose}
-      />}>
+      >
        <Modal.Header>Enter the password </Modal.Header>
        <Modal.Content image>
          <Modal.Description>

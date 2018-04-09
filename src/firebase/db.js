@@ -137,6 +137,8 @@ export const doUpdateTeaching = (title, tid, tEmail, tName, tDisplayName, tProfi
   updates[`teaching/${tid}/${cid}/metadata/tProfileImg`] = tProfileImg
   updates[`teaching/${tid}/${cid}/metadata/isPublished`] = false
   updates[`teaching/${tid}/${cid}/metadata/readyToPublish`] = false
+
+  updates[`teachingList/${tid}/${cid}`] = true
   return db.ref().update(updates)
 }
 

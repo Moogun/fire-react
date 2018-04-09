@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+  import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {db} from '../../firebase';
 import CourseCards from '../courses/CourseCards'
@@ -119,7 +119,7 @@ class MyCourses extends Component {
               {/* <Responsive minWidth={320}>
                 <Visibility onUpdate={this.handleUpdate}> */}
                   <Grid
-                    style={dashboardHeader} 
+                    style={dashboardHeader}
                     centered>
                     <Grid.Row>
                       <Grid.Column width={12}>
@@ -162,14 +162,12 @@ class MyCourses extends Component {
                         </Switch> */}
                         {/* <CourseCards courses={attendingCourses}/> */}
 
-                        <Card>
+                        {/* <Card>
                             <Card.Content>
-                             <a>
-                             {/* <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' /> */}
-                               <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
+                             <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' />
+                              <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
                               <Card.Header> Steve Sanders</Card.Header>
                               <Card.Meta> Friends of Elliot </Card.Meta>
-                              </a>
                             </Card.Content>
 
                             <Card.Content extra>
@@ -181,52 +179,8 @@ class MyCourses extends Component {
                             <Card.Content extra>
                               <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
                             </Card.Content>
-                          </Card>
+                          </Card> */}
 
-                          <Card>
-                              <Card.Content>
-                               <a>
-                               {/* <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' /> */}
-                                 <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
-                                <Card.Header> Steve Sanders</Card.Header>
-                                <Card.Meta> Friends of Elliot </Card.Meta>
-                                </a>
-                              </Card.Content>
-
-                              <Card.Content extra>
-                                <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
-                              </Card.Content>
-                            </Card>
-
-                            <Card>
-                                <Card.Content>
-                                 <a>
-                                 {/* <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' /> */}
-                                   <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
-                                  <Card.Header> Steve Sanders</Card.Header>
-                                  <Card.Meta> Friends of Elliot </Card.Meta>
-                                  </a>
-                                </Card.Content>
-
-                                <Card.Content extra>
-                                  <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
-                                </Card.Content>
-                              </Card>
-
-                              <Card>
-                                  <Card.Content>
-                                   <a>
-                                   {/* <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' /> */}
-                                     <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
-                                    <Card.Header> Steve Sanders</Card.Header>
-                                    <Card.Meta> Friends of Elliot </Card.Meta>
-                                    </a>
-                                  </Card.Content>
-
-                                  <Card.Content extra>
-                                    <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
-                                  </Card.Content>
-                                </Card>
 
                       </Grid.Column>
                     </Grid.Row>
