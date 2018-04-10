@@ -2,26 +2,13 @@ import React, {Component} from 'react'
 import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import * as routes from '../../constants/routes';
+import * as style from '../../style/inline';
 
 import CourseCards from '../courses/CourseCards'
 import CourseTeaching from './CourseTeaching'
 import QPanel from './QPanel'
 import {db} from '../../firebase';
-import { Grid, Header, Menu, Visibility, Responsive, Segment  } from 'semantic-ui-react'
-
-const DASHBOARD_HEAD = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
-const DASHBOARD_HEADER = {color: '#fff'}
-
-const DASHBOARD_MENU = {borderColor: '#2980b9'}
-const DASHBOARD_MENU_ITEM = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
-const DASHBOARD_BODY = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
-
-const DASHBOARD_HEAD_M = {  marginTop: '0rem', paddingTop: '0rem', backgroundColor: '#2980b9'}
-const DASHBOARD_HEADER_M = {color: '#fff', marginBottom: '0'}
-
-const DASHBOARD_MENU_M = {borderColor: '#2980b9', marginTop: '0rem'}
-const DASHBOARD_MENU_ITEMMobile = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
-const DASHBOARD_BODYMobile = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
+import { Grid, Header, Menu, Visibility, Responsive, Segment } from 'semantic-ui-react'
 
 class Dashboard extends Component {
 
@@ -109,42 +96,40 @@ class Dashboard extends Component {
           <Grid.Row>
             <Grid.Column>
 
-              {/* <Responsive minWidth={320}>
-                <Visibility onUpdate={this.handleUpdate}> */}
                 <Responsive {...Responsive.onlyComputer}>
-                  <Grid style={DASHBOARD_HEAD} centered>
+                  <Grid style={style.DASHBOARD_HEAD} centered>
                       <Grid.Row>
                         <Grid.Column width={12}>
 
-                            <Header as='h1' style={DASHBOARD_HEADER}>Dashboard</Header>
+                            <Header as='h1' style={style.DASHBOARD_HEADER}>Dashboard</Header>
 
                             <Menu size='small' secondary pointing inverted
-                              style={DASHBOARD_MENU} >
+                              style={style.DASHBOARD_MENU} >
                                 <Menu.Item name='courses'
                                   active={activeItem === 'courses'}
                                   onClick={this.handleItemClick}
                                   as={Link} to={`${match.url}/courses`}
-                                  style={DASHBOARD_MENU_ITEM}
+                                  style={style.DASHBOARD_MENU_ITEM}
                                 />
                                 <Menu.Item
                                   name='questions'
                                   active={activeItem === 'questions'}
                                   onClick={this.handleItemClick}
                                   as={Link} to={`${match.url}/questions`}
-                                  style={DASHBOARD_MENU_ITEM}
+                                  style={style.DASHBOARD_MENU_ITEM}
                                 />
                                 <Menu.Item
                                   name='announcement'
                                   active={activeItem === 'announcement'}
                                   onClick={this.handleItemClick}
-                                  style={DASHBOARD_MENU_ITEM}
+                                  style={style.DASHBOARD_MENU_ITEM}
                                 />
                               </Menu>
 
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-                    <Grid style={DASHBOARD_BODY} centered>
+                    <Grid style={style.DASHBOARD_BODY} centered>
                       <Grid.Row>
                         <Grid.Column width={12}>
 
@@ -163,67 +148,71 @@ class Dashboard extends Component {
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-                    {/* </Visibility>
-                    </Responsive> */}
+
                 </Responsive>
 
               <Responsive {...Responsive.onlyMobile} >
-                <Grid style={DASHBOARD_HEAD_M} centered>
+
+                <Grid style={style.DASHBOARD_HEAD_M}>
                     <Grid.Row>
-                      <Grid.Column width={15}>
+                      <Grid container>
+                          <Grid.Column >
 
-                          <Header as='h1' style={DASHBOARD_HEADER_M}>Dashboard</Header>
+                              <Header as='h1' style={style.DASHBOARD_HEADER_M}>Dashboard</Header>
 
-                          <Menu size='small' secondary pointing inverted
-                            style={DASHBOARD_MENU_M} >
-                              <Menu.Item name='courses'
-                                active={activeItem === 'courses'}
-                                onClick={this.handleItemClick}
-                                as={Link} to={`${match.url}/courses`}
-                                style={DASHBOARD_MENU_ITEM}
-                              />
-                              <Menu.Item
-                                name='questions'
-                                active={activeItem === 'questions'}
-                                onClick={this.handleItemClick}
-                                as={Link} to={`${match.url}/questions`}
-                                style={DASHBOARD_MENU_ITEM}
-                              />
-                              <Menu.Item
-                                name='announcement'
-                                active={activeItem === 'announcement'}
-                                onClick={this.handleItemClick}
-                                style={DASHBOARD_MENU_ITEM}
-                              />
-                            </Menu>
+                              <Menu size='small' secondary pointing inverted
+                                style={style.DASHBOARD_MENU_M} >
+                                  <Menu.Item name='courses'
+                                    active={activeItem === 'courses'}
+                                    onClick={this.handleItemClick}
+                                    as={Link} to={`${match.url}/courses`}
+                                    style={style.DASHBOARD_MENU_ITEM}
+                                  />
+                                  <Menu.Item
+                                    name='questions'
+                                    active={activeItem === 'questions'}
+                                    onClick={this.handleItemClick}
+                                    as={Link} to={`${match.url}/questions`}
+                                    style={style.DASHBOARD_MENU_ITEM}
+                                  />
+                                  <Menu.Item
+                                    name='announcement'
+                                    active={activeItem === 'announcement'}
+                                    onClick={this.handleItemClick}
+                                    style={style.DASHBOARD_MENU_ITEM}
+                                  />
+                                </Menu>
+                          </Grid.Column>
+                      </Grid>
 
-                      </Grid.Column>
                     </Grid.Row>
                   </Grid>
-                  <Grid style={DASHBOARD_BODY} centered>
-                    <Grid.Row>
-                      <Grid.Column width={15}>
 
-                        <Switch>
-                          <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
-                          <Route path={routes.DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
-                          <Route path={routes.DASHBOARD_Q_PANEL} render = {() => <QPanel
-                            options={selectOption}
-                            questions={questions}
-                            didChooseCourse={this.handleDidChooseCourse}
-                            selectedCourse={cid}
-                            queClick={this.handleQuestionClick}
-                           />} />
-                        </Switch>
+                  <Grid>
+                      <Grid.Row>
+                        <Grid container>
+                            <Grid.Column >
 
-                      </Grid.Column>
+                              <Switch>
+                                <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
+                                <Route path={routes.DASHBOARD_COURSES} render = {(props) =>
+                                  <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
+
+                                <Route path={routes.DASHBOARD_Q_PANEL} render = {() => <QPanel
+                                  options={selectOption}
+                                  questions={questions}
+                                  didChooseCourse={this.handleDidChooseCourse}
+                                  selectedCourse={cid}
+                                  queClick={this.handleQuestionClick}
+                                 />} />
+                              </Switch>
+                            </Grid.Column>
+                      </Grid>
+
                     </Grid.Row>
                   </Grid>
-                  {/* </Visibility>
-                  </Responsive> */}
+
               </Responsive>
-
-
 
             </Grid.Column>
           </Grid.Row>
