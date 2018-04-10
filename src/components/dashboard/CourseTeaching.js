@@ -1,45 +1,72 @@
 import React from 'react'
-import { Table  } from 'semantic-ui-react'
+import { Table, Responsive, Image, List } from 'semantic-ui-react'
+import profile from '../../assets/profile-lg.png'
 
 const CourseTeaching = ({click, courses}) => {
   console.log('course teaching', courses);
-  let courseList = courses ?
-    <Table selectable attached celled textAlign='center'>
-        <Table.Header >
-          <Table.Row >
-            <Table.HeaderCell width={3}>Status</Table.HeaderCell>
-            <Table.HeaderCell width='six'>Title</Table.HeaderCell>
-            <Table.HeaderCell width='six'>Date</Table.HeaderCell>
-            <Table.HeaderCell width='six'>Students Enrolled</Table.HeaderCell>
-            <Table.HeaderCell width='six'>Questions</Table.HeaderCell>
-            <Table.HeaderCell width='six'>reviews</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {Object.keys(courses).map(key =>
-          <Table.Row  key={key} onClick={()=> click(key)}>
-            <Table.Cell textAlign='left' >
-              {courses[key].metadata.isPublished ? <p>Published</p> : <p>draft</p>}
-            </Table.Cell>
-            <Table.Cell textAlign='left' >
-              {courses[key].metadata.title}
-            </Table.Cell>
-            <Table.Cell textAlign='left' >
+  let courseList = courses
+  ? <div>
+    <Responsive {...Responsive.onlyComputer} >
+      <Table selectable attached celled textAlign='center'>
+          <Table.Header >
+            <Table.Row >
+              <Table.HeaderCell width={3}>Status</Table.HeaderCell>
+              <Table.HeaderCell width='six'>Title</Table.HeaderCell>
+              <Table.HeaderCell width='six'>Date</Table.HeaderCell>
+              <Table.HeaderCell width='six'>Students Enrolled</Table.HeaderCell>
+              <Table.HeaderCell width='six'>Questions</Table.HeaderCell>
+              <Table.HeaderCell width='six'>reviews</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {Object.keys(courses).map(key =>
+            <Table.Row  key={key} onClick={()=> click(key)}>
+              <Table.Cell textAlign='left' >
+                {courses[key].metadata.isPublished ? <p>Published</p> : <p>draft</p>}
+              </Table.Cell>
+              <Table.Cell textAlign='left' >
+                {courses[key].metadata.title}
+              </Table.Cell>
+              <Table.Cell textAlign='left' >
+                {courses[key].metadata.date}
+              </Table.Cell>
+              <Table.Cell textAlign='left' >
+                26
+              </Table.Cell>
+              <Table.Cell textAlign='left' >
+                30
+              </Table.Cell>
+              <Table.Cell textAlign='left' >
+                14
+              </Table.Cell>
+            </Table.Row>
+          )}
+        </Table.Body>
+      </Table>
+    </Responsive>
+
+    <Responsive {...Responsive.onlyMobile}>
+      <List divided >
+        {Object.keys(courses).map(key =>
+          <List.Item key={key} onClick={()=> click(key)}>
+
+            <Image src={profile} size='tiny'/>
+
+            <List.Content  verticalAlign='top'>
+              <List.Header>{courses[key].metadata.title}</List.Header>
               {courses[key].metadata.date}
-            </Table.Cell>
-            <Table.Cell textAlign='left' >
-              26
-            </Table.Cell>
-            <Table.Cell textAlign='left' >
-              30
-            </Table.Cell>
-            <Table.Cell textAlign='left' >
-              14
-            </Table.Cell>
-          </Table.Row>
+              {courses[key].metadata.isPublished ? <p>Published</p> : <p>draft</p>}
+            </List.Content>
+
+            <List.Content floated='right' >
+              {courses[key].metadata.openCourse ? <p>Open</p> : <p>Private</p>}
+            </List.Content>
+          </List.Item>
         )}
-      </Table.Body>
-    </Table>
+      </List>
+    </Responsive>
+
+    </div>
     : <p> Looks like you haven't registered any course yet. Register your courses</p>
 
   return (
