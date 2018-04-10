@@ -31,7 +31,7 @@ class CEditGallery extends Component {
 
   render() {
 
-    const {images, confirmOpen, selectedImage, handleImageChange, submit, show, handleConfirm, handleCancel } = this.props
+    const {images, confirmOpen, selectedImage, handleImageChange, submit, removeModalShow, removeConfirm, removeCancel } = this.props
     console.log('rdr c edit gallery imgaes', images);
     return (
       <Segment style={CEditMetaBorder}>
@@ -43,7 +43,7 @@ class CEditGallery extends Component {
               <Grid.Column key={i}>
                 <Dimmer.Dimmable
                     as={Image}
-                    onClick={() => this.props.show(i)}
+                    onClick={() => this.props.removeModalShow(i)}
                     size='medium'
                     src={images[i].src}
                   />
@@ -56,8 +56,8 @@ class CEditGallery extends Component {
               <Confirm
                 open={confirmOpen}
                 content='Remove image?'
-                onCancel={handleCancel}
-                onConfirm={handleConfirm}
+                onCancel={removeCancel}
+                onConfirm={removeConfirm}
               />
 
             </Grid.Column>

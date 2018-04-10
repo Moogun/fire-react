@@ -11,8 +11,8 @@ import {auth} from '../../firebase'
 
 import Dashboard from '../dashboard/Dashboard';
 
-const segmentBorder={padding: '0'}
-const menuBorder={borderRadius: '0', marginBottom: '0'}
+const SEGMENT_BORDER={padding: '0'}
+const MENU_BORDER={borderRadius: '0', marginBottom: '0'}
 
 class MobileContainer extends Component {
   state = {}
@@ -90,7 +90,7 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
             // minHeight: 350,
              padding: '1em 0em'
            }}
-          // style={segmentBorder}
+          // style={SEGMENT_BORDER}
           vertical>
           <Container>
 
@@ -149,7 +149,7 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
 
       <Sidebar.Pusher dimmed={sidebarOpened} onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
         <Segment inverted textAlign='center'
-          style={segmentBorder}
+          style={SEGMENT_BORDER}
           // style={{ minHeight: 350, padding: '1em 0em' }}
           vertical>
           {/* <Container> */}

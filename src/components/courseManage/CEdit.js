@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
-import { Segment,Grid, Menu, Button, Icon, } from 'semantic-ui-react'
+import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header } from 'semantic-ui-react'
 
 import CEditTop from './CEditTop'
 import CEditTitle from './CEditTitle'
@@ -19,9 +19,9 @@ import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
 import { ImageSideButton, Block, addNewBlock, Editor, createEditorState,} from 'medium-draft';
 import 'medium-draft/lib/index.css';
 
-const CEditBody = {backgroundColor: '#ecf0f1', marginTop: '0px', minHeight: '700px'}
-const CEditTitleBg = {backgroundColor: '#2c3e50'}
-const CEditMenu = {marginTop: '4rem'}
+const C_EDIT_HEAD = {backgroundColor: '#2c3e50'}
+const C_EDIT_MENU = {marginTop: '4rem'}
+const C_EDIT_BODY = {backgroundColor: '#ecf0f1', marginTop: '0px', minHeight: '700px'}
 
 const INITIAL_STATE = {
   open: true,
@@ -42,6 +42,9 @@ const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
 })
 
+const SEGMENT_BORDER={padding: '0'}
+const MENU_BORDER={borderRadius: '0'}
+
 class CourseEdit extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +57,7 @@ class CourseEdit extends Component {
        confirmOpen: false,
        selectedImage: null,
        editorState: createEditorState(),
+       visible: false,
     };
     this.sideButtons = [{
       title: 'Image',
@@ -66,6 +70,85 @@ class CourseEdit extends Component {
     };
   }
 
+  //MENU
+  handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
+
+  // course edit
+  handleInputChange = (event) => {
+    this.setState(byPropKey(event.target.name, event.target.value))
+  }
+
+  onTitleSubmit = (e) => {
+    console.log('title submit');
+    const { courseId, teacherId, title, subTitle } = this.state
+    db.doUpdateCourseTitle(teacherId, courseId, title, subTitle)
+      .then(res => {
+        console.log('title submit res', res)
+      }).catch(error => {
+        this.setState(byPropKey('error', error))
+      })
+    e.preventDefault()
+  }
+
+  onInfoSubmit = (event) => {
+    const {courseId, teacherId, textbook, date, time, location, isLoading} = this.state
+    console.log('onInfoSubmit', courseId, teacherId, textbook, date, time, location, isLoading);
+    this.setState({isLoading: !isLoading})
+
+    db.doUpdateCourseMeta(teacherId, courseId, textbook, date, time, location)
+        .then((res)=> {
+          console.log(' meta saved', res);
+          const {isLoading} = this.state
+          console.log('is Loading', isLoading);
+          this.setState({isLoading: !isLoading})
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error))
+        })
+      event.preventDefault();
+  }
+
+  //FEATURE
+  handleFeatureDismiss = (e) => {
+      console.log('e', e);
+
+      let fList = this.state.features
+      delete fList[e]
+      console.log('new lsit', fList);
+      this.setState ({ features: fList })
+      console.log('state', this.state.features);
+   }
+
+  handleAddNewFeature = () => {
+
+     let newKey = db.newKey();
+     console.log('newkey', newKey);
+     let id = newKey
+
+     const {features, header, sub} = this.state
+     let feats = !!features ? features : {}
+     console.log('featuers', feats);
+     feats[newKey] = {header: header, sub: sub}
+
+     this.setState ({
+       features: feats,
+       ...INITIAL_FEATURE_STATE,
+     })
+     console.log('state', this.state.features);
+  }
+
+  onFeaturesSubmit = () => {
+    const {courseId, teacherId, features } = this.state
+    console.log('courseId, tid, features', features, courseId, teacherId);
+
+    db.doUpdateFeatures(teacherId, courseId, features)
+      .then(res => console.log('res', res))
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      });
+  }
+
+  //IMGAES
   handleImageChange = (e) => {
     const {images, key, count} = this.state
 
@@ -151,12 +234,12 @@ class CourseEdit extends Component {
     })
   }
 
-  show = (id) => {
+  handleRemoveModalShow = (id) => {
     console.log(id);
     this.setState ({ confirmOpen: true, selectedImage: id})
   }
 
-  handleConfirm = () => {
+  handleRemoveConfirm = () => {
     const {teacherId, courseId, images, selectedImage} = this.state
     let fileName = images[selectedImage].fileName
     console.log('filename', fileName, selectedImage);
@@ -190,101 +273,11 @@ class CourseEdit extends Component {
     }
   }
 
-  handleCancel = () => {
+  handleRemoveCancel = () => {
     this.setState({ confirmOpen: false })
   }
-  //life cycle
-  componentDidMount() {
 
-    const {isLoading } = this.state
-    const {match} = this.props
-    // console.log('did mount 1 ', 'beforeIsLoading')
-    this.setState({isLoading: !isLoading})
-
-    let courseId = match.params.cid
-    db.onceGetCourse(match.params.cid)
-      .then(snapshot => {
-        let course = snapshot.val()
-        let meta = course.metadata
-        let curri = course.curri
-        let features = course.features
-        let images = course.images ? course.images : {}
-        // console.log('meta', meta);
-        // console.log('curri', curri);
-        // console.log('features', features);
-        // console.log('dmt images', images);
-        const {isLoading } = this.state
-        this.setState ({
-          courseId: courseId,
-
-          title: meta.title,
-          subTitle: meta.subTitle,
-          teacherId: meta.tid,
-
-          teacherName: meta.tName,
-          teacherPhoto: meta.tProfileImg,
-
-          textbook: meta.textbook,
-          date: meta.date,
-          time: meta.time,
-          location: meta.location,
-          openCourse: meta.openCourse ? meta.openCourse : false,
-          password: meta.password ? meta.password : '',
-          isPublished: meta.isPublished,
-
-          isLoading: !isLoading,
-          features: features,
-          images: images,
-          })
-          this.onChange(createEditorState(JSON.parse(curri)))
-      }).catch(error => {
-        this.setState(byPropKey('error', error));
-      });
-
-  }
-
-  componentWillUnmount(){
-    console.log('will un mount', 0);
-  }
-
-  //
-  handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
-
-  // course edit
-  handleInputChange = (event) => {
-    this.setState(byPropKey(event.target.name, event.target.value))
-  }
-
-  onTitleSubmit = (e) => {
-    console.log('title submit');
-    const { courseId, teacherId, title, subTitle } = this.state
-    db.doUpdateCourseTitle(teacherId, courseId, title, subTitle)
-      .then(res => {
-        console.log('title submit res', res)
-      }).catch(error => {
-        this.setState(byPropKey('error', error))
-      })
-    e.preventDefault()
-  }
-
-  onInfoSubmit = (event) => {
-    const {courseId, teacherId, textbook, date, time, location, isLoading} = this.state
-    console.log('onInfoSubmit', courseId, teacherId, textbook, date, time, location, isLoading);
-    this.setState({isLoading: !isLoading})
-
-    db.doUpdateCourseMeta(teacherId, courseId, textbook, date, time, location)
-        .then((res)=> {
-          console.log(' meta saved', res);
-          const {isLoading} = this.state
-          console.log('is Loading', isLoading);
-          this.setState({isLoading: !isLoading})
-        })
-        .catch(error => {
-          this.setState(byPropKey('error', error))
-        })
-      event.preventDefault();
-  }
-
+  //CURRI
   onCurriSubmit = ( ) => {
     const {courseId, teacherId} = this.state
     console.log('course teacher', courseId, teacherId);
@@ -299,6 +292,12 @@ class CourseEdit extends Component {
       .catch(error => {
         this.setState(byPropKey('error', error));
       });
+  }
+
+  //SETTINGS
+  handleSettingsClick = () => {
+    const { history, match } = this.props
+    history.push({ pathname: `${match.url}/settings`})
   }
 
   onSettingsSubmit = (event) => {
@@ -357,7 +356,7 @@ class CourseEdit extends Component {
         })
   }
 
-  //notification
+  //NOTIFICATION
   barStyleFactory = (index, style) => {
     return Object.assign(
       {},
@@ -394,49 +393,61 @@ class CourseEdit extends Component {
     })
   }
 
-  handleSettingsClick = () => {
-    const { history, match } = this.props
-    history.push({ pathname: `${match.url}/settings`})
-  }
+  //life cycle
+  componentDidMount() {
 
-  handleDismiss = (e) => {
-      console.log('e', e);
+    const {isLoading } = this.state
+    const {match} = this.props
+    // console.log('did mount 1 ', 'beforeIsLoading')
+    this.setState({isLoading: !isLoading})
 
-      let fList = this.state.features
-      delete fList[e]
-      console.log('new lsit', fList);
-      this.setState ({ features: fList })
-      console.log('state', this.state.features);
-   }
+    let courseId = match.params.cid
+    db.onceGetCourse(match.params.cid)
+      .then(snapshot => {
+        let course = snapshot.val()
+        let meta = course.metadata
+        let curri = course.curri
+        let features = course.features
+        let images = course.images ? course.images : {}
+        // console.log('meta', meta);
+        // console.log('curri', curri);
+        // console.log('features', features);
+        // console.log('dmt images', images);
+        const {isLoading } = this.state
+        this.setState ({
+          courseId: courseId,
 
-  handleAddNewFeature = () => {
+          title: meta.title,
+          subTitle: meta.subTitle,
+          teacherId: meta.tid,
 
-     let newKey = db.newKey();
-     console.log('newkey', newKey);
-     let id = newKey
+          teacherName: meta.tName,
+          teacherPhoto: meta.tProfileImg,
 
-     const {features, header, sub} = this.state
-     let feats = !!features ? features : {}
-     console.log('featuers', feats);
-     feats[newKey] = {header: header, sub: sub}
+          textbook: meta.textbook,
+          date: meta.date,
+          time: meta.time,
+          location: meta.location,
+          openCourse: meta.openCourse ? meta.openCourse : false,
+          password: meta.password ? meta.password : '',
+          isPublished: meta.isPublished,
 
-     this.setState ({
-       features: feats,
-       ...INITIAL_FEATURE_STATE,
-     })
-     console.log('state', this.state.features);
-  }
-
-  onFeaturesSubmit = () => {
-    const {courseId, teacherId, features } = this.state
-    console.log('courseId, tid, features', features, courseId, teacherId);
-
-    db.doUpdateFeatures(teacherId, courseId, features)
-      .then(res => console.log('res', res))
-      .catch(error => {
+          isLoading: !isLoading,
+          features: features,
+          images: images,
+          })
+          this.onChange(createEditorState(JSON.parse(curri)))
+      }).catch(error => {
         this.setState(byPropKey('error', error));
       });
+
   }
+
+  componentWillUnmount(){
+    console.log('will un mount', 0);
+  }
+
+  toggleVisibility = () => this.setState({ visible: !this.state.visible })
 
   render() {
     const {activeItem, isLoading,
@@ -446,170 +457,200 @@ class CourseEdit extends Component {
       openCourse, password, isPublished,
       features,
       editorState,
-      images, confirmOpen, selectedImage, show, handleConfirm, handleCancel,
+      images, confirmOpen, selectedImage, handleRemoveModalShow, handleRemoveConfirm, handleRemoveCancel,
+      visible
     } = this.state
     const {match} = this.props
 
-    // console.log('render 2 course info', courseId, title, teacherName, teacherId, textbook, openCourse, isLoading);
-    // console.log('is loading render', isLoading );
-    // console.log('render 1 ', 'features', !!features)
     console.log('render 1 ', 'images', images)
     return (
-      <Segment basic loading={isLoading} style={CEditBody}>
+      <div>
+        <Responsive
+          // minWidth={320}
+          // maxWidth={992}
+          {...Responsive.onlyTablet}
+          >
 
-        <Grid centered>
-          {/* <Grid.Row centered> */}
-            <Grid.Column>
+          {/* <Grid>
+            <Grid.Column style={C_EDIT_HEAD}>
+              <CEditTop
+                title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
+                settingsClick={this.handleSettingsClick}/>
+            </Grid.Column>
+          </Grid> */}
+          <Grid>
+            <Grid.Column >
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi sed similique pariatur eaque, sint ea veniam, corporis. Aspernatur quos dicta quidem excepturi enim, ut aut, porro, libero officia maxime molestias.
+            </Grid.Column>
+          </Grid>
+            {/* <Segment basic style={SEGMENT_BORDER}>
+              <Menu size='mini' style={MENU_BORDER}>
+                <Menu.Item onClick={this.toggleVisibility}>Menu</Menu.Item>
+              </Menu>
+            </Segment> */}
 
-            <Grid >
-              <Grid.Column style={CEditTitleBg}>
-                <CEditTop
-                  title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
-                  settingsClick={this.handleSettingsClick}/>
-              </Grid.Column>
+        </Responsive>
+
+        <Responsive {...Responsive.onlyComputer}>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione doloremque impedit unde illo consequatur assumenda accusamus temporibus quam aspernatur porro, optio aut nam tempore deleniti voluptates. Beatae nam molestias, magnam!
+          {/* <Segment basic loading={isLoading} style={C_EDIT_BODY}>
+
+            <Grid centered>
+              <Grid.Row centered>
+                <Grid.Column>
+
+                <Grid >
+                  <Grid.Column style={C_EDIT_HEAD}>
+                    <CEditTop
+                      title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
+                      settingsClick={this.handleSettingsClick}/>
+                  </Grid.Column>
+                </Grid>
+
+                  <Grid container stackable>
+                    <Grid.Column width={3}>
+                      <Menu vertical fluid style={C_EDIT_MENU} >
+                        <Menu.Item name='title'
+                           active={activeItem === 'title'}
+                           onClick={this.handleItemClick}
+                           as={Link} to={`${match.url}/title`}
+                           >
+                           <Icon name='check circle outline'  size='large'/> title
+                        </Menu.Item>
+                        <Menu.Item name='info'
+                           active={activeItem === 'info'}
+                           onClick={this.handleItemClick}
+                           as={Link} to={`${match.url}/info`}
+                           >
+                           <Icon name='check circle outline'  size='large'/> Info
+                        </Menu.Item>
+                        <Menu.Item name='features'
+                           active={activeItem === 'features'}
+                           onClick={this.handleItemClick}
+                           as={Link} to={`${match.url}/features`}
+                           >
+                          <Icon name='radio'  size='large'/> Features
+                        </Menu.Item>
+                        <Menu.Item name='gallery'
+                           active={activeItem === 'gallery'}
+                           onClick={this.handleItemClick}
+                           as={Link} to={`${match.url}/gallery`}
+                           >
+                          <Icon name='radio'  size='large'/> Gallery
+                        </Menu.Item>
+                        <Menu.Item name='curri'
+                           active={activeItem === 'curri'}
+                           onClick={this.handleItemClick}
+                           as={Link} to={`${match.url}/curriculum`}
+                           >
+                           <Icon name='radio'  size='large'/> Curriculum
+                        </Menu.Item>
+
+                        <Menu.Item name='assignment'
+                          disabled
+                           active={activeItem === 'assignment'}
+                           onClick={this.handleItemClick}
+                           as={Link} to={`${match.url}/assignment`}
+                           >
+                           Assignment (Coming soon)
+                        </Menu.Item>
+                        <Menu.Item name='assignment'
+                           active={activeItem === 'assignment'}
+                           onClick={this.handleItemClick}
+                           >
+                           <Button fluid color='red' onClick={this.handlePublish}>Publish</Button>
+                        </Menu.Item>
+                       </Menu>
+
+                    </Grid.Column>
+
+                    <Grid.Column width={11}>
+                        <Switch>
+                          <Redirect exact from={match.url} to={`${match.url}/info`} />
+                          <Route path={`${match.url}/title`} render={(props) => <CEditTitle
+                            {...props}
+                            title={title}
+                            subTitle={subTitle}
+                            change={this.handleInputChange}
+                            titleSubmit={this.onTitleSubmit}
+                          /> }/>
+                          <Route path={`${match.url}/info`} render={(props) => <CEditMeta
+                            {...props}
+                            title={title}
+                            subTitle={subTitle}
+                            textbook={textbook}
+                            date={date}
+                            time={time}
+                            location={location}
+                            change={this.handleInputChange}
+                            submit={this.onInfoSubmit}
+                          /> }/>
+                          <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
+                            {...props}
+                            courseId={courseId}
+                            teacherId={teacherId}
+                            features={features}
+                            change={this.handleInputChange}
+                            dismiss={this.handleFeatureDismiss}
+                            addNewFeature={this.handleAddNewFeature}
+                            submit={this.onFeaturesSubmit}
+                          /> }/>
+                          <Route path={`${match.url}/gallery`} render={(props) => <CEditGallery
+                            {...props}
+                            courseId={courseId}
+                            teacherId={teacherId}
+                            images={images}
+                            handleImageChange={this.handleImageChange}
+                            submit={this.onImageSubmit}
+                            confirmOpen={confirmOpen}
+                            selectedImage={selectedImage}
+                            removeModalShow={this.handleRemoveModalShow}
+                            removeConfirm={this.handleRemoveConfirm}
+                            removeCancel={this.handleRemoveCancel}
+                            // change={this.handleInputChange}
+                            // submit={this.onInfoSubmit}
+                          /> }/>
+                          <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
+                            {...props}
+                            courseId={courseId}
+                            teacherId={teacherId}
+                            editorState={editorState}
+                            change={this.onChange}
+                            submit={this.onCurriSubmit}
+                          />} />
+                          <Route path={`${match.url}/settings`} render={() => <CEditSettings
+                            courseId={courseId}
+                            teacherId={teacherId}
+                            openCourse={openCourse}
+                            password={password}
+                            change={this.handleInputChange}
+                            toggle={this.handleSettingsOpenOrClose}
+                            submit={this.onSettingsSubmit}
+                            remove={this.handleRemoveCourse}
+                          />} />
+                          <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
+
+                        </Switch>
+                    </Grid.Column>
+
+                  </Grid>
+
+            <NotificationStack
+              barStyleFactory={this.barStyleFactory}
+              activeBarStyleFactory={this.activeBarStyleFactory}
+              // notifications={this.state.notifications.toArray()}
+              onDismiss={notification => this.setState({
+                notifications: this.state.notifications.delete(notification)
+              })}
+            />
+                  </Grid.Column>
+              </Grid.Row>
+
             </Grid>
+          </Segment> */}
+        </Responsive>
 
-              <Grid container stackable>
-                <Grid.Column width={3}>
-                  <Menu vertical fluid style={CEditMenu} >
-                    <Menu.Item name='title'
-                       active={activeItem === 'title'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/title`}
-                       >
-                       <Icon name='check circle outline'  size='large'/> title
-                    </Menu.Item>
-                    <Menu.Item name='info'
-                       active={activeItem === 'info'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/info`}
-                       >
-                       <Icon name='check circle outline'  size='large'/> Info
-                    </Menu.Item>
-                    <Menu.Item name='features'
-                       active={activeItem === 'features'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/features`}
-                       >
-                      <Icon name='radio'  size='large'/> Features
-                    </Menu.Item>
-                    <Menu.Item name='gallery'
-                       active={activeItem === 'gallery'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/gallery`}
-                       >
-                      <Icon name='radio'  size='large'/> Gallery
-                    </Menu.Item>
-                    <Menu.Item name='curri'
-                       active={activeItem === 'curri'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/curriculum`}
-                       >
-                       <Icon name='radio'  size='large'/> Curriculum
-                    </Menu.Item>
-
-                    <Menu.Item name='assignment'
-                      disabled
-                       active={activeItem === 'assignment'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/assignment`}
-                       >
-                       Assignment (Coming soon)
-                    </Menu.Item>
-                    <Menu.Item name='assignment'
-                       active={activeItem === 'assignment'}
-                       onClick={this.handleItemClick}
-                       >
-                       <Button fluid color='red' onClick={this.handlePublish}>Publish</Button>
-                    </Menu.Item>
-                   </Menu>
-
-                </Grid.Column>
-
-                <Grid.Column width={11}>
-                    <Switch>
-                      <Redirect exact from={match.url} to={`${match.url}/info`} />
-                      <Route path={`${match.url}/title`} render={(props) => <CEditTitle
-                        {...props}
-                        title={title}
-                        subTitle={subTitle}
-                        change={this.handleInputChange}
-                        titleSubmit={this.onTitleSubmit}
-                      /> }/>
-                      <Route path={`${match.url}/info`} render={(props) => <CEditMeta
-                        {...props}
-                        title={title}
-                        subTitle={subTitle}
-                        textbook={textbook}
-                        date={date}
-                        time={time}
-                        location={location}
-                        change={this.handleInputChange}
-                        submit={this.onInfoSubmit}
-                      /> }/>
-                      <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
-                        {...props}
-                        courseId={courseId}
-                        teacherId={teacherId}
-                        features={features}
-                        change={this.handleInputChange}
-                        dismiss={this.handleDismiss}
-                        addNewFeature={this.handleAddNewFeature}
-                        submit={this.onFeaturesSubmit}
-                      /> }/>
-                      <Route path={`${match.url}/gallery`} render={(props) => <CEditGallery
-                        {...props}
-                        courseId={courseId}
-                        teacherId={teacherId}
-                        images={images}
-                        handleImageChange={this.handleImageChange}
-                        submit={this.onImageSubmit}
-                        confirmOpen={confirmOpen}
-                        selectedImage={selectedImage}
-                        show={this.show}
-                        handleConfirm={this.handleConfirm}
-                        handleCancel={this.handleCancel}
-                        // change={this.handleInputChange}
-                        // submit={this.onInfoSubmit}
-                      /> }/>
-                      <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
-                        {...props}
-                        courseId={courseId}
-                        teacherId={teacherId}
-                        editorState={editorState}
-                        change={this.onChange}
-                        submit={this.onCurriSubmit}
-                      />} />
-                      <Route path={`${match.url}/settings`} render={() => <CEditSettings
-                        courseId={courseId}
-                        teacherId={teacherId}
-                        openCourse={openCourse}
-                        password={password}
-                        change={this.handleInputChange}
-                        toggle={this.handleSettingsOpenOrClose}
-                        submit={this.onSettingsSubmit}
-                        remove={this.handleRemoveCourse}
-                      />} />
-                      <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
-
-                    </Switch>
-                </Grid.Column>
-
-              </Grid>
-
-        {/* <NotificationStack
-          barStyleFactory={this.barStyleFactory}
-          activeBarStyleFactory={this.activeBarStyleFactory}
-          // notifications={this.state.notifications.toArray()}
-          onDismiss={notification => this.setState({
-            notifications: this.state.notifications.delete(notification)
-          })}
-        /> */}
-              </Grid.Column>
-          {/* </Grid.Row> */}
-
-        </Grid>
-      </Segment>
+      </div>
     );
   }
 }
