@@ -9,11 +9,19 @@ import QPanel from './QPanel'
 import {db} from '../../firebase';
 import { Grid, Header, Menu, Visibility, Responsive, Segment  } from 'semantic-ui-react'
 
-const dashboardHeader = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
-const dashboardHeaderColor = {color: '#fff'}
-const dashboardHeaderMenuBorderColor = {borderColor: '#2980b9'}
-const dashboardHeaderMenuItemBorder = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
-const dashboardBody = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
+const DASHBOARD_HEAD = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
+const DASHBOARD_HEADER = {color: '#fff'}
+
+const DASHBOARD_MENU = {borderColor: '#2980b9'}
+const DASHBOARD_MENU_ITEM = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
+const DASHBOARD_BODY = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
+
+const DASHBOARD_HEAD_M = {  marginTop: '0rem', paddingTop: '0rem', backgroundColor: '#2980b9'}
+const DASHBOARD_HEADER_M = {color: '#fff', marginBottom: '0'}
+
+const DASHBOARD_MENU_M = {borderColor: '#2980b9', marginTop: '0rem'}
+const DASHBOARD_MENU_ITEMMobile = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
+const DASHBOARD_BODYMobile = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
 
 class Dashboard extends Component {
 
@@ -74,10 +82,6 @@ class Dashboard extends Component {
         .catch(error => {
           this.setState({[error]: error});
         });
-       //
-       //  db.doFetchRecentQuestions(this.context.authUser.uid)
-       //    .then(qSnap => this.setState ({questions: qSnap.val() }))
-       //      // console.log('q snap', qSnap.val()))
      }
   }
 
@@ -90,6 +94,7 @@ class Dashboard extends Component {
     const {activeItem, error, user, courseTeaching, selectOption, questions, cid} = this.state
 
     console.log('dashboard props', this.props);
+    console.log('dashboard props mobile', this.props.mobile);
 
     let qList;
     if (!!cid) {
@@ -106,40 +111,40 @@ class Dashboard extends Component {
 
               {/* <Responsive minWidth={320}>
                 <Visibility onUpdate={this.handleUpdate}> */}
-                  <Grid style={dashboardHeader} centered>
+                <Responsive {...Responsive.onlyComputer}>
+                  <Grid style={DASHBOARD_HEAD} centered>
                       <Grid.Row>
                         <Grid.Column width={12}>
 
-                            <Header as='h1' style={dashboardHeaderColor}>Dashboard</Header>
+                            <Header as='h1' style={DASHBOARD_HEADER}>Dashboard</Header>
 
                             <Menu size='small' secondary pointing inverted
-                              style={dashboardHeaderMenuBorderColor} >
+                              style={DASHBOARD_MENU} >
                                 <Menu.Item name='courses'
                                   active={activeItem === 'courses'}
                                   onClick={this.handleItemClick}
                                   as={Link} to={`${match.url}/courses`}
-                                  style={dashboardHeaderMenuItemBorder}
+                                  style={DASHBOARD_MENU_ITEM}
                                 />
                                 <Menu.Item
                                   name='questions'
                                   active={activeItem === 'questions'}
                                   onClick={this.handleItemClick}
                                   as={Link} to={`${match.url}/questions`}
-                                  style={dashboardHeaderMenuItemBorder}
+                                  style={DASHBOARD_MENU_ITEM}
                                 />
                                 <Menu.Item
                                   name='announcement'
                                   active={activeItem === 'announcement'}
                                   onClick={this.handleItemClick}
-                                  style={dashboardHeaderMenuItemBorder}
+                                  style={DASHBOARD_MENU_ITEM}
                                 />
                               </Menu>
 
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-
-                    <Grid style={dashboardBody} centered>
+                    <Grid style={DASHBOARD_BODY} centered>
                       <Grid.Row>
                         <Grid.Column width={12}>
 
@@ -158,8 +163,67 @@ class Dashboard extends Component {
                         </Grid.Column>
                       </Grid.Row>
                     </Grid>
-                {/* </Visibility>
-              </Responsive> */}
+                    {/* </Visibility>
+                    </Responsive> */}
+                </Responsive>
+
+              <Responsive {...Responsive.onlyMobile} >
+                <Grid style={DASHBOARD_HEAD_M} centered>
+                    <Grid.Row>
+                      <Grid.Column width={15}>
+
+                          <Header as='h1' style={DASHBOARD_HEADER_M}>Dashboard</Header>
+
+                          <Menu size='small' secondary pointing inverted
+                            style={DASHBOARD_MENU_M} >
+                              <Menu.Item name='courses'
+                                active={activeItem === 'courses'}
+                                onClick={this.handleItemClick}
+                                as={Link} to={`${match.url}/courses`}
+                                style={DASHBOARD_MENU_ITEM}
+                              />
+                              <Menu.Item
+                                name='questions'
+                                active={activeItem === 'questions'}
+                                onClick={this.handleItemClick}
+                                as={Link} to={`${match.url}/questions`}
+                                style={DASHBOARD_MENU_ITEM}
+                              />
+                              <Menu.Item
+                                name='announcement'
+                                active={activeItem === 'announcement'}
+                                onClick={this.handleItemClick}
+                                style={DASHBOARD_MENU_ITEM}
+                              />
+                            </Menu>
+
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                  <Grid style={DASHBOARD_BODY} centered>
+                    <Grid.Row>
+                      <Grid.Column width={15}>
+
+                        <Switch>
+                          <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
+                          <Route path={routes.DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
+                          <Route path={routes.DASHBOARD_Q_PANEL} render = {() => <QPanel
+                            options={selectOption}
+                            questions={questions}
+                            didChooseCourse={this.handleDidChooseCourse}
+                            selectedCourse={cid}
+                            queClick={this.handleQuestionClick}
+                           />} />
+                        </Switch>
+
+                      </Grid.Column>
+                    </Grid.Row>
+                  </Grid>
+                  {/* </Visibility>
+                  </Responsive> */}
+              </Responsive>
+
+
 
             </Grid.Column>
           </Grid.Row>
@@ -171,6 +235,10 @@ class Dashboard extends Component {
 
 Dashboard.contextTypes ={
   authUser: PropTypes.object,
+}
+
+Dashboard.propTypes = {
+  mobile: PropTypes.bool,
 }
 
 export default withRouter(Dashboard)

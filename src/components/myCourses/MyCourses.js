@@ -8,6 +8,7 @@ import {Link, withRouter} from 'react-router-dom'
 const dashboardHeader = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
 const dashboardHeaderColor = {color: '#fff'}
 const dashboardHeaderMenuBorderColor = {borderColor: '#2980b9'}
+const dashboardHeaderMenuItemBorder = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
 const dashboardBody = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
 
 class MyCourses extends Component {
@@ -127,7 +128,7 @@ class MyCourses extends Component {
                         <Header as='h1'
                           style={dashboardHeaderColor}>My Courses</Header>
 
-                          <Menu size='small' secondary pointing inverted
+                          {/* <Menu size='small' secondary pointing inverted
                             style={dashboardHeaderMenuBorderColor} >
                               <Menu.Item name='courses'
                                 active={activeItem === 'courses'}
@@ -144,7 +145,7 @@ class MyCourses extends Component {
                                 name='announcement'
                                 active={activeItem === 'announcement'}
                                 onClick={this.handleItemClick} />
-                            </Menu>
+                            </Menu> */}
 
                       </Grid.Column>
                     </Grid.Row>

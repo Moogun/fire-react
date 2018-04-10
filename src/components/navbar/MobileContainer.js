@@ -9,6 +9,8 @@ import HomepageHeading from './HomepageHeading'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import {auth} from '../../firebase'
 
+import Dashboard from '../dashboard/Dashboard';
+
 const segmentBorder={padding: '0'}
 const menuBorder={borderRadius: '0', marginBottom: '0'}
 
@@ -70,11 +72,11 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
   return (
     <Sidebar.Pushable>
        <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
-         <Menu.Item as={Link} to='/account' active>Username</Menu.Item>
-         <Menu.Item as={Link} to='/category' active>Category</Menu.Item>
+         <Menu.Item as={Link} to={routes.ACCOUNT} >Username</Menu.Item>
+         <Menu.Item as={Link} to='/category' >Category</Menu.Item>
          <Menu.Item as='a'>My Courses</Menu.Item>
          <Menu.Item as='a'>My Notifications</Menu.Item>
-         <Menu.Item as='a'>Instructor Dashboard</Menu.Item>
+         <Menu.Item as={Link} to={routes.DASHBOARD}>Instructor Dashboard</Menu.Item>
          <Menu.Item as='a'>Help</Menu.Item>
          <Menu.Item as='a' onClick={auth.doSignOut}>Log out</Menu.Item>
       </Sidebar>
@@ -92,35 +94,26 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
           vertical>
           <Container>
 
-                <Menu.Item as='a' onClick={handleToggle}
-                    style={{float:'left', color: 'white'}}
-                    >
+                <Menu.Item as='a' onClick={handleToggle} style={{float:'left', color: 'white'}} >
                   <Icon name='sidebar' />
                 </Menu.Item>
-                <Menu.Item as='a' onClick={handleSearchField}
-                    style={{float:'left', color: 'white', marginLeft: '1em'}} //was 0.5
-                  >
+                <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1em'}}>
+                  {/* was 0.5  */}
                   <Icon name='search' />
                 </Menu.Item>
-                <Menu.Item as='a' style={{color: 'white'}}>
-                  We qna
-                </Menu.Item>
-                <Menu.Item as={Link} to={routes.ACCOUNT}
-                  onClick={this.handleItemClick}
-                  style={{float:'right', color: 'white', marginLeft: '1em'}}
-                   >
+                <Menu.Item as='a' style={{color: 'white'}}> We question and answer </Menu.Item>
+                <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1em'}} >
                      <Icon name='user circle' />
                 </Menu.Item>
-                  <Menu.Item  as={Link} to={routes.LEARNING}
-                    style={{float:'right', color: 'white',}}
-                    >
-                      <Icon name='book' />
-                  </Menu.Item>
+                <Menu.Item  as={Link} to={routes.LEARNING} style={{float:'right', color: 'white',}} >
+                  <Icon name='book' />
+                </Menu.Item>
 
-              {searchFieldActive? <Input className='icon' placeholder='Search...' fluid size='large' style={{marginTop: '1em'}}
-                 // action={{ icon: 'search' }}
-                  icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>}
-               /> : null}
+                  {searchFieldActive
+                    ? <Input className='icon' placeholder='Search...' fluid size='large' style={{marginTop: '1em'}} // action={{ icon: 'search' }}
+                    icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>} />
+                    : null
+                  }
 
           </Container>
           {/* <HomepageHeading mobile /> */}
