@@ -34,7 +34,7 @@ class MobileContainer extends Component {
     const { fixed, activeItem, sidebarOpened, searchFieldActive } = this.state
 
     return (
-      <Responsive {...Responsive.onlyMobile}>
+      <Responsive minWidth={320} maxWidth={991}>
           { authUser
               ? <MobileAuth
                 activeItem={activeItem}

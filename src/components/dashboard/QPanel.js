@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item, Select, Checkbox, Label, } from 'semantic-ui-react'
+import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item, Select, Checkbox, Label, Responsive } from 'semantic-ui-react'
 
 import QuestionTable from '../questions/QuestionTable'
 
@@ -19,30 +19,57 @@ class QPanel extends Component {
       : <p>No question yet</p>
 
     return (
+    <div>
 
-      <Grid stackable>
-        <Grid.Row centered>
+      <Responsive {...Responsive.onlyComputer}>
+        <Grid stackable>
+          <Grid.Row centered>
 
-          <Grid.Column width={4}>
-            <Select placeholder='Select a course' name="cid" fluid search selection options={options} onChange={didChooseCourse}/>
-            <Divider />
-            <Menu vertical text fluid>
-              <Menu.Item><Checkbox label='Unread' /> <Label content='10'/></Menu.Item>
-              <Menu.Item><Checkbox label='Not top answer' /> <Label content='10'/></Menu.Item>
-              <Menu.Item><Checkbox label='No response' /> <Label content='10'/></Menu.Item>
-            </Menu>
-            <Divider />
-          </Grid.Column>
+            <Grid.Column width={4}>
+              <Select placeholder='Select a course' name="cid" fluid search selection options={options} onChange={didChooseCourse}/>
+              <Divider />
+              <Menu vertical text fluid>
+                <Menu.Item><Checkbox label='Unread' /> <Label content='10'/></Menu.Item>
+                <Menu.Item><Checkbox label='Not top answer' /> <Label content='10'/></Menu.Item>
+                <Menu.Item><Checkbox label='No response' /> <Label content='10'/></Menu.Item>
+              </Menu>
+              <Divider />
+            </Grid.Column>
 
-          <Grid.Column width={12}>
-            <Header as='h1' content='Course title' dividing/>
-            {qList}
+            <Grid.Column width={12}>
+              <Header as='h1' content='Course title' dividing/>
+              {qList}
+            </Grid.Column>
 
-          </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Responsive>
 
-        </Grid.Row>
-      </Grid>
+      <Responsive {...Responsive.onlyMobile}>
+        <Grid stackable>
+          <Grid.Row centered>
 
+            <Grid.Column>
+              <Select placeholder='Select a course' name="cid" fluid search selection options={options} onChange={didChooseCourse}/>
+              <Divider />
+              <Menu vertical text fluid>
+                <Menu.Item><Checkbox label='Unread' /> <Label content='10'/></Menu.Item>
+                <Menu.Item><Checkbox label='Not top answer' /> <Label content='10'/></Menu.Item>
+                <Menu.Item><Checkbox label='No response' /> <Label content='10'/></Menu.Item>
+              </Menu>
+              <Divider />
+            </Grid.Column>
+
+            <Grid.Column>
+              <Header as='h1' content='Course title' dividing/>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut nostrum tempore sint, dolores, hic recusandae? Libero corrupti asperiores architecto iste animi quasi, ipsa totam, voluptate quaerat reiciendis perferendis eligendi, explicabo!
+              {qList}
+            </Grid.Column>
+
+          </Grid.Row>
+        </Grid>
+      </Responsive>
+    </div>
     );
   }
 
