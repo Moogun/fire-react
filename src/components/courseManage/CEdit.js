@@ -478,11 +478,11 @@ class CourseEdit extends Component {
                 settingsClick={this.handleSettingsClick}/>
             </Grid.Column>
           </Grid> */}
-          <Grid>
-            <Grid.Column >
+          {/* <Grid>
+            <Grid.Column > */}
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi sed similique pariatur eaque, sint ea veniam, corporis. Aspernatur quos dicta quidem excepturi enim, ut aut, porro, libero officia maxime molestias.
-            </Grid.Column>
-          </Grid>
+            {/* </Grid.Column>
+          </Grid> */}
             {/* <Segment basic style={SEGMENT_BORDER}>
               <Menu size='mini' style={MENU_BORDER}>
                 <Menu.Item onClick={this.toggleVisibility}>Menu</Menu.Item>
@@ -492,8 +492,8 @@ class CourseEdit extends Component {
         </Responsive>
 
         <Responsive {...Responsive.onlyComputer}>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione doloremque impedit unde illo consequatur assumenda accusamus temporibus quam aspernatur porro, optio aut nam tempore deleniti voluptates. Beatae nam molestias, magnam!
-          {/* <Segment basic loading={isLoading} style={C_EDIT_BODY}>
+
+         <Segment basic loading={isLoading} style={C_EDIT_BODY}>
 
             <Grid centered>
               <Grid.Row centered>
@@ -635,19 +635,20 @@ class CourseEdit extends Component {
 
                   </Grid>
 
-            <NotificationStack
+            {/* <NotificationStack
               barStyleFactory={this.barStyleFactory}
               activeBarStyleFactory={this.activeBarStyleFactory}
               // notifications={this.state.notifications.toArray()}
               onDismiss={notification => this.setState({
                 notifications: this.state.notifications.delete(notification)
               })}
-            />
+            /> */}
                   </Grid.Column>
               </Grid.Row>
 
             </Grid>
-          </Segment> */}
+          </Segment>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint libero similique omnis voluptates itaque aperiam enim numquam corrupti esse minima qui dicta, minus error doloremque, repellat quas perspiciatis eum deleniti.
         </Responsive>
 
       </div>

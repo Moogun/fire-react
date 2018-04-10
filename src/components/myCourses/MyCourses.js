@@ -5,11 +5,7 @@ import CourseCards from '../courses/CourseCards'
 import { Grid, Header, Menu, Visibility, Responsive, Card, Button } from 'semantic-ui-react'
 import {Link, withRouter} from 'react-router-dom'
 
-const dashboardHeader = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
-const dashboardHeaderColor = {color: '#fff'}
-const dashboardHeaderMenuBorderColor = {borderColor: '#2980b9'}
-const dashboardHeaderMenuItemBorder = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
-const dashboardBody = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
+import * as style from '../../style/inline';
 
 class MyCourses extends Component {
 
@@ -117,16 +113,15 @@ class MyCourses extends Component {
           <Grid.Row>
             <Grid.Column>
 
-              {/* <Responsive minWidth={320}>
-                <Visibility onUpdate={this.handleUpdate}> */}
+              <Responsive {...Responsive.onlyComputer}>
                   <Grid
-                    style={dashboardHeader}
+                    style={style.DASHBOARD_HEAD}
                     centered>
                     <Grid.Row>
                       <Grid.Column width={12}>
 
                         <Header as='h1'
-                          style={dashboardHeaderColor}>My Courses</Header>
+                          style={style.DASHBOARD_HEADER}>My Courses</Header>
 
                           {/* <Menu size='small' secondary pointing inverted
                             style={dashboardHeaderMenuBorderColor} >
@@ -151,7 +146,7 @@ class MyCourses extends Component {
                     </Grid.Row>
                   </Grid>
 
-                  <Grid style={dashboardBody} centered>
+                  <Grid style={style.DASHBOARD_BODY} centered>
                     <Grid.Row>
                       <Grid.Column width={12}>
 
@@ -160,7 +155,7 @@ class MyCourses extends Component {
                           <Route path={routes.DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
                           <Route path={routes.DASHBOARD_Q_PANEL} component = {QPanel} />
                         </Switch> */}
-                        {/* <CourseCards courses={attendingCourses}/> */}
+                        <CourseCards courses={attendingCourses}/>
 
                         {/* <Card>
                             <Card.Content>
@@ -185,8 +180,22 @@ class MyCourses extends Component {
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
-                {/* </Visibility>
-              </Responsive> */}
+                </Responsive>
+
+                <Responsive {...Responsive.onlyMobile} >
+                  <Grid style={style.DASHBOARD_HEAD_M} >
+                    <Grid.Row>
+                      <Grid container>
+                          <Grid.Column >
+                            <Header as='h1'
+                              style={style.DASHBOARD_HEADER_M}>My Courses</Header>
+
+                          </Grid.Column>
+                      </Grid>
+                    </Grid.Row>
+                  </Grid>
+
+                </Responsive>
 
             </Grid.Column>
           </Grid.Row>

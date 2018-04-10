@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Responsive, Image, List } from 'semantic-ui-react'
+import { Table, Responsive, Image, List, Grid } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 
 const CourseTeaching = ({click, courses}) => {
@@ -46,24 +46,34 @@ const CourseTeaching = ({click, courses}) => {
     </Responsive>
 
     <Responsive {...Responsive.onlyMobile}>
-      <List divided >
-        {Object.keys(courses).map(key =>
-          <List.Item key={key} onClick={()=> click(key)}>
+          <Grid>
+            {/* <Grid.Row> */}
+              <Grid.Column>
 
-            <Image src={profile} size='tiny'/>
+                  <List divided >
+                    {Object.keys(courses).map(key =>
+                      <List.Item key={key} onClick={()=> click(key)}>
 
-            <List.Content  verticalAlign='top'>
-              <List.Header>{courses[key].metadata.title}</List.Header>
-              {courses[key].metadata.date}
-              {courses[key].metadata.isPublished ? <p>Published</p> : <p>draft</p>}
-            </List.Content>
+                        <Image src={profile} size='tiny'/>
 
-            <List.Content floated='right' >
-              {courses[key].metadata.openCourse ? <p>Open</p> : <p>Private</p>}
-            </List.Content>
-          </List.Item>
-        )}
-      </List>
+                        <List.Content  verticalAlign='top'>
+                          <List.Header>{courses[key].metadata.title}</List.Header>
+                          {courses[key].metadata.date}
+                          {courses[key].metadata.isPublished ? <p>Published</p> : <p>draft</p>}
+                        </List.Content>
+
+                        <List.Content floated='right' >
+                          {courses[key].metadata.openCourse ? <p>Open</p> : <p>Private</p>}
+                        </List.Content>
+                      </List.Item>
+                    )}
+                  </List>
+
+              list doesn't sit along with the right boundary list doesn't sit along with the right boundary
+              list doesn't sit along with the right boundary list doesn't sit along with the right boundary
+          </Grid.Column>
+        {/* </Grid.Row> */}
+      </Grid>
     </Responsive>
 
     </div>
