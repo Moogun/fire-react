@@ -79,47 +79,50 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
          <Menu.Item as='a' onClick={auth.doSignOut}>Log out</Menu.Item>
       </Sidebar>
 
-      <Sidebar.Pusher dimmed={sidebarOpened} onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
+      <Sidebar.Pusher dimmed={sidebarOpened}
+        onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
         <Segment
-          // inverted
+          inverted
           textAlign='center'
-          // style={{ minHeight: 350, padding: '1em 0em' }}
-          style={segmentBorder}
+          style={{
+            // minHeight: 350,
+             padding: '1em 0em'
+           }}
+          // style={segmentBorder}
           vertical>
-          {/* <Container> */}
-              <Menu
-                // inverted
-                // pointing
-                // secondary
-                size='large'
-                style={menuBorder}
-                >
-                <Menu.Item onClick={handleToggle}>
+          <Container>
+
+                <Menu.Item as='a' onClick={handleToggle}
+                    style={{float:'left', color: 'white'}}
+                    >
                   <Icon name='sidebar' />
                 </Menu.Item>
-                <Menu.Item as='a' onClick={handleSearchField}>
+                <Menu.Item as='a' onClick={handleSearchField}
+                    style={{float:'left', color: 'white', marginLeft: '1em'}} //was 0.5
+                  >
                   <Icon name='search' />
                 </Menu.Item>
-                <Menu.Item as='a'>
+                <Menu.Item as='a' style={{color: 'white'}}>
                   We qna
                 </Menu.Item>
-                <Menu.Menu position='right'>
-                  <Menu.Item  as={Link} to={routes.LEARNING}>
+                <Menu.Item as={Link} to={routes.ACCOUNT}
+                  onClick={this.handleItemClick}
+                  style={{float:'right', color: 'white', marginLeft: '1em'}}
+                   >
+                     <Icon name='user circle' />
+                </Menu.Item>
+                  <Menu.Item  as={Link} to={routes.LEARNING}
+                    style={{float:'right', color: 'white',}}
+                    >
                       <Icon name='book' />
                   </Menu.Item>
-                  <Menu.Item as={Link} to={routes.ACCOUNT}
-                    onClick={this.handleItemClick}
-                     >
-                       <Icon name='user circle' />
-                  </Menu.Item>
-                </Menu.Menu>
-              </Menu>
-              {searchFieldActive? <Input className='icon' placeholder='Search...' fluid     size='large'
+
+              {searchFieldActive? <Input className='icon' placeholder='Search...' fluid size='large' style={{marginTop: '1em'}}
                  // action={{ icon: 'search' }}
                   icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>}
                /> : null}
 
-          {/* </Container> */}
+          </Container>
           {/* <HomepageHeading mobile /> */}
         </Segment>
       {children}
