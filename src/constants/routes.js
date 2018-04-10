@@ -3,7 +3,7 @@ export const SIGN_IN = '/signin';
 
 export const LANDING = '/';
 export const HOME = '/home';
-export const ACCOUNT = '/account/my/e';
+export const ACCOUNT = '/account/my';
 export const ACCOUNT_PROFILE = '/account/my/profile';
 export const ACCOUNT_PHOTO = '/account/my/photo';
 export const ACCOUNT_PASSWORD_FORGET = '/account/my/pw-forget';
@@ -11,7 +11,7 @@ export const ACCOUNT_PASSWORD_CHANGE = '/account/my/pw-change';
 export const ACCOUNT_DANGER = '/account/my/danger';
 
 //1.
-export const LEARNING = '/learning/my/e';
+export const LEARNING = '/learning/my';
 export const LEARNING_MY_COURSES = '/learning/my/courses';
 
 //2. internal pages nested routes
