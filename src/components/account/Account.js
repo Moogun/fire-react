@@ -13,7 +13,7 @@ import Danger from './Danger'
 import {db} from '../../firebase';
 import {storage} from '../../firebase/firebase';
 
-import { Container, Menu, Grid, Image} from 'semantic-ui-react'
+import { Container, Menu, Grid, Image, Responsive, Segment, Header} from 'semantic-ui-react'
 
 const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
@@ -37,22 +37,22 @@ class AccountPage extends Component {
   componentDidMount(){
     console.log('did mount');
     const {authUser} = this.context
-    db.onceGetUser(authUser.uid)
-      .then(res => {
-           // console.log('res', res.val())
-           this.setState ({
-              user: res.val(),
-              uid: authUser.uid,
-              email: res.val().email,
-              username: res.val().username,
-              displayName: res.val().displayName,
-              photoUrl: res.val().photoUrl ? res.val().photoUrl : profile,
-              images: {},
-            })
-      })
-      .catch(error => {
-        this.setState(byPropKey('error', error));
-      })
+    // db.onceGetUser(authUser.uid)
+    //   .then(res => {
+    //        // console.log('res', res.val())
+    //        this.setState ({
+    //           user: res.val(),
+    //           uid: authUser.uid,
+    //           email: res.val().email,
+    //           username: res.val().username,
+    //           displayName: res.val().displayName,
+    //           photoUrl: res.val().photoUrl ? res.val().photoUrl : profile,
+    //           images: {},
+    //         })
+    //   })
+    //   .catch(error => {
+    //     this.setState(byPropKey('error', error));
+    //   })
   }
 
   handleProfileInfoChange = (event) => {
@@ -153,7 +153,9 @@ class AccountPage extends Component {
       })
     })
   }
-
+  componentWillUnMount(){
+    console.log('account will un mount 1');
+  }
   render() {
     const {match} = this.props
     // console.log('account props',this.props.match, this.props.user);
@@ -163,71 +165,94 @@ class AccountPage extends Component {
     // console.log('photoUrl', photoUrl, 'image', images);
 
     return (
-      <Container text>
-        <Grid celled stackable>
-          <Grid.Row centered>
-            <Grid.Column width={4}>
-                <Menu vertical secondary fluid>
-                <br/>
-                <Image src={photoUrl} circular centered size='small'/>
-                <br/>
-                <Menu.Item name='profile'
-                  active
-                  // as={Link} to='/account/profile'
-                  as={Link} to={`${match.url}/profile`}
-                  active={activeItem === 'profile'} onClick={this.handleItemClick}
-                 />
-                <Menu.Item name='photo'
-                  // as={Link} to='/account/photo'
-                  as={Link} to={`${match.url}/photo`}
-                    active={activeItem === 'photo'} onClick={this.handleItemClick}
-                 />
-                 <Menu.Item name='passwordChange'
-                  // as={Link} to='/account/passwordChange'
-                   as={Link} to={`${match.url}/pw-change`}
-                    active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
-                />
-                <Menu.Item name='passwordForget'
-                 // as={Link} to='/account/passwordForget'
-                  as={Link} to={`${match.url}/pw-forget`}
-                   active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
-                 />
-                <Menu.Item name='danger'
-                  as={Link} to={`${match.url}/danger`}
-                  active={activeItem === 'danger'} onClick={this.handleItemClick}
-                 />
-              </Menu>
-            </Grid.Column>
+      <div>
+        <Responsive {...Responsive.onlyComputer}>
+        <Container text>
+          <Grid celled stackable>
+            <Grid.Row centered>
+              <Grid.Column width={4}>
+                  <Menu vertical secondary fluid>
+                  <br/>
+                  <Image src={photoUrl} circular centered size='small'/>
+                  <br/>
+                  <Menu.Item name='profile'
+                    active
+                    // as={Link} to='/account/profile'
+                    as={Link} to={`${match.url}/profile`}
+                    active={activeItem === 'profile'} onClick={this.handleItemClick}
+                   />
+                  <Menu.Item name='photo'
+                    // as={Link} to='/account/photo'
+                    as={Link} to={`${match.url}/photo`}
+                      active={activeItem === 'photo'} onClick={this.handleItemClick}
+                   />
+                   <Menu.Item name='passwordChange'
+                    // as={Link} to='/account/passwordChange'
+                     as={Link} to={`${match.url}/pw-change`}
+                      active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
+                  />
+                  <Menu.Item name='passwordForget'
+                   // as={Link} to='/account/passwordForget'
+                    as={Link} to={`${match.url}/pw-forget`}
+                     active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
+                   />
+                  <Menu.Item name='danger'
+                    as={Link} to={`${match.url}/danger`}
+                    active={activeItem === 'danger'} onClick={this.handleItemClick}
+                   />
+                </Menu>
+              </Grid.Column>
 
-            <Grid.Column width={12}>
-              <Switch>
-                <Redirect exact from={match.url} to={routes.ACCOUNT_PROFILE} />
-                <Route path={routes.ACCOUNT_PROFILE} render={(props) => <Profile {...props}
-                  user={user}
-                  email={email}
-                  username={username}
-                  usernameTaken={usernameTaken}
-                  displayName={displayName}
-                  change={this.handleProfileInfoChange}
-                  submit={this.onProfileInfoSubmit}
-                  />} />
-                <Route path={routes.ACCOUNT_PHOTO} render={() => <Photo
-                  image={images}
-                  photo={photoUrl}
-                  photoChange={this.handlePhotoChange}
-                  submit={this.onPhotoSubmit}
-                  />} />
-                <Route path={routes.ACCOUNT_PASSWORD_CHANGE} render={ () => <PasswordChangeForm />} />
-                <Route
-                  path={routes.ACCOUNT_PASSWORD_FORGET}
-                  render={ () => <PasswordForgetPage />} />
-                <Route path={routes.ACCOUNT_DANGER} render={() => <Danger />} />
-              </Switch>
-            </Grid.Column>
+              <Grid.Column width={12}>
+                <Switch>
+                  <Redirect exact from={match.url} to={routes.ACCOUNT_PROFILE} />
+                  <Route path={routes.ACCOUNT_PROFILE} render={(props) => <Profile {...props}
+                    user={user}
+                    email={email}
+                    username={username}
+                    usernameTaken={usernameTaken}
+                    displayName={displayName}
+                    change={this.handleProfileInfoChange}
+                    submit={this.onProfileInfoSubmit}
+                    />} />
+                  <Route path={routes.ACCOUNT_PHOTO} render={() => <Photo
+                    image={images}
+                    photo={photoUrl}
+                    photoChange={this.handlePhotoChange}
+                    submit={this.onPhotoSubmit}
+                    />} />
+                  <Route path={routes.ACCOUNT_PASSWORD_CHANGE} render={ () => <PasswordChangeForm />} />
+                  <Route
+                    path={routes.ACCOUNT_PASSWORD_FORGET}
+                    render={ () => <PasswordForgetPage />} />
+                  <Route path={routes.ACCOUNT_DANGER} render={() => <Danger />} />
+                </Switch>
+              </Grid.Column>
 
-          </Grid.Row>
-        </Grid>
-      </Container>
+            </Grid.Row>
+          </Grid>
+        </Container>
+        </Responsive>
+        <Responsive minWidth={320} maxWidth={992}>
+            <Grid>
+              <Grid.Column>
+                   <Container>
+                      <Segment basic>
+                          <Header as='h5'>
+                            <Image circular src={profile} size='tiny'/>
+                            <Header.Content>
+                              {user.username}
+                              <Header.Subheader>
+                                {user.email}
+                              </Header.Subheader>
+                            </Header.Content>
+                         </Header>
+                        </Segment>
+                    </Container>
+              </Grid.Column>
+            </Grid>
+          </Responsive>
+  </div>
     );
   }
 }
