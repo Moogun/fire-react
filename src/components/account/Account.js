@@ -13,7 +13,7 @@ import Danger from './Danger'
 import {db} from '../../firebase';
 import {storage} from '../../firebase/firebase';
 
-import { Container, Menu, Grid, Image, Responsive, Segment, Header} from 'semantic-ui-react'
+import { Container, Menu, Grid, Image, Responsive, Segment, Header, Icon, Sidebar} from 'semantic-ui-react'
 
 const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
@@ -29,6 +29,7 @@ class AccountPage extends Component {
       username: '',
       displayName: '',
       photoUrl: '',
+      visible: false,
     };
   }
 
@@ -37,22 +38,22 @@ class AccountPage extends Component {
   componentDidMount(){
     console.log('did mount');
     const {authUser} = this.context
-    // db.onceGetUser(authUser.uid)
-    //   .then(res => {
-    //        // console.log('res', res.val())
-    //        this.setState ({
-    //           user: res.val(),
-    //           uid: authUser.uid,
-    //           email: res.val().email,
-    //           username: res.val().username,
-    //           displayName: res.val().displayName,
-    //           photoUrl: res.val().photoUrl ? res.val().photoUrl : profile,
-    //           images: {},
-    //         })
-    //   })
-    //   .catch(error => {
-    //     this.setState(byPropKey('error', error));
-    //   })
+    db.onceGetUser(authUser.uid)
+      .then(res => {
+           // console.log('res', res.val())
+           this.setState ({
+              user: res.val(),
+              uid: authUser.uid,
+              email: res.val().email,
+              username: res.val().username,
+              displayName: res.val().displayName,
+              photoUrl: res.val().photoUrl ? res.val().photoUrl : profile,
+              images: {},
+            })
+      })
+      .catch(error => {
+        this.setState(byPropKey('error', error));
+      })
   }
 
   handleProfileInfoChange = (event) => {
@@ -156,12 +157,15 @@ class AccountPage extends Component {
   componentWillUnMount(){
     console.log('account will un mount 1');
   }
+
+  toggleVisibility = () => this.setState({ visible: !this.state.visible })
+
   render() {
     const {match} = this.props
     // console.log('account props',this.props.match, this.props.user);
     // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
-    const { activeItem, user, email, username, displayName, photoUrl, usernameTaken, images } = this.state
+    const { activeItem, user, email, username, displayName, photoUrl, usernameTaken, images, visible } = this.state
     // console.log('photoUrl', photoUrl, 'image', images);
 
     return (
@@ -237,8 +241,8 @@ class AccountPage extends Component {
             <Grid>
               <Grid.Column>
                    <Container>
-                      <Segment basic>
-                          <Header as='h5'>
+                      <Segment basic clearing >
+                          <Header as='h5' floated='left'>
                             <Image circular src={profile} size='tiny'/>
                             <Header.Content>
                               {user.username}
@@ -247,8 +251,82 @@ class AccountPage extends Component {
                               </Header.Subheader>
                             </Header.Content>
                          </Header>
+                         <Header as='h6' floated='right' onClick={this.toggleVisibility}>
+                            <Icon name='settings' />
+                          </Header>
                         </Segment>
-                    </Container>
+
+                        <Sidebar.Pushable
+                          // as={Segment}
+                          >
+                           <Sidebar
+                             as={Menu}
+                             animation='overlay'
+                             width='thin'
+                             direction='right'
+                             visible={visible}
+                             icon='labeled'
+                             vertical
+                             inverted
+                           >
+                             <br/>
+                             <Menu.Item name='profile'
+                               active
+                               // as={Link} to='/account/profile'
+                               as={Link} to={`${match.url}/profile`}
+                               active={activeItem === 'profile'} onClick={this.handleItemClick}
+                              />
+                             <Menu.Item name='photo'
+                               // as={Link} to='/account/photo'
+                               as={Link} to={`${match.url}/photo`}
+                                 active={activeItem === 'photo'} onClick={this.handleItemClick}
+                              />
+                              <Menu.Item name='passwordChange'
+                               // as={Link} to='/account/passwordChange'
+                                as={Link} to={`${match.url}/pw-change`}
+                                 active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
+                             />
+                             <Menu.Item name='passwordForget'
+                              // as={Link} to='/account/passwordForget'
+                               as={Link} to={`${match.url}/pw-forget`}
+                                active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
+                              />
+                             <Menu.Item name='danger'
+                               as={Link} to={`${match.url}/danger`}
+                               active={activeItem === 'danger'} onClick={this.handleItemClick}
+                              />
+
+                           </Sidebar>
+                           <Sidebar.Pusher>
+                             {/* <Segment basic> */}
+                                 <Switch>
+                                   <Redirect exact from={match.url} to={routes.ACCOUNT_PROFILE} />
+                                   <Route path={routes.ACCOUNT_PROFILE} render={(props) => <Profile {...props}
+                                     user={user}
+                                     email={email}
+                                     username={username}
+                                     usernameTaken={usernameTaken}
+                                     displayName={displayName}
+                                     change={this.handleProfileInfoChange}
+                                     submit={this.onProfileInfoSubmit}
+                                     />} />
+                                   <Route path={routes.ACCOUNT_PHOTO} render={() => <Photo
+                                     image={images}
+                                     photo={photoUrl}
+                                     photoChange={this.handlePhotoChange}
+                                     submit={this.onPhotoSubmit}
+                                     />} />
+                                   <Route path={routes.ACCOUNT_PASSWORD_CHANGE} render={ () => <PasswordChangeForm />} />
+                                   <Route
+                                     path={routes.ACCOUNT_PASSWORD_FORGET}
+                                     render={ () => <PasswordForgetPage />} />
+                                   <Route path={routes.ACCOUNT_DANGER} render={() => <Danger />} />
+                               </Switch>
+                             {/* </Segment> */}
+                           </Sidebar.Pusher>
+                         </Sidebar.Pushable>
+
+                  </Container>
               </Grid.Column>
             </Grid>
           </Responsive>
