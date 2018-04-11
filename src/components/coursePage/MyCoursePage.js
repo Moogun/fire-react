@@ -152,7 +152,7 @@ class MyCoursePage extends Component {
               <SectionContainer_M>
                 <Header as='h3'
                   style={style.DASHBOARD_HEADER_M}
-                  >Dashboard</Header>
+                  >Course title goes here </Header>
 
                 <Menu size='small' secondary pointing inverted
                   style={style.DASHBOARD_MENU_M}

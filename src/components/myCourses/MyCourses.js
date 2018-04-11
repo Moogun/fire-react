@@ -1,7 +1,8 @@
   import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {db} from '../../firebase';
-import CourseCards from '../courses/CourseCards'
+
+import MyCourseCards from '../courses/MyCourseCards'
 import { Grid, Header, Menu, Visibility, Responsive, Card, Button } from 'semantic-ui-react'
 import {Link, withRouter} from 'react-router-dom'
 
@@ -94,7 +95,7 @@ class MyCourses extends Component {
 
                         <Header as='h1'
                           style={style.DASHBOARD_HEADER}>My Courses</Header>
-                          
+
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -102,7 +103,7 @@ class MyCourses extends Component {
                   <Grid style={style.DASHBOARD_BODY} centered>
                     <Grid.Row>
                       <Grid.Column width={12}>
-                        <CourseCards courses={attendingCourses}/>
+                        <MyCourseCards courses={attendingCourses}/>
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -115,7 +116,7 @@ class MyCourses extends Component {
                           <Grid.Column >
                             <Header as='h1'
                               style={style.DASHBOARD_HEADER_M}>My Courses</Header>
-                                <CourseCards courses={attendingCourses}/>
+                                <MyCourseCards courses={attendingCourses}/>
                           </Grid.Column>
                       </Grid>
                     </Grid.Row>
