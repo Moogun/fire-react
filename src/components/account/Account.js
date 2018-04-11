@@ -30,10 +30,14 @@ class AccountPage extends Component {
       displayName: '',
       photoUrl: '',
       visible: false,
+      dimmed: false,
     };
   }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name })
+    this.toggleVisibility()
+  }
 
   componentDidMount(){
     console.log('did mount');
@@ -158,14 +162,14 @@ class AccountPage extends Component {
     console.log('account will un mount 1');
   }
 
-  toggleVisibility = () => this.setState({ visible: !this.state.visible })
+  toggleVisibility = () => this.setState({ visible: !this.state.visible, dimmed: !this.state.dimmed })
 
   render() {
     const {match} = this.props
     // console.log('account props',this.props.match, this.props.user);
     // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
-    const { activeItem, user, email, username, displayName, photoUrl, usernameTaken, images, visible } = this.state
+    const { activeItem, user, email, username, displayName, photoUrl, usernameTaken, images, visible, dimmed } = this.state
     // console.log('photoUrl', photoUrl, 'image', images);
 
     return (
@@ -297,7 +301,7 @@ class AccountPage extends Component {
                               />
 
                            </Sidebar>
-                           <Sidebar.Pusher>
+                           <Sidebar.Pusher dimmed={dimmed}>
                              {/* <Segment basic> */}
                                  <Switch>
                                    <Redirect exact from={match.url} to={routes.ACCOUNT_PROFILE} />
