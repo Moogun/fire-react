@@ -9,6 +9,9 @@ import CourseTeaching from './CourseTeaching'
 import QPanel from './QPanel'
 import {db} from '../../firebase';
 import { Grid, Header, Menu, Visibility, Responsive, Segment } from 'semantic-ui-react'
+import SectionContainer from '../navbar/SectionContainer'
+import SectionContainer_M from '../navbar/SectionContainer_M'
+
 
 class Dashboard extends Component {
 
@@ -93,45 +96,68 @@ class Dashboard extends Component {
       return (
 
         <Grid >
-          <Grid.Row>
             <Grid.Column>
 
-                <Responsive {...Responsive.onlyComputer}>
-                  <Grid style={style.DASHBOARD_HEAD} centered>
-                      <Grid.Row>
-                        <Grid.Column width={12}>
+                <SectionContainer>
+                    <Header as='h1' style={style.DASHBOARD_HEADER}>Dashboard</Header>
 
-                            <Header as='h1' style={style.DASHBOARD_HEADER}>Dashboard</Header>
+                    <Menu size='small' secondary pointing inverted
+                      style={style.DASHBOARD_MENU} >
+                        <Menu.Item name='courses'
+                          active={activeItem === 'courses'}
+                          onClick={this.handleItemClick}
+                          as={Link} to={`${match.url}/courses`}
+                          style={style.DASHBOARD_MENU_ITEM}
+                        />
+                        <Menu.Item
+                          name='questions'
+                          active={activeItem === 'questions'}
+                          onClick={this.handleItemClick}
+                          as={Link} to={`${match.url}/questions`}
+                          style={style.DASHBOARD_MENU_ITEM}
+                        />
+                        <Menu.Item
+                          name='announcement'
+                          active={activeItem === 'announcement'}
+                          onClick={this.handleItemClick}
+                          style={style.DASHBOARD_MENU_ITEM}
+                        />
+                      </Menu>
+                  </SectionContainer>
 
-                            <Menu size='small' secondary pointing inverted
-                              style={style.DASHBOARD_MENU} >
-                                <Menu.Item name='courses'
-                                  active={activeItem === 'courses'}
-                                  onClick={this.handleItemClick}
-                                  as={Link} to={`${match.url}/courses`}
-                                  style={style.DASHBOARD_MENU_ITEM}
-                                />
-                                <Menu.Item
-                                  name='questions'
-                                  active={activeItem === 'questions'}
-                                  onClick={this.handleItemClick}
-                                  as={Link} to={`${match.url}/questions`}
-                                  style={style.DASHBOARD_MENU_ITEM}
-                                />
-                                <Menu.Item
-                                  name='announcement'
-                                  active={activeItem === 'announcement'}
-                                  onClick={this.handleItemClick}
-                                  style={style.DASHBOARD_MENU_ITEM}
-                                />
-                              </Menu>
+                  <SectionContainer_M>
+                      <Header as='h3'
+                        style={style.DASHBOARD_HEADER_M}
+                        >Dashboard</Header>
 
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                    <Grid style={style.DASHBOARD_BODY} centered>
-                      <Grid.Row>
-                        <Grid.Column width={12}>
+                      <Menu size='small' secondary pointing inverted
+                        style={style.DASHBOARD_MENU_M}
+                         >
+                          <Menu.Item name='courses'
+                            active={activeItem === 'courses'}
+                            onClick={this.handleItemClick}
+                            as={Link} to={`${match.url}/courses`}
+                            style={style.DASHBOARD_MENU_ITEM}
+                          />
+                          <Menu.Item
+                            name='questions'
+                            active={activeItem === 'questions'}
+                            onClick={this.handleItemClick}
+                            as={Link} to={`${match.url}/questions`}
+                            style={style.DASHBOARD_MENU_ITEM}
+                          />
+                          <Menu.Item
+                            name='announcement'
+                            active={activeItem === 'announcement'}
+                            onClick={this.handleItemClick}
+                            style={style.DASHBOARD_MENU_ITEM}
+                          />
+                        </Menu>
+                    </SectionContainer_M>
+
+
+                    <Grid style={style.DASHBOARD_BODY}>
+                        <Grid.Column>
 
                           <Switch>
                             <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
@@ -146,76 +172,9 @@ class Dashboard extends Component {
                           </Switch>
 
                         </Grid.Column>
-                      </Grid.Row>
                     </Grid>
 
-                </Responsive>
-
-              <Responsive {...Responsive.onlyMobile} >
-
-                <Grid style={style.DASHBOARD_HEAD_M}>
-                    <Grid.Row>
-                      <Grid container>
-                          <Grid.Column >
-
-                              <Header as='h1' style={style.DASHBOARD_HEADER_M}>Dashboard</Header>
-
-                              <Menu size='small' secondary pointing inverted
-                                style={style.DASHBOARD_MENU_M} >
-                                  <Menu.Item name='courses'
-                                    active={activeItem === 'courses'}
-                                    onClick={this.handleItemClick}
-                                    as={Link} to={`${match.url}/courses`}
-                                    style={style.DASHBOARD_MENU_ITEM}
-                                  />
-                                  <Menu.Item
-                                    name='questions'
-                                    active={activeItem === 'questions'}
-                                    onClick={this.handleItemClick}
-                                    as={Link} to={`${match.url}/questions`}
-                                    style={style.DASHBOARD_MENU_ITEM}
-                                  />
-                                  <Menu.Item
-                                    name='announcement'
-                                    active={activeItem === 'announcement'}
-                                    onClick={this.handleItemClick}
-                                    style={style.DASHBOARD_MENU_ITEM}
-                                  />
-                                </Menu>
-                          </Grid.Column>
-                      </Grid>
-
-                    </Grid.Row>
-                  </Grid>
-
-                  <Grid>
-                      <Grid.Row>
-                        <Grid container>
-                            <Grid.Column >
-
-                              <Switch>
-                                <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
-                                <Route path={routes.DASHBOARD_COURSES} render = {(props) =>
-                                  <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
-
-                                <Route path={routes.DASHBOARD_Q_PANEL} render = {() => <QPanel
-                                  options={selectOption}
-                                  questions={questions}
-                                  didChooseCourse={this.handleDidChooseCourse}
-                                  selectedCourse={cid}
-                                  queClick={this.handleQuestionClick}
-                                 />} />
-                              </Switch>
-                            </Grid.Column>
-                      </Grid>
-
-                    </Grid.Row>
-                  </Grid>
-
-              </Responsive>
-
             </Grid.Column>
-          </Grid.Row>
         </Grid>
 
       );

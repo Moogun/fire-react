@@ -105,7 +105,9 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
                 <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1em'}} >
                      <Icon name='user circle' />
                 </Menu.Item>
-                <Menu.Item  as={Link} to={routes.LEARNING} style={{float:'right', color: 'white',}} >
+                <Menu.Item  as={Link} to={routes.LEARNING}
+                  style={{float:'right', color: 'white',}} 
+                  >
                   <Icon name='book' />
                 </Menu.Item>
 

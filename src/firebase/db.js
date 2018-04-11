@@ -34,11 +34,6 @@ export const doUpdateUserProfile = (uid, username, displayName) =>
           updateObj[`courses/${cid}/metadata/lowercaseUsername`] = lowercaseUsername
           updateObj[`courses/${cid}/metadata/displayName`] = displayName
         })
-        // console.log('db t list updateObj', updateObj);
-        // updateObj[`users/${uid}/username`] = username
-        // updateObj[`users/${uid}/lowercaseUsername`] = lowercaseUsername
-        // updateObj[`users/${uid}/displayName`] = displayName
-        // console.log('db t list updateObj', updateObj);
       }
 
       updateObj[`users/${uid}/username`] = username
@@ -47,11 +42,6 @@ export const doUpdateUserProfile = (uid, username, displayName) =>
       console.log('db t list updateObj', updateObj);
       return db.ref().update(updateObj)
     })
-  //   return db.ref(`users/${uid}`).update({
-  //   username,
-  //   displayName,
-  //   lowercaseUsername,
-  // })
 }
 
 export const doUpdateUserPhoto = (uid, downloadURL) =>
@@ -108,6 +98,27 @@ export const onceGetPublishedCourses = () =>
 //get 1 course
 export const onceGetCourse = (courseKey) =>
   db.ref('courses').child(courseKey).once('value');
+
+//get my course
+export const onceGetMyCourses = (uid) =>
+  db.ref().child('attendingList').child(uid).once('value')
+
+  // return teachingList.once('value').then(snap => {
+  //   let updateObj = {}
+  //   if (snap.val()) {
+  //     console.log('db t list snap4');
+  //     let cList = Object.keys(snap.val())
+  //     console.log('db t list snap5');
+  //     cList.forEach(cid => {
+  //       updateObj[`teaching/${uid}/${cid}/metadata/tProfileImg`] = downloadURL
+  //       updateObj[`courses/${cid}/metadata/tProfileImg`] = downloadURL
+  //     })
+  //   }
+  //
+  //     updateObj[`users/${uid}/photoUrl`] = downloadURL
+  //   return db.ref().update(updateObj)
+  // })
+
 
 
 //course creation

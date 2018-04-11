@@ -31,63 +31,35 @@ class MyCourses extends Component {
   componentDidMount(){
     console.log('my courses did mount 1 ', )
     const {authUser} = this.context
-    if (!!authUser) {
+    console.log('authUser', authUser);
+    if (authUser) {
 
       let myCourses = []
+      db.onceGetMyCourses(authUser.uid)
+        .then(snap => {
+          // console.log('db getting my courses snap', snap.val());
+          let courseObj = {}
 
-        // db.onceGetUser(authUser.uid)
-        // .then(userSnap => {
-        //   console.log('user snap', userSnap.val())
-        //
-        //   let cAttending = userSnap.val().courseAttending
-        //
-        //   if (cAttending) {
-        //     Object.keys(cAttending).map(key => {
-        //       db.onceGetCourse(key)
-        //         .then(res => {
-        //           console.log('get course', res.val());
-        //           let course = res.val()
-        //           let tid = res.val().metadata.teacherId
-        //           // console.log('return', this.handleFetchTeacher(tid))
-        //           db.onceGetUser(tid)
-        //             .then(res => {
-        //               console.log('res teacher', res.val())
-        //               let tName = res.val().username
-        //               course.metadata.username = tName
-        //               console.log('c meta username',course.metadata.username)
-        //               myCourses.push(course)
-        //               this.setState ({attendingCourses: myCourses})
-        //             })
-        //         })
-        //     })
-        //   }
-        // })
+          if (snap.val()) {
+            let aList = Object.keys(snap.val())
+            aList.forEach(cid => {
+              // console.log('db getting my courses cid', cid);
+              db.onceGetCourse(cid)
+                .then(res => {
+                  courseObj[cid] = res.val()
+                  this.setState ({ attendingCourses: courseObj})
+                })
+                .catch(error => {
+                  this.setState({[error]: error});
+                });
+            })
+          }
+        })
+        .catch(error => {
+          this.setState({[error]: error});
+        });
+
     }
-  }
-
-  handleFetchMyCourses(cAttending){
-    console.log('course attending', cAttending);
-    console.log('attending', Object.keys(cAttending));
-
-    let myCourses = []
-
-    // Object.keys(cAttending).map(key => {
-    //   db.onceGetCourse(key)
-    //     .then(res => {
-    //       console.log('get course', res.val());
-    //       let course = res.val()
-    //       let tid = res.val().metadata.teacherId
-    //       // console.log('return', this.handleFetchTeacher(tid))
-    //       db.onceGetUser(tid)
-    //         .then(res => {
-    //           console.log('res teacher', res.val())
-    //           let tName = res.val().username
-    //           course.metadata.username = tName
-    //           console.log('c meta username',course.metadata.username)
-    //           myCourses.push(course)
-    //         })
-    //     })
-    // })
   }
 
   handleQuestion = () => {
@@ -100,7 +72,7 @@ class MyCourses extends Component {
 
     const {calculations, activeItem, attendingCourses} = this.state
     console.log('width', calculations.width, 'attendingCourses', attendingCourses);
-    console.log('setting high min width removes the error', 'getBoundingClientRect');
+
     let margin;
     if (calculations.width > 1127 ) {
       margin = '3em'
@@ -122,26 +94,7 @@ class MyCourses extends Component {
 
                         <Header as='h1'
                           style={style.DASHBOARD_HEADER}>My Courses</Header>
-
-                          {/* <Menu size='small' secondary pointing inverted
-                            style={dashboardHeaderMenuBorderColor} >
-                              <Menu.Item name='courses'
-                                active={activeItem === 'courses'}
-                                onClick={this.handleItemClick}
-                                // as={Link} to={`${match.url}/courses`}
-                              />
-                              <Menu.Item
-                                name='questions'
-                                active={activeItem === 'questions'}
-                                onClick={this.handleItemClick}
-                                // as={Link} to={`${match.url}/questions`}
-                              />
-                              <Menu.Item
-                                name='announcement'
-                                active={activeItem === 'announcement'}
-                                onClick={this.handleItemClick} />
-                            </Menu> */}
-
+                          
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
@@ -149,47 +102,20 @@ class MyCourses extends Component {
                   <Grid style={style.DASHBOARD_BODY} centered>
                     <Grid.Row>
                       <Grid.Column width={12}>
-
-                        {/* <Switch>
-                          <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
-                          <Route path={routes.DASHBOARD_COURSES} render = {(props) => <CourseTeaching {...props} courses={courseTeaching} click={this.handleCourseClick}/> } />
-                          <Route path={routes.DASHBOARD_Q_PANEL} component = {QPanel} />
-                        </Switch> */}
                         <CourseCards courses={attendingCourses}/>
-
-                        {/* <Card>
-                            <Card.Content>
-                             <Image floated='left' size='mini' src='/assets/images/avatar/large/steve.jpg' />
-                              <Button floated='right' color='red' onClick={this.handleQuestion}> Q</Button>
-                              <Card.Header> Steve Sanders</Card.Header>
-                              <Card.Meta> Friends of Elliot </Card.Meta>
-                            </Card.Content>
-
-                            <Card.Content extra>
-                              <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
-                            </Card.Content>
-                            <Card.Content extra>
-                              <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
-                            </Card.Content>
-                            <Card.Content extra>
-                              <a> 그로스해킹과 구글 애널리틱스 실전 CAMP <br /> 18.04~18.05</a>
-                            </Card.Content>
-                          </Card> */}
-
-
                       </Grid.Column>
                     </Grid.Row>
                   </Grid>
                 </Responsive>
 
-                <Responsive {...Responsive.onlyMobile} >
+                <Responsive minWidth={320} maxWidth={992}>
                   <Grid style={style.DASHBOARD_HEAD_M} >
                     <Grid.Row>
                       <Grid container>
                           <Grid.Column >
                             <Header as='h1'
                               style={style.DASHBOARD_HEADER_M}>My Courses</Header>
-
+                                <CourseCards courses={attendingCourses}/>
                           </Grid.Column>
                       </Grid>
                     </Grid.Row>

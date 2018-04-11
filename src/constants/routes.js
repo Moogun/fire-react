@@ -11,7 +11,7 @@ export const ACCOUNT_PASSWORD_CHANGE = '/account/my/pw-change';
 export const ACCOUNT_DANGER = '/account/my/danger';
 
 //1.
-export const LEARNING = '/learning/my';
+export const LEARNING = '/learning/my/e';
 export const LEARNING_MY_COURSES = '/learning/my/courses';
 
 //2. internal pages nested routes
@@ -38,6 +38,7 @@ export const TEACHER_PAGE_QUESTIONS = '/teacher/:tName/questions';
 
 //5.
 export const COURSE_PAGE = '/:tName/:cTitle'; // query t info with c title
+export const MY_COURSE_PAGE = '/my/:tName/:cTitle'; // query t info with c title
 export const QUESTION_PAGE = '/teacher/:tName/question/:qNum'; // q details, get access from TEACHER_PAGE_QUESTIONS, and fetch q detail from q list
 
 //TEACHER DASHBOARD,

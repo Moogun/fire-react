@@ -21,6 +21,7 @@ import CEdit from './courseManage/CEdit';
 // import Create from './courseManage/Create';
 import Create from './courseManage/CreateC';
 import CoursePage from './coursePage/CoursePage';
+import MyCoursePage from './coursePage/MyCoursePage';
 
 import MyCourses from './myCourses/MyCourses';
 import Dashboard from './dashboard/Dashboard';
@@ -101,6 +102,12 @@ class App extends Component {
             // exact path='/:teacherName/courses/:courseName'
             exact path={routes.COURSE_PAGE}
             render={() => <CoursePage />}
+          />
+
+          <Route
+            // exact path='/:teacherName/courses/:courseName'
+            exact path={routes.MY_COURSE_PAGE}
+            render={() => <MyCoursePage />}
           />
 
           <Route

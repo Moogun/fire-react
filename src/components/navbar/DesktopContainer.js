@@ -22,7 +22,7 @@ class DesktopContainer extends Component {
     const { children, authUser } = this.props
     const { fixed, activeItem } = this.state
     return (
-      <Responsive {...Responsive.onlyComputer}>
+      <Responsive minWidth={992}>
         <Visibility once={false} onBottomPassed={this.showFixedMenu} onBottomPassedReverse={this.hideFixedMenu}>
             { authUser
                 ? <DesktopAuth fixed={fixed} activeItem={activeItem} authUser={authUser}/>

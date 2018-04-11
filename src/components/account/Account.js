@@ -255,82 +255,81 @@ class AccountPage extends Component {
                               </Header.Subheader>
                             </Header.Content>
                          </Header>
-                         <Header as='h6' floated='right' onClick={this.toggleVisibility}>
-                            <Icon name='settings' />
+                         <Header as='h5' floated='right' onClick={this.toggleVisibility}>
+                            <Icon name='ellipsis vertical'/>
                           </Header>
                         </Segment>
 
-                        <Sidebar.Pushable
-                          // as={Segment}
-                          >
-                           <Sidebar
-                             as={Menu}
-                             animation='overlay'
-                             width='thin'
-                             direction='right'
-                             visible={visible}
-                             icon='labeled'
-                             vertical
-                             inverted
-                           >
-                             <br/>
-                             <Menu.Item name='profile'
-                               active
-                               // as={Link} to='/account/profile'
-                               as={Link} to={`${match.url}/profile`}
-                               active={activeItem === 'profile'} onClick={this.handleItemClick}
-                              />
-                             <Menu.Item name='photo'
-                               // as={Link} to='/account/photo'
-                               as={Link} to={`${match.url}/photo`}
-                                 active={activeItem === 'photo'} onClick={this.handleItemClick}
-                              />
-                              <Menu.Item name='passwordChange'
-                               // as={Link} to='/account/passwordChange'
-                                as={Link} to={`${match.url}/pw-change`}
-                                 active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
-                             />
-                             <Menu.Item name='passwordForget'
-                              // as={Link} to='/account/passwordForget'
-                               as={Link} to={`${match.url}/pw-forget`}
-                                active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
-                              />
-                             <Menu.Item name='danger'
-                               as={Link} to={`${match.url}/danger`}
-                               active={activeItem === 'danger'} onClick={this.handleItemClick}
-                              />
-
-                           </Sidebar>
-                           <Sidebar.Pusher dimmed={dimmed}>
-                             {/* <Segment basic> */}
-                                 <Switch>
-                                   <Redirect exact from={match.url} to={routes.ACCOUNT_PROFILE} />
-                                   <Route path={routes.ACCOUNT_PROFILE} render={(props) => <Profile {...props}
-                                     user={user}
-                                     email={email}
-                                     username={username}
-                                     usernameTaken={usernameTaken}
-                                     displayName={displayName}
-                                     change={this.handleProfileInfoChange}
-                                     submit={this.onProfileInfoSubmit}
-                                     />} />
-                                   <Route path={routes.ACCOUNT_PHOTO} render={() => <Photo
-                                     image={images}
-                                     photo={photoUrl}
-                                     photoChange={this.handlePhotoChange}
-                                     submit={this.onPhotoSubmit}
-                                     />} />
-                                   <Route path={routes.ACCOUNT_PASSWORD_CHANGE} render={ () => <PasswordChangeForm />} />
-                                   <Route
-                                     path={routes.ACCOUNT_PASSWORD_FORGET}
-                                     render={ () => <PasswordForgetPage />} />
-                                   <Route path={routes.ACCOUNT_DANGER} render={() => <Danger />} />
-                               </Switch>
-                             {/* </Segment> */}
-                           </Sidebar.Pusher>
-                         </Sidebar.Pushable>
-
                   </Container>
+                  <Sidebar.Pushable
+                    // as={Segment}
+                    >
+                     <Sidebar
+                       as={Menu}
+                       animation='overlay'
+                       width='thin'
+                       direction='right'
+                       visible={visible}
+                       icon='labeled'
+                       vertical
+                       inverted
+                     >
+                       <br/>
+                       <Menu.Item name='profile'
+                         active
+                         // as={Link} to='/account/profile'
+                         as={Link} to={`${match.url}/profile`}
+                         active={activeItem === 'profile'} onClick={this.handleItemClick}
+                        />
+                       <Menu.Item name='photo'
+                         // as={Link} to='/account/photo'
+                         as={Link} to={`${match.url}/photo`}
+                           active={activeItem === 'photo'} onClick={this.handleItemClick}
+                        />
+                        <Menu.Item name='passwordChange'
+                         // as={Link} to='/account/passwordChange'
+                          as={Link} to={`${match.url}/pw-change`}
+                           active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
+                       />
+                       <Menu.Item name='passwordForget'
+                        // as={Link} to='/account/passwordForget'
+                         as={Link} to={`${match.url}/pw-forget`}
+                          active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
+                        />
+                       <Menu.Item name='danger'
+                         as={Link} to={`${match.url}/danger`}
+                         active={activeItem === 'danger'} onClick={this.handleItemClick}
+                        />
+
+                     </Sidebar>
+                     <Sidebar.Pusher dimmed={dimmed}>
+                       {/* <Segment basic> */}
+                           <Switch>
+                             <Redirect exact from={match.url} to={routes.ACCOUNT_PROFILE} />
+                             <Route path={routes.ACCOUNT_PROFILE} render={(props) => <Profile {...props}
+                               user={user}
+                               email={email}
+                               username={username}
+                               usernameTaken={usernameTaken}
+                               displayName={displayName}
+                               change={this.handleProfileInfoChange}
+                               submit={this.onProfileInfoSubmit}
+                               />} />
+                             <Route path={routes.ACCOUNT_PHOTO} render={() => <Photo
+                               image={images}
+                               photo={photoUrl}
+                               photoChange={this.handlePhotoChange}
+                               submit={this.onPhotoSubmit}
+                               />} />
+                             <Route path={routes.ACCOUNT_PASSWORD_CHANGE} render={ () => <PasswordChangeForm />} />
+                             <Route
+                               path={routes.ACCOUNT_PASSWORD_FORGET}
+                               render={ () => <PasswordForgetPage />} />
+                             <Route path={routes.ACCOUNT_DANGER} render={() => <Danger />} />
+                         </Switch>
+                       {/* </Segment> */}
+                     </Sidebar.Pusher>
+                   </Sidebar.Pushable>
               </Grid.Column>
             </Grid>
           </Responsive>
