@@ -18,7 +18,7 @@ class QuestionTable extends Component {
     return (
       <Segment basic textAlign='center' style={qPanelQuestionTablePadding}>
         <Container >
-            <Table attached padded>
+            <Table unstackable>
             <Table.Body>
 
               {Object.keys(questions).map(qid =>
@@ -32,6 +32,7 @@ class QuestionTable extends Component {
           <Button primary>Load more</Button>
         </Container>
       </Segment>
+
     );
   }
 }

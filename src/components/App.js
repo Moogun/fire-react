@@ -106,7 +106,7 @@ class App extends Component {
 
           <Route
             // exact path='/:teacherName/courses/:courseName'
-            exact path={routes.MY_COURSE_PAGE}
+            path={routes.MY_COURSE_PAGE}
             render={() => <MyCoursePage />}
           />
 
