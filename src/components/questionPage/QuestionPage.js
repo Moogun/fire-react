@@ -56,9 +56,9 @@ class QuestionPage extends Component {
     const { answerText, answers } = this.state
     let answerList = answers ? answers : null
       return (
-          <Segment basic>
+          <Segment >
             <Container text>
-
+              <Icon name='left arrow' />
               <Question question={this.props.location.state.q}/>
               <AnswerList answers={answerList}/>
               <CommentForm value={answerText} submit={this.handleSubmit} change={this.handleChange}/>
