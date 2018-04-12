@@ -4,20 +4,22 @@ import profile from '../../assets/profile-lg.png'
 
 const Question = (props) => {
   return (
+
     <Comment.Group>
       <Comment>
         <Comment.Avatar src={profile} />
         <Comment.Content>
-          <Comment.Author as='a'>{props.question.username}</Comment.Author>
-          <Comment.Metadata>
-            <div>5days ago</div>
-          </Comment.Metadata>
-          <Comment.Text>{props.question.title}
-            {/* <Image src={profile}/> */}
-          </Comment.Text>
-          <Comment.Text>
-            {props.question.text}
-          </Comment.Text>
+          <Comment.Author>{props.question.title}</Comment.Author>
+            <Comment.Metadata>
+              <div>{props.question.askedBy}</div>
+              <div>
+                {props.question.createdAt}
+              </div>
+            </Comment.Metadata>
+            <Comment.Text>
+              {props.question.text}
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus repellat iusto, dolorem quae quas dicta nobis autem, eum. Voluptatum nulla ad officiis qui quibusdam atque, minima incidunt obcaecati iusto consectetur.
+            </Comment.Text>
 
           <Comment.Actions>
             <Comment.Action>나도 궁금</Comment.Action>

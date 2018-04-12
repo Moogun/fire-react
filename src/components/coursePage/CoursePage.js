@@ -11,6 +11,8 @@ import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visib
 import profile from '../../assets/profile-lg.png'
 
 import {Link, withRouter} from 'react-router-dom';
+import * as style from '../../style/inline';
+
 import {db} from '../../firebase';
 
 import { createEditorState, Editor,} from 'medium-draft';
@@ -37,7 +39,7 @@ const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
 })
 
-const coursePageHeader = { backgroundColor: '#34495e', marginTop: '0rem'}
+
 
 class CoursePage extends Component {
   constructor(props){
@@ -210,54 +212,44 @@ class CoursePage extends Component {
      </Modal>
 
     return (
-      <Grid>
-        <Grid.Row>
-            <Grid.Column>
+      <div>
+          <Grid style={style.COURSE_PAGE_HEAD_GRID} stackable centered>
+                <Grid.Row
+                  style={style.COURSE_PAGE_HEAD_GRID_ROW}
+                  >
+                  <Grid.Column width={12} >
 
-                <Grid style={coursePageHeader} stackable centered>
-                      <Grid.Row
-                        style={{ marginTop: '2rem', marginBottom: '2rem'}}
-                        >
-                        <Grid.Column width={12} >
+                       <Header as='h1' inverted content={title} subheader='좌절하지 말고 오라' />
+                       <Header as='h2' onClick={this.handleNavToTeacher}  style={{color: '#fff'}}>
+                        <Image circular src={profile}/>
+                        <Header.Content>
+                          {tName} <Rating icon='star' defaultRating={5} maxRating={5} disabled/>
+                          <Header.Subheader style={{color: '#fff'}}>
+                            The best of the best
+                          </Header.Subheader>
+                        </Header.Content>
 
-                          <Segment basic style={{margin: '0rem'}}>
-                            <Header as='h1'
-                              style={{color: '#fff'}}
-                              content={title}
-                             />
-                             <Header as='h4' style={{marginTop: '0', color: '#fff'}}>  {subTitle} </Header>
-                             <Header as='h4' style={{marginTop: '0', color: '#fff'}} onClick={this.handleNavToTeacher}>  {tName} </Header>
-                             {register}
-                          </Segment>
-                          {/* <Segment basic style={{margin: '0rem'}}>
-                              <Item.Group>
-                                <Item>
-                                  <Item.Image size='tiny' src={teacherProfile} />
-                                  <Item.Content>
-                                    <Item.Header as='h2' style={textColor}>{title}</Item.Header>
-                                    <Item.Header as='h3' style={textColor}>{subTitle}</Item.Header>
-                                    <Item.Meta style={textColor}> {teacherName} </Item.Meta>
-                                  </Item.Content>
-                                </Item>
-                              </Item.Group>
-                            </Segment> */}
-                        </Grid.Column>
-                      </Grid.Row>
-                  </Grid>
+                      </Header>
 
-                  <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}}       stackable centered
-                    >
-                      <Grid.Column width={10} >
-                          <CourseMeta meta={meta}/>
-                          <CourseFeatures features={features}/>
-                          <CourseGallery images={images}/>
-                          <CourseCurri curri={renderedHtml}/>
-                      </Grid.Column>
-                  </Grid>
+                       {register}
+                  </Grid.Column>
+                </Grid.Row>
+            </Grid>
 
-            </Grid.Column>
-        </Grid.Row>
-      </Grid>
+
+            <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}}       stackable centered
+              >
+                <Grid.Column width={10} >
+
+                    <CourseMeta meta={meta}/>
+                    <CourseFeatures features={features}/>
+                    <CourseGallery images={images}/>
+                    <CourseCurri curri={renderedHtml}/>
+
+                </Grid.Column>
+             </Grid>
+
+          </div>
 
     )
   }

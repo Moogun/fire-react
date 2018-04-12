@@ -53,7 +53,7 @@ let QUESTIONS =  {
       "-L8aaR70p5Bgq7VQMNrM" : {
         "answers" : {
           "-L8dxagSnECUBEd4JzIW" : {
-            "answerText" : "abc",
+            "answerText" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
             "createdAt" : "2days ago",
             "img" : "img"
@@ -115,8 +115,8 @@ let QUESTIONS =  {
         },
         "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
         "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "다 알려줘요\n",
+        "createdAt" : "5 days ago",
+        "text" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n",
         "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
         "title" : "마케팅 "
       },
@@ -224,6 +224,7 @@ class MyCoursePage extends Component {
   constructor(props){
     super(props)
     this.state = {
+      activeItem: 'questions',
       subTitle: '',
       menuFixed: false,
       openCourse: false,
@@ -421,7 +422,7 @@ class MyCoursePage extends Component {
       <Grid >
           <Grid.Column>
               <SectionContainer>
-                <Header as='h1' style={style.DASHBOARD_HEADER}>title goes here</Header>
+                <Header as='h1' style={style.DASHBOARD_HEADER}>{cTitle}</Header>
 
                 <Menu size='small' secondary pointing inverted
                   style={style.DASHBOARD_MENU_M}
@@ -459,7 +460,7 @@ class MyCoursePage extends Component {
               <SectionContainer_M>
                 <Header as='h3'
                   style={style.DASHBOARD_HEADER_M}
-                  >Course title goes here </Header>
+                  >{cTitle} </Header>
 
                 <Menu size='small' secondary pointing inverted
                   style={style.DASHBOARD_MENU_M}

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Footer from './footer/Footer';
 import * as routes from '../constants/routes';
 
+import Structure from '../Structure';
 import LandingPage from './Landing';
 import HomePage from './Home';
 
@@ -37,6 +38,10 @@ class App extends Component {
       <Router>
         <ResponsiveContainer>
           {/* <Navigation/> */}
+          <Route
+          exact path='/structure'
+          component={() => <Structure />}
+          />
 
           <Route
           exact path={routes.LANDING}

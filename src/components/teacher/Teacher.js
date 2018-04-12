@@ -9,6 +9,8 @@ import CoursePage from '../coursePage/CoursePage'
 import profile from '../../assets/profile-lg.png'
 import {db} from '../../firebase';
 
+import * as style from '../../style/inline';
+
 const NEW_Q = {
   text: '',
   title:'',
@@ -24,7 +26,7 @@ let QUESTIONS =  {
       "-L8aaR70p5Bgq7VQMNrM" : {
         "answers" : {
           "-L8dxagSnECUBEd4JzIW" : {
-            "answerText" : "abc",
+            "answerText" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
             "createdAt" : "2days ago",
             "img" : "img"
@@ -367,71 +369,68 @@ class Teacher extends Component {
     // console.log('teacher render 1 questions', questions )
 
     return (
-      <Grid style={{backgroundColor: '#ecf0f1', marginTop: '0rem' }}>
-        <Grid.Row style={{paddingTop: '0rem'}}>
-            <Grid.Column>
+      <div>
+          <Grid style={style.COURSE_PAGE_HEAD_GRID} stackable centered>
+                <Grid.Row
+                  style={style.COURSE_PAGE_HEAD_GRID_ROW}
+                  >
+                  <Grid.Column width={12} >
 
-               {/* <Breadcrumb style={{marginTop: '2em' }}>
-               <Breadcrumb.Section link as={Link} to='/'> Home </Breadcrumb.Section>
-               <Breadcrumb.Divider icon='right angle' />
-               <Breadcrumb.Section>{tName}</Breadcrumb.Section>
-               </Breadcrumb> */}
+                       <Header as='h1' inverted >
+                        <Image circular src={profile}/>
+                        <Header.Content>
+                          {tName}
+                          <Header.Subheader style={{color: '#fff'}}>
+                            The best of the best
+                          </Header.Subheader>
+                          <Header.Subheader style={{color: '#fff'}}>
+                            <Rating icon='star' defaultRating={5} maxRating={5} disabled/>
+                          </Header.Subheader>
+                        </Header.Content>
 
-               <Grid
-                 style={{ backgroundColor: '#34495e', marginTop: '0rem'}} stackable centered
-                 >
-                   <Grid.Column width={12} >
-                       <Segment basic style={{margin: '2em' }} >
-                         <Header as='h1'
-                           // style={{color: '#fff'}}
-                           content={tName}
-                           subheader='Profile' />
-                           <Rating icon='star' defaultRating={5} maxRating={4} />
-                           <p> '000 reviews' </p>
-                       </Segment>
-                     </Grid.Column>
-
-                     {/* <Grid.Column width={3} textAlign='center'>
-                       <Image src={profile} circular centered/>
-                     </Grid.Column>
-                     <Grid.Column width={1}>
-                     </Grid.Column> */}
-                   </Grid>
-
-                   <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} stackable centered>
-                    <Grid.Column width={12}>
-                      <Segment basic>
-                        <Menu size='large' inverted>
-                          <Container>
-                            <Menu.Item
-                              name='course'
-                              active={activeItem === 'courses'}
-                              onClick={this.handleItemClick}
-                              as={Link} to={`${match.url}/courses`}>Courses</Menu.Item>
-                            <Menu.Item
-                              name='question'
-                              active={activeItem === 'questions'}
-                              onClick={this.handleItemClick}
-                              as={Link} to={`${match.url}/questions`}>Questions</Menu.Item>
-                            <Menu.Item
-                              name='story'
-                              active={activeItem === 'story'}
-                              onClick={this.handleItemClick}
-                              as={Link} to={`${match.url}/story`}>Story</Menu.Item>
-                            <Menu.Item
-                              name='review'
-                              active={activeItem === 'review'}
-                              onClick={this.handleItemClick}
-                              as={Link} to={`${match.url}/story`}>Review</Menu.Item>
-                            </Container>
-                          </Menu>
-                         </Segment>
-                      </Grid.Column>
-                 </Grid>
-
+                      </Header>
+                  </Grid.Column>
+                </Grid.Row>
+            </Grid>
+                <Menu
+                   secondary pointing
+                    >
+                      <Container text>
+                        <Menu.Item
+                          name='courses'
+                          active={activeItem === 'courses'}
+                          onClick={this.handleItemClick}
+                          as={Link} to={`${match.url}/courses`}
+                          style={style.DASHBOARD_MENU_ITEM}
+                          >Courses</Menu.Item>
+                        <Menu.Item
+                          name='questions'
+                          active={activeItem === 'questions'}
+                          onClick={this.handleItemClick}
+                          as={Link} to={`${match.url}/questions`}
+                          style={style.DASHBOARD_MENU_ITEM}
+                          >Questions</Menu.Item>
+                        <Menu.Item
+                          name='story'
+                          active={activeItem === 'story'}
+                          onClick={this.handleItemClick}
+                          as={Link} to={`${match.url}/story`}
+                          style={style.DASHBOARD_MENU_ITEM}
+                          >Story</Menu.Item>
+                        <Menu.Item
+                          name='review'
+                          active={activeItem === 'review'}
+                          onClick={this.handleItemClick}
+                          as={Link} to={`${match.url}/story`}
+                          style={style.DASHBOARD_MENU_ITEM}
+                          >Review</Menu.Item>
+                        </Container>
+                  </Menu>
 
                  <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} stackable centered>
-                  <Grid.Column width={12}>
+                  <Grid.Column
+                    // width={12}
+                    >
 
                         <Switch>
                           <Redirect exact strict from={match.url} to={`${match.url}/courses`} />
@@ -464,10 +463,7 @@ class Teacher extends Component {
                      </Grid.Column>
                    </Grid>
 
-           </Grid.Column>
-       </Grid.Row>
-     </Grid>
-
+</div>
     //         <Header
     //           as='h1'
     //           content='Teacher Name'
@@ -482,6 +478,8 @@ class Teacher extends Component {
     //           }}
     //           // color='yellow'
     //         />
+
+
     );
   }
 }

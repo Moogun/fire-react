@@ -9,6 +9,7 @@ const CourseMeta = ({meta}) => {
   let textbook = meta ? meta.textbook : ''
   let location = meta ? meta.location : ''
   return (
+
     <Grid.Row style={{margin: '3em 0em'}}>
         <Grid.Column >
 
@@ -36,7 +37,7 @@ const CourseMeta = ({meta}) => {
             </Table>
             </Segment>
 
-        </Grid.Column>
+         </Grid.Column>
       </Grid.Row>
   )
 }
