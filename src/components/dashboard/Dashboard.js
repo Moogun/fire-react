@@ -8,6 +8,7 @@ import withAuthorization from '../../HOC/withAuthorization';
 import CourseCards from '../courses/CourseCards'
 import CourseTeaching from './CourseTeaching'
 import QPanel from './QPanel'
+import Announcement from './Announcement'
 import {db} from '../../firebase';
 import { Grid, Header, Menu, Visibility, Responsive, Segment } from 'semantic-ui-react'
 import SectionContainer from '../navbar/SectionContainer'
@@ -309,6 +310,7 @@ class Dashboard extends Component {
                           name='announcement'
                           active={activeItem === 'announcement'}
                           onClick={this.handleItemClick}
+                          as={Link} to={`${match.url}/announcement`}
                           style={style.DASHBOARD_MENU_ITEM}
                         />
                       </Menu>
@@ -339,6 +341,7 @@ class Dashboard extends Component {
                             name='announcement'
                             active={activeItem === 'announcement'}
                             onClick={this.handleItemClick}
+                            as={Link} to={`${match.url}/announcement`}
                             style={style.DASHBOARD_MENU_ITEM}
                           />
                         </Menu>
@@ -366,6 +369,8 @@ class Dashboard extends Component {
                               queClick={this.handleQuestionClick}
                               loading={isLoading}
                              />} />
+                             <Route path={routes.DASHBOARD_AN} render = {() => <Announcement
+                              />} />
                           </Switch>
 
                         </Grid.Column>
