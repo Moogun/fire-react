@@ -14,8 +14,6 @@ const CourseCard = ({course, click}) => {
       profileImg = profile
     }
     return (
-      <Grid.Column>
-
         <Card fluid onClick={click} style={{borderRadius: '0rem'}} >
 
          <Card.Content>
@@ -31,11 +29,11 @@ const CourseCard = ({course, click}) => {
             <Card.Description> - {course.metadata.textbook} </Card.Description>
             <Card.Description> - {course.metadata.date} </Card.Description>
           </Card.Content>
-
+{/* <Route path="/teacher" render={Teacher} /> */}
         </Card>
 
-        <Route path="/teacher" render={Teacher} />
-      </Grid.Column>
+
+
     );
   }
 

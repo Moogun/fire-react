@@ -13,6 +13,7 @@ export const ACCOUNT_DANGER = '/account/my/danger';
 //1.
 export const LEARNING = '/learning/my/e';
 export const LEARNING_MY_COURSES = '/learning/my/courses';
+export const LEARNING_MY_WISHLIST = '/learning/my/wishlist';
 
 //2. internal pages nested routes
 export const CREATE = '/create';

@@ -1,17 +1,21 @@
   import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {db} from '../../firebase';
+import * as routes from '../../constants/routes';
+import * as style from '../../style/inline';
+import withAuthorization from '../../HOC/withAuthorization';
 
 import MyCourseCards from '../courses/MyCourseCards'
 import { Grid, Header, Menu, Visibility, Responsive, Card, Button } from 'semantic-ui-react'
-import {Link, withRouter} from 'react-router-dom'
+import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
+import SectionContainer from '../navbar/SectionContainer'
+import SectionContainer_M from '../navbar/SectionContainer_M'
 
-import * as style from '../../style/inline';
 
 class MyCourses extends Component {
 
     state = {
-      activeItem : '',
+      activeItem : 'courses',
       calculations: {
         width: 0,
         topPassed: false,
@@ -25,7 +29,10 @@ class MyCourses extends Component {
         onScreen: false,
         offScreen: false,
       },
+      isLoading: false,
   }
+
+  handleItemClick = (e, {name}) => this.setState({activeItem: name})
 
   handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
@@ -70,69 +77,80 @@ class MyCourses extends Component {
   }
 
   render() {
-
-    const {calculations, activeItem, attendingCourses} = this.state
+    const {match} = this.props
+    const {calculations, activeItem, attendingCourses, isLoading} = this.state
     console.log('width', calculations.width, 'attendingCourses', attendingCourses);
 
-    let margin;
-    if (calculations.width > 1127 ) {
-      margin = '3em'
-    } else if (calculations.width > 933) {
-      margin = '0em'
-    }
+    return (
+      <Grid>
+          <Grid.Column>
 
-      return (
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
+            <SectionContainer>
+                <Header as='h1' style={style.DASHBOARD_HEADER}>My Courses</Header>
+                <Menu size='small' secondary pointing inverted
+                  style={style.DASHBOARD_MENU} >
+                    <Menu.Item name='courses'
+                      active={activeItem === 'courses'}
+                      onClick={this.handleItemClick}
+                      as={Link} to={`${match.url}/courses`}
+                      style={style.DASHBOARD_MENU_ITEM}
+                    />
+                    <Menu.Item
+                      name='wishlist'
+                      active={activeItem === 'wishlist'}
+                      onClick={this.handleItemClick}
+                      as={Link} to={`${match.url}/wishlist`}
+                      style={style.DASHBOARD_MENU_ITEM}
+                    />
+                  </Menu>
+            </SectionContainer>
 
-              <Responsive {...Responsive.onlyComputer}>
-                  <Grid
-                    style={style.DASHBOARD_HEAD}
-                    centered>
-                    <Grid.Row>
-                      <Grid.Column width={12}>
+            <SectionContainer_M>
+              <Header as='h3' style={style.DASHBOARD_HEADER_M}>My Courses</Header>
+              <Menu size='small' secondary pointing inverted
+                style={style.DASHBOARD_MENU} >
+                  <Menu.Item name='courses'
+                    active={activeItem === 'courses'}
+                    onClick={this.handleItemClick}
+                    as={Link} to={`${match.url}/courses`}
+                    style={style.DASHBOARD_MENU_ITEM}
+                  />
+                  <Menu.Item
+                    name='wishlist'
+                    active={activeItem === 'wishlist'}
+                    onClick={this.handleItemClick}
+                    as={Link} to={`${match.url}/wishlist`}
+                    style={style.DASHBOARD_MENU_ITEM}
+                  />
+                </Menu>
+            </SectionContainer_M>
 
-                        <Header as='h1'
-                          style={style.DASHBOARD_HEADER}>My Courses</Header>
+            <Grid style={style.DASHBOARD_BODY}>
+                <Grid.Column>
+                  <MyCourseCards courses={attendingCourses} loading={isLoading}/>
+                  {/* <Switch> */}
+                    {/* <Redirect exact from={match.url} to={routes.LEARNING_MY_COURSES} />
+                    <Route path={routes.LEARNING_MY_COURSES} render = {(props) =>
+                      // <MyCourseCards {...props}
+                        courses={attendingCourses}
+                      />
+                      } /> */}
 
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
+                  {/* </Switch> */}
 
-                  <Grid style={style.DASHBOARD_BODY} centered>
-                    <Grid.Row>
-                      <Grid.Column width={12}>
-                        <MyCourseCards courses={attendingCourses}/>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                </Responsive>
+                </Grid.Column>
+            </Grid>
 
-                <Responsive minWidth={320} maxWidth={992}>
-                  <Grid style={style.DASHBOARD_HEAD_M} >
-                    <Grid.Row>
-                      <Grid container>
-                          <Grid.Column >
-                            <Header as='h1'
-                              style={style.DASHBOARD_HEADER_M}>My Courses</Header>
-                                <MyCourseCards courses={attendingCourses}/>
-                          </Grid.Column>
-                      </Grid>
-                    </Grid.Row>
-                  </Grid>
-
-                </Responsive>
-
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      );
-    }
+          </Grid.Column>
+      </Grid>
+    );
+  }
 }
 
 MyCourses.contextTypes ={
   authUser: PropTypes.object,
 }
 
-export default withRouter(MyCourses)
+const authCondition = (authUser) => !!authUser;
+
+export default withAuthorization(authCondition)(MyCourses);

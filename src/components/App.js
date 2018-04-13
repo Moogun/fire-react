@@ -68,24 +68,17 @@ class App extends Component {
             render={() => <AccountPage />}
           />
 
-          {/* <Route
-            exact path={routes.PASSWORD_FORGET}
-            component={() => <PasswordForgetPage />}
-          /> */}
-
           <Route
             exact path={routes.LEARNING}
             component={() => <MyCourses />}
           />
 
           <Route
-            // exact path='/teaching'
             path={routes.DASHBOARD}
             render={() => <Dashboard />}
           />
 
           <Route
-            // path='/course_manage/:id/edit'
             path={routes.COURSE_MANAGE}
             component={() => <CEdit />}
           />
@@ -96,12 +89,6 @@ class App extends Component {
             path={routes.TEACHER_PAGE}
             render={() => <Teacher />}
           />
-
-
-          {/* <Route
-            exact path='/teacher/:teacherId/course/:courseId'
-            render={() => <CoursePage />}
-          /> */}
 
           <Route
             // exact path='/:teacherName/courses/:courseName'
