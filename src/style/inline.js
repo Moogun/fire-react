@@ -18,9 +18,11 @@ export const DASHBOARD_MENU = {borderColor: '#2980b9'}
 export const DASHBOARD_MENU_M = {borderColor: '#2980b9', marginTop: '0rem'}
 
 
-export const DASHBOARD_MENU_ITEM = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginLeft: '1rem', marginRight: '0rem'}
+export const DASHBOARD_MENU_ITEM = {borderWidth: '5px', paddingLeft: '0', paddingRight: '2px', marginLeft: '0rem', marginRight: '1rem'}
 export const DASHBOARD_MENU_ITEM_M = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
 
 
-export const DASHBOARD_BODY = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
+export const DASHBOARD_BODY = {marginTop: '0rem', marginBottom: '0rem', backgroundColor: '#ecf0f1'}
 export const DASHBOARD_BODY_M = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
+
+export const SEGMENT_LOADER = {padding: '0rem'}

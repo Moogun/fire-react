@@ -32,7 +32,7 @@ class MobileContainer extends Component {
   render() {
     const { children, authUser, mobile } = this.props
     const { fixed, activeItem, sidebarOpened, searchFieldActive } = this.state
-    console.log('mobile container', mobile);
+    // console.log('mobile container', mobile);
     return (
       <Responsive minWidth={320} maxWidth={991}>
           { authUser

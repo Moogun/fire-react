@@ -427,10 +427,8 @@ class Teacher extends Component {
                         </Container>
                   </Menu>
 
-                 <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} stackable centered>
-                  <Grid.Column
-                    // width={12}
-                    >
+                 <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} centered>
+                  <Grid.Column>
 
                         <Switch>
                           <Redirect exact strict from={match.url} to={`${match.url}/courses`} />
