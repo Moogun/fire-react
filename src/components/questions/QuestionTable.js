@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import { Segment,Container, Table, Button} from 'semantic-ui-react'
+import { Segment,Container, Table, Button, Responsive} from 'semantic-ui-react'
 import QuestionRow from './QuestionRow'
 
 const qPanelQuestionTablePadding = {paddingTop: '0px', 'paddingLeft': '0px'}
@@ -16,25 +16,48 @@ class QuestionTable extends Component {
     const {questions} = this.props
 
     return (
-      <Segment basic textAlign='center' style={qPanelQuestionTablePadding}>
-        <Container >
-            <Table unstackable>
-            <Table.Body>
+      <div>
+        <Responsive {...Responsive.onlyComputer}>
+           <Container text>
 
-              {Object.keys(questions).map(qid =>
-                <QuestionRow key={qid}
-                  question={questions[qid]}
-                  click={()=> this.handleQueClick(qid)} /> )}
+            <Q_Table questions={questions}/>
 
-            </Table.Body>
-          </Table>
-          <br/>
-          <Button primary>Load more</Button>
-        </Container>
-      </Segment>
+          </Container>
+        </Responsive>
 
+
+        {/* This produced the same with below, Guess it has something to do with 
+           <Responsive {...Responsive.onlyTablet}>
+          <Q_Table questions={questions}/>
+        </Responsive> */}
+
+        <Responsive minWidth={320} maxWidth={991}>
+          <Q_Table questions={questions}/>
+        </Responsive>
+    </div>
     );
   }
 }
 
 export default withRouter(QuestionTable)
+
+
+const Q_Table = ({questions}) => {
+  return (
+    <div>
+      <Table unstackable style={{marginTop: '1rem'}}>
+        <Table.Body>
+
+          {Object.keys(questions).map(qid =>
+            <QuestionRow key={qid}
+              question={questions[qid]}
+              click={()=> this.handleQueClick(qid)} /> )}
+
+        </Table.Body>
+      </Table>
+      <Segment basic textAlign='center'>
+        <Button content='Load more'/>
+      </Segment>
+    </div>
+  );
+}

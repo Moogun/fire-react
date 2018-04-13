@@ -393,7 +393,7 @@ class Teacher extends Component {
                 </Grid.Row>
             </Grid>
                 <Menu
-                   secondary pointing
+                   secondary pointing style={style.SUB_MENU}
                     >
                       <Container text>
                         <Menu.Item
@@ -401,28 +401,28 @@ class Teacher extends Component {
                           active={activeItem === 'courses'}
                           onClick={this.handleItemClick}
                           as={Link} to={`${match.url}/courses`}
-                          style={style.DASHBOARD_MENU_ITEM}
-                          >Courses</Menu.Item>
+                          // style={style.DASHBOARD_MENU_ITEM}
+                          >수업</Menu.Item>
                         <Menu.Item
                           name='questions'
                           active={activeItem === 'questions'}
                           onClick={this.handleItemClick}
                           as={Link} to={`${match.url}/questions`}
-                          style={style.DASHBOARD_MENU_ITEM}
-                          >Questions</Menu.Item>
+                          // style={style.DASHBOARD_MENU_ITEM}
+                          >질문</Menu.Item>
                         <Menu.Item
                           name='story'
                           active={activeItem === 'story'}
                           onClick={this.handleItemClick}
                           as={Link} to={`${match.url}/story`}
-                          style={style.DASHBOARD_MENU_ITEM}
+                          // style={style.DASHBOARD_MENU_ITEM}
                           >Story</Menu.Item>
                         <Menu.Item
                           name='review'
                           active={activeItem === 'review'}
                           onClick={this.handleItemClick}
                           as={Link} to={`${match.url}/story`}
-                          style={style.DASHBOARD_MENU_ITEM}
+                          // style={style.DASHBOARD_MENU_ITEM}
                           >Review</Menu.Item>
                         </Container>
                   </Menu>

@@ -30,9 +30,9 @@ class MobileContainer extends Component {
   handleSearchClick = () => { console.log('search clicked')}
 
   render() {
-    const { children, st, authUser } = this.props
+    const { children, authUser, mobile } = this.props
     const { fixed, activeItem, sidebarOpened, searchFieldActive } = this.state
-
+    console.log('mobile container', mobile);
     return (
       <Responsive minWidth={320} maxWidth={991}>
           { authUser
@@ -106,7 +106,7 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
                      <Icon name='user circle' />
                 </Menu.Item>
                 <Menu.Item  as={Link} to={routes.LEARNING}
-                  style={{float:'right', color: 'white',}} 
+                  style={{float:'right', color: 'white',}}
                   >
                   <Icon name='book' />
                 </Menu.Item>

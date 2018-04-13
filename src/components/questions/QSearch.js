@@ -1,21 +1,25 @@
 import React from 'react'
-import { Segment,Container, Button, Grid, Input } from 'semantic-ui-react'
+import { Segment,Container, Button, Grid, Input, Form, Responsive } from 'semantic-ui-react'
 const newQButton = {paddingLeft: '0.5rem'}
 
 const QSearch = (props) =>
-  // <Segment basic>
-  //   <Container text>
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={12}>
-            <Input type="text" fluid icon="search" placeholder="search" onChange={props.change} loading={props.isLoading}/>
-          </Grid.Column>
-          <Grid.Column width={4} verticalAlign="middle" style={newQButton}>
-            <Button size="large" onClick={props.click} color='red'>New question</Button>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-  //   </Container>
-  // </Segment>
+<div>
+    <Responsive {...Responsive.onlyComputer}>
+      <Container text>
+        <Form>
+          <Form.Group>
+            <Form.Input  type="text" icon="search" placeholder='Search' width={12} onChange={props.change} />
+            <Form.Button fluid width={4} onClick={props.click} color='red'> New question </Form.Button>
+          </Form.Group>
+        </Form>
+      </Container>
+    </Responsive>
 
+    <Responsive minWidth={320} maxWidth={991}>
+      <Form>
+          <Form.Input  type="text" icon="search" placeholder='Search' onChange={props.change} />
+          <Form.Button fluid onClick={props.click} color='red'> New question </Form.Button>
+      </Form>
+    </Responsive>
+ </div>
 export default QSearch

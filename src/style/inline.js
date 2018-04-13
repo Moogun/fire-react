@@ -2,6 +2,8 @@
 export const COURSE_PAGE_HEAD_GRID = { backgroundColor: '#34495e', marginTop: '0rem'}
 export const COURSE_PAGE_HEAD_GRID_ROW = { marginTop: '2rem', marginBottom: '2rem'}
 
+export const SUB_MENU = { marginBottom: '0rem'}
+
 export const DASHBOARD_HEAD = {marginTop: '0rem', paddingTop: '2rem', backgroundColor: '#2980b9'}
 export const DASHBOARD_HEAD_M = { marginTop: '0rem', marginBottom: '0rem',paddingTop: '0rem', backgroundColor: '#2980b9'}
 export const DASHBOARD_HEAD_M_ROW = {paddingBottom: '0'}
