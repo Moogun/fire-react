@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Segment, Container, Header, Icon, Menu, Image, Grid, Breadcrumb, Rating} from 'semantic-ui-react'
+import { Segment, Container, Header, Icon, Menu, Image, Grid, Breadcrumb, Rating, Responsive} from 'semantic-ui-react'
 import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
 import Courses from './Courses'
 import Questions from './Questions'
@@ -430,33 +430,72 @@ class Teacher extends Component {
                  <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} centered>
                   <Grid.Column>
 
-                        <Switch>
-                          <Redirect exact strict from={match.url} to={`${match.url}/courses`} />
-                          <Route path={`${match.url}/courses`} render={() =>
-                            <Courses
-                              tName={tName}
+                    <Responsive {...Responsive.onlyComputer}>
+                       <Container text>
+
+                         <Switch>
+                           <Redirect exact strict from={match.url} to={`${match.url}/courses`} />
+                           <Route path={`${match.url}/courses`} render={() =>
+                             <Courses
+                               tName={tName}
+                               cTeaching={cTeaching}
+                               click={this.handleCourseClick}
+                             />} />
+                           <Route path={`${match.url}/questions`} render={ (props) =>
+                                 <Questions
+                                   tid={teacherId}
+                                   questions={questions}
+                                   click={this.handleNewQ} {...props}
+                                   queClick={this.handleQuestionClick}
+                                   searchQueryChange={this.handleSearchQueryChange}
+                                   isLoading={isLoading}
+                                 />} />
+                          <Route path={`${match.url}/new-question`} render={() =>
+                            <NewQ
+                              tid={teacherId}
                               cTeaching={cTeaching}
-                              click={this.handleCourseClick}
+                              selectOption={selectOption}
+                              submit={this.handleQuestionSubmit}
+                              change={this.handleQuestionChange}
+                              chooseCourse={this.handleCourseSelect}
                             />} />
-                          <Route path={`${match.url}/questions`} render={ (props) =>
-                                <Questions
-                                  tid={teacherId}
-                                  questions={questions}
-                                  click={this.handleNewQ} {...props}
-                                  queClick={this.handleQuestionClick}
-                                  searchQueryChange={this.handleSearchQueryChange}
-                                  isLoading={isLoading}
-                                />} />
-                         <Route path={`${match.url}/new-question`} render={() =>
-                           <NewQ
-                             tid={teacherId}
-                             cTeaching={cTeaching}
-                             selectOption={selectOption}
-                             submit={this.handleQuestionSubmit}
-                             change={this.handleQuestionChange}
-                             chooseCourse={this.handleCourseSelect}
-                           />} />
-                       </Switch>
+                        </Switch>
+                       </Container>
+                     </Responsive>
+
+                     <Responsive minWidth={320} maxWidth={991}>
+                        <Container>
+
+                          <Switch>
+                            <Redirect exact strict from={match.url} to={`${match.url}/courses`} />
+                            <Route path={`${match.url}/courses`} render={() =>
+                              <Courses
+                                tName={tName}
+                                cTeaching={cTeaching}
+                                click={this.handleCourseClick}
+                              />} />
+                            <Route path={`${match.url}/questions`} render={ (props) =>
+                                  <Questions
+                                    tid={teacherId}
+                                    questions={questions}
+                                    click={this.handleNewQ} {...props}
+                                    queClick={this.handleQuestionClick}
+                                    searchQueryChange={this.handleSearchQueryChange}
+                                    isLoading={isLoading}
+                                  />} />
+                           <Route path={`${match.url}/new-question`} render={() =>
+                             <NewQ
+                               tid={teacherId}
+                               cTeaching={cTeaching}
+                               selectOption={selectOption}
+                               submit={this.handleQuestionSubmit}
+                               change={this.handleQuestionChange}
+                               chooseCourse={this.handleCourseSelect}
+                             />} />
+                         </Switch>
+
+                        </Container>
+                      </Responsive>
 
                      </Grid.Column>
                    </Grid>
@@ -481,6 +520,7 @@ class Teacher extends Component {
     );
   }
 }
+
 
 Teacher.contextTypes ={
   authUser: PropTypes.object,

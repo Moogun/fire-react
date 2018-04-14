@@ -10,7 +10,7 @@ import CourseOpenQ from './CourseOpenQ'
 
 import Questions from '../teacher/Questions'
 
-import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item, Modal, Form, Input, Icon } from 'semantic-ui-react'
+import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item, Modal, Form, Input, Icon, Responsive } from 'semantic-ui-react'
 import SectionContainer from '../navbar/SectionContainer'
 
 import SectionContainer_M from '../navbar/SectionContainer_M'
@@ -422,7 +422,7 @@ class MyCoursePage extends Component {
       <Grid >
           <Grid.Column>
               <SectionContainer>
-                
+
                 <Header as='h1' inverted>
                    <Image circular src={profile}/>
                    <Header.Content>
@@ -512,6 +512,9 @@ class MyCoursePage extends Component {
               <Grid style={style.DASHBOARD_BODY}>
                   <Grid.Column>
 
+                  <Responsive {...Responsive.onlyComputer}>
+                     <Container text>
+
                       <Switch>
 
                       <Redirect exact from={match.url} to={`${match.url}/questions`} />
@@ -538,6 +541,43 @@ class MyCoursePage extends Component {
                            meta={meta}
                           />} />
                     </Switch>
+
+                  </Container>
+                </Responsive>
+
+                <Responsive minWidth={320} maxWidth={991}>
+                   <Container>
+
+                    <Switch>
+
+                    <Redirect exact from={match.url} to={`${match.url}/questions`} />
+                    <Route path={`${match.url}/questions`} render = {(props) =>
+                      <Questions {...props}
+                        questions={questions}
+                        click={this.handleQuestionClick}
+                        // tid={teacherId}
+                        tid='111'
+                        questions={questions}
+                        click={this.handleNewQ} {...props}
+                        queClick={this.handleQuestionClick}
+                        searchQueryChange={this.handleSearchQueryChange}
+                        isLoading={false}
+                      />}
+
+                       />} />
+                    <Route path={`${match.url}/curri`} render = {() =>
+                      <CourseCurri
+                        curri={renderedHtml}
+                       />} />
+                     <Route path={`${match.url}/info`} render = {() =>
+                       <CourseMeta
+                         meta={meta}
+                        />} />
+                  </Switch>
+
+                </Container>
+              </Responsive>
+
 
                   </Grid.Column>
               </Grid>

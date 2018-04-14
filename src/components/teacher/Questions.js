@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import QSearch from '../questions/QSearch'
 import QuestionTable from '../questions/QuestionTable'
 import profile from '../../assets/profile-lg.png'
-import { Grid, Container, Responsive} from 'semantic-ui-react'
+import { Segment} from 'semantic-ui-react'
+import * as style from '../../style/inline';
 
 class Questions extends Component {
   constructor(props) {
@@ -32,32 +33,15 @@ class Questions extends Component {
     let qTable = questions ? <QuestionTable tid={tid} questions={questions} click={this.handleQuestionClick} />
      : <p>no question yet</p>
     return (
-        <div>
-          <Responsive {...Responsive.onlyComputer}>
-             <Container text>
+        <Segment basic style={style.SEGMENT_LOADER}>
+          <QSearch
+            tid={tid}
+            click={() => this.props.click()} change={this.handleSearchQueryChange}
+            searchClick={this.handleSearchClick}
+            isLoading={isLoading}/>
 
-            <QSearch
-              tid={tid}
-              click={() => this.props.click()} change={this.handleSearchQueryChange}
-              searchClick={this.handleSearchClick}
-              isLoading={isLoading}/>
-
-              {qTable}
-            </Container>
-          </Responsive>
-          <Responsive minWidth={320} maxWidth={991}>
-            <Container>
-
-              <QSearch
-                tid={tid}
-                click={() => this.props.click()} change={this.handleSearchQueryChange}
-                searchClick={this.handleSearchClick}
-                isLoading={isLoading}/>
-
-                {qTable}
-            </Container>
-          </Responsive>
-        </div>
+            {qTable}
+        </Segment>
     );
   }
 }
