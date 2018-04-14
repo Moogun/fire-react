@@ -7,32 +7,40 @@ class NewQ extends Component {
     super(props);
     state: {}
   }
+
   render() {
-    const { selectOption, submit, change, chooseCourse} = this.props
+    const { selectOption, submit, cancel, change, chooseCourse, qTitle, qText} = this.props
     let options = selectOption ? selectOption : [{}]
+
+    const isInvalid =
+          qTitle === '' ||
+          qText === ''
 
     return (
       <Segment basic>
         <Container text>
-          <Breadcrumb>
+
+          //my course page Breadcrumb is useless
+          {/* <Breadcrumb>
             <Breadcrumb.Section>Teacher name</Breadcrumb.Section>
             <Breadcrumb.Divider icon='right angle' />
             <Breadcrumb.Section>Course name</Breadcrumb.Section>
             <Breadcrumb.Divider icon='right angle' />
           </Breadcrumb>
-            <br/><br/>
+            <br/><br/> */}
           <Form onSubmit={submit}>
-            <Form.Field>
+            //my course page select option is useless
+            {/* <Form.Field>
               <Select placeholder='Select a course' name="cid" search selection options={options} onChange={chooseCourse} />
+            </Form.Field> */}
+            <Form.Field>
+              <Input placeholder='Enter title' name="qTitle" onChange={change} value={qTitle}/>
             </Form.Field>
             <Form.Field>
-              <Input placeholder='Enter title' name="title" onChange={change}/>
+              <TextArea placeholder='Tell us more' name="qText" onChange={change} value={qText}/>
             </Form.Field>
-            <Form.Field>
-              <TextArea placeholder='Tell us more' name="text" onChange={change}/>
-            </Form.Field>
-            <Button>Cancel</Button>
-            <Button type='submit'>Submit</Button>
+            <Button onClick={this.handleCancel} disabled={isInvalid}>Cancel</Button>
+            <Button type='submit' disabled={isInvalid}>Submit</Button>
             </Form>
 
         </Container>

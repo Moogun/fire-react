@@ -15,7 +15,7 @@ const QuestionRow = ({question, click}) => (
 
       <Header.Content>
         {question.title}
-        <Header.Subheader>Fabric Design Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi odit quam explicabo, maxime hic eum, aut, neque quas sed, aperiam voluptates culpa sit reiciendis. Velit, ex, sint! Rem, ut, neque! </Header.Subheader>
+        <Header.Subheader>{question.text} </Header.Subheader>
       </Header.Content>
 
 
@@ -25,7 +25,7 @@ const QuestionRow = ({question, click}) => (
       textAlign='center'>
       <Header as='h5' image>
         <Header.Content>
-          1{question.answerCount} <br />
+          {question.answerCount} <br />
           <Header.Subheader>Responses</Header.Subheader>
         </Header.Content>
       </Header>

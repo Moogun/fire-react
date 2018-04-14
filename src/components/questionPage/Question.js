@@ -3,22 +3,22 @@ import { Comment } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 
 const Question = (props) => {
+  console.log('qqqq ', props.question[0], props.question[0].title);
   return (
 
     <Comment.Group>
       <Comment>
         <Comment.Avatar src={profile} />
         <Comment.Content>
-          <Comment.Author>{props.question.title}</Comment.Author>
+          <Comment.Author>{props.question[0].title}</Comment.Author>
             <Comment.Metadata>
-              <div>{props.question.askedBy}</div>
+              <div>{props.question[0].askedByUsername}</div>
               <div>
-                {props.question.createdAt}
+                {props.question[0].createdAt}
               </div>
             </Comment.Metadata>
             <Comment.Text>
-              {props.question.text}
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus repellat iusto, dolorem quae quas dicta nobis autem, eum. Voluptatum nulla ad officiis qui quibusdam atque, minima incidunt obcaecati iusto consectetur.
+              {props.question[0].text}
             </Comment.Text>
 
           <Comment.Actions>

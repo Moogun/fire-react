@@ -66,7 +66,6 @@ class MyCourses extends Component {
         .catch(error => {
           this.setState({[error]: error});
         });
-
     }
   }
 
@@ -78,7 +77,7 @@ class MyCourses extends Component {
 
   render() {
     const {match} = this.props
-    const {calculations, activeItem, attendingCourses, isLoading} = this.state
+    const {calculations, activeItem, user, attendingCourses, isLoading} = this.state
     console.log('width', calculations.width, 'attendingCourses', attendingCourses);
 
     return (

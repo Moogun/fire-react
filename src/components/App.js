@@ -102,17 +102,11 @@ class App extends Component {
             render={() => <MyCoursePage />}
           />
 
-          <Route
-            // path='/teacher/:teacherId/question/:questionId'
-            exact path ={routes.QUESTION_PAGE}
-            render={() => <Question />}
-          />
-
-          <Route
+          {/* <Route
             // path='/teacher/:teacherId/question/:questionId'
             exact path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
             render={() => <Question />}
-          />
+          /> */}
 
           <Route
             // eaact path='/create'

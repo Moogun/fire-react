@@ -25,7 +25,7 @@ class MyCourseCards extends Component {
 
   render() {
     // const {courses} = this.state
-    const {courses, loading} = this.props
+    const { courses, loading} = this.props
 
     let courseList = courses ?
         <div>
@@ -34,7 +34,7 @@ class MyCourseCards extends Component {
               <Grid.Column width={12}>
                   <Grid stackable doubling columns={3} style={{marginTop: '0em'}}>
                     {Object.keys(courses).map(key =>
-                      <Grid.Column>
+                      <Grid.Column key={key}>
                         <CourseCard
                           key={key}
                           course={courses[key]} click={() => this.handleClick( key,

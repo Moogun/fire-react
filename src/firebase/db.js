@@ -256,9 +256,10 @@ export const doEnrollInCourse = (tid, cid, password, uid) => {
 
 
 
-export const doSaveNewQ = (tid, cid, askedBy, title, text, createdAt, img) => {
-  console.log('db', tid, cid, askedBy, title, text, createdAt, img);
-  return db.ref('questions').child(tid).push({tid, cid, askedBy, title, text, createdAt})
+export const doSaveNewQ = (tid, cid, askedById, askedByUsername, title, text, createdAt, img) => {
+  console.log('db askedByUsername is needed April 14', tid, cid, askedById, askedByUsername, title, text, createdAt, img);
+  let answerCount = 0
+  return db.ref('questions').child(tid).child(cid).push({tid, cid, askedById, askedByUsername, title, text, createdAt, answerCount})
 }
 
 export const doSaveAnswer = (tid, cid, qid, answeredBy, text, createdAt, img) => {
@@ -267,8 +268,10 @@ export const doSaveAnswer = (tid, cid, qid, answeredBy, text, createdAt, img) =>
   return db.ref('questions').child(tid).child(qid).child('answers').push(answer)
 }
 
-export const doFetchRecentQuestions = (tid) => {
-  return db.ref('questions').child(tid).limitToFirst(10).once('value')
+export const doFetchRecentQuestions = (tid, cid) => {
+  // return db.ref('questions').child(tid).child(cid).limitToFirst(10)
+  // .once('value')
+    return db.ref('questions').child(tid).child(cid)
 }
 
 export const doSearchForQuestions = (tid, queryText) => {
