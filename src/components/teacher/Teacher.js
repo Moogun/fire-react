@@ -366,7 +366,7 @@ class Teacher extends Component {
     const {match} = this.props
     const {tName} = this.props.match.params
     const { activeItem, teacherId, cTeaching, selectOption, questions, isLoading } = this.state
-    // console.log('teacher render 1 questions', questions )
+    // console.log('teacher render 1 questions', questions, )
 
     return (
       <div>

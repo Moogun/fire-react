@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import * as style from '../../style/inline';
 import { Grid, Header, Menu, Visibility, Responsive, Segment } from 'semantic-ui-react'
-
+1
 class SectionContainer extends Component {
   render() {
     const { children} = this.props

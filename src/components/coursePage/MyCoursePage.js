@@ -422,7 +422,20 @@ class MyCoursePage extends Component {
       <Grid >
           <Grid.Column>
               <SectionContainer>
-                <Header as='h1' style={style.DASHBOARD_HEADER}>{cTitle}</Header>
+                
+                <Header as='h1' inverted>
+                   <Image circular src={profile}/>
+                   <Header.Content>
+                     {cTitle}
+                     <Header.Subheader>
+                       course sub title
+                     </Header.Subheader>
+                     <Header.Subheader onClick={this.handleNavToTeacher}>
+                       {teacherName} <Rating icon='star' defaultRating={5} maxRating={5} disabled/>
+                     </Header.Subheader>
+
+                   </Header.Content>
+                </Header>
 
                 <Menu size='small' secondary pointing inverted
                   style={style.DASHBOARD_MENU_M}

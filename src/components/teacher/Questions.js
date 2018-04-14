@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import QSearch from '../questions/QSearch'
 import QuestionTable from '../questions/QuestionTable'
 import profile from '../../assets/profile-lg.png'
-import { Grid, Container} from 'semantic-ui-react'
+import { Grid, Container, Responsive} from 'semantic-ui-react'
 
 class Questions extends Component {
   constructor(props) {
@@ -33,6 +33,9 @@ class Questions extends Component {
      : <p>no question yet</p>
     return (
         <div>
+          <Responsive {...Responsive.onlyComputer}>
+             <Container text>
+
             <QSearch
               tid={tid}
               click={() => this.props.click()} change={this.handleSearchQueryChange}
@@ -40,6 +43,20 @@ class Questions extends Component {
               isLoading={isLoading}/>
 
               {qTable}
+            </Container>
+          </Responsive>
+          <Responsive minWidth={320} maxWidth={991}>
+            <Container>
+
+              <QSearch
+                tid={tid}
+                click={() => this.props.click()} change={this.handleSearchQueryChange}
+                searchClick={this.handleSearchClick}
+                isLoading={isLoading}/>
+
+                {qTable}
+            </Container>
+          </Responsive>
         </div>
     );
   }

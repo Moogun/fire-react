@@ -17,47 +17,43 @@ class QuestionTable extends Component {
 
     return (
       <div>
-        <Responsive {...Responsive.onlyComputer}>
-           <Container text>
+        <Table unstackable style={{marginTop: '1rem'}}>
+          <Table.Body>
 
-            <Q_Table questions={questions}/>
+            {Object.keys(questions).map(qid =>
+              <QuestionRow key={qid}
+                question={questions[qid]}
+                click={()=> this.handleQueClick(qid)} /> )}
 
-          </Container>
-        </Responsive>
-
-
-        {/* This produced the same with below, Guess it has something to do with 
-           <Responsive {...Responsive.onlyTablet}>
-          <Q_Table questions={questions}/>
-        </Responsive> */}
-
-        <Responsive minWidth={320} maxWidth={991}>
-          <Q_Table questions={questions}/>
-        </Responsive>
-    </div>
+          </Table.Body>
+        </Table>
+        <Segment basic textAlign='center'>
+          <Button content='Load more'/>
+        </Segment>
+      </div>
     );
   }
 }
 
 export default withRouter(QuestionTable)
 
-
-const Q_Table = ({questions}) => {
-  return (
-    <div>
-      <Table unstackable style={{marginTop: '1rem'}}>
-        <Table.Body>
-
-          {Object.keys(questions).map(qid =>
-            <QuestionRow key={qid}
-              question={questions[qid]}
-              click={()=> this.handleQueClick(qid)} /> )}
-
-        </Table.Body>
-      </Table>
-      <Segment basic textAlign='center'>
-        <Button content='Load more'/>
-      </Segment>
-    </div>
-  );
-}
+//
+// const Q_Table = ({questions}) => {
+//   return (
+//     <div>
+//       <Table unstackable style={{marginTop: '1rem'}}>
+//         <Table.Body>
+//
+//           {Object.keys(questions).map(qid =>
+//             <QuestionRow key={qid}
+//               question={questions[qid]}
+//               click={()=> this.handleQueClick(qid)} /> )}
+//
+//         </Table.Body>
+//       </Table>
+//       <Segment basic textAlign='center'>
+//         <Button content='Load more'/>
+//       </Segment>
+//     </div>
+//   );
+// }
