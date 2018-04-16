@@ -22,11 +22,19 @@ class Questions extends Component {
   }
 
   render() {
-    const {tid, questions, searchClick, isLoading, loadMore} = this.props
-    console.log('Questions render 1 ', questions, isLoading)
+    const {tid, questions, searchClick, isLoading, loadMore, lastPage} = this.props
+    console.log('Questions render 1 ', questions, isLoading, lastPage)
 
-    let qTable = questions ? <QuestionTable tid={tid} questions={questions} click={this.handleQuestionClick} loadMore={loadMore} isLoading={isLoading}/>
-     : <p>no question yet</p>
+    let qTable = questions ? <QuestionTable
+      tid={tid}
+      questions={questions}
+      click={this.handleQuestionClick}
+      loadMore={loadMore}
+      isLoading={isLoading}
+      lastPage={lastPage}/>
+     : <Segment basic textAlign='center'>
+         No question yet. Ask any question!
+      </Segment>
     return (
         <Segment basic style={style.SEGMENT_LOADER}>
           <QSearch

@@ -66,6 +66,7 @@ class MyCoursePage extends Component {
       modalOpen: false,
       registered: false,
       editorState: createEditorState(),
+
       questions: '',
       isLoading: false,
       lastPage: false,
@@ -79,6 +80,10 @@ class MyCoursePage extends Component {
   unStickTopMenu = () => this.setState({ menuFixed: false })
 
   componentDidMount() {
+    this.handleGetCourseWithTitle()
+  }
+
+  handleGetCourseWithTitle() {
     console.log('course page did mount', this.props.match.params);
     let cTitle = this.props.match.params.cTitle
     let title = cTitle.replace(/-/g, ' ');
@@ -110,68 +115,57 @@ class MyCoursePage extends Component {
             qTitle: '',
             qText: '',
           })
-          const {tid, cid} = this.state
-          // console.log('tid, cid', tid, cid);
+
           let curri = course.curri
           // console.log('curri', curri);
           this.onChange(createEditorState(JSON.parse(curri)))
-
-          let qList =[]
-          let questions = db.doFetchRecentQuestions(tid, cid, 5)
-          questions.on('child_added', (data) => {
-            // console.log('child added data', data.key, data.val(), data.val()["qid"]= data.key);
-            let q = data.val()
-            q['qid'] = data.key
-            // // console.log('q', q);
-            qList.unshift(q)
-            this.setState ({ questions: qList, isLoading: false })
-            console.log('isloading 2 dmt ', this.state.isLoading);
-          })
 
         } else {
           console.log('find a way to display course titles that have dash in it');
         }
 
-        const {authUser} = this.context
-        if (authUser) {
-          console.log('My course page authUser', authUser);
-          db.onceGetUser(authUser.uid)
-            .then(res => {
-              // console.log('my course user', res.val())
-              this.setState ({ user: res.val(), uid: authUser.uid })
-            })
-            .catch(error => {
-              this.setState({[error]: error});
-            });
-        }
+        this.handleContextUserToState()
+      }).then(res => {
+        const {tid, cid} = this.state
+        console.log('tid, cid', tid, cid);
 
+        let qList =[]
+        let fetchedItem = 1
+        let questions = db.doFetchRecentQuestions(tid, cid, 5)
+        questions.on('child_added', (data) => {
+          // console.log('child added data', data.key, data.val(), data.val()["qid"]= data.key);
+          let q = data.val()
+          fetchedItem += 1
+          q['qid'] = data.key
+          // // console.log('q', q);
+          qList.unshift(q)
+
+          if (fetchedItem >= 5) {
+            this.setState ({ questions: qList, isLoading: false, lastPage: false })
+          } else {
+            this.setState ({ questions: qList, isLoading: false, lastPage: true })
+          }
+
+        })
       })
-
+      .catch(error => {
+        this.setState({[error]: error});
+      });
   }
 
-  handleNavToTeacher = () => {
-    const {tName, cTitle,} = this.props.match.params
-    this.props.history.push({pathname: '/' + 'teacher' + '/' + tName })
-  }
-
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
-  //navigation  courses, questions, new question
-
-  handleQuestionClick = (qid) => {
-    const { questions } = this.state
-    console.log('teacher q click', qid);
-    // console.log('teacher q click',questions['qid']);
-    let selected = questions.filter(q => q.qid == qid)
-    console.log('selected', selected);
-    this.props.history.push({
-      pathname: `${this.props.match.url}/question/${qid}`,
-      state:
-        {
-          q: selected,
-          qid: qid
-        }
-    })
+  handleContextUserToState(){
+    const {authUser} = this.context
+    if (authUser) {
+      console.log('My course page authUser', authUser);
+      db.onceGetUser(authUser.uid)
+        .then(res => {
+          // console.log('my course user', res.val())
+          this.setState ({ user: res.val(), uid: authUser.uid })
+        })
+        .catch(error => {
+          this.setState({[error]: error});
+        });
+    }
   }
 
   handleMore = (e) => {
@@ -189,6 +183,7 @@ class MyCoursePage extends Component {
     paginated.on('child_added', (data) => {
       let q = data.val()
         fetchedItem += 1
+
         console.log('fetchedItem', fetchedItem);
         if(lastElmQid === data.key) {
           return
@@ -199,8 +194,39 @@ class MyCoursePage extends Component {
         console.log('p', data.val());
 
         questions.splice(leng, 0, q)
-        this.setState ({ questions: questions, isLoading: false })
-        console.log('isloading 2 handle more ', this.state.isLoading);
+
+        if (fetchedItem >= 5) {
+          this.setState ({ questions: questions, isLoading: false, lastPage: false })
+        } else {
+          this.setState ({ questions: questions, isLoading: false, lastPage: true })
+        }
+
+        console.log('handle more  isloading 2 ', this.state.isLoading, 'lastpage', this.state.lastPage);
+    })
+  }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  handleNavToTeacher = () => {
+    const {tName, cTitle,} = this.props.match.params
+    this.props.history.push({pathname: '/' + 'teacher' + '/' + tName })
+  }
+
+  //navigation  courses, questions, new question
+
+  handleQuestionClick = (qid) => {
+    const { questions } = this.state
+    console.log('teacher q click', qid);
+    // console.log('teacher q click',questions['qid']);
+    let selected = questions.filter(q => q.qid == qid)
+    console.log('selected', selected);
+    this.props.history.push({
+      pathname: `${this.props.match.url}/question/${qid}`,
+      state:
+        {
+          q: selected,
+          qid: qid
+        }
     })
   }
 
@@ -250,8 +276,8 @@ class MyCoursePage extends Component {
 
     this.setState({ isLoading: true, value })
     setTimeout( () => {
-      const {tid} = this.state
-      db.doSearchForQuestions(tid, value)
+      const {tid, cid} = this.state
+      db.doSearchForQuestions(tid, cid, value)
         .then(res => {
           let searchResult = res.val()
           if (searchResult){
@@ -269,14 +295,20 @@ class MyCoursePage extends Component {
 
   saveFechedQuestionsToState = (qList) => {
     console.log('save fetched q to state qlist', qList);
+    let questions = []
     Object.keys(qList).map(key => {
-      let askedBy = qList[key].askedBy
+      let askedBy = qList[key].askedById
       db.onceGetUser(askedBy)
         .then(userSnap => {
           let username = userSnap.val().username
           qList[key].username = username
-          // console.log('handle fetch questions, ', qList);
-          this.setState({questions: qList})
+          qList[key]['qid'] = key
+          console.log('handle searched questions, ', qList);
+          //18, April 16, this returns {qid: {title: '', text: ''} but this is difficult to sort questions
+          let qConverted = Object.assign(qList[key])
+          console.log('handle searched questions converted, ', qConverted);
+          questions.push(qConverted)
+          this.setState({questions: questions})
         })
 
       if (qList[key].answers){
@@ -304,8 +336,8 @@ class MyCoursePage extends Component {
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacherName = tName ? tName : 'Teacher'
 
-    const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images, activeItem, questions, qTitle, qText, isLoading } = this.state
-    console.log('rdr questions', questions, isLoading);
+    const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images, activeItem, questions, qTitle, qText, isLoading, lastPage } = this.state
+    console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
     let teacherProfile = tProfileImg ? tProfileImg : profile
     // let questionsReversed = questions.reverse()
     const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
@@ -423,6 +455,7 @@ class MyCoursePage extends Component {
                           searchQueryChange={this.handleSearchQueryChange}
                           isLoading={isLoading}
                           loadMore={this.handleMore}
+                          lastPage={lastPage}
                         />}
 
                          />} />
@@ -475,6 +508,7 @@ class MyCoursePage extends Component {
                         searchQueryChange={this.handleSearchQueryChange}
                         isLoading={isLoading}
                         loadMore={this.handleMore}
+                        lastPage={lastPage}
                       />}
 
                        />} />

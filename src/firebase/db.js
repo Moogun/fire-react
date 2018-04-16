@@ -297,8 +297,8 @@ export const doFetchNextQuestions = (tid, cid, lastQid, FiveMore) => {
 // limi to last start at - not working
 // orderbykey limi to last start at - 789 789
 
-export const doSearchForQuestions = (tid, queryText) => {
-  return db.ref('questions').child(tid).orderByChild('title').startAt(queryText).endAt(queryText+"\uf8ff").once('value')
+export const doSearchForQuestions = (tid, cid, queryText) => {
+  return db.ref('questions').child(tid).child(cid).orderByChild('title').startAt(queryText).endAt(queryText+"\uf8ff").once('value')
 }
 
 

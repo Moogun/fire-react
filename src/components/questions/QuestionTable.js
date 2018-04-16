@@ -13,8 +13,8 @@ class QuestionTable extends Component {
   }
 
   render() {
-    const {questions, loadMore, isLoading} = this.props
-
+    const {questions, loadMore, isLoading, lastPage} = this.props
+    console.log('q table lastPage', lastPage);
     return (
       <div>
         <Table unstackable style={{marginTop: '1rem'}}>
@@ -37,7 +37,7 @@ class QuestionTable extends Component {
         {/* <Pagination defaultActivePage={3} totalPages={3} /> */}
         <Loader active={isLoading} inline='centered' />
         <Segment basic textAlign='center'>
-          <Button content='Load more' onClick={loadMore}/>
+          <Button content='Load more' disabled={lastPage} onClick={loadMore}/>
         </Segment>
       </div>
     );

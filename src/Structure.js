@@ -92,6 +92,16 @@ class Structure extends Component {
                 </ul>
 
               </Segment>
+              <Segment inverted color='green'>
+                questions
+                <ul>
+                  sort
+                  <li>by course title</li>
+                  <li>by recency</li>
+                  <li>by no response</li>
+                  <li>by following</li>
+                </ul>
+              </Segment>
             </Segment>
           </Grid.Column>
           <Grid.Column>
@@ -141,6 +151,14 @@ class Structure extends Component {
                   </li>
                   <li>curri</li>
                   <li>info</li>
+                </ul>
+              </Segment>
+              <Segment inverted color='green'>
+                questions
+                <ul>
+                  sort
+                  <li>by recency</li>
+                  <li>star? follow? </li>
                 </ul>
               </Segment>
             </Segment>
@@ -208,12 +226,35 @@ class Structure extends Component {
             <Segment>
               body
               <ul>
-                <li>child added</li>
-                <li>child sort</li>
-                <li>data conversion</li>
-                <li>pagination</li>
-                <li>loading view</li>
+                <li style={strikeThrough}>child added</li>
+                <li style={strikeThrough}>child sort</li>
+                <li style={strikeThrough}>data conversion</li>
+                <li style={strikeThrough}>loading view</li>
+                <li >pagination</li>
+                  <ul>
+                    <li>initial retrieving
+                      <ul>
+                        <li> fewer than 5 -prop initial: true, fetchedItem: 1~5, lastPage: true, </li>
+                        <li> more than 5 -
+                          prop initial: true, fetchedItem: 6, lastPage: false,
+                        </li>
+                        <li>gets bigger more than 5 -
+                          prop initial: true, fetchedItem: 6
+                          , lastPage: false,
+                        </li>
+                      </ul>
+                    </li>
 
+                    <li style={{textDecoration: 'bold'}}>more
+                      <ul>
+                        <li>fewer than or equal to 5: initial: false, fetchedItem 5, lastPage: true ( how I know this?, 1) add new q number to course meta(ex: 21), 21/5 no modulas means no more item next</li>
+                        <li>more than 5: initial: false, fetchedItem 5, lastPage: false</li>
+                      </ul>
+                    </li>
+
+
+
+                  </ul>
               </ul>
             </Segment>
           </Segment>
@@ -224,3 +265,4 @@ class Structure extends Component {
 }
 
 export default Structure
+const strikeThrough = {textDecoration: 'line-through'}
