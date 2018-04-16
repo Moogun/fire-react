@@ -13,6 +13,7 @@ if (!firebase.apps.length) {
  firebase.initializeApp(config);
 }
 
+const fb = firebase
 const auth = firebase.auth();
 const google = new firebase.auth.GoogleAuthProvider();
 const facebook = new firebase.auth.FacebookAuthProvider();
@@ -21,6 +22,7 @@ const storage = firebase.storage();
 const msg = firebase.messaging();
 
 export {
+  fb,
   auth,
   google,
   facebook,

@@ -29,7 +29,7 @@ class Structure extends Component {
 
               </Segment>
               <Segment>
-                <Menu pointing secondary  color='blue'>
+                <Menu pointing secondary inverted color='grey'>
                   <Menu.Item name='courses' active={activeItem === 'courses'}
                      // onClick={this.handleItemClick}
                   />
@@ -70,7 +70,7 @@ class Structure extends Component {
                 </Header>
               </Segment>
               <Segment>
-                <Menu pointing secondary  color='blue'>
+                <Menu pointing secondary  inverted color='blue'>
                   <Menu.Item name='courses' active={activeItem === 'courses'}
                      // onClick={this.handleItemClick}
                   />
@@ -115,7 +115,7 @@ class Structure extends Component {
 
               </Segment>
               <Segment>
-                <Menu pointing secondary  color='blue'>
+                <Menu pointing secondary  inverted color='grey'>
                   <Menu.Item name='questions' active={activeItem === 'questions'}
                     // onClick={this.handleItemClick}
                   />
@@ -134,7 +134,11 @@ class Structure extends Component {
                 body
 
                 <ul>
-                  <li>question list </li>
+                  <li>question list
+                    <ul>
+                      <li> (teacher : stateful) - questions  - q table - q row - question page - q + answer list </li>
+                    </ul>
+                  </li>
                   <li>curri</li>
                   <li>info</li>
                 </ul>
@@ -183,9 +187,34 @@ class Structure extends Component {
                   My course /
                 </Header.Content>
               </Header>
+              <Menu pointing secondary  inverted color='blue'>
+                <Menu.Item name='courses' active={activeItem === 'courses'}
+                   // onClick={this.handleItemClick}
+                />
+                <Menu.Item name='wishlist' active={activeItem === 'wishlist'}
+                  // onClick={this.handleItemClick}
+                />
+
+              </Menu>
             </Segment>
             <Segment>
               body
+            </Segment>
+          </Segment>
+        </Grid.Column>
+        <Grid.Column>
+          <Segment>
+             Question page component for teacher page, Dashboard, 'my'course page,
+            <Segment>
+              body
+              <ul>
+                <li>child added</li>
+                <li>child sort</li>
+                <li>data conversion</li>
+                <li>pagination</li>
+                <li>loading view</li>
+
+              </ul>
             </Segment>
           </Segment>
         </Grid.Column>

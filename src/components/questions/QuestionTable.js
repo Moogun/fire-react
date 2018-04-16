@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import { Segment,Container, Table, Button, Responsive, Pagination} from 'semantic-ui-react'
+import { Segment,Container, Table, Button, Responsive, Loader} from 'semantic-ui-react'
 import QuestionRow from './QuestionRow'
 
 const qPanelQuestionTablePadding = {paddingTop: '0px', 'paddingLeft': '0px'}
@@ -13,7 +13,7 @@ class QuestionTable extends Component {
   }
 
   render() {
-    const {questions} = this.props
+    const {questions, loadMore, isLoading} = this.props
 
     return (
       <div>
@@ -34,9 +34,10 @@ class QuestionTable extends Component {
 
           </Table.Body>
         </Table>
-        <Pagination defaultActivePage={3} totalPages={3} />
+        {/* <Pagination defaultActivePage={3} totalPages={3} /> */}
+        <Loader active={isLoading} inline='centered' />
         <Segment basic textAlign='center'>
-          <Button content='Load more'/>
+          <Button content='Load more' onClick={loadMore}/>
         </Segment>
       </div>
     );

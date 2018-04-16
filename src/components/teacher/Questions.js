@@ -6,12 +6,6 @@ import { Segment} from 'semantic-ui-react'
 import * as style from '../../style/inline';
 
 class Questions extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     questions: null,
-  //   }
-  // }
 
   handleNewQ = () => {
     this.props.click()
@@ -28,9 +22,10 @@ class Questions extends Component {
   }
 
   render() {
-    const {tid, questions, searchClick, isLoading} = this.props
-    console.log('Questions render 1 ', questions )
-    let qTable = questions ? <QuestionTable tid={tid} questions={questions} click={this.handleQuestionClick} />
+    const {tid, questions, searchClick, isLoading, loadMore} = this.props
+    console.log('Questions render 1 ', questions, isLoading)
+
+    let qTable = questions ? <QuestionTable tid={tid} questions={questions} click={this.handleQuestionClick} loadMore={loadMore} isLoading={isLoading}/>
      : <p>no question yet</p>
     return (
         <Segment basic style={style.SEGMENT_LOADER}>

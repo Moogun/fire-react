@@ -67,6 +67,8 @@ class MyCoursePage extends Component {
       registered: false,
       editorState: createEditorState(),
       questions: '',
+      isLoading: false,
+      lastPage: false,
     }
     this.onChange = (editorState) => {
       this.setState({ editorState });
@@ -83,6 +85,8 @@ class MyCoursePage extends Component {
 
     db.onceGetCourseWithTitle(title)
       .then(cSnap => {
+        this.setState ({isLoading: true})
+        console.log('isloading 1 dmt ', this.state.isLoading);
         let c = cSnap.val()
 
         if (c) {
@@ -113,14 +117,15 @@ class MyCoursePage extends Component {
           this.onChange(createEditorState(JSON.parse(curri)))
 
           let qList =[]
-          let questions = db.doFetchRecentQuestions(tid, cid)
+          let questions = db.doFetchRecentQuestions(tid, cid, 5)
           questions.on('child_added', (data) => {
             // console.log('child added data', data.key, data.val(), data.val()["qid"]= data.key);
             let q = data.val()
             q['qid'] = data.key
-            // console.log('q', q);
-            qList.push(q)
-            this.setState ({ questions: qList })
+            // // console.log('q', q);
+            qList.unshift(q)
+            this.setState ({ questions: qList, isLoading: false })
+            console.log('isloading 2 dmt ', this.state.isLoading);
           })
 
         } else {
@@ -166,6 +171,36 @@ class MyCoursePage extends Component {
           q: selected,
           qid: qid
         }
+    })
+  }
+
+  handleMore = (e) => {
+    console.log('load more clicked');
+    e.preventDefault()
+    this.setState ({isLoading: true })
+    console.log('isloading 1 handle more ', this.state.isLoading);
+    const {tid, cid, questions } = this.state
+
+    let leng = questions.length
+    let lastElmQid = questions[leng -1].qid
+    let fetchedItem = 1
+    // console.log('leng', leng, 'lastElmQid', lastElmQid);
+    let paginated = db.doFetchNextQuestions(tid, cid, lastElmQid, 5)
+    paginated.on('child_added', (data) => {
+      let q = data.val()
+        fetchedItem += 1
+        console.log('fetchedItem', fetchedItem);
+        if(lastElmQid === data.key) {
+          return
+        }
+        console.log();
+
+        q['qid'] = data.key
+        console.log('p', data.val());
+
+        questions.splice(leng, 0, q)
+        this.setState ({ questions: questions, isLoading: false })
+        console.log('isloading 2 handle more ', this.state.isLoading);
     })
   }
 
@@ -232,32 +267,6 @@ class MyCoursePage extends Component {
     }, 1000)
   }
 
-  handleFetchQuestions = () => {
-    // const {tid} = this.state
-    // db.doFetchRecentQuestions(tid)
-    //   .then(snap => {
-    //     // this.setState({questions: res.val() })}
-    //     let qList = snap.val()
-    //     this.saveFechedQuestionsToState(qList)
-    //   })
-    //   .catch(error => {
-    //     this.setState(byPropKey('error', error))
-    //   })
-  }
-
-  handleFetchCourseRecentQuestions = (tid, cid) => {
-
-    db.doFetchRecentQuestions(tid, cid)
-      // .then(snap => {
-      //   // this.setState({questions: res.val() })}
-      //   let qList = snap.val()
-      //   this.saveFechedQuestionsToState(qList)
-      // })
-      // .catch(error => {
-      //   this.setState(byPropKey('error', error))
-      // })
-  }
-
   saveFechedQuestionsToState = (qList) => {
     console.log('save fetched q to state qlist', qList);
     Object.keys(qList).map(key => {
@@ -295,10 +304,10 @@ class MyCoursePage extends Component {
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacherName = tName ? tName : 'Teacher'
 
-    const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images, activeItem, questions, qTitle, qText } = this.state
-
+    const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images, activeItem, questions, qTitle, qText, isLoading } = this.state
+    console.log('rdr questions', questions, isLoading);
     let teacherProfile = tProfileImg ? tProfileImg : profile
-
+    // let questionsReversed = questions.reverse()
     const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
 
     let meta = course ? course.metadata : null
@@ -409,11 +418,11 @@ class MyCoursePage extends Component {
                           questions={questions}
                           click={this.handleQuestionClick}
                           tid={tid}
-                          questions={questions}
                           click={this.handleNewQ} {...props}
                           queClick={this.handleQuestionClick}
                           searchQueryChange={this.handleSearchQueryChange}
-                          isLoading={false}
+                          isLoading={isLoading}
+                          loadMore={this.handleMore}
                         />}
 
                          />} />
@@ -444,7 +453,7 @@ class MyCoursePage extends Component {
                         path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
                         render={() => <Question />}
                       />
-                      
+
                     </Switch>
 
                   </Container>
@@ -461,11 +470,11 @@ class MyCoursePage extends Component {
                         questions={questions}
                         click={this.handleQuestionClick}
                         tid={tid}
-                        questions={questions}
                         click={this.handleNewQ} {...props}
                         queClick={this.handleQuestionClick}
                         searchQueryChange={this.handleSearchQueryChange}
-                        isLoading={false}
+                        isLoading={isLoading}
+                        loadMore={this.handleMore}
                       />}
 
                        />} />
