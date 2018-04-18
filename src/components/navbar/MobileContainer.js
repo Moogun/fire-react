@@ -129,21 +129,24 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
 const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
   return (
     <Sidebar.Pushable>
-       <Sidebar as={Menu} animation='uncover' inverted vertical visible={sidebarOpened}>
-          <Menu.Item as={Link} to='/' active>Home</Menu.Item>
+       <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
+          <Menu.Item as={Link} to='/' active onClick={handlePusherClick} >We </Menu.Item>
           <Menu.Item as='a'>Category</Menu.Item>
-          <Menu.Item as='a'>Are you teaching?</Menu.Item>
-          <Menu.Item as='a'>Help</Menu.Item>
-          {/* <Menu.Item as='a'>Sign Up</Menu.Item>
-          <Menu.Item as='a'>Log in</Menu.Item> */}
-          <Menu.Item as={Link} to={routes.SIGN_IN}
-            name='Log in' active={activeItem === 'signin'}
+          <Menu.Item
+            as={Link} to={routes.TEACHER_INTRO} onClick={handlePusherClick}
+            >Are you teaching?</Menu.Item>
+          <Menu.Item
+            as={Link} to={routes.FOOTER_HELP}
+            onClick={handlePusherClick}
+            >Help</Menu.Item>
+          <Menu.Item name='Log in' active={activeItem === 'signin'}
+            as={Link} to={routes.SIGN_IN}
             onClick={handlePusherClick}
              >
           </Menu.Item>
 
-          <Menu.Item as={Link} to={routes.SIGN_UP}
-            name='Sign Up' active={activeItem === 'signup'}
+          <Menu.Item name='Sign Up' active={activeItem === 'signup'}
+            as={Link} to={routes.SIGN_UP}
             onClick={handleToggle}
              >
           </Menu.Item>
