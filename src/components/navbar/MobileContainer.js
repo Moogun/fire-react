@@ -99,20 +99,20 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
                   <Icon name='sidebar' />
                 </Menu.Item>
 
-                <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1em'}}>
+                <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1rem'}}>
                   {/* was 0.5  */}
                   <Icon name='search' />
                 </Menu.Item>
 
                 <Menu.Item as='a' style={{color: 'white'}}> We question and answer </Menu.Item>
-                <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '0.5rem'}} >
-                  <Icon name='user circle' size='large'/>
+                <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1rem'}} >
+                  <Icon name='user circle' />
                 </Menu.Item>
 
                 <Menu.Item  as={Link} to={routes.LEARNING}
                   style={{float:'right', color: 'white',}}
                   >
-                  <Icon name='folder outline' size='large'/>
+                  <Icon name='folder outline' />
                 </Menu.Item>
 
                   {searchFieldActive
