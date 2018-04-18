@@ -11,7 +11,8 @@ import {auth} from '../../firebase'
 
 import Dashboard from '../dashboard/Dashboard';
 
-const SEGMENT_BORDER={padding: '0'}
+const NAV_MOBILE_AUTH={padding: '0rem'}
+const NAV_MOBILE_NON_AUTH={padding: '0rem'}
 const MENU_BORDER={borderRadius: '0', marginBottom: '0'}
 
 class MobileContainer extends Component {
@@ -90,25 +91,28 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
             // minHeight: 350,
              padding: '1em 0em'
            }}
-          // style={SEGMENT_BORDER}
+          // style={NAV_MOBILE_AUTH}
           vertical>
           <Container>
 
                 <Menu.Item as='a' onClick={handleToggle} style={{float:'left', color: 'white'}} >
                   <Icon name='sidebar' />
                 </Menu.Item>
+
                 <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1em'}}>
                   {/* was 0.5  */}
                   <Icon name='search' />
                 </Menu.Item>
+
                 <Menu.Item as='a' style={{color: 'white'}}> We question and answer </Menu.Item>
-                <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1em'}} >
-                     <Icon name='user circle' />
+                <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '0.5rem'}} >
+                  <Icon name='user circle' size='large'/>
                 </Menu.Item>
+
                 <Menu.Item  as={Link} to={routes.LEARNING}
                   style={{float:'right', color: 'white',}}
                   >
-                  <Icon name='book' />
+                  <Icon name='folder outline' size='large'/>
                 </Menu.Item>
 
                   {searchFieldActive
@@ -154,7 +158,7 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
 
       <Sidebar.Pusher dimmed={sidebarOpened} onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
         <Segment inverted textAlign='center'
-          style={SEGMENT_BORDER}
+          style={NAV_MOBILE_NON_AUTH}
           // style={{ minHeight: 350, padding: '1em 0em' }}
           vertical>
           {/* <Container> */}
@@ -163,8 +167,11 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
                   <Icon name='sidebar' />
                 </Menu.Item>
                 <Menu.Item position='right'>
-                  <Button as='a' inverted>Log in</Button>
-                  <Button as='a' inverted style={{ marginLeft: '0.5em' }}>Sign Up</Button>
+                  <Button
+                    as={Link} to={routes.SIGN_IN} inverted>
+                    Log in</Button>
+                  <Button   as={Link} to={routes.SIGN_UP} inverted style={{ marginLeft: '0.5em' }}>
+                    Sign Up</Button>
                 </Menu.Item>
               </Menu>
                 {searchFieldActive? <Input className='icon' icon='search' placeholder='Search...' fluid
