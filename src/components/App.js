@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Segment, Header, Grid} from 'semantic-ui-react'
 
 import * as routes from '../constants/routes';
+import * as style from '../style/inline';
 
 import Structure from '../Structure';
 import LandingPage from './Landing';
@@ -51,6 +53,7 @@ class App extends Component {
       <Router>
         <ResponsiveContainer>
           {/* <Navigation/> */}
+          <Switch>
           <Route
           exact path='/structure'
           component={() => <Structure />}
@@ -134,12 +137,33 @@ class App extends Component {
           <Route exact path={routes.FOOTER_FAQ} render={() => <Faq />} />
           <Route exact path={routes.FOOTER_HELP} render={() => <Help />} />
 
+          <Route component={NoMatch} />
+          </Switch>
+          
           <Footer />
+
         </ResponsiveContainer>
 
       </Router>
     );
   }
 }
+
+const NoMatch = ({ location }) => (
+  <Grid verticalAlign='middle' textAlign='center' style={style.NO_MATCH_MIN_HEIGHT}>
+    <Grid.Row>
+    <Grid.Column>
+
+      <Header as='h1' >
+        Sorry!
+        <Header.Subheader>
+          We can't find the page you're looking for.
+          Visit our support page for any questions. (404)
+        </Header.Subheader>
+      </Header>
+    </Grid.Column>
+    </Grid.Row>
+  </Grid>
+);
 
 export default withAuthentication(App);

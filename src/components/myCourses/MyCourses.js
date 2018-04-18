@@ -94,13 +94,13 @@ class MyCourses extends Component {
                       as={Link} to={`${match.url}/courses`}
                       style={style.DASHBOARD_MENU_ITEM}
                     />
-                    <Menu.Item
-                      name='wishlist'
+                    {/* <Menu.Item
+                      name='wishlist(coming soon)'
                       active={activeItem === 'wishlist'}
                       onClick={this.handleItemClick}
-                      as={Link} to={`${match.url}/wishlist`}
+                      as={Link} to={`${match.url}/courses`}
                       style={style.DASHBOARD_MENU_ITEM}
-                    />
+                    /> */}
                   </Menu>
             </SectionContainer>
 
@@ -114,13 +114,13 @@ class MyCourses extends Component {
                     as={Link} to={`${match.url}/courses`}
                     style={style.DASHBOARD_MENU_ITEM}
                   />
-                  <Menu.Item
-                    name='wishlist'
+                  {/* <Menu.Item
+                    name='wishlist(coming soon)'
                     active={activeItem === 'wishlist'}
                     onClick={this.handleItemClick}
-                    as={Link} to={`${match.url}/wishlist`}
+                    as={Link} to={`${match.url}/courses`}
                     style={style.DASHBOARD_MENU_ITEM}
-                  />
+                  /> */}
                 </Menu>
             </SectionContainer_M>
 

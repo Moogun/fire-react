@@ -33,11 +33,12 @@ class MobileContainer extends Component {
   render() {
     const { children, authUser, mobile } = this.props
     const { fixed, activeItem, sidebarOpened, searchFieldActive } = this.state
-    // console.log('mobile container', mobile);
+    console.log('mobile container', authUser);
     return (
       <Responsive minWidth={320} maxWidth={991}>
           { authUser
               ? <MobileAuth
+                authUser={authUser}
                 activeItem={activeItem}
                 children={children}
                 sidebarOpened={sidebarOpened}
@@ -70,10 +71,13 @@ export default MobileContainer
 
 
 const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
+  console.log('mobile auth', authUser);
   return (
     <Sidebar.Pushable>
        <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
-         <Menu.Item as={Link} to={routes.ACCOUNT} >Username</Menu.Item>
+         <Menu.Item
+           as={Link} to={routes.ACCOUNT}
+           onClick={handlePusherClick} >My Account</Menu.Item>
          <Menu.Item as={Link} to='/category' >Category</Menu.Item>
          <Menu.Item as='a'>My Courses</Menu.Item>
          <Menu.Item as='a'>My Notifications</Menu.Item>
@@ -104,7 +108,9 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
                   <Icon name='search' />
                 </Menu.Item>
 
-                <Menu.Item as='a' style={{color: 'white'}}> We question and answer </Menu.Item>
+                <Menu.Item as='a' style={{color: 'white'}}
+                  as={Link} to={routes.HOME}
+                  > We question and answer </Menu.Item>
                 <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1rem'}} >
                   <Icon name='user circle' />
                 </Menu.Item>

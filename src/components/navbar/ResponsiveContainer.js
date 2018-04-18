@@ -14,6 +14,11 @@ class ResponsiveContainer extends Component {
 
     };
   }
+
+  // April 18
+  // here does not retrieve user from database but from context.
+  // place to use - 1. account menu username and image
+  // and where ??
   render() {
     // console.log('authUser respsonvie', this.context.authUser);
     return (

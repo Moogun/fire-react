@@ -4,6 +4,7 @@ import {Link, Route, Switch, Redirect} from 'react-router-dom'
 import withAuthorization from '../../HOC/withAuthorization';
 import profile from '../../assets/profile-lg.png'
 import * as routes from '../../constants/routes';
+import * as style from '../../style/inline';
 
 import Profile from './Profile'
 import Photo from './Photo'
@@ -171,13 +172,13 @@ class AccountPage extends Component {
     const {authUser} = this.context
     const { activeItem, //menu
       user, email, username, displayName, photoUrl, usernameTaken, images, //sub menu
-      visible, dimmed // mobile toggle 
+      visible, dimmed // mobile toggle
     } = this.state
 
     return (
       <div>
         <Responsive {...Responsive.onlyComputer}>
-        <Container text>
+        <Container text style={style.ACCOUNT_MIN_HEIGHT}>
           <Grid celled stackable>
             <Grid.Row centered>
               <Grid.Column width={4}>

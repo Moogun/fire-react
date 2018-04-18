@@ -48,7 +48,8 @@ const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
       // inverted
       basic
       textAlign='center' vertical
-      style={segmentBorder}>
+      style={segmentBorder}
+       >
       <Menu
         style={menuBorder}
         fixed={fixed ? 'top' : null}
