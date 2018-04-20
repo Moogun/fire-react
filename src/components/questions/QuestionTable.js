@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
-import { Segment,Container, Table, Button, Responsive} from 'semantic-ui-react'
+import { Segment,Container, Table, Button, Responsive, Loader} from 'semantic-ui-react'
 import QuestionRow from './QuestionRow'
 
 const qPanelQuestionTablePadding = {paddingTop: '0px', 'paddingLeft': '0px'}
@@ -13,22 +13,31 @@ class QuestionTable extends Component {
   }
 
   render() {
-    const {questions} = this.props
-
+    const {questions, loadMore, isLoading, lastPage} = this.props
+    console.log('q table lastPage', lastPage);
     return (
       <div>
         <Table unstackable style={{marginTop: '1rem'}}>
           <Table.Body>
 
-            {Object.keys(questions).map(qid =>
+            {/* {Object.keys(questions).map(qid =>
               <QuestionRow key={qid}
                 question={questions[qid]}
-                click={()=> this.handleQueClick(qid)} /> )}
+                click={()=> this.handleQueClick(qid)} /> )} */}
+            {questions.map((q, index) =>
+              <QuestionRow
+              key={index}
+              question={q}
+              click={()=> this.handleQueClick(q.qid)}
+             />
+           )}
 
           </Table.Body>
         </Table>
+        {/* <Pagination defaultActivePage={3} totalPages={3} /> */}
+        <Loader active={isLoading} inline='centered' />
         <Segment basic textAlign='center'>
-          <Button content='Load more'/>
+          <Button content='Load more' disabled={lastPage} onClick={loadMore}/>
         </Segment>
       </div>
     );
@@ -36,24 +45,3 @@ class QuestionTable extends Component {
 }
 
 export default withRouter(QuestionTable)
-
-//
-// const Q_Table = ({questions}) => {
-//   return (
-//     <div>
-//       <Table unstackable style={{marginTop: '1rem'}}>
-//         <Table.Body>
-//
-//           {Object.keys(questions).map(qid =>
-//             <QuestionRow key={qid}
-//               question={questions[qid]}
-//               click={()=> this.handleQueClick(qid)} /> )}
-//
-//         </Table.Body>
-//       </Table>
-//       <Segment basic textAlign='center'>
-//         <Button content='Load more'/>
-//       </Segment>
-//     </div>
-//   );
-// }

@@ -4,6 +4,7 @@ import {Link, Route, Switch, Redirect} from 'react-router-dom'
 import withAuthorization from '../../HOC/withAuthorization';
 import profile from '../../assets/profile-lg.png'
 import * as routes from '../../constants/routes';
+import * as style from '../../style/inline';
 
 import Profile from './Profile'
 import Photo from './Photo'
@@ -91,7 +92,7 @@ class AccountPage extends Component {
   }
 
   handlePhotoChange = (e) => {
-    const {images} = this.state
+    // const {images} = this.state
     let img = {}
     let newKey = db.newKey();
 
@@ -113,7 +114,7 @@ class AccountPage extends Component {
   onPhotoSubmit = () => {
     const { uid } = this.state
     const {images} = this.state
-    const {teacherId, courseId } = this.props
+    // const {teacherId, courseId } = this.props
 
     Object.keys(images).map(i => {
       console.log('images[i]', 'i', i, 'file', images[i].file, images[i].progress)
@@ -169,13 +170,15 @@ class AccountPage extends Component {
     // console.log('account props',this.props.match, this.props.user);
     // console.log('account authUser',this.context.authUser);
     const {authUser} = this.context
-    const { activeItem, user, email, username, displayName, photoUrl, usernameTaken, images, visible, dimmed } = this.state
-    // console.log('photoUrl', photoUrl, 'image', images);
+    const { activeItem, //menu
+      user, email, username, displayName, photoUrl, usernameTaken, images, //sub menu
+      visible, dimmed // mobile toggle
+    } = this.state
 
     return (
       <div>
         <Responsive {...Responsive.onlyComputer}>
-        <Container text>
+        <Container text style={style.ACCOUNT_MIN_HEIGHT}>
           <Grid celled stackable>
             <Grid.Row centered>
               <Grid.Column width={4}>
@@ -184,13 +187,12 @@ class AccountPage extends Component {
                   <Image src={photoUrl} circular centered size='small'/>
                   <br/>
                   <Menu.Item name='profile'
-                    active
-                    // as={Link} to='/account/profile'
-                    as={Link} to={`${match.url}/profile`}
-                    active={activeItem === 'profile'} onClick={this.handleItemClick}
+                    as={Link}
+                    to={`${match.url}/profile`}
+                    active={activeItem === 'profile'}
+                    onClick={this.handleItemClick}
                    />
                   <Menu.Item name='photo'
-                    // as={Link} to='/account/photo'
                     as={Link} to={`${match.url}/photo`}
                       active={activeItem === 'photo'} onClick={this.handleItemClick}
                    />
@@ -241,12 +243,13 @@ class AccountPage extends Component {
           </Grid>
         </Container>
         </Responsive>
+
         <Responsive minWidth={320} maxWidth={992}>
             <Grid>
               <Grid.Column>
                    <Container>
                       <Segment basic clearing >
-                          <Header as='h5' floated='left'>
+                          <Header as='h5' floated='left' style={{marginBottom: '0'}}>
                             <Image circular src={profile} size='tiny'/>
                             <Header.Content>
                               {user.username}
@@ -258,7 +261,7 @@ class AccountPage extends Component {
                          <Header as='h5' floated='right' onClick={this.toggleVisibility}>
                             <Icon name='ellipsis vertical'/>
                           </Header>
-                        </Segment>
+                    </Segment>
 
                   </Container>
                   <Sidebar.Pushable
@@ -266,9 +269,9 @@ class AccountPage extends Component {
                     >
                      <Sidebar
                        as={Menu}
-                       animation='overlay'
+                       animation='push'
                        width='thin'
-                       direction='right'
+                       direction='top'
                        visible={visible}
                        icon='labeled'
                        vertical
@@ -276,23 +279,20 @@ class AccountPage extends Component {
                      >
                        <br/>
                        <Menu.Item name='profile'
-                         active
-                         // as={Link} to='/account/profile'
                          as={Link} to={`${match.url}/profile`}
-                         active={activeItem === 'profile'} onClick={this.handleItemClick}
+                         active={activeItem === 'profile'}
+                         onClick={this.handleItemClick}
                         />
                        <Menu.Item name='photo'
-                         // as={Link} to='/account/photo'
-                         as={Link} to={`${match.url}/photo`}
-                           active={activeItem === 'photo'} onClick={this.handleItemClick}
+                           as={Link} to={`${match.url}/photo`}
+                           active={activeItem === 'photo'}
+                           onClick={this.handleItemClick}
                         />
                         <Menu.Item name='passwordChange'
-                         // as={Link} to='/account/passwordChange'
                           as={Link} to={`${match.url}/pw-change`}
                            active={activeItem === 'passwordChange'} onClick={this.handleItemClick}
                        />
                        <Menu.Item name='passwordForget'
-                        // as={Link} to='/account/passwordForget'
                          as={Link} to={`${match.url}/pw-forget`}
                           active={activeItem === 'passwordForget'} onClick={this.handleItemClick}
                         />

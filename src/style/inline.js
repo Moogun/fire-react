@@ -26,3 +26,12 @@ export const DASHBOARD_BODY = {marginTop: '0rem', marginBottom: '0rem', backgrou
 export const DASHBOARD_BODY_M = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
 
 export const SEGMENT_LOADER = {padding: '0rem'}
+
+//MY COURSE
+export const MY_COURSES_MIN_HEIGHT = {minHeight: '86vh'}
+
+//ACCOUNT
+export const ACCOUNT_MIN_HEIGHT = {minHeight: '80vh'}
+
+//ACCOUNT
+export const NO_MATCH_MIN_HEIGHT = {minHeight: '90vh'}

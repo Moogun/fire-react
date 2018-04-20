@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-// import Navigation from './navbar/Navigation';
-import Footer from './footer/Footer';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Segment, Header, Grid} from 'semantic-ui-react'
+
 import * as routes from '../constants/routes';
+import * as style from '../style/inline';
 
 import Structure from '../Structure';
 import LandingPage from './Landing';
@@ -14,9 +15,12 @@ import PasswordForgetPage from './account/PasswordForget';
 import AccountPage from './account/Account';
 
 
+import TeacherIntro from './teacherIntro/TeacherIntro';
+
 import Teacher from './teacher/Teacher';
 import Courses from './teacher/Courses';
 import Question from './questionPage/QuestionPage';
+
 
 import CEdit from './courseManage/CEdit';
 // import Create from './courseManage/Create';
@@ -24,8 +28,19 @@ import Create from './courseManage/CreateC';
 import CoursePage from './coursePage/CoursePage';
 import MyCoursePage from './coursePage/MyCoursePage';
 
+
 import MyCourses from './myCourses/MyCourses';
+
+
 import Dashboard from './dashboard/Dashboard';
+
+
+import Footer from './footer/Footer';
+import About from './footer/About';
+import Faq from './footer/Faq';
+import Terms from './footer/Terms';
+import Help from './footer/Help';
+
 
 import {firebase} from '../firebase';
 import withAuthentication from '../HOC/withAuthentication';
@@ -38,6 +53,7 @@ class App extends Component {
       <Router>
         <ResponsiveContainer>
           {/* <Navigation/> */}
+          <Switch>
           <Route
           exact path='/structure'
           component={() => <Structure />}
@@ -83,6 +99,8 @@ class App extends Component {
             component={() => <CEdit />}
           />
 
+          <Route exact path={routes.TEACHER_INTRO} render={() => <TeacherIntro />} />
+
           <Route
             // exact path='/teacher/:teacherId'
             // exact path='/:teacherName'
@@ -102,17 +120,11 @@ class App extends Component {
             render={() => <MyCoursePage />}
           />
 
-          <Route
-            // path='/teacher/:teacherId/question/:questionId'
-            exact path ={routes.QUESTION_PAGE}
-            render={() => <Question />}
-          />
-
-          <Route
+          {/* <Route
             // path='/teacher/:teacherId/question/:questionId'
             exact path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
             render={() => <Question />}
-          />
+          /> */}
 
           <Route
             // eaact path='/create'
@@ -120,12 +132,38 @@ class App extends Component {
             render={() => <Create />}
           />
 
+          <Route exact path={routes.FOOTER_ABOUT} render={() => <About />} />
+          <Route exact path={routes.FOOTER_TERMS} render={() => <Terms />} />
+          <Route exact path={routes.FOOTER_FAQ} render={() => <Faq />} />
+          <Route exact path={routes.FOOTER_HELP} render={() => <Help />} />
+
+          <Route component={NoMatch} />
+          </Switch>
+
           <Footer />
+
         </ResponsiveContainer>
 
       </Router>
     );
   }
 }
+
+const NoMatch = ({ location }) => (
+  <Grid verticalAlign='middle' textAlign='center' style={style.NO_MATCH_MIN_HEIGHT}>
+    <Grid.Row>
+    <Grid.Column>
+
+      <Header as='h1' style={{fontSize: '4rem'}}>
+        Sorry!
+        <Header.Subheader>
+          We can't find the page you're looking for.
+          Visit our support page for any questions. (404)
+        </Header.Subheader>
+      </Header>
+    </Grid.Column>
+    </Grid.Row>
+  </Grid>
+);
 
 export default withAuthentication(App);

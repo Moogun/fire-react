@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
-import { Segment,Container, Table, Header, Rating, Grid, Image, Menu, Item, Button, Comment, Form, Icon, Label } from 'semantic-ui-react'
+import { Segment,Container, Table, Header, Rating, Grid, Image, Menu, Item, Button, Comment, Form, Icon, Label, Responsive } from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
 
 import Question from './Question'
@@ -55,17 +55,12 @@ class QuestionPage extends Component {
   render() {
     const { answerText, answers } = this.state
     let answerList = answers ? answers : null
+    console.log('rdr', 'q page', this.props.location.state.q);
       return (
-
-            <Container text>
-              <Segment>
-                {/* <Icon name='left arrow' /> */}
-                <Question question={this.props.location.state.q}/>
-                <AnswerList answers={answerList} value={answerText} submit={this.handleSubmit} change={this.handleChange}/>
-                {/* <CommentForm value={answerText} submit={this.handleSubmit} change={this.handleChange}/> */}
-              </Segment>
-            </Container>
-
+          <Segment>
+              <Question question={this.props.location.state.q}/>
+              <AnswerList answers={answerList} value={answerText} submit={this.handleSubmit} change={this.handleChange}/>
+          </Segment>
         )
     }
 }

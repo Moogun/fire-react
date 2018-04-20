@@ -10,7 +10,11 @@ import CourseOpenQ from './CourseOpenQ'
 
 import Questions from '../teacher/Questions'
 
-import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item, Modal, Form, Input, Icon } from 'semantic-ui-react'
+import Question from '../questionPage/QuestionPage';
+
+import NewQ from '../questions/NewQ' 
+
+import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item, Modal, Form, Input, Icon, Responsive } from 'semantic-ui-react'
 import SectionContainer from '../navbar/SectionContainer'
 
 import SectionContainer_M from '../navbar/SectionContainer_M'
@@ -49,175 +53,6 @@ const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
 })
 
-let QUESTIONS =  {
-      "-L8aaR70p5Bgq7VQMNrM" : {
-        "answers" : {
-          "-L8dxagSnECUBEd4JzIW" : {
-            "answerText" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8dxeqnRdVvwiIJ0Os1" : {
-            "answerText" : "speicfy your question",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8dxxUKHMcG6VLy45eo" : {
-            "answerText" : "how much more I can do with it",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8dyBKSAgIqjvvWPVeG" : {
-            "answerText" : "ooo",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8dyDwcnVR-ddNn6RZl" : {
-            "answerText" : "answerText",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8dyR3OYLQqyq4WJciG" : {
-            "answerText" : "answerText",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8eAMhtWD0ca-LHNRLo" : {
-            "answerText" : "answerText",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8eAPHmdX3wszsxSjen" : {
-            "answerText" : "answerText",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8eAir61Y-B9Apa6hBo" : {
-            "answerText" : "come on 10 18",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          },
-          "-L8eAsahRjGbGoxCnLFf" : {
-            "answerText" : "you know ",
-            "answeredBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-            "createdAt" : "2days ago",
-            "img" : "img"
-          }
-        },
-        "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "5 days ago",
-        "text" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "마케팅 "
-      },
-      "-L8aaa9vhLSxJujhaSks" : {
-        "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "빨리 빨리 ",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "궁금궁금"
-      },
-      "-L8aacXheofG12rstxOK" : {
-        "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "속도 속도",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "왜이래"
-      },
-      "-L8aahDyHCDPUI8laJ3A" : {
-        "answers" : {
-          "-L8q3mBSDn--XTHmDvf7" : {
-            "answeredBy" : "dgNwJUgPP7OjuMglkK7Uqcm1ha92",
-            "createdAt" : "2days ago",
-            "img" : "img",
-            "text" : "글쎄 확실합니까?"
-          }
-        },
-        "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "오타 맞죠?",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "책 47page  오타"
-      },
-      "-L8aajPpJnUyENhpsgG3" : {
-        "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "오타 맞죠?",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "책 47page  오타"
-      },
-      "-L8acbX0f2tZvP2HHdGJ" : {
-        "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-        "cid" : "-L7hJU4ocZI02GZ6nAm8",
-        "createdAt" : "createdAt",
-        "text" : "어려워\n",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "그로스 해킹이 뭥미? "
-      },
-      "-L8acg-TkYSkmv1X3P0H" : {
-        "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-        "cid" : "-L7hJU4ocZI02GZ6nAm8",
-        "createdAt" : "createdAt",
-        "text" : "어려워요",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "애널리틱스는 전문가만 하는거 아닌가요?"
-      },
-      "-L8ack1h1UUFWOjxeB8u" : {
-        "askedBy" : "MxbMJw31WCUsU0v5GOWMTqwcApR2",
-        "cid" : "-L7hJU4ocZI02GZ6nAm8",
-        "createdAt" : "createdAt",
-        "text" : "1박2일인가요?",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "캠프면 1박 2일 인가요"
-      },
-      "-L8plEUaWSPqNa4ue-je" : {
-        "askedBy" : "dgNwJUgPP7OjuMglkK7Uqcm1ha92",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "마케팅이란 무엇인가?  알려주세요",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "마케팅이란 무엇인가? "
-      },
-      "-L8plMOn65W45JUY-6Yh" : {
-        "askedBy" : "dgNwJUgPP7OjuMglkK7Uqcm1ha92",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "무엇을 했는지 알려주세요 ",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "어제 오늘ㅁ"
-      },
-      "-L8plQ3v9s2LgfCpfptw" : {
-        "askedBy" : "dgNwJUgPP7OjuMglkK7Uqcm1ha92",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "1박2일 캠프인가?",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "캠프면"
-      },
-      "-L8plT6DxWbany2sEM3E" : {
-        "askedBy" : "dgNwJUgPP7OjuMglkK7Uqcm1ha92",
-        "cid" : "-L7hItXjIZxClZtpg9dQ",
-        "createdAt" : "createdAt",
-        "text" : "못참아요",
-        "tid" : "RQg9vzBgQ0bej5MhICRNqSSrRdz1",
-        "title" : "궁금한 것은 못참아"
-      }
-    }
-
 const COURSE_PAGE_HEADER = { backgroundColor: '#34495e', marginTop: '0rem'}
 
 class MyCoursePage extends Component {
@@ -231,7 +66,10 @@ class MyCoursePage extends Component {
       modalOpen: false,
       registered: false,
       editorState: createEditorState(),
-      questions: QUESTIONS,
+
+      questions: '',
+      isLoading: false,
+      lastPage: false,
     }
     this.onChange = (editorState) => {
       this.setState({ editorState });
@@ -242,18 +80,24 @@ class MyCoursePage extends Component {
   unStickTopMenu = () => this.setState({ menuFixed: false })
 
   componentDidMount() {
+    this.handleGetCourseWithTitle()
+  }
+
+  handleGetCourseWithTitle() {
     console.log('course page did mount', this.props.match.params);
     let cTitle = this.props.match.params.cTitle
     let title = cTitle.replace(/-/g, ' ');
 
     db.onceGetCourseWithTitle(title)
       .then(cSnap => {
+        this.setState ({isLoading: true})
+        console.log('isloading 1 dmt ', this.state.isLoading);
         let c = cSnap.val()
 
         if (c) {
           let key = Object.keys(c)
           let course = c[key]
-          console.log('course', course);
+          // console.log('course', course);
 
           this.setState ({
             tid: course.metadata.tid,
@@ -268,37 +112,119 @@ class MyCoursePage extends Component {
             attendee: course.attendee,
             features: course.features,
             images: course.images,
+            qTitle: '',
+            qText: '',
           })
-          const {tid, cid} = this.state
-          console.log('tid, cid', tid, cid);
+
           let curri = course.curri
-          console.log('curri', curri);
+          // console.log('curri', curri);
           this.onChange(createEditorState(JSON.parse(curri)))
+
         } else {
           console.log('find a way to display course titles that have dash in it');
         }
-      })
 
+        this.handleContextUserToState()
+      }).then(res => {
+        const {tid, cid} = this.state
+        console.log('tid, cid', tid, cid);
+
+        let qList =[]
+        let fetchedItem = 1
+        let questions = db.doFetchRecentQuestions(tid, cid, 5)
+        questions.on('child_added', (data) => {
+          // console.log('child added data', data.key, data.val(), data.val()["qid"]= data.key);
+          let q = data.val()
+          fetchedItem += 1
+          q['qid'] = data.key
+          // // console.log('q', q);
+          qList.unshift(q)
+
+          if (fetchedItem >= 5) {
+            this.setState ({ questions: qList, isLoading: false, lastPage: false })
+          } else {
+            this.setState ({ questions: qList, isLoading: false, lastPage: true })
+          }
+
+        })
+      })
+      .catch(error => {
+        this.setState({[error]: error});
+      });
   }
+
+  handleContextUserToState(){
+    const {authUser} = this.context
+    if (authUser) {
+      console.log('My course page authUser', authUser);
+      db.onceGetUser(authUser.uid)
+        .then(res => {
+          // console.log('my course user', res.val())
+          this.setState ({ user: res.val(), uid: authUser.uid })
+        })
+        .catch(error => {
+          this.setState({[error]: error});
+        });
+    }
+  }
+
+  handleMore = (e) => {
+    console.log('load more clicked');
+    e.preventDefault()
+    this.setState ({isLoading: true })
+    console.log('isloading 1 handle more ', this.state.isLoading);
+    const {tid, cid, questions } = this.state
+
+    let leng = questions.length
+    let lastElmQid = questions[leng -1].qid
+    let fetchedItem = 1
+    // console.log('leng', leng, 'lastElmQid', lastElmQid);
+    let paginated = db.doFetchNextQuestions(tid, cid, lastElmQid, 5)
+    paginated.on('child_added', (data) => {
+      let q = data.val()
+        fetchedItem += 1
+
+        console.log('fetchedItem', fetchedItem);
+        if(lastElmQid === data.key) {
+          return
+        }
+        console.log();
+
+        q['qid'] = data.key
+        console.log('p', data.val());
+
+        questions.splice(leng, 0, q)
+
+        if (fetchedItem >= 5) {
+          this.setState ({ questions: questions, isLoading: false, lastPage: false })
+        } else {
+          this.setState ({ questions: questions, isLoading: false, lastPage: true })
+        }
+
+        console.log('handle more  isloading 2 ', this.state.isLoading, 'lastpage', this.state.lastPage);
+    })
+  }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   handleNavToTeacher = () => {
     const {tName, cTitle,} = this.props.match.params
     this.props.history.push({pathname: '/' + 'teacher' + '/' + tName })
   }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
   //navigation  courses, questions, new question
 
   handleQuestionClick = (qid) => {
     const { questions } = this.state
     console.log('teacher q click', qid);
-    console.log('teacher q click',questions[qid]);
+    // console.log('teacher q click',questions['qid']);
+    let selected = questions.filter(q => q.qid == qid)
+    console.log('selected', selected);
     this.props.history.push({
       pathname: `${this.props.match.url}/question/${qid}`,
       state:
         {
-          q: questions[qid],
+          q: selected,
           qid: qid
         }
     })
@@ -317,18 +243,28 @@ class MyCoursePage extends Component {
 
   handleQuestionSubmit = (event) => {
 
-    const {teacherId, title, text, cid} = this.state;
-    const {authUser} = this.context
+    const {tid, cid, qTitle, qText, uid, user,} = this.state;
+    console.log('handleQuestionSubmit', tid, cid, qTitle, qText, user);
 
-    console.log(teacherId, 'on submit title, text', title, text, cid);
+    let date = new Date();
+    let createdAt = Number(date)
 
-    db.doSaveNewQ(teacherId, cid, authUser.uid, title, text, "createdAt", 'img')
-      .then(res => console.log('res', res))
+    db.doSaveNewQ(tid, cid, uid, user.username, qTitle, qText, createdAt, 'img')
+      .then(res => {
+        console.log('res', res)
+        this.setState ({ qTitle: '', qText: ''})
+        this.props.history.replace(`${this.props.match.url}/questions`)
+        })
       .catch(error => {
         this.setState(byPropKey('error', error))
       })
 
     event.preventDefault();
+  }
+
+  handleNewQCancel = (e) => {
+    e.preventDefault()
+    console.log('handle cancel confirm');
   }
 
   handleCourseSelect = (e, {value}) => {
@@ -340,8 +276,8 @@ class MyCoursePage extends Component {
 
     this.setState({ isLoading: true, value })
     setTimeout( () => {
-      const {teacherId} = this.state
-      db.doSearchForQuestions(teacherId, value)
+      const {tid, cid} = this.state
+      db.doSearchForQuestions(tid, cid, value)
         .then(res => {
           let searchResult = res.val()
           if (searchResult){
@@ -357,29 +293,22 @@ class MyCoursePage extends Component {
     }, 1000)
   }
 
-  handleFetchQuestions = () => {
-    const {teacherId} = this.state
-    db.doFetchRecentQuestions(teacherId)
-      .then(snap => {
-        // this.setState({questions: res.val() })}
-        let qList = snap.val()
-        this.saveFechedQuestionsToState(qList)
-      })
-      .catch(error => {
-        this.setState(byPropKey('error', error))
-      })
-  }
-
   saveFechedQuestionsToState = (qList) => {
     console.log('save fetched q to state qlist', qList);
+    let questions = []
     Object.keys(qList).map(key => {
-      let askedBy = qList[key].askedBy
+      let askedBy = qList[key].askedById
       db.onceGetUser(askedBy)
         .then(userSnap => {
           let username = userSnap.val().username
           qList[key].username = username
-          // console.log('handle fetch questions, ', qList);
-          this.setState({questions: qList})
+          qList[key]['qid'] = key
+          console.log('handle searched questions, ', qList);
+          //18, April 16, this returns {qid: {title: '', text: ''} but this is difficult to sort questions
+          let qConverted = Object.assign(qList[key])
+          console.log('handle searched questions converted, ', qConverted);
+          questions.push(qConverted)
+          this.setState({questions: questions})
         })
 
       if (qList[key].answers){
@@ -401,28 +330,26 @@ class MyCoursePage extends Component {
 
   render() {
 
-    console.log('render');
+    // console.log('render');
     const {tName, cTitle,} = this.props.match.params
+
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacherName = tName ? tName : 'Teacher'
 
-    const { course, cid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images, activeItem, questions } = this.state
-
+    const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images, activeItem, questions, qTitle, qText, isLoading, lastPage } = this.state
+    console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
     let teacherProfile = tProfileImg ? tProfileImg : profile
-
+    // let questionsReversed = questions.reverse()
     const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
 
     let meta = course ? course.metadata : null
     const {match} = this.props
-    console.log('my course page');
-
-
 
     return (
       <Grid >
           <Grid.Column>
               <SectionContainer>
-                
+
                 <Header as='h1' inverted>
                    <Image circular src={profile}/>
                    <Header.Content>
@@ -512,6 +439,9 @@ class MyCoursePage extends Component {
               <Grid style={style.DASHBOARD_BODY}>
                   <Grid.Column>
 
+                  <Responsive {...Responsive.onlyComputer}>
+                     <Container text>
+
                       <Switch>
 
                       <Redirect exact from={match.url} to={`${match.url}/questions`} />
@@ -519,13 +449,13 @@ class MyCoursePage extends Component {
                         <Questions {...props}
                           questions={questions}
                           click={this.handleQuestionClick}
-                          // tid={teacherId}
-                          tid='111'
-                          questions={questions}
+                          tid={tid}
                           click={this.handleNewQ} {...props}
                           queClick={this.handleQuestionClick}
                           searchQueryChange={this.handleSearchQueryChange}
-                          isLoading={false}
+                          isLoading={isLoading}
+                          loadMore={this.handleMore}
+                          lastPage={lastPage}
                         />}
 
                          />} />
@@ -537,7 +467,83 @@ class MyCoursePage extends Component {
                          <CourseMeta
                            meta={meta}
                           />} />
+                      <Route path={`${match.url}/new-question`} render={() =>
+                        <NewQ
+                          // tid={tid}
+                          // cTeaching={cTeaching}
+                          // selectOption={selectOption}
+                          qTitle={qTitle}
+                          qText={qText}
+                          submit={this.handleQuestionSubmit}
+                          cancel={this.handleNewQCancel}
+                          change={this.handleQuestionChange}
+                          // chooseCourse={this.handleCourseSelect}
+                        />} />
+                      />
+
+                      <Route
+                        // path='/teacher/:teacherId/question/:questionId'
+                        path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
+                        render={() => <Question />}
+                      />
+
                     </Switch>
+
+                  </Container>
+                </Responsive>
+
+                <Responsive minWidth={320} maxWidth={991}>
+                   <Container>
+
+                    <Switch>
+
+                    <Redirect exact from={match.url} to={`${match.url}/questions`} />
+                    <Route path={`${match.url}/questions`} render = {(props) =>
+                      <Questions {...props}
+                        questions={questions}
+                        click={this.handleQuestionClick}
+                        tid={tid}
+                        click={this.handleNewQ} {...props}
+                        queClick={this.handleQuestionClick}
+                        searchQueryChange={this.handleSearchQueryChange}
+                        isLoading={isLoading}
+                        loadMore={this.handleMore}
+                        lastPage={lastPage}
+                      />}
+
+                       />} />
+                    <Route path={`${match.url}/curri`} render = {() =>
+                      <CourseCurri
+                        curri={renderedHtml}
+                       />} />
+                     <Route path={`${match.url}/info`} render = {() =>
+                       <CourseMeta
+                         meta={meta}
+                        />} />
+                    <Route path={`${match.url}/new-question`} render={() =>
+                      <NewQ
+                        // tid={tid}
+                        // cTeaching={cTeaching}
+                        // selectOption={selectOption}
+                        qTitle={qTitle}
+                        qText={qText}
+                        submit={this.handleQuestionSubmit}
+                        cancel={this.handleNewQCancel}
+                        change={this.handleQuestionChange}
+                        // chooseCourse={this.handleCourseSelect}
+                      />} />
+
+                    <Route
+                      // path='/teacher/:teacherId/question/:questionId'
+                      path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
+                      render={() => <Question />}
+                    />
+
+                  </Switch>
+
+                </Container>
+              </Responsive>
+
 
                   </Grid.Column>
               </Grid>

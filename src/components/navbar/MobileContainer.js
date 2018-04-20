@@ -11,7 +11,8 @@ import {auth} from '../../firebase'
 
 import Dashboard from '../dashboard/Dashboard';
 
-const SEGMENT_BORDER={padding: '0'}
+const NAV_MOBILE_AUTH={padding: '0rem'}
+const NAV_MOBILE_NON_AUTH={padding: '0rem'}
 const MENU_BORDER={borderRadius: '0', marginBottom: '0'}
 
 class MobileContainer extends Component {
@@ -32,11 +33,12 @@ class MobileContainer extends Component {
   render() {
     const { children, authUser, mobile } = this.props
     const { fixed, activeItem, sidebarOpened, searchFieldActive } = this.state
-    // console.log('mobile container', mobile);
+    console.log('mobile container', authUser);
     return (
       <Responsive minWidth={320} maxWidth={991}>
           { authUser
               ? <MobileAuth
+                authUser={authUser}
                 activeItem={activeItem}
                 children={children}
                 sidebarOpened={sidebarOpened}
@@ -69,10 +71,13 @@ export default MobileContainer
 
 
 const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
+  console.log('mobile auth', authUser);
   return (
     <Sidebar.Pushable>
        <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
-         <Menu.Item as={Link} to={routes.ACCOUNT} >Username</Menu.Item>
+         <Menu.Item
+           as={Link} to={routes.ACCOUNT}
+           onClick={handlePusherClick} >My Account</Menu.Item>
          <Menu.Item as={Link} to='/category' >Category</Menu.Item>
          <Menu.Item as='a'>My Courses</Menu.Item>
          <Menu.Item as='a'>My Notifications</Menu.Item>
@@ -90,25 +95,30 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
             // minHeight: 350,
              padding: '1em 0em'
            }}
-          // style={SEGMENT_BORDER}
+          // style={NAV_MOBILE_AUTH}
           vertical>
           <Container>
 
                 <Menu.Item as='a' onClick={handleToggle} style={{float:'left', color: 'white'}} >
                   <Icon name='sidebar' />
                 </Menu.Item>
-                <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1em'}}>
+
+                <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1rem'}}>
                   {/* was 0.5  */}
                   <Icon name='search' />
                 </Menu.Item>
-                <Menu.Item as='a' style={{color: 'white'}}> We question and answer </Menu.Item>
-                <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1em'}} >
-                     <Icon name='user circle' />
+
+                <Menu.Item as='a' style={{color: 'white'}}
+                  as={Link} to={routes.HOME}
+                  > We question and answer </Menu.Item>
+                <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1rem'}} >
+                  <Icon name='user circle' />
                 </Menu.Item>
+
                 <Menu.Item  as={Link} to={routes.LEARNING}
                   style={{float:'right', color: 'white',}}
                   >
-                  <Icon name='book' />
+                  <Icon name='folder outline' />
                 </Menu.Item>
 
                   {searchFieldActive
@@ -129,21 +139,24 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
 const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
   return (
     <Sidebar.Pushable>
-       <Sidebar as={Menu} animation='uncover' inverted vertical visible={sidebarOpened}>
-          <Menu.Item as={Link} to='/' active>Home</Menu.Item>
+       <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
+          <Menu.Item as={Link} to='/' active onClick={handlePusherClick} >We </Menu.Item>
           <Menu.Item as='a'>Category</Menu.Item>
-          <Menu.Item as='a'>Are you teaching?</Menu.Item>
-          <Menu.Item as='a'>Help</Menu.Item>
-          {/* <Menu.Item as='a'>Sign Up</Menu.Item>
-          <Menu.Item as='a'>Log in</Menu.Item> */}
-          <Menu.Item as={Link} to={routes.SIGN_IN}
-            name='Log in' active={activeItem === 'signin'}
+          <Menu.Item
+            as={Link} to={routes.TEACHER_INTRO} onClick={handlePusherClick}
+            >Are you teaching?</Menu.Item>
+          <Menu.Item
+            as={Link} to={routes.FOOTER_HELP}
+            onClick={handlePusherClick}
+            >Help</Menu.Item>
+          <Menu.Item name='Log in' active={activeItem === 'signin'}
+            as={Link} to={routes.SIGN_IN}
             onClick={handlePusherClick}
              >
           </Menu.Item>
 
-          <Menu.Item as={Link} to={routes.SIGN_UP}
-            name='Sign Up' active={activeItem === 'signup'}
+          <Menu.Item name='Sign Up' active={activeItem === 'signup'}
+            as={Link} to={routes.SIGN_UP}
             onClick={handleToggle}
              >
           </Menu.Item>
@@ -151,7 +164,7 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
 
       <Sidebar.Pusher dimmed={sidebarOpened} onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
         <Segment inverted textAlign='center'
-          style={SEGMENT_BORDER}
+          style={NAV_MOBILE_NON_AUTH}
           // style={{ minHeight: 350, padding: '1em 0em' }}
           vertical>
           {/* <Container> */}
@@ -160,8 +173,11 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
                   <Icon name='sidebar' />
                 </Menu.Item>
                 <Menu.Item position='right'>
-                  <Button as='a' inverted>Log in</Button>
-                  <Button as='a' inverted style={{ marginLeft: '0.5em' }}>Sign Up</Button>
+                  <Button
+                    as={Link} to={routes.SIGN_IN} inverted>
+                    Log in</Button>
+                  <Button   as={Link} to={routes.SIGN_UP} inverted style={{ marginLeft: '0.5em' }}>
+                    Sign Up</Button>
                 </Menu.Item>
               </Menu>
                 {searchFieldActive? <Input className='icon' icon='search' placeholder='Search...' fluid

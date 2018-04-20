@@ -66,7 +66,6 @@ class MyCourses extends Component {
         .catch(error => {
           this.setState({[error]: error});
         });
-
     }
   }
 
@@ -78,7 +77,7 @@ class MyCourses extends Component {
 
   render() {
     const {match} = this.props
-    const {calculations, activeItem, attendingCourses, isLoading} = this.state
+    const {calculations, activeItem, user, attendingCourses, isLoading} = this.state
     console.log('width', calculations.width, 'attendingCourses', attendingCourses);
 
     return (
@@ -95,13 +94,13 @@ class MyCourses extends Component {
                       as={Link} to={`${match.url}/courses`}
                       style={style.DASHBOARD_MENU_ITEM}
                     />
-                    <Menu.Item
-                      name='wishlist'
+                    {/* <Menu.Item
+                      name='wishlist(coming soon)'
                       active={activeItem === 'wishlist'}
                       onClick={this.handleItemClick}
-                      as={Link} to={`${match.url}/wishlist`}
+                      as={Link} to={`${match.url}/courses`}
                       style={style.DASHBOARD_MENU_ITEM}
-                    />
+                    /> */}
                   </Menu>
             </SectionContainer>
 
@@ -115,13 +114,13 @@ class MyCourses extends Component {
                     as={Link} to={`${match.url}/courses`}
                     style={style.DASHBOARD_MENU_ITEM}
                   />
-                  <Menu.Item
-                    name='wishlist'
+                  {/* <Menu.Item
+                    name='wishlist(coming soon)'
                     active={activeItem === 'wishlist'}
                     onClick={this.handleItemClick}
-                    as={Link} to={`${match.url}/wishlist`}
+                    as={Link} to={`${match.url}/courses`}
                     style={style.DASHBOARD_MENU_ITEM}
-                  />
+                  /> */}
                 </Menu>
             </SectionContainer_M>
 

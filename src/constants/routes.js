@@ -15,6 +15,8 @@ export const LEARNING = '/learning/my/e';
 export const LEARNING_MY_COURSES = '/learning/my/courses';
 export const LEARNING_MY_WISHLIST = '/learning/my/wishlist';
 
+export const TEACHER_INTRO = '/teacher_Intro';
+
 //2. internal pages nested routes
 export const CREATE = '/create';
 export const COURSE_MANAGE = '/course_manage/:cid/edit';
@@ -49,4 +51,8 @@ export const MY_COURSE_PAGE_CURRI = '/my/:tName/:cTitle/curri'; // query t info 
 
 export const QUESTION_PAGE = '/teacher/:tName/question/:qNum'; // q details, get access from TEACHER_PAGE_QUESTIONS, and fetch q detail from q list
 
-//TEACHER DASHBOARD,
+//FOOTER
+export const FOOTER_ABOUT = '/about'
+export const FOOTER_TERMS = '/terms'
+export const FOOTER_FAQ = '/faq'
+export const FOOTER_HELP = '/help'

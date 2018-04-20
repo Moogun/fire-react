@@ -1,4 +1,4 @@
-import {db, storage} from './firebase';
+import {fb, db, storage} from './firebase';
 
 export const doCreateUser = (id, username, email, providerName, photoURL) =>
   {
@@ -256,9 +256,16 @@ export const doEnrollInCourse = (tid, cid, password, uid) => {
 
 
 
-export const doSaveNewQ = (tid, cid, askedBy, title, text, createdAt, img) => {
-  console.log('db', tid, cid, askedBy, title, text, createdAt, img);
-  return db.ref('questions').child(tid).push({tid, cid, askedBy, title, text, createdAt})
+export const doSaveNewQ = (tid, cid, askedById, askedByUsername, title, text, createdAt, img) => {
+  console.log('db askedByUsername is needed April 14', tid, cid, askedById, askedByUsername, title, text, createdAt, img);
+  let answerCount = 0
+  let timeStamp = fb.database.ServerValue.TIMESTAMP
+
+  // var updates = {}
+  // updates[`courses/${cid}/meta/questionCount`] = true
+  // return db.ref().update(updates)
+
+  return db.ref('questions').child(tid).child(cid).push({tid, cid, askedById, askedByUsername, title, text, timeStamp, answerCount})
 }
 
 export const doSaveAnswer = (tid, cid, qid, answeredBy, text, createdAt, img) => {
@@ -267,12 +274,31 @@ export const doSaveAnswer = (tid, cid, qid, answeredBy, text, createdAt, img) =>
   return db.ref('questions').child(tid).child(qid).child('answers').push(answer)
 }
 
-export const doFetchRecentQuestions = (tid) => {
-  return db.ref('questions').child(tid).limitToFirst(10).once('value')
+export const doFetchRecentQuestions = (tid, cid, FirstFive) => {
+    return db.ref('questions').child(tid).child(cid).limitToLast(FirstFive)
 }
 
-export const doSearchForQuestions = (tid, queryText) => {
-  return db.ref('questions').child(tid).orderByChild('title').startAt(queryText).endAt(queryText+"\uf8ff").once('value')
+export const doFetchNextQuestions = (tid, cid, lastQid, FiveMore) => {
+  return db.ref('questions').child(tid).child(cid).orderByKey().endAt(lastQid).limitToLast(FiveMore)
+}
+
+//start at limist to first - not working
+//start at limist to last - not working
+//end at limist to first -  fetch from the oldest to the given num 1,2,3
+//end at limist to last - 7 8 9
+//limist to last - 7 8 9
+
+// orderByKey().startAt(lastQid).limitToLast(3) 789 789
+// orderByKey().startAt(lastQid).limitToFirst(3) 789 789
+// .orderByKey().endAt(lastQid).limitToFirst(3) 123 123
+
+// .orderByKey().endAt(lastQid).limitToLast(3) 567
+
+// limi to last start at - not working
+// orderbykey limi to last start at - 789 789
+
+export const doSearchForQuestions = (tid, cid, queryText) => {
+  return db.ref('questions').child(tid).child(cid).orderByChild('title').startAt(queryText).endAt(queryText+"\uf8ff").once('value')
 }
 
 
