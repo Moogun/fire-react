@@ -39,29 +39,30 @@ class HomePage extends Component {
 
     const {users, courses, isLoading} = this.state;
     let cList = courses ? <CourseCards courses={courses}/>
-    : <p>No course yet</p>
+    : <Segment basic textAlign='center'>
+      <p>No course yet</p>
+    </Segment>
     return (
-      <Segment basic loading={isLoading} style={{backgroundColor: '#f2f2f2', margin: '0rem'}}>
+      // <Segment basic loading={isLoading} style={{backgroundColor: '#f2f2f2', margin: '0rem'}}>
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              <Grid container>
-                <Grid.Column>
-                  <Header as='h5' style={{marginTop: '2rem'}}>Header</Header>
-                </Grid.Column>
+              <Grid container columns={3}>
+                <Grid.Row>
+                <Header as='h5' style={{marginTop: '2rem'}}>Header</Header>
+                {cList}
+                </Grid.Row>
               </Grid>
-              {cList}
-              <br/>
 
-              <Grid container>
-                <Grid.Column >
+
+                <Segment basic textAlign='center'>
                   <Button primary>Load more</Button>
-                </Grid.Column>
-              </Grid>
+                </Segment>
+
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Segment>
+      // </Segment>
     );
   }
 }

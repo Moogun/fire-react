@@ -249,7 +249,7 @@ class AccountPage extends Component {
               <Grid.Column>
                    <Container>
                       <Segment basic clearing >
-                          <Header as='h5' floated='left'>
+                          <Header as='h5' floated='left' style={{marginBottom: '0'}}>
                             <Image circular src={profile} size='tiny'/>
                             <Header.Content>
                               {user.username}
@@ -261,7 +261,7 @@ class AccountPage extends Component {
                          <Header as='h5' floated='right' onClick={this.toggleVisibility}>
                             <Icon name='ellipsis vertical'/>
                           </Header>
-                        </Segment>
+                    </Segment>
 
                   </Container>
                   <Sidebar.Pushable
@@ -269,9 +269,9 @@ class AccountPage extends Component {
                     >
                      <Sidebar
                        as={Menu}
-                       animation='overlay'
+                       animation='push'
                        width='thin'
-                       direction='right'
+                       direction='top'
                        visible={visible}
                        icon='labeled'
                        vertical

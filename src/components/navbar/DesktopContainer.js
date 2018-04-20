@@ -8,7 +8,7 @@ import Category from './Category'
 import HomepageHeading from './HomepageHeading'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import {auth} from '../../firebase'
-
+import logo from '../../assets/logo.png'
 const segmentBorder={padding: '0'}
 const menuBorder={borderRadius: '0'}
 
@@ -23,7 +23,7 @@ class DesktopContainer extends Component {
     const { fixed, activeItem } = this.state
     return (
       <Responsive minWidth={992}>
-        {/* <Visibility once={false} onBottomPassed={this.showFixedMenu} onBottomPassedReverse={this.hideFixedMenu}> */}
+        {/* <Visibility once={false} onBottomPassed={this.showFixedMenu}  onBottomPassedReverse={this.hideFixedMenu}> */}
             { authUser
                 ? <DesktopAuth fixed={fixed} activeItem={activeItem} authUser={authUser}/>
                 : <DesktopNonAuth fixed={fixed} activeItem={activeItem} />
@@ -60,7 +60,10 @@ const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
       >
         <Container>
           <Menu.Item as={Link} to={routes.HOME}
-            name='Weqna' active={activeItem === 'home'} onClick={this.handleItemClick} />
+            // name='Weqna'
+             active={activeItem === 'home'} onClick={this.handleItemClick} >
+            <img src={logo} />
+          </Menu.Item>
           <Category />
           <Menu.Item>
               <Input placeholder='Search...' action={{ icon: 'search' }} style={{width: '350px'}}/>

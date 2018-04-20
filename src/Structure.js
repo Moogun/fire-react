@@ -57,6 +57,9 @@ class Structure extends Component {
                   <li>Review list</li>
                 </ul>
               </Segment>
+              <Segment inverted color='orange'>
+                with auth HOC for questions
+              </Segment>
             </Segment>
           </Grid.Column>
           <Grid.Column>
@@ -101,6 +104,9 @@ class Structure extends Component {
                   <li>by no response</li>
                   <li>by following</li>
                 </ul>
+              </Segment>
+              <Segment inverted color='orange'>
+                with auth HOC
               </Segment>
             </Segment>
           </Grid.Column>
@@ -161,6 +167,9 @@ class Structure extends Component {
                   <li>star? follow? </li>
                 </ul>
               </Segment>
+              <Segment inverted color='orange'>
+                with auth HOC
+              </Segment>
             </Segment>
           </Grid.Column>
 
@@ -217,6 +226,9 @@ class Structure extends Component {
             </Segment>
             <Segment>
               body
+            </Segment>
+            <Segment inverted color='orange'>
+              with auth HOC
             </Segment>
           </Segment>
         </Grid.Column>

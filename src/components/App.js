@@ -99,7 +99,7 @@ class App extends Component {
             component={() => <CEdit />}
           />
 
-          <Route exact path={routes.TEACHER_INTRO} render={() => <About />} />
+          <Route exact path={routes.TEACHER_INTRO} render={() => <TeacherIntro />} />
 
           <Route
             // exact path='/teacher/:teacherId'
@@ -139,7 +139,7 @@ class App extends Component {
 
           <Route component={NoMatch} />
           </Switch>
-          
+
           <Footer />
 
         </ResponsiveContainer>
@@ -154,7 +154,7 @@ const NoMatch = ({ location }) => (
     <Grid.Row>
     <Grid.Column>
 
-      <Header as='h1' >
+      <Header as='h1' style={{fontSize: '4rem'}}>
         Sorry!
         <Header.Subheader>
           We can't find the page you're looking for.
