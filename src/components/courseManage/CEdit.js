@@ -15,10 +15,6 @@ import {storage} from '../../firebase/firebase';
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
 
-import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
-import { ImageSideButton, Block, addNewBlock, Editor, createEditorState,} from 'medium-draft';
-import 'medium-draft/lib/index.css';
-
 const C_EDIT_HEAD = {backgroundColor: '#2c3e50'}
 const C_EDIT_MENU = {marginTop: '4rem'}
 const C_EDIT_BODY = {backgroundColor: '#ecf0f1', marginTop: '0px', minHeight: '700px'}
@@ -56,25 +52,16 @@ class CourseEdit extends Component {
        images: {},
        confirmOpen: false,
        selectedImage: null,
-       editorState: createEditorState(),
        visible: false,
 
-      sections: [],
+      sections: [{title:'', content:[],}],
       formForSection: false,
       sectionTitle: '',
       activeSection: '',
 
       lectureTitle: '',
     };
-    this.sideButtons = [{
-      title: 'Image',
-      component: ImageSideButton,
-      // component: CustomImageSideButton,
-    }];
 
-    this.onChange = (editorState) => {
-      this.setState({ editorState });
-    };
   }
 
   //MENU
@@ -284,22 +271,33 @@ class CourseEdit extends Component {
     this.setState({ confirmOpen: false })
   }
 
+  // //CURRI
+  // onCurriSubmit = ( ) => {
+  //   const {courseId, teacherId} = this.state
+  //   console.log('course teacher', courseId, teacherId);
+  //
+  //   var editorData = convertToRaw(this.state.editorState.getCurrentContent());
+  //   console.log('editor1 data getCurrentContent',editorData);
+  //
+  //   var strData = JSON.stringify(editorData)
+  //
+  //   db.doUpdateCourseCurri(teacherId, courseId, strData)
+  //     .then(response => console.log('succeded uploading',response))
+  //     .catch(error => {
+  //       this.setState(byPropKey('error', error));
+  //     });
+  // }
+
   //CURRI
-  onCurriSubmit = ( ) => {
-    const {courseId, teacherId} = this.state
-    console.log('course teacher', courseId, teacherId);
-
-    var editorData = convertToRaw(this.state.editorState.getCurrentContent());
-    console.log('editor1 data getCurrentContent',editorData);
-
-    var strData = JSON.stringify(editorData)
-
-    db.doUpdateCourseCurri(teacherId, courseId, strData)
+  onCurriSubmit = () => {
+    const {courseId, teacherId, sections} = this.state
+    db.doUpdateCourseCurri(teacherId, courseId, sections)
       .then(response => console.log('succeded uploading',response))
       .catch(error => {
         this.setState(byPropKey('error', error));
-      });
+    });
   }
+
 
   //SETTINGS
   handleSettingsClick = () => {
@@ -442,8 +440,9 @@ class CourseEdit extends Component {
           isLoading: !isLoading,
           features: features,
           images: images,
+          sections: curri,
           })
-          this.onChange(createEditorState(JSON.parse(curri)))
+
       }).catch(error => {
         this.setState(byPropKey('error', error));
       });
@@ -472,7 +471,12 @@ handleAddSectionCancel = (e) => {
 
 handleSaveSection = () => {
   const { sections, formForSection, sectionTitle } = this.state
-  let prev = sections
+  let prev
+  if (sections == undefined) {
+    prev = []
+  } else {
+    prev = sections
+  }
   let newEl = {title: sectionTitle, content: [], expanded: false}
   prev.push(newEl)
   this.setState ({ sections: prev, formForSection: !formForSection, sectionTitle: ''})
@@ -514,6 +518,10 @@ handleSaveLecture = (sectionId) => {
   const { sections, lectureTitle } = this.state
   let section = sections[sectionId]
   section.expanded = true
+
+  if (section.content == undefined) {
+    sections[sectionId].content = []
+  }
   section.content.push(lectureTitle)
   console.log('section', section);
   sections.splice(sectionId, 1, section)
@@ -604,6 +612,7 @@ handleLecMoveDown  = (e, secIndex, lecIndex) => {
 
 handleSecToggle = (e, secIndex) => {
   const { sections } = this.state
+  console.log('sections' ,sections, 'secIndex', secIndex);
   sections[secIndex].expanded = !sections[secIndex].expanded
   this.setState ({sections})
 }
@@ -622,7 +631,6 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
       curri,
       openCourse, password, isPublished,
       features,
-      editorState,
       images, confirmOpen, selectedImage, handleRemoveModalShow, handleRemoveConfirm, handleRemoveCancel,
       visible,
 
@@ -632,7 +640,8 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
     } = this.state
     const {match} = this.props
 
-    console.log('render 1 ', 'images', images)
+    // console.log('render 1 ', 'images', images)
+    console.log('curri', sections );
 
     const isInvalidSection = sectionTitle === ''
     const isInvalidLecture = lectureTitle === ''
@@ -784,14 +793,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                             // change={this.handleInputChange}
                             // submit={this.onInfoSubmit}
                           /> }/>
-                          {/* <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
-                            {...props}
-                            courseId={courseId}
-                            teacherId={teacherId}
-                            editorState={editorState}
-                            change={this.onChange}
-                            submit={this.onCurriSubmit}
-                          />} /> */}
+
                           <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
                             {...props}
             sections={sections}
@@ -841,6 +843,9 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
             handleAddSectionCancel = {this.handleAddSectionCancel}
             handleSaveSection = {this.handleSaveSection}
             handleSectionTitleChange = {this.handleSectionTitleChange}
+
+            onCurriSubmit={this.onCurriSubmit}
+
                           />} />
                           <Route path={`${match.url}/settings`} render={() => <CEditSettings
                             courseId={courseId}

@@ -53,10 +53,12 @@ class CEditCurri extends React.Component {
       handleSaveSection,
       // handleSectionTitleChange,
 
+      onCurriSubmit
+
     } = this.props
 
 
-    let sectionList = sections.map((s, secIndex) =>
+    let sectionList = sections && sections.map((s, secIndex) =>
       <Segment.Group
         data-id={secIndex}
         key={secIndex}
@@ -83,9 +85,17 @@ class CEditCurri extends React.Component {
               </Button.Group>
               <Button.Group floated='right' size='mini' basic style={{marginLeft: '1rem'}}>
                 <Button icon='chevron up' disabled={secIndex === 0 } onClick={(e) => handleSecMoveUp(e, secIndex)} />
-                <Button icon='chevron down' disabled={sections.length === (secIndex+1) } onClick={(e) => handleSecMoveDown(e, secIndex)} />
-                <Button disabled={s.content[0] ? false : true} icon={s.content[0] && s.expanded ? 'minus' : 'plus'}
-                  onClick={(e) => handleSecToggle(e, secIndex)} />
+                <Button icon='chevron down'
+                  disabled={sections === null || sections.length === (secIndex+1) } onClick={(e) => handleSecMoveDown(e, secIndex)}
+                />
+                <Button
+                  // disabled={s.content[0] ? false : true} icon={s.content[0] && s.expanded ? 'minus' : 'plus'}
+                  disabled={(s.content == undefined ? true : s.content[0] ? false: true) }
+                  icon={s.content == undefined ? 'plus' : s.content[0] ? 'minus' : 'plus'}
+                  // ={s.content[0] && s.expanded ? 'minus' : 'plus'}
+                  onClick={(e) => handleSecToggle(e, secIndex)}
+                />
+                  {s.title}
               </Button.Group>
             </React.Fragment>
           }
@@ -162,6 +172,7 @@ class CEditCurri extends React.Component {
         <React.Fragment>
           {sectionList}
           {addSection}
+          <Button onClick={onCurriSubmit}> Save curri</Button>
         </React.Fragment>
         )
       }
