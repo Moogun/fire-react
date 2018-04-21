@@ -23,6 +23,12 @@ class MobileContainer extends Component {
     if (sidebarOpened) this.setState({ sidebarOpened: false })
   }
 
+  handlePusherClickAndLogout = () => {
+    const { sidebarOpened } = this.state
+    if (sidebarOpened) this.setState({ sidebarOpened: false })
+    auth.doSignOut()
+  }
+
   handleToggle = () => this.setState({ sidebarOpened: !this.state.sidebarOpened })
 
   handleSearchField = () => {this.setState ({ searchFieldActive: !this.state.searchFieldActive})
@@ -43,6 +49,7 @@ class MobileContainer extends Component {
                 children={children}
                 sidebarOpened={sidebarOpened}
                 handlePusherClick={this.handlePusherClick}
+                handlePusherClickAndLogout={this.handlePusherClickAndLogout}
                 handleToggle={this.handleToggle}
                 searchFieldActive={searchFieldActive}
                 handleSearchField={this.handleSearchField}
@@ -70,20 +77,34 @@ MobileContainer.propTypes = {
 export default MobileContainer
 
 
-const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
+const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handlePusherClickAndLogout, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
   console.log('mobile auth', authUser);
   return (
     <Sidebar.Pushable>
        <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
          <Menu.Item
            as={Link} to={routes.ACCOUNT}
-           onClick={handlePusherClick} >My Account</Menu.Item>
-         <Menu.Item as={Link} to='/category' >Category</Menu.Item>
-         <Menu.Item as='a'>My Courses</Menu.Item>
-         <Menu.Item as='a'>My Notifications</Menu.Item>
-         <Menu.Item as={Link} to={routes.DASHBOARD}>Instructor Dashboard</Menu.Item>
-         <Menu.Item as='a'>Help</Menu.Item>
-         <Menu.Item as='a' onClick={auth.doSignOut}>Log out</Menu.Item>
+           onClick={handlePusherClick}
+            >My Account</Menu.Item>
+         <Menu.Item
+           as={Link} to='/category'
+           onClick={handlePusherClick}
+           >Category</Menu.Item>
+         <Menu.Item
+           as={Link} to={routes.LEARNING}
+           onClick={handlePusherClick}
+           >My Courses</Menu.Item>
+         <Menu.Item
+           as={Link} to='/notifications'
+           onClick={handlePusherClick}
+           >My Notifications</Menu.Item>
+         <Menu.Item
+           as={Link} to={routes.DASHBOARD}
+           onClick={handlePusherClick}
+           >Instructor Dashboard</Menu.Item>
+         <Menu.Item as={Link} to={routes.FOOTER_HELP}
+           onClick={handlePusherClick}>Help</Menu.Item>
+         <Menu.Item onClick={handlePusherClickAndLogout}>Log out</Menu.Item>
       </Sidebar>
 
       <Sidebar.Pusher dimmed={sidebarOpened}
