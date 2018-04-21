@@ -81,7 +81,6 @@ class MobileAuth extends Component {
     super(props);
     this.state = {
 
-<<<<<<< HEAD
     };
   }
   componentDidMount(){
@@ -93,40 +92,9 @@ class MobileAuth extends Component {
         this.setState({[error]: error});
       })
   }
-=======
-const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handlePusherClickAndLogout, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
-  console.log('mobile auth', authUser);
-  return (
-    <Sidebar.Pushable>
-       <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
-         <Menu.Item
-           as={Link} to={routes.ACCOUNT}
-           onClick={handlePusherClick}
-            >My Account</Menu.Item>
-         <Menu.Item
-           as={Link} to='/category'
-           onClick={handlePusherClick}
-           >Category</Menu.Item>
-         <Menu.Item
-           as={Link} to={routes.LEARNING}
-           onClick={handlePusherClick}
-           >My Courses</Menu.Item>
-         <Menu.Item
-           as={Link} to='/notifications'
-           onClick={handlePusherClick}
-           >My Notifications</Menu.Item>
-         <Menu.Item
-           as={Link} to={routes.DASHBOARD}
-           onClick={handlePusherClick}
-           >Instructor Dashboard</Menu.Item>
-         <Menu.Item as={Link} to={routes.FOOTER_HELP}
-           onClick={handlePusherClick}>Help</Menu.Item>
-         <Menu.Item onClick={handlePusherClickAndLogout}>Log out</Menu.Item>
-      </Sidebar>
->>>>>>> 1417d07820557690cb7162018221abd35c56fc0a
 
   render() {
-    const {children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem} = this.props
+    const {children, authUser, sidebarOpened, handlePusherClick, handlePusherClickAndLogout, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem} = this.props
     // console.log('mobile auth props user', authUser);
     const { user } = this.state
     // console.log('mobile state user', user);
@@ -153,7 +121,7 @@ const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handl
            <Menu.Item as={Link} to='/notifications' onClick={handlePusherClick}>My Notifications</Menu.Item>
            <Menu.Item as={Link} to={routes.DASHBOARD} onClick={handlePusherClick}>Instructor Dashboard</Menu.Item>
            <Menu.Item as={Link} to={routes.FOOTER_HELP} onClick={handlePusherClick}>Help</Menu.Item>
-           <Menu.Item as='a' onClick={auth.doSignOut}>Log out</Menu.Item>
+           <Menu.Item as='a' onClick={handlePusherClickAndLogout}>Log out</Menu.Item>
         </Sidebar>
 
         <Sidebar.Pusher dimmed={sidebarOpened}
