@@ -1,3 +1,6 @@
+//desktop menu style
+export const NAV_MENU_SEGMENT_BORDER={padding: '0'}
+export const NAV_MENU_BORDER={borderRadius: '0', fontSize: '0.9rem'}
 
 export const COURSE_PAGE_HEAD_GRID = { backgroundColor: '#34495e', marginTop: '0rem'}
 export const COURSE_PAGE_HEAD_GRID_ROW = { marginTop: '2rem', marginBottom: '2rem'}

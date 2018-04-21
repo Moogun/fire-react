@@ -4,13 +4,13 @@ import {
   Button, Container, Divider, Grid, Header, Icon, Image, List, Menu, Responsive, Segment, Sidebar, Visibility, Dropdown, Input
 } from 'semantic-ui-react'
 import * as routes from '../../constants/routes';
+import * as style from '../../style/inline';
+
 import Category from './Category'
 import HomepageHeading from './HomepageHeading'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import {auth} from '../../firebase'
+import {auth, db} from '../../firebase'
 import logo from '../../assets/logo.png'
-const segmentBorder={padding: '0'}
-const menuBorder={borderRadius: '0'}
 
 class DesktopContainer extends Component {
   state = {}
@@ -42,70 +42,167 @@ DesktopContainer.propTypes = {
 
 export default DesktopContainer
 
-const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
-  return (
-    <Segment
-      // inverted
-      basic
-      textAlign='center' vertical
-      style={segmentBorder}
-       >
-      <Menu
-        style={menuBorder}
-        fixed={fixed ? 'top' : null}
-        // inverted={!fixed}
-        // pointing={!fixed}
-        // secondary={!fixed}
-        size='large'
-      >
-        <Container>
-          <Menu.Item as={Link} to={routes.HOME}
-            // name='Weqna'
-             active={activeItem === 'home'} onClick={this.handleItemClick} >
-            <img src={logo} />
-          </Menu.Item>
-          <Category />
-          <Menu.Item>
-              <Input placeholder='Search...' action={{ icon: 'search' }} style={{width: '350px'}}/>
-          </Menu.Item>
-          <Menu.Menu  position='right'>
-            <Dropdown item text='Teacher' >
-              <Dropdown.Menu>
-                <Dropdown.Item as={Link} to={routes.CREATE}
-                  name='create' active={activeItem === 'create'} onClick={this.handleItemClick}>
-                  Create New Course
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to={routes.DASHBOARD}
-                  name='dashboard'
-                  active={activeItem === 'dashboard'}
-                  onClick={this.handleItemClick}
-                  >
-                    Manage Courses
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+class DesktopAuth extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
 
-            <Menu.Item as={Link} to={routes.LEARNING}
-              name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick} />
+    };
+  }
+  componentDidMount(){
+    // console.log('did mount 1 M Container', )
+    const {authUser} = this.props
+      db.onceGetUser(authUser.uid)
+      .then(res => this.setState ({ user: res.val() }))
+      .then(
+        db.doFetchTeaching(authUser.uid)
+        .then(res => this.setState ({teachingList: res.val() }))
+        .catch(error => {
+          this.setState({[error]: error});
+        })
+      )
+      .catch(error => {
+        this.setState({[error]: error});
+      })
+  }
 
-            <Dropdown item text='Account' >
-              <Dropdown.Menu>
-                <Dropdown.Item as={Link} to={routes.ACCOUNT}>
-                  {authUser.email}
-                </Dropdown.Item>
-                <Dropdown.Item onClick={auth.doSignOut}>
-                     SignOut
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-        </Menu.Menu>
+  render() {
+    const {authUser, fixed, activeItem} = this.props
+    const {user, teachingList } = this.state
+    console.log('desktop authUser', user, 'teachingList', teachingList);
+    return (
+      <Segment
+        // inverted
+        basic
+        textAlign='center' vertical
+        style={style.NAV_MENU_SEGMENT_BORDER}
+         >
+        <Menu
+          style={style.NAV_MENU_BORDER}
+          fixed={fixed ? 'top' : null}
+          // inverted={!fixed}
+          // pointing={!fixed}
+          // secondary={!fixed}
+          size='large'
+        >
+          <Container>
+            <Menu.Item as={Link} to={routes.HOME}
+              // name='Weqna'
+               active={activeItem === 'home'} onClick={this.handleItemClick} >
+              <img src={logo} />
+            </Menu.Item>
+            <Category />
+            <Menu.Item>
+                <Input placeholder='Search...' action={{ icon: 'search' }} style={{width: '350px'}}/>
+            </Menu.Item>
+            <Menu.Menu  position='right'>
+              {!!teachingList ?
+              <Dropdown item text='Teacher'>
+                  <Dropdown.Menu>
+                    <Dropdown.Item as={Link} to={routes.CREATE}
+                      name='create' active={activeItem === 'create'} onClick={this.handleItemClick}>
+                      Create New Course
+                    </Dropdown.Item>
+                    <Dropdown.Item as={Link} to={routes.DASHBOARD}
+                      name='dashboard'
+                      active={activeItem === 'dashboard'}
+                      onClick={this.handleItemClick}
+                      >
+                        Manage Courses
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+              </Dropdown>
+              : <Menu.Item as={Link} to={routes.TEACHER_INTRO}
+                name='teaching' active={activeItem === 'teaching?'} onClick={this.handleItemClick}> Are You Teaching?</Menu.Item>
+              }
 
-        </Container>
-      </Menu>
-      {/* <HomepageHeading /> */}
-    </Segment>
-  );
+              <Menu.Item as={Link} to={routes.LEARNING}
+                name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick} />
+
+              <Dropdown item text={!!user ? user.username : 'Account'} >
+                <Dropdown.Menu>
+                  <Dropdown.Item as={Link} to={routes.ACCOUNT}>
+                    {authUser.email}
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={auth.doSignOut}>
+                       SignOut
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+          </Menu.Menu>
+
+          </Container>
+        </Menu>
+        {/* <HomepageHeading /> */}
+      </Segment>
+    );
+  }
 }
+
+// const DesktopAuth = ({authUser, fixed, activeItem, st}) => {
+//   return (
+//     <Segment
+//       // inverted
+//       basic
+//       textAlign='center' vertical
+//       style={style.NAV_MENU_SEGMENT_BORDER}
+//        >
+//       <Menu
+//         style={style.NAV_MENU_BORDER}
+//         fixed={fixed ? 'top' : null}
+//         // inverted={!fixed}
+//         // pointing={!fixed}
+//         // secondary={!fixed}
+//         size='large'
+//       >
+//         <Container>
+//           <Menu.Item as={Link} to={routes.HOME}
+//             // name='Weqna'
+//              active={activeItem === 'home'} onClick={this.handleItemClick} >
+//             <img src={logo} />
+//           </Menu.Item>
+//           <Category />
+//           <Menu.Item>
+//               <Input placeholder='Search...' action={{ icon: 'search' }} style={{width: '350px'}}/>
+//           </Menu.Item>
+//           <Menu.Menu  position='right'>
+//             <Dropdown item text='Teacher' >
+//               <Dropdown.Menu>
+//                 <Dropdown.Item as={Link} to={routes.CREATE}
+//                   name='create' active={activeItem === 'create'} onClick={this.handleItemClick}>
+//                   Create New Course
+//                 </Dropdown.Item>
+//                 <Dropdown.Item as={Link} to={routes.DASHBOARD}
+//                   name='dashboard'
+//                   active={activeItem === 'dashboard'}
+//                   onClick={this.handleItemClick}
+//                   >
+//                     Manage Courses
+//                 </Dropdown.Item>
+//               </Dropdown.Menu>
+//             </Dropdown>
+//
+//             <Menu.Item as={Link} to={routes.LEARNING}
+//               name='my courses' active={activeItem === 'mycourses'} onClick={this.handleItemClick} />
+//
+//             <Dropdown item text='Account' >
+//               <Dropdown.Menu>
+//                 <Dropdown.Item as={Link} to={routes.ACCOUNT}>
+//                   {authUser.email}
+//                 </Dropdown.Item>
+//                 <Dropdown.Item onClick={auth.doSignOut}>
+//                      SignOut
+//                 </Dropdown.Item>
+//               </Dropdown.Menu>
+//             </Dropdown>
+//         </Menu.Menu>
+//
+//         </Container>
+//       </Menu>
+//       {/* <HomepageHeading /> */}
+//     </Segment>
+//   );
+// }
 
 const DesktopNonAuth = ({fixed, activeItem, st}) => {
   return (
@@ -113,7 +210,7 @@ const DesktopNonAuth = ({fixed, activeItem, st}) => {
       // inverted
        textAlign='center' vertical
        basic
-       style={segmentBorder}
+       style={style.NAV_MENU_SEGMENT_BORDER}
        >
       <Menu
         fixed={fixed ? 'top' : null}
@@ -122,7 +219,7 @@ const DesktopNonAuth = ({fixed, activeItem, st}) => {
         // pointing={!fixed}
         // secondary={!fixed}
         size='large'
-        style={menuBorder}
+        style={style.NAV_MENU_BORDER}
       >
         <Container>
           <Menu.Item  as={Link} to={routes.LANDING}

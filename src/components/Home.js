@@ -47,8 +47,10 @@ class HomePage extends Component {
         <Grid>
           <Grid.Row>
             <Grid.Column>
+              <Segment inverted color='teal'>Enroll your course and help your students while promoting your course</Segment>
               <Grid container columns={3}>
                 <Grid.Row>
+
                 <Header as='h5' style={{marginTop: '2rem'}}>Header</Header>
                 {cList}
                 </Grid.Row>

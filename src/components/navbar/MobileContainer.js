@@ -4,6 +4,8 @@ import {
   Button, Container, Divider, Grid, Header, Icon, Image, List, Menu, Responsive, Segment, Sidebar, Visibility, Dropdown, Input
 } from 'semantic-ui-react'
 import * as routes from '../../constants/routes';
+import profile from '../../assets/profile-lg.png'
+
 import Category from './Category'
 import HomepageHeading from './HomepageHeading'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
@@ -116,7 +118,7 @@ class MobileAuth extends Component {
              as={Link} to={routes.ACCOUNT}
              onClick={handlePusherClick} >{!!user ?
                <Header as='h5' inverted>
-                 <Image circular src={user.photoUrl} />
+                 <Image circular src={!!user.photoUrl ? user.photoUrl : profile } />
                  <Header.Content>
                    {user.username}
                    <Header.Subheader>
@@ -171,7 +173,10 @@ class MobileAuth extends Component {
                   </Menu.Item>
 
                     {searchFieldActive
-                      ? <Input className='icon' placeholder='Search...' fluid size='large' style={{marginTop: '1em'}} // action={{ icon: 'search' }}
+                      ? <Input className='icon' placeholder='Search...'
+                        fluid
+                        // size='large'
+                        style={{marginTop: '1em'}} // action={{ icon: 'search' }}
                       icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>} />
                       : null
                     }
@@ -283,7 +288,7 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
           // style={{ minHeight: 350, padding: '1em 0em' }}
           vertical>
           {/* <Container> */}
-              <Menu inverted pointing secondary size='large'>
+              <Menu inverted pointing secondary >
                 <Menu.Item onClick={handleToggle}>
                   <Icon name='sidebar' />
                 </Menu.Item>
@@ -296,7 +301,7 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
                 </Menu.Item>
               </Menu>
                 {searchFieldActive? <Input className='icon' icon='search' placeholder='Search...' fluid
-                  size='large'
+                  // size='large'
                 icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>}
                /> : null}
           {/* </Container>*/}
