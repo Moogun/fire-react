@@ -4,6 +4,7 @@ import { auth, db } from '../../firebase';
 import * as routes from '../../constants/routes';
 import { Button, Image, Form, Checkbox, Icon, Input, Divider, Segment, Header, Grid, Message } from 'semantic-ui-react'
 import {SignInLink} from './SignIn';
+import logo from '../../assets/logo.png'
 
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 
@@ -20,7 +21,7 @@ const SignUpPage = ({history}) => (
     >
       <Grid.Column style={{ maxWidth: 350 }}>
         <Header as='h2' color='teal' textAlign='center'>
-          <Image src='/logo.png' />
+          <Image src={logo} />
           {' '}Sign Up
         </Header>
 
@@ -176,24 +177,25 @@ class SignUpForm extends Component {
     console.log('err', err, passwordOne.length)
     return (
       <div>
+        <Segment basic style={{marginBottom: '0'}}>
+          <FacebookLogin
+            appId="1329723160399765"
+            autoLoad
+            render={renderProps => (
+              <Button
+                fluid size='tiny'
+                color='facebook'
+                onClick={this.signUpWithFB}>Continue with Facebook</Button>
+            )}
+          />
+          <br/>
+          <Button fluid color='google plus' size='tiny' onClick={this.signUpWithGoogle}>
+            <Icon name='google plus' />Continue with Google
+          </Button>
+            <Divider horizontal>Or</Divider>
+        </Segment>
         <Form size='tiny' onSubmit={this.onSubmit}>
           <Segment stacked>
-            <FacebookLogin
-              appId="1329723160399765"
-              autoLoad
-              render={renderProps => (
-                <Button
-                  fluid size='tiny'
-                  color='facebook'
-                  onClick={this.signUpWithFB}>Continue with Facebook</Button>
-              )}
-            />
-            <br/>
-            <Button fluid color='google plus' size='tiny' onClick={this.signUpWithGoogle}>
-              <Icon name='google plus' />Continue with Google
-            </Button>
-              <Divider horizontal>Or</Divider>
-
               <Form.Field>
                 <Form.Input
                     icon='mail'

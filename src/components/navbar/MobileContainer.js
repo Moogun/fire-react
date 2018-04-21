@@ -88,16 +88,27 @@ class MobileAuth extends Component {
     const {authUser} = this.props
       db.onceGetUser(authUser.uid)
       .then(res => this.setState ({ user: res.val() }))
+      .then(
+        db.doFetchTeaching(authUser.uid)
+        .then(res => this.setState ({teachingList: res.val() }))
+        .catch(error => {
+          this.setState({[error]: error});
+        })
+      )
       .catch(error => {
         this.setState({[error]: error});
       })
   }
 
   render() {
-    const {children, authUser, sidebarOpened, handlePusherClick, handlePusherClickAndLogout, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem} = this.props
+    const {children,
+      sidebarOpened, handlePusherClick, handlePusherClickAndLogout, handleToggle,
+      searchFieldActive, handleSearchField, handleSearchClick,
+      activeItem,
+      authUser, } = this.props
     // console.log('mobile auth props user', authUser);
-    const { user } = this.state
-    // console.log('mobile state user', user);
+    const { user, teachingList } = this.state
+    console.log('mobile state user', user, 'teachingList', teachingList);
     return (
       <Sidebar.Pushable>
          <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
@@ -119,7 +130,7 @@ class MobileAuth extends Component {
            <Menu.Item as={Link} to='/category' onClick={handlePusherClick}>Category</Menu.Item>
            <Menu.Item as={Link} to={routes.LEARNING} onClick={handlePusherClick}>My Courses</Menu.Item>
            <Menu.Item as={Link} to='/notifications' onClick={handlePusherClick}>My Notifications</Menu.Item>
-           <Menu.Item as={Link} to={routes.DASHBOARD} onClick={handlePusherClick}>Instructor Dashboard</Menu.Item>
+           <Menu.Item as={Link} to={!!teachingList ? routes.DASHBOARD : routes.TEACHER_INTRO} onClick={handlePusherClick}>{!!teachingList ? 'Instructor Dashboard' : 'Are You Teaching?'} </Menu.Item>
            <Menu.Item as={Link} to={routes.FOOTER_HELP} onClick={handlePusherClick}>Help</Menu.Item>
            <Menu.Item as='a' onClick={handlePusherClickAndLogout}>Log out</Menu.Item>
         </Sidebar>
@@ -130,7 +141,7 @@ class MobileAuth extends Component {
             inverted
             textAlign='center'
             style={{
-              // minHeight: 350,
+               // minHeight: 350,
                padding: '1em 0em'
              }}
             // style={NAV_MOBILE_AUTH}
@@ -288,8 +299,8 @@ const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle
                   size='large'
                 icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>}
                /> : null}
-          {/* </Container>
-          <HomepageHeading mobile /> */}
+          {/* </Container>*/}
+          {/* <HomepageHeading mobile /> */}
         </Segment>
       {children}
       </Sidebar.Pusher>

@@ -9,6 +9,7 @@ import {SignUpLink} from './SignUp';
 import {PasswordForgetLink, PasswordForgetForm } from './PasswordForget'
 
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import logo from '../../assets/logo.png'
 
 const responseFacebook = (response) => {
   console.log(response);
@@ -23,7 +24,7 @@ const SignInPage = ({history}) => (
     >
       <Grid.Column style={{ maxWidth: 350 }}>
         <Header as='h2' color='teal' textAlign='center'>
-          <Image src='/logo.png' />
+          <Image src={logo} />
           {' '}Sign-in to your account
         </Header>
 
@@ -107,29 +108,29 @@ class SignInForm extends Component {
 
     return (
         <div>
+          <Segment basic style={{marginBottom: '0'}}>
+            <FacebookLogin
+              appId="1329723160399765"
+              autoLoad={true}
+              fields="name,email,picture"
+              callback={responseFacebook}
+              render={renderProps => (
+                <Button
+                  fluid size='tiny'
+                  color='facebook'
+                  onClick={this.signUpWithFB}
+                  >Continue with Facebook</Button>
+              )}
+            />
+            <br/>
+            <Button fluid color='google plus' size='tiny' onClick={this.signUpWithGoogle}>
+              <Icon name='google plus' />Continue with Google
+            </Button>
+            <Divider horizontal>Or</Divider>
+          </Segment>
+
           <Form size='large' onSubmit={this.onSubmit}>
-
             <Segment stacked>
-
-              <FacebookLogin
-                appId="1329723160399765"
-                autoLoad={true}
-                fields="name,email,picture"
-                callback={responseFacebook}
-                render={renderProps => (
-                  <Button
-                    fluid size='tiny'
-                    color='facebook'
-                    onClick={this.signUpWithFB}
-                    >Continue with Facebook</Button>
-                )}
-              />
-              <br/>
-              <Button fluid color='google plus' size='tiny' onClick={this.signUpWithGoogle}>
-                <Icon name='google plus' />Continue with Google
-              </Button>
-                <Divider horizontal>Or</Divider>
-
               <Form.Input
                 fluid
                 icon='mail'
@@ -148,7 +149,7 @@ class SignInForm extends Component {
                 onChange = {(event) => this.setState(byPropKey('password', event.target.value))}
                 type="password"
                 placeholder="Password"/>
-                {error && <Message>{error.message}</Message>}
+                {error && <Message negative>{error.message}</Message>}
               <Button color='teal' fluid size='large' disabled = {isInvalid} type="submit">Sign In</Button>
 
             </Segment>
