@@ -7,7 +7,7 @@ import * as routes from '../../constants/routes';
 import Category from './Category'
 import HomepageHeading from './HomepageHeading'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import {auth} from '../../firebase'
+import {auth, db} from '../../firebase'
 
 import Dashboard from '../dashboard/Dashboard';
 
@@ -69,72 +69,169 @@ MobileContainer.propTypes = {
 
 export default MobileContainer
 
+class MobileAuth extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
 
-const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
-  console.log('mobile auth', authUser);
-  return (
-    <Sidebar.Pushable>
-       <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
-         <Menu.Item
-           as={Link} to={routes.ACCOUNT}
-           onClick={handlePusherClick} >My Account</Menu.Item>
-         <Menu.Item as={Link} to='/category' >Category</Menu.Item>
-         <Menu.Item as='a'>My Courses</Menu.Item>
-         <Menu.Item as='a'>My Notifications</Menu.Item>
-         <Menu.Item as={Link} to={routes.DASHBOARD}>Instructor Dashboard</Menu.Item>
-         <Menu.Item as='a'>Help</Menu.Item>
-         <Menu.Item as='a' onClick={auth.doSignOut}>Log out</Menu.Item>
-      </Sidebar>
+    };
+  }
+  componentDidMount(){
+    // console.log('did mount 1 M Container', )
+    const {authUser} = this.props
+      db.onceGetUser(authUser.uid)
+      .then(res => this.setState ({ user: res.val() }))
+      .catch(error => {
+        this.setState({[error]: error});
+      })
+  }
 
-      <Sidebar.Pusher dimmed={sidebarOpened}
-        onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
-        <Segment
-          inverted
-          textAlign='center'
-          style={{
-            // minHeight: 350,
-             padding: '1em 0em'
-           }}
-          // style={NAV_MOBILE_AUTH}
-          vertical>
-          <Container>
+  render() {
+    const {children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem} = this.props
+    // console.log('mobile auth props user', authUser);
+    const { user } = this.state
+    // console.log('mobile state user', user);
+    return (
+      <Sidebar.Pushable>
+         <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
+           <Menu.Item
+             as={Link} to={routes.ACCOUNT}
+             onClick={handlePusherClick} >{!!user ?
+               <Header as='h5' inverted>
+                 <Image circular src={user.photoUrl} />
+                 <Header.Content>
+                   {user.username}
+                   <Header.Subheader>
+                     {user.email}
+                   </Header.Subheader>
+                 </Header.Content>
+               </Header>
+               : 'My Account'
+             }
+           </Menu.Item>
+           <Menu.Item as={Link} to='/category' onClick={handlePusherClick}>Category</Menu.Item>
+           <Menu.Item as={Link} to={routes.LEARNING} onClick={handlePusherClick}>My Courses</Menu.Item>
+           <Menu.Item as={Link} to='/notifications' onClick={handlePusherClick}>My Notifications</Menu.Item>
+           <Menu.Item as={Link} to={routes.DASHBOARD} onClick={handlePusherClick}>Instructor Dashboard</Menu.Item>
+           <Menu.Item as={Link} to={routes.FOOTER_HELP} onClick={handlePusherClick}>Help</Menu.Item>
+           <Menu.Item as='a' onClick={auth.doSignOut}>Log out</Menu.Item>
+        </Sidebar>
 
-                <Menu.Item as='a' onClick={handleToggle} style={{float:'left', color: 'white'}} >
-                  <Icon name='sidebar' />
-                </Menu.Item>
+        <Sidebar.Pusher dimmed={sidebarOpened}
+          onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
+          <Segment
+            inverted
+            textAlign='center'
+            style={{
+              // minHeight: 350,
+               padding: '1em 0em'
+             }}
+            // style={NAV_MOBILE_AUTH}
+            vertical>
+            <Container>
 
-                <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1rem'}}>
-                  {/* was 0.5  */}
-                  <Icon name='search' />
-                </Menu.Item>
+                  <Menu.Item as='a' onClick={handleToggle} style={{float:'left', color: 'white'}} >
+                    <Icon name='sidebar' />
+                  </Menu.Item>
 
-                <Menu.Item as='a' style={{color: 'white'}}
-                  as={Link} to={routes.HOME}
-                  > We question and answer </Menu.Item>
-                <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1rem'}} >
-                  <Icon name='user circle' />
-                </Menu.Item>
+                  <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1rem'}}>
+                    {/* was 0.5  */}
+                    <Icon name='search' />
+                  </Menu.Item>
 
-                <Menu.Item  as={Link} to={routes.LEARNING}
-                  style={{float:'right', color: 'white',}}
-                  >
-                  <Icon name='folder outline' />
-                </Menu.Item>
+                  <Menu.Item as='a' style={{color: 'white'}}
+                    as={Link} to={routes.HOME}
+                    > We question and answer </Menu.Item>
+                  <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1rem'}} >
+                    <Icon name='user circle' />
+                  </Menu.Item>
 
-                  {searchFieldActive
-                    ? <Input className='icon' placeholder='Search...' fluid size='large' style={{marginTop: '1em'}} // action={{ icon: 'search' }}
-                    icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>} />
-                    : null
-                  }
+                  <Menu.Item  as={Link} to={routes.LEARNING}
+                    style={{float:'right', color: 'white',}}
+                    >
+                    <Icon name='folder outline' />
+                  </Menu.Item>
 
-          </Container>
-          {/* <HomepageHeading mobile /> */}
-        </Segment>
-      {children}
-      </Sidebar.Pusher>
-    </Sidebar.Pushable>
-  );
+                    {searchFieldActive
+                      ? <Input className='icon' placeholder='Search...' fluid size='large' style={{marginTop: '1em'}} // action={{ icon: 'search' }}
+                      icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>} />
+                      : null
+                    }
+
+            </Container>
+            {/* <HomepageHeading mobile /> */}
+          </Segment>
+        {children}
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
+    );
+  }
 }
+// const MobileAuth = ({children, authUser, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
+//   console.log('mobile auth', authUser);
+//   return (
+//     <Sidebar.Pushable>
+//        <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
+//          <Menu.Item
+//            as={Link} to={routes.ACCOUNT}
+//            onClick={handlePusherClick} >My Account</Menu.Item>
+//          <Menu.Item as={Link} to='/category' >Category</Menu.Item>
+//          <Menu.Item as='a'>My Courses</Menu.Item>
+//          <Menu.Item as='a'>My Notifications</Menu.Item>
+//          <Menu.Item as={Link} to={routes.DASHBOARD}>Instructor Dashboard</Menu.Item>
+//          <Menu.Item as='a'>Help</Menu.Item>
+//          <Menu.Item as='a' onClick={auth.doSignOut}>Log out</Menu.Item>
+//       </Sidebar>
+//
+//       <Sidebar.Pusher dimmed={sidebarOpened}
+//         onClick={handlePusherClick} style={{ minHeight: '100vh' }}>
+//         <Segment
+//           inverted
+//           textAlign='center'
+//           style={{
+//             // minHeight: 350,
+//              padding: '1em 0em'
+//            }}
+//           // style={NAV_MOBILE_AUTH}
+//           vertical>
+//           <Container>
+//
+//                 <Menu.Item as='a' onClick={handleToggle} style={{float:'left', color: 'white'}} >
+//                   <Icon name='sidebar' />
+//                 </Menu.Item>
+//
+//                 <Menu.Item as='a' onClick={handleSearchField} style={{float:'left', color: 'white', marginLeft: '1rem'}}>
+//                   {/* was 0.5  */}
+//                   <Icon name='search' />
+//                 </Menu.Item>
+//
+//                 <Menu.Item as='a' style={{color: 'white'}}
+//                   as={Link} to={routes.HOME}
+//                   > We question and answer </Menu.Item>
+//                 <Menu.Item as={Link} to={routes.ACCOUNT} onClick={this.handleItemClick} style={{float:'right', color: 'white', marginLeft: '1rem'}} >
+//                   <Icon name='user circle' />
+//                 </Menu.Item>
+//
+//                 <Menu.Item  as={Link} to={routes.LEARNING}
+//                   style={{float:'right', color: 'white',}}
+//                   >
+//                   <Icon name='folder outline' />
+//                 </Menu.Item>
+//
+//                   {searchFieldActive
+//                     ? <Input className='icon' placeholder='Search...' fluid size='large' style={{marginTop: '1em'}} // action={{ icon: 'search' }}
+//                     icon={<Icon name='search' inverted circular link onClick={handleSearchClick}/>} />
+//                     : null
+//                   }
+//
+//           </Container>
+//           {/* <HomepageHeading mobile /> */}
+//         </Segment>
+//       {children}
+//       </Sidebar.Pusher>
+//     </Sidebar.Pushable>
+//   );
+// }
 
 const MobileNonAuth = ({children, sidebarOpened, handlePusherClick, handleToggle, searchFieldActive, handleSearchField, handleSearchClick, activeItem}) => {
   return (
