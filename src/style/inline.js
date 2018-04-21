@@ -13,11 +13,11 @@ export const DASHBOARD_HEAD_M_ROW = {paddingBottom: '0'}
 {/* //for container to sit along with the top bar icon */}
 
 
-export const DASHBOARD_HEADER = {color: '#fff'}
+export const DASHBOARD_HEADER = {color: '#fff', marginBottom: '0' }
 export const DASHBOARD_HEADER_M = {color: '#fff',marginBottom: '0'}
 
 
-export const DASHBOARD_MENU = {borderColor: '#2980b9'}
+export const DASHBOARD_MENU = {borderColor: '#2980b9', marginTop: '0rem'}
 export const DASHBOARD_MENU_M = {borderColor: '#2980b9', marginTop: '0rem'}
 
 
@@ -25,8 +25,15 @@ export const DASHBOARD_MENU_ITEM = {borderWidth: '5px', paddingLeft: '0', paddin
 export const DASHBOARD_MENU_ITEM_M = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
 
 
-export const DASHBOARD_BODY = {marginTop: '0rem', marginBottom: '0rem', backgroundColor: '#ecf0f1'}
+export const DASHBOARD_BODY = {marginTop: '0rem', marginBottom: '0rem', backgroundColor: '#ecf0f1', minHeight: '67vh'}
 export const DASHBOARD_BODY_M = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
+
+//C EDIT
+export const C_EDIT_HEAD = {backgroundColor: '#2c3e50'}
+export const C_EDIT_MENU = {marginTop: '0rem', borderRadius: '0', borderRightWidth: '0', fontSize:'0.9rem'}
+export const C_EDIT_MENU_ITEM = {borderLeftWidth: '5px', borderLeftStyle: 'solid', borderRightWidth: '0', borderColor: '#2980b9'}
+export const C_EDIT_BODY = {backgroundColor: '#ecf0f1', marginTop: '0px', minHeight: '700px'}
+
 
 export const SEGMENT_LOADER = {padding: '0rem'}
 

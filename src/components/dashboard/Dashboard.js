@@ -285,8 +285,10 @@ class Dashboard extends Component {
     const { } = this.props
       return (
 
-        <Grid >
-            <Grid.Column>
+        <Grid>
+            <Grid.Column
+              // style={{minHeight: '87vh'}}
+              >
 
                 <SectionContainer>
                     <Header as='h1' style={style.DASHBOARD_HEADER}>Dashboard</Header>

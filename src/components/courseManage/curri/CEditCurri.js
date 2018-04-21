@@ -1,5 +1,7 @@
 import React from 'react'
-import { Segment, Button, Form, Confirm, } from 'semantic-ui-react'
+import { Segment, Button, Form, Confirm, Header } from 'semantic-ui-react'
+
+const CEditMetaBorder = {borderRadius: '0px'}
 
 class CEditCurri extends React.Component {
 
@@ -170,8 +172,11 @@ class CEditCurri extends React.Component {
 
     return (
         <React.Fragment>
-          {sectionList}
-          {addSection}
+          <Header as='h1' attached='top'>Curriculum</Header>
+          <Segment attached style={CEditMetaBorder}>
+            {sectionList}
+            {addSection}
+          </Segment>
           <Button onClick={onCurriSubmit}> Save curri</Button>
         </React.Fragment>
         )

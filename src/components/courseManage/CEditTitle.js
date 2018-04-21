@@ -13,10 +13,9 @@ class CEditTitle extends Component {
     // title === '' ||
     // password === '';
     return (
-      <Segment style={CEditMetaBorder}>
-        <Header as='h2'>Basic Info</Header>
-        <Divider />
-
+      <React.Fragment>
+      <Header as='h1' attached='top'>Title and Subtitle</Header>
+      <Segment attached style={CEditMetaBorder}>
           <Form>
             <Form.Field>
               <label>Title</label>
@@ -37,6 +36,7 @@ class CEditTitle extends Component {
              <Button onClick={titleSubmit}>저장</Button>
            </Form>
          </Segment>
+       </React.Fragment>
     );
   }
 }

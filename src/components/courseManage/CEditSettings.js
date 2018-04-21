@@ -20,7 +20,10 @@ class CEditSettings extends Component {
       const isInvalid = closed && password.length < 4 ;
 
       return (
-        <Segment style={CEditMetaBorder}>
+        <React.Fragment>
+        <Header as='h1' attached='top'>Course settings</Header>
+
+        <Segment attached style={CEditMetaBorder}>
           <Header as='h3' content='Course settings'></Header>
           <Divider />
            <Segment basic>
@@ -64,6 +67,7 @@ class CEditSettings extends Component {
              </Segment>
 
            </Segment>
+         </React.Fragment>
       );
     }
 }

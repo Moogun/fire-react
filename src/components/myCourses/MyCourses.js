@@ -1,4 +1,4 @@
-  import React, {Component} from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {db} from '../../firebase';
 import * as routes from '../../constants/routes';

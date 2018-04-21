@@ -34,9 +34,12 @@ class CEditGallery extends Component {
     const {images, confirmOpen, selectedImage, handleImageChange, submit, removeModalShow, removeConfirm, removeCancel } = this.props
     console.log('rdr c edit gallery imgaes', images);
     return (
-      <Segment style={CEditMetaBorder}>
-        <Header as='h2'>Gallery</Header>
-        <Divider />
+      <React.Fragment>
+      <Header as='h1' attached='top'>Gallery</Header>
+
+      <Segment attached style={CEditMetaBorder}>
+        {/* <Header as='h2'>Gallery</Header>
+        <Divider /> */}
         <Segment basic style={minHeight} textAlign='center'>
           <Grid columns={3}>
             {images && Object.keys(images).map(i =>
@@ -71,6 +74,7 @@ class CEditGallery extends Component {
         <Button primary onClick={submit}>Save</Button>
 
       </Segment>
+    </React.Fragment>
     );
   }
 }

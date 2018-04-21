@@ -10,10 +10,12 @@ class CEditMeta extends Component {
     const { textbook, date, location, time, submit } = this.props
 
     return (
-      <Segment style={CEditMetaBorder}>
-        <Header as='h2'>Basic Info</Header>
-        <Divider />
+      <React.Fragment>
+      <Header as='h1' attached='top'>Basic Info</Header>
 
+      <Segment attached style={CEditMetaBorder}>
+        {/* <Header as='h2'>Basic Info</Header>
+        <Divider /> */}
           <Form>
              <Form.Field>
                <label>Textbook</label>
@@ -50,6 +52,7 @@ class CEditMeta extends Component {
              <Button onClick={submit}>저장</Button>
            </Form>
          </Segment>
+       </React.Fragment>
     );
   }
 }

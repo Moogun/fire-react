@@ -19,9 +19,11 @@ class CEditFeatures extends Component {
     // console.log('fe', Object.keys(features).length === 0) ;
 
     return (
-      <Segment style={CEditMetaBorder}>
-        <Header as='h2'>Features</Header>
-        <Divider />
+      <React.Fragment>
+      <Header as='h1' attached='top'>Features</Header>
+      <Segment attached style={CEditMetaBorder}>
+        {/* <Header as='h2'>Features</Header>
+        <Divider /> */}
         <Segment basic style={minHeight}>
           <Grid columns={2}>
             {!!features && Object.keys(features).map(f =>
@@ -59,6 +61,7 @@ class CEditFeatures extends Component {
         <Divider />
         <Button onClick={this.props.submit} disabled = {isInvalidSave}>Save</Button>
       </Segment>
+    </React.Fragment>
     );
   }
 }

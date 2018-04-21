@@ -15,16 +15,14 @@ import {storage} from '../../firebase/firebase';
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
 
-const C_EDIT_HEAD = {backgroundColor: '#2c3e50'}
-const C_EDIT_MENU = {marginTop: '4rem'}
-const C_EDIT_BODY = {backgroundColor: '#ecf0f1', marginTop: '0px', minHeight: '700px'}
+import * as style from '../../style/inline'
 
 const INITIAL_STATE = {
   open: true,
   closed: false,
   password: '',
   isLoading: false,
-  activeItem: 'info',
+  activeItem: '',
   openCourse: true,
   error: null,
 }
@@ -648,42 +646,17 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
 
     return (
       <div>
-        <Responsive
-          // minWidth={320}
-          // maxWidth={992}
-          {...Responsive.onlyTablet}
-          >
 
-          {/* <Grid>
-            <Grid.Column style={C_EDIT_HEAD}>
-              <CEditTop
-                title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
-                settingsClick={this.handleSettingsClick}/>
-            </Grid.Column>
-          </Grid> */}
-          {/* <Grid>
-            <Grid.Column > */}
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi sed similique pariatur eaque, sint ea veniam, corporis. Aspernatur quos dicta quidem excepturi enim, ut aut, porro, libero officia maxime molestias.
-            {/* </Grid.Column>
-          </Grid> */}
-            {/* <Segment basic style={SEGMENT_BORDER}>
-              <Menu size='mini' style={MENU_BORDER}>
-                <Menu.Item onClick={this.toggleVisibility}>Menu</Menu.Item>
-              </Menu>
-            </Segment> */}
+        {/* <Responsive {...Responsive.onlyComputer}> */}
 
-        </Responsive>
-
-        <Responsive {...Responsive.onlyComputer}>
-
-         <Segment basic loading={isLoading} style={C_EDIT_BODY}>
+         <Segment basic loading={isLoading} style={style.C_EDIT_BODY}>
 
             <Grid centered>
               <Grid.Row centered>
                 <Grid.Column>
 
                 <Grid >
-                  <Grid.Column style={C_EDIT_HEAD}>
+                  <Grid.Column style={style.C_EDIT_HEAD}>
                     <CEditTop
                       title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
                       settingsClick={this.handleSettingsClick}/>
@@ -691,52 +664,57 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                 </Grid>
 
                   <Grid container stackable>
-                    <Grid.Column width={3}>
-                      <Menu vertical fluid style={C_EDIT_MENU} >
+                    <Grid.Column width={4}>
+                      <Menu vertical pointing secondary fluid style={style.C_EDIT_MENU} >
                         <Menu.Item name='title'
                            active={activeItem === 'title'}
                            onClick={this.handleItemClick}
                            as={Link} to={`${match.url}/title`}
+                           style={activeItem === 'title' ? style.C_EDIT_MENU_ITEM: null}
                            >
-                           <Icon name='check circle outline'  size='large'/> title
+                           Title
                         </Menu.Item>
                         <Menu.Item name='info'
                            active={activeItem === 'info'}
                            onClick={this.handleItemClick}
                            as={Link} to={`${match.url}/info`}
+                           style={activeItem === 'info' ? style.C_EDIT_MENU_ITEM: null}
                            >
-                           <Icon name='check circle outline'  size='large'/> Info
+                           Info
                         </Menu.Item>
                         <Menu.Item name='features'
                            active={activeItem === 'features'}
                            onClick={this.handleItemClick}
                            as={Link} to={`${match.url}/features`}
+                           style={activeItem === 'features' ? style.C_EDIT_MENU_ITEM: null}
                            >
-                          <Icon name='radio'  size='large'/> Features
+                          Features
                         </Menu.Item>
                         <Menu.Item name='gallery'
                            active={activeItem === 'gallery'}
                            onClick={this.handleItemClick}
                            as={Link} to={`${match.url}/gallery`}
+                           style={activeItem === 'gallery' ? style.C_EDIT_MENU_ITEM: null}
                            >
-                          <Icon name='radio'  size='large'/> Gallery
+                          Gallery
                         </Menu.Item>
                         <Menu.Item name='curri'
                            active={activeItem === 'curri'}
                            onClick={this.handleItemClick}
                            as={Link} to={`${match.url}/curriculum`}
+                           style={activeItem === 'curri' ? style.C_EDIT_MENU_ITEM: null}
                            >
-                           <Icon name='radio'  size='large'/> Curriculum
+                            Curriculum
                         </Menu.Item>
 
-                        <Menu.Item name='assignment'
+                        {/* <Menu.Item name='assignment'
                           disabled
                            active={activeItem === 'assignment'}
                            onClick={this.handleItemClick}
                            as={Link} to={`${match.url}/assignment`}
                            >
                            Assignment (Coming soon)
-                        </Menu.Item>
+                        </Menu.Item> */}
                         <Menu.Item name='assignment'
                            active={activeItem === 'assignment'}
                            onClick={this.handleItemClick}
@@ -747,7 +725,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
 
                     </Grid.Column>
 
-                    <Grid.Column width={11}>
+                    <Grid.Column width={12}>
                         <Switch>
                           <Redirect exact from={match.url} to={`${match.url}/info`} />
                           <Route path={`${match.url}/title`} render={(props) => <CEditTitle
@@ -877,8 +855,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
 
             </Grid>
           </Segment>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint libero similique omnis voluptates itaque aperiam enim numquam corrupti esse minima qui dicta, minus error doloremque, repellat quas perspiciatis eum deleniti.
-        </Responsive>
+        {/* </Responsive> */}
 
       </div>
     );

@@ -15,12 +15,12 @@ const CourseTeaching = ({click, courses, loading}) => {
           <Table selectable attached celled textAlign='center'>
               <Table.Header >
                 <Table.Row >
-                  <Table.HeaderCell width={3}>Status</Table.HeaderCell>
-                  <Table.HeaderCell width='six'>Title</Table.HeaderCell>
-                  <Table.HeaderCell width='six'>Date</Table.HeaderCell>
-                  <Table.HeaderCell width='six'>Students Enrolled</Table.HeaderCell>
-                  <Table.HeaderCell width='six'>Questions</Table.HeaderCell>
-                  <Table.HeaderCell width='six'>reviews</Table.HeaderCell>
+                  <Table.HeaderCell collapsing>Status</Table.HeaderCell>
+                  <Table.HeaderCell >Title</Table.HeaderCell>
+                  <Table.HeaderCell >Date</Table.HeaderCell>
+                  <Table.HeaderCell collapsing>Students</Table.HeaderCell>
+                  <Table.HeaderCell collapsing>Questions</Table.HeaderCell>
+                  {/* <Table.HeaderCell width='six'>reviews</Table.HeaderCell> */}
                 </Table.Row>
               </Table.Header>
               <Table.Body>
@@ -35,15 +35,15 @@ const CourseTeaching = ({click, courses, loading}) => {
                   <Table.Cell textAlign='left' >
                     {courses[key].metadata.date}
                   </Table.Cell>
-                  <Table.Cell textAlign='left' >
+                  <Table.Cell textAlign='center' >
                     26
                   </Table.Cell>
-                  <Table.Cell textAlign='left' >
+                  <Table.Cell textAlign='center' >
                     30
                   </Table.Cell>
-                  <Table.Cell textAlign='left' >
+                  {/* <Table.Cell textAlign='left' >
                     14
-                  </Table.Cell>
+                  </Table.Cell> */}
                 </Table.Row>
               )}
             </Table.Body>

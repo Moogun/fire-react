@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import profile from '../../assets/profile-lg.png'
-import {Image, Item, Grid, Button, Icon, Responsive, List} from 'semantic-ui-react'
+import {Image, Item, Grid, Button, Icon, Responsive, List, Header} from 'semantic-ui-react'
 
 const TEXT_COLOR = {color: '#fff'}
 
@@ -20,21 +20,23 @@ class CEditTop extends Component {
       <div>
         <Responsive {...Responsive.onlyComputer}>
           <Grid container verticalAlign='middle'>
-            <Grid.Column floated='left' width={5}>
-            <Item.Group>
-              <Item>
-                <Item.Image size='tiny' src={teacherProfile} />
 
-                <Item.Content>
-                  <Item.Header as='a' style={TEXT_COLOR}>{title}</Item.Header>
-                  <Item.Extra style={TEXT_COLOR}>{published}</Item.Extra>
-                  <Item.Meta style={TEXT_COLOR}> {teacherName} </Item.Meta>
-
-                </Item.Content>
-              </Item>
-            </Item.Group>
+            <Grid.Column floated='left' width={12}>
+              <Header as='h1' inverted >
+               <Image circular src={teacherProfile}/>
+               <Header.Content>
+                 {title}
+                 <Header.Subheader >
+                   {published}
+                 </Header.Subheader>
+                 <Header.Subheader >
+                   {teacherName}
+                 </Header.Subheader>
+               </Header.Content>
+              </Header>
             </Grid.Column>
-            <Grid.Column floated='right' width={5}>
+
+            <Grid.Column floated='right' width={4}>
               <Button.Group floated='right' >
                 <Button inverted style={{margin: '1px'}}>Preview</Button>
                 <Button  style={{margin: '1px'}}>Save</Button>
