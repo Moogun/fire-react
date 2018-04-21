@@ -7,17 +7,13 @@ import CEditTitle from './CEditTitle'
 import CEditMeta from './CEditMeta'
 import CEditFeatures from './CEditFeatures'
 import CEditGallery from './CEditGallery'
-import CEditCurri from './CEditCurri'
+import CEditCurri from './curri/CEditCurri'
 import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
 import {storage} from '../../firebase/firebase';
 
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
-
-import { convertToRaw, convertFromRaw, EditorState } from 'draft-js';
-import { ImageSideButton, Block, addNewBlock, Editor, createEditorState,} from 'medium-draft';
-import 'medium-draft/lib/index.css';
 
 const C_EDIT_HEAD = {backgroundColor: '#2c3e50'}
 const C_EDIT_MENU = {marginTop: '4rem'}
@@ -56,18 +52,16 @@ class CourseEdit extends Component {
        images: {},
        confirmOpen: false,
        selectedImage: null,
-       editorState: createEditorState(),
        visible: false,
-    };
-    this.sideButtons = [{
-      title: 'Image',
-      component: ImageSideButton,
-      // component: CustomImageSideButton,
-    }];
 
-    this.onChange = (editorState) => {
-      this.setState({ editorState });
+      sections: [{title:'', content:[],}],
+      formForSection: false,
+      sectionTitle: '',
+      activeSection: '',
+
+      lectureTitle: '',
     };
+
   }
 
   //MENU
@@ -277,22 +271,33 @@ class CourseEdit extends Component {
     this.setState({ confirmOpen: false })
   }
 
+  // //CURRI
+  // onCurriSubmit = ( ) => {
+  //   const {courseId, teacherId} = this.state
+  //   console.log('course teacher', courseId, teacherId);
+  //
+  //   var editorData = convertToRaw(this.state.editorState.getCurrentContent());
+  //   console.log('editor1 data getCurrentContent',editorData);
+  //
+  //   var strData = JSON.stringify(editorData)
+  //
+  //   db.doUpdateCourseCurri(teacherId, courseId, strData)
+  //     .then(response => console.log('succeded uploading',response))
+  //     .catch(error => {
+  //       this.setState(byPropKey('error', error));
+  //     });
+  // }
+
   //CURRI
-  onCurriSubmit = ( ) => {
-    const {courseId, teacherId} = this.state
-    console.log('course teacher', courseId, teacherId);
-
-    var editorData = convertToRaw(this.state.editorState.getCurrentContent());
-    console.log('editor1 data getCurrentContent',editorData);
-
-    var strData = JSON.stringify(editorData)
-
-    db.doUpdateCourseCurri(teacherId, courseId, strData)
+  onCurriSubmit = () => {
+    const {courseId, teacherId, sections} = this.state
+    db.doUpdateCourseCurri(teacherId, courseId, sections)
       .then(response => console.log('succeded uploading',response))
       .catch(error => {
         this.setState(byPropKey('error', error));
-      });
+    });
   }
+
 
   //SETTINGS
   handleSettingsClick = () => {
@@ -435,8 +440,9 @@ class CourseEdit extends Component {
           isLoading: !isLoading,
           features: features,
           images: images,
+          sections: curri,
           })
-          this.onChange(createEditorState(JSON.parse(curri)))
+
       }).catch(error => {
         this.setState(byPropKey('error', error));
       });
@@ -449,6 +455,175 @@ class CourseEdit extends Component {
 
   toggleVisibility = () => this.setState({ visible: !this.state.visible })
 
+
+
+  //CURRI
+  handleOpenAddSectionForm =()=>{
+  const {formForSection} = this.state
+  this.setState({formForSection: !formForSection, activeSection: null})
+}
+
+handleAddSectionCancel = (e) => {
+  const {formForSection} = this.state
+  this.setState({formForSection: !formForSection})
+  e.preventDefault()
+}
+
+handleSaveSection = () => {
+  const { sections, formForSection, sectionTitle } = this.state
+  let prev
+  if (sections == undefined) {
+    prev = []
+  } else {
+    prev = sections
+  }
+  let newEl = {title: sectionTitle, content: [], expanded: false}
+  prev.push(newEl)
+  this.setState ({ sections: prev, formForSection: !formForSection, sectionTitle: ''})
+}
+
+handleRemoveSection = (id) => {
+    this.setState ({sectionToRemove: id })
+    this.showRemoveConfirm()
+}
+
+showRemoveConfirm = () => this.setState({ removeSectionConfirm: true })
+
+handleConfirmRemove = () => {
+  const { sections, sectionToRemove } = this.state
+  sections.splice(sectionToRemove, 1)
+  let updated = sections
+  this.setState ({sections: updated, removeSectionConfirm: false})
+}
+
+handleCancelRemove = () => this.setState({ sectionToRemove: null, removeSectionConfirm: false })
+
+handleOpenAddLectureForm = (id) => {
+  const {activeSection, formForSection} = this.state
+  this.setState({activeSection: id, formForSection: false })
+}
+
+handleAddLectureCancel = (e) => {
+  e.preventDefault()
+  const {activeSection} = this.state
+  console.log('activeSection1', activeSection);
+  this.setState({activeSection: null})
+  // const {activeSection} = this.state
+  console.log('activeSection2', activeSection);
+
+}
+
+handleSaveLecture = (sectionId) => {
+  console.log(sectionId);
+  const { sections, lectureTitle } = this.state
+  let section = sections[sectionId]
+  section.expanded = true
+
+  if (section.content == undefined) {
+    sections[sectionId].content = []
+  }
+  section.content.push(lectureTitle)
+  console.log('section', section);
+  sections.splice(sectionId, 1, section)
+  let updated = sections
+  this.setState ({ sections: updated, lectureTitle: ''})
+}
+
+handleRemoveLecture =(secIndex, lecIndex) => {
+  console.log('remove lec', secIndex, lecIndex);
+  const { sections } = this.state
+  sections[secIndex].content.splice(lecIndex, 1)
+  let updated = sections
+  console.log('updated ', updated);
+  this.setState ({sections: updated})
+}
+
+handleInlineSectionEdit = (secIndex) => {
+  this.setState ({ sectionToEdit: secIndex, sectionTitle: ''})
+}
+
+handleSaveSectionTitleEdit = (e, secIndex) => {
+  const { sections, sectionTitle } = this.state
+  sections[secIndex].title = sectionTitle
+  let updated = sections
+  console.log('sections[secIndex].title', sections[secIndex].title, 'sectionToEdit': null)
+  this.setState ({ sections: updated, 'sectionToEdit': null, })
+  // this.setState ({ })
+  e.preventDefault()
+}
+
+handleInlineLectureEdit = (secIndex, lecIndex) => {
+  this.setState ({ lectureToEdit: [secIndex, lecIndex], lectureTitle: '', activeSection: null})
+  console.log('lecture to edit', this.state.lectureToEdit);
+}
+
+handleSaveLectureTitleEdit = (e, secIndex, lecIndex) => {
+  const { sections, lectureTitle} = this.state
+  sections[secIndex].content[lecIndex] = lectureTitle
+  let updated = sections
+  console.log('  sections[secIndex].content[lecIndex]', sections[secIndex].content[lecIndex])
+  this.setState ({ sections: updated, 'lectureToEdit': null, lectureTitle: '' })
+
+  e.preventDefault()
+}
+
+handleSecMoveUp = (e, secIndex) => {
+  if (secIndex === 0) {
+    return
+  }
+  const { sections } = this.state
+  let el = sections[secIndex]
+  sections.splice(secIndex, 1)
+  sections.splice(secIndex-1, 0, el)
+  this.setState ({ sections, activeSection: null, })
+  e.preventDefault()
+}
+
+handleSecMoveDown  = (e, secIndex) => {
+  const { sections } = this.state
+  let el = sections[secIndex]
+  sections.splice(secIndex, 1)
+  sections.splice(secIndex+1, 0, el)
+  this.setState ({ sections, activeSection: null, })
+  e.preventDefault()
+}
+
+handleLecMoveUp = (e, secIndex, lecIndex) => {
+  if (lecIndex === 0) {
+    return
+  }
+
+  const { sections } = this.state
+  let el = sections[secIndex].content[lecIndex]
+  sections[secIndex].content.splice(lecIndex, 1)
+  sections[secIndex].content.splice(lecIndex-1, 0, el)
+  this.setState ({ sections, activeSection: null, })
+  e.preventDefault()
+}
+
+handleLecMoveDown  = (e, secIndex, lecIndex) => {
+  const { sections } = this.state
+  let el = sections[secIndex].content[lecIndex]
+  sections[secIndex].content.splice(lecIndex, 1)
+  sections[secIndex].content.splice(lecIndex+1, 0, el)
+  this.setState ({ sections, activeSection: null, })
+  e.preventDefault()
+}
+
+handleSecToggle = (e, secIndex) => {
+  const { sections } = this.state
+  console.log('sections' ,sections, 'secIndex', secIndex);
+  sections[secIndex].expanded = !sections[secIndex].expanded
+  this.setState ({sections})
+}
+
+handleSectionTitleChange = (e) => this.setState ({ sectionTitle: e.target.value})
+handleSectionTitleChangeCancel = () => this.setState ({ sectionToEdit: null})
+
+handleLectureTitleChange = (e) => this.setState ({ lectureTitle: e.target.value})
+handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
+
+
   render() {
     const {activeItem, isLoading,
       courseId, title, subTitle, teacherName, teacherId, teacherPhoto,
@@ -456,13 +631,21 @@ class CourseEdit extends Component {
       curri,
       openCourse, password, isPublished,
       features,
-      editorState,
       images, confirmOpen, selectedImage, handleRemoveModalShow, handleRemoveConfirm, handleRemoveCancel,
-      visible
+      visible,
+
+      // CURRI
+      sections, formForSection, sectionTitle, activeSection, lectureTitle, sectionToEdit, lectureToEdit, removeSectionConfirm
+
     } = this.state
     const {match} = this.props
 
-    console.log('render 1 ', 'images', images)
+    // console.log('render 1 ', 'images', images)
+    console.log('curri', sections );
+
+    const isInvalidSection = sectionTitle === ''
+    const isInvalidLecture = lectureTitle === ''
+
     return (
       <div>
         <Responsive
@@ -610,13 +793,59 @@ class CourseEdit extends Component {
                             // change={this.handleInputChange}
                             // submit={this.onInfoSubmit}
                           /> }/>
+
                           <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
                             {...props}
-                            courseId={courseId}
-                            teacherId={teacherId}
-                            editorState={editorState}
-                            change={this.onChange}
-                            submit={this.onCurriSubmit}
+            sections={sections}
+            isInvalidSection={isInvalidSection} isInvalidLecture={isInvalidLecture}
+
+            activeSection={activeSection}
+
+            sectionTitle={sectionTitle} sectionToEdit={sectionToEdit}
+            lectureTitle={lectureTitle} lectureToEdit={lectureToEdit}
+
+            removeSectionConfirm = {removeSectionConfirm}
+
+            handleSectionTitleChange ={this.handleSectionTitleChange}
+            handleSectionTitleChangeCancel = {this.handleSectionTitleChangeCancel}
+
+            handleRemoveSection = {this.handleRemoveSection}
+
+            showRemoveConfirm = {this.showRemoveConfirm}
+            handleConfirmRemove = {this.handleConfirmRemove}
+            handleCancelRemove = {this.handleCancelRemove}
+
+
+            handleOpenAddLectureForm = {this.handleOpenAddLectureForm}
+            handleAddLectureCancel = {this.handleAddLectureCancel}
+            handleSaveLecture = {this.handleSaveLecture}
+            handleRemoveLecture = {this.handleRemoveLecture}
+
+            handleLectureTitleChange = {this.handleLectureTitleChange}
+            handleLectureTitleChangeCancel = {this.handleLectureTitleChangeCancel}
+
+            handleInlineSectionEdit = {this.handleInlineSectionEdit}
+            handleSaveSectionTitleEdit = {this.handleSaveSectionTitleEdit}
+
+            handleInlineLectureEdit = {this.handleInlineLectureEdit}
+            handleSaveLectureTitleEdit = {this.handleSaveLectureTitleEdit}
+
+            handleSecMoveUp = {this.handleSecMoveUp}
+            handleSecMoveDown = {this.handleSecMoveDown}
+            handleLecMoveUp = {this.handleLecMoveUp}
+            handleLecMoveDown = {this.handleLecMoveDown}
+
+            handleSecToggle = {this.handleSecToggle}
+
+            formForSection={formForSection}
+            isInvalidSection={isInvalidSection}
+            handleOpenAddSectionForm = {this.handleOpenAddSectionForm}
+            handleAddSectionCancel = {this.handleAddSectionCancel}
+            handleSaveSection = {this.handleSaveSection}
+            handleSectionTitleChange = {this.handleSectionTitleChange}
+
+            onCurriSubmit={this.onCurriSubmit}
+
                           />} />
                           <Route path={`${match.url}/settings`} render={() => <CEditSettings
                             courseId={courseId}
