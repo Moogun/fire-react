@@ -69,7 +69,7 @@ class DesktopAuth extends Component {
   render() {
     const {authUser, fixed, activeItem} = this.props
     const {user, teachingList } = this.state
-    console.log('desktop authUser', user, 'teachingList', teachingList);
+    // console.log('desktop authUser', user, 'teachingList', teachingList);
     return (
       <Segment
         // inverted

@@ -13,6 +13,7 @@ class CEditCurri extends React.Component {
   render() {
 
     const isInvalidLecture = lectureTitle === ''
+    const isInvalid = false
 
     const {sections, formForSection, activeSection,
       sectionTitle, sectionToEdit,
@@ -178,9 +179,13 @@ class CEditCurri extends React.Component {
     return (
         <React.Fragment>
           <Header as='h1' attached='top'>Curriculum
-            <Button onClick={onCurriSubmit}
+            {/* <Button onClick={onCurriSubmit}
               floated='right' color='red'
-              >Save</Button>
+              >Save</Button> */}
+              {isInvalid ?
+                <Button basic disabled floated='right' content='Saved' />
+              : <Button disabled={isInvalid} onClick={onCurriSubmit} floated='right' color='red' content='Save'/>
+              }
           </Header>
           <Segment attached style={CEditMetaBorder}>
             {sectionList}

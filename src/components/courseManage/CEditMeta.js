@@ -25,7 +25,11 @@ class CEditMeta extends Component {
       <React.Fragment >
         {/* <Segment basic style={{boxShadow:'1px 1px 10px 1px grey', padding: '0'}}> */}
           <Header as='h1' attached='top'>Basic Info
-            <Button disabled={isInvalid} onClick={submit} floated='right' color='red'>Save</Button>
+            {/* <Button disabled={isInvalid} onClick={submit} floated='right' color='red'>{isInvalid ? 'Saved' : 'Save'}</Button> */}
+            {isInvalid ?
+              <Button basic disabled floated='right' content='Saved' />
+            : <Button disabled={isInvalid} onClick={submit} floated='right' color='red' content='Save'/>
+            }
           </Header>
 
           <Segment attached stacked

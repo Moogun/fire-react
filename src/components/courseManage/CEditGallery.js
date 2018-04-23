@@ -33,10 +33,17 @@ class CEditGallery extends Component {
 
     const {images, confirmOpen, selectedImage, handleImageChange, submit, removeModalShow, removeConfirm, removeCancel } = this.props
     console.log('rdr c edit gallery imgaes', images);
+
+    const isInvalid = false
+
     return (
       <React.Fragment>
       <Header as='h1' attached='top'>Gallery
-          <Button onClick={submit} floated='right' color='red'>Save</Button>
+          {/* <Button onClick={submit} floated='right' color='red'>{isInvalid ? 'Saved' : 'Save'}</Button> */}
+          {isInvalid ?
+            <Button basic disabled floated='right' content='Saved' />
+          : <Button disabled={isInvalid} onClick={submit} floated='right' color='red' content='Save'/>
+          }
       </Header>
       <Segment attached stacked style={CEditMetaBorder}>
         <Segment basic style={minHeight} textAlign='center'>

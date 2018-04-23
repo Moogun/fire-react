@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Link, Route, withRouter, Switch, Redirect} from 'react-router-dom'
+import {Link, Route, withRouter, Switch, Redirect, Prompt} from 'react-router-dom'
 import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header } from 'semantic-ui-react'
 
 import CEditTop from './CEditTop'
@@ -25,11 +25,6 @@ const INITIAL_STATE = {
   activeItem: '',
   openCourse: true,
   error: null,
-}
-
-const INITIAL_FEATURE_STATE = {
-  header: '',
-  sub: '',
 }
 
 const byPropKey = (propertyName, value) => ()=> ({
@@ -58,6 +53,9 @@ class CourseEdit extends Component {
       activeSection: '',
 
       lectureTitle: '',
+      changeSaved: true,
+      header: '',
+      sub: '',
     };
 
   }
@@ -68,6 +66,7 @@ class CourseEdit extends Component {
   // course edit
   handleInputChange = (event) => {
     this.setState(byPropKey(event.target.name, event.target.value))
+    this.setState ({ changeSaved: false })
   }
 
   onTitleSubmit = (e) => {
@@ -75,7 +74,7 @@ class CourseEdit extends Component {
     const { courseId, teacherId, title, subTitle } = this.state
     db.doUpdateCourseTitle(teacherId, courseId, title, subTitle)
       .then(res => {
-        console.log('title submit res', res)
+        this.setState ({ changeSaved: true})
       }).catch(error => {
         this.setState(byPropKey('error', error))
       })
@@ -124,9 +123,12 @@ class CourseEdit extends Component {
 
      this.setState ({
        features: feats,
-       ...INITIAL_FEATURE_STATE,
+       header: '',
+       sub: '',
      })
      console.log('state', this.state.features);
+
+     // features = [{title: 'abc', list={a,1,2,}, }, {title: 'abc', list={a,1,2,}, },]
   }
 
   onFeaturesSubmit = () => {
@@ -627,10 +629,12 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
     const {activeItem, isLoading,
       course,
       courseId, title, subTitle, teacherName, teacherId, teacherPhoto,
+      changeSaved,
       textbook, date, time, location,
-      curri,
+      // curri,
       openCourse, password, isPublished,
       features,
+      header, sub,
       images, confirmOpen, selectedImage, handleRemoveModalShow, handleRemoveConfirm, handleRemoveCancel,
       visible,
 
@@ -737,6 +741,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                             subTitle={subTitle}
                             change={this.handleInputChange}
                             titleSubmit={this.onTitleSubmit}
+                            changeSaved={changeSaved}
                           /> }/>
                           <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                             {...props}
@@ -756,6 +761,8 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                             courseId={courseId}
                             teacherId={teacherId}
                             features={features}
+                            header = {header}
+                            sub = {sub}
                             change={this.handleInputChange}
                             dismiss={this.handleFeatureDismiss}
                             addNewFeature={this.handleAddNewFeature}
@@ -843,6 +850,12 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                           <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
 
                         </Switch>
+                        <Prompt
+                          when={!changeSaved}
+                          message={location =>
+                            `Are you sure you want to leave ? Unsaved data will be lost`
+                          }
+                        />
                     </Grid.Column>
 
                   </Grid>
