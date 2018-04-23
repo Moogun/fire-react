@@ -24,7 +24,7 @@ export const DASHBOARD_MENU_M = {borderColor: '#2980b9', marginTop: '0rem'}
 export const DASHBOARD_MENU_ITEM = {borderWidth: '5px', paddingLeft: '0', paddingRight: '2px', marginLeft: '0rem', marginRight: '1rem'}
 export const DASHBOARD_MENU_ITEM_M = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
 
-
+//
 export const DASHBOARD_BODY = {marginTop: '0rem', marginBottom: '0rem', backgroundColor: '#ecf0f1', minHeight: '67vh'}
 export const DASHBOARD_BODY_M = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
 
@@ -34,6 +34,10 @@ export const C_EDIT_MENU = {marginTop: '0rem', borderRadius: '0', borderRightWid
 export const C_EDIT_MENU_ITEM = {borderLeftWidth: '5px', borderLeftStyle: 'solid', borderRightWidth: '0', borderColor: '#2980b9'}
 export const C_EDIT_BODY = {backgroundColor: '#ecf0f1', marginTop: '0px', minHeight: '700px'}
 
+
+// curri section, lecture
+export const C_EDIT_CURRI_SECTION = {marginLeft: '1rem', marginBottom: '2rem', marginRight: '1rem', marginTop: '1rem'}
+export const C_EDIT_CURRI_ITEM = {paddingTop: '0.5rem', paddingBottom: '0.5rem'}
 
 export const SEGMENT_LOADER = {padding: '0rem'}
 

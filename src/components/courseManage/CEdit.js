@@ -419,6 +419,7 @@ class CourseEdit extends Component {
         const {isLoading } = this.state
         this.setState ({
           courseId: courseId,
+          course: course,
 
           title: meta.title,
           subTitle: meta.subTitle,
@@ -624,6 +625,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
 
   render() {
     const {activeItem, isLoading,
+      course,
       courseId, title, subTitle, teacherName, teacherId, teacherPhoto,
       textbook, date, time, location,
       curri,
@@ -663,9 +665,9 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                   </Grid.Column>
                 </Grid>
 
-                  <Grid container stackable>
-                    <Grid.Column width={4}>
-                      <Menu vertical pointing secondary fluid style={style.C_EDIT_MENU} >
+                  <Grid container stackable centered>
+                    <Grid.Column width={3}>
+                      <Menu vertical secondary fluid style={style.C_EDIT_MENU} >
                         <Menu.Item name='title'
                            active={activeItem === 'title'}
                            onClick={this.handleItemClick}
@@ -725,11 +727,12 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
 
                     </Grid.Column>
 
-                    <Grid.Column width={12}>
+                    <Grid.Column width={11}>
                         <Switch>
                           <Redirect exact from={match.url} to={`${match.url}/info`} />
                           <Route path={`${match.url}/title`} render={(props) => <CEditTitle
                             {...props}
+                            course={course}
                             title={title}
                             subTitle={subTitle}
                             change={this.handleInputChange}
@@ -737,6 +740,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                           /> }/>
                           <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                             {...props}
+                            course={course}
                             title={title}
                             subTitle={subTitle}
                             textbook={textbook}
@@ -748,6 +752,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                           /> }/>
                           <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
                             {...props}
+                            course={course}
                             courseId={courseId}
                             teacherId={teacherId}
                             features={features}

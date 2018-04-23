@@ -1,5 +1,6 @@
 import React from 'react'
-import { Segment, Button, Form, Confirm, Header } from 'semantic-ui-react'
+import { Segment, Button, Form, Confirm, Header, Icon } from 'semantic-ui-react'
+import * as style from '../../../style/inline'
 
 const CEditMetaBorder = {borderRadius: '0px'}
 
@@ -59,13 +60,14 @@ class CEditCurri extends React.Component {
 
     } = this.props
 
-
-    let sectionList = sections && sections.map((s, secIndex) =>
+    console.log('c edit curri', sections);
+    let sectionList = !!sections && sections.map((s, secIndex) =>
       <Segment.Group
         data-id={secIndex}
         key={secIndex}
+        style={style.C_EDIT_CURRI_SECTION}
         >
-          <Segment inverted color='teal'>
+          <Segment color='red' style={style.C_EDIT_CURRI_ITEM}>
             {sectionToEdit === secIndex ?
               <input value={sectionTitle} placeholder='Section' type='text' onChange={handleSectionTitleChange} />
               : `Section ${secIndex + 1} ${s.title}`}
@@ -80,21 +82,23 @@ class CEditCurri extends React.Component {
               </Button.Group>
             :
             <React.Fragment>
-              <Button.Group size='mini' basic style={{marginLeft: '1rem'}}>
+              <Button.Group size='mini' style={{marginLeft: '1rem'}}>
+                <Button icon='pencil' disabled basic inverted />
+              </Button.Group>
+
+              <Button.Group floated='right' size='mini' basic style={{marginLeft: '1rem'}}>
+                <Button icon='plus' content='Add lecture' onClick={() => handleOpenAddLectureForm(secIndex)} />
                 <Button icon='pencil' onClick={() => handleInlineSectionEdit(secIndex)}/>
                 <Button icon='trash' onClick={() => handleRemoveSection(secIndex)} />
-                <Button icon='plus' content='Add lecture' onClick={() => handleOpenAddLectureForm(secIndex)} />
-              </Button.Group>
-              <Button.Group floated='right' size='mini' basic style={{marginLeft: '1rem'}}>
+
+
                 <Button icon='chevron up' disabled={secIndex === 0 } onClick={(e) => handleSecMoveUp(e, secIndex)} />
                 <Button icon='chevron down'
                   disabled={sections === null || sections.length === (secIndex+1) } onClick={(e) => handleSecMoveDown(e, secIndex)}
                 />
                 <Button
-                  // disabled={s.content[0] ? false : true} icon={s.content[0] && s.expanded ? 'minus' : 'plus'}
                   disabled={(s.content == undefined ? true : s.content[0] ? false: true) }
-                  icon={s.content == undefined ? 'plus' : s.content[0] ? 'minus' : 'plus'}
-                  // ={s.content[0] && s.expanded ? 'minus' : 'plus'}
+                  icon={s.content == undefined ? 'plus' : s.expanded ? 'minus' : 'plus'}
                   onClick={(e) => handleSecToggle(e, secIndex)}
                 />
                   {s.title}
@@ -111,11 +115,11 @@ class CEditCurri extends React.Component {
           />
 
           {s.expanded && s.content.map((c, lecIndex) =>
-            <Segment key={lecIndex} color='teal'>
+            <Segment key={lecIndex} style={style.C_EDIT_CURRI_ITEM}>
               {this.arraysEqual(lectureToEdit, [secIndex, lecIndex]) ? <input value={lectureTitle} placeholder='' type='text'
                 onChange={(e) => handleLectureTitleChange(e)}
               />
-                : `Lecture ${lecIndex + 1} ${c}` }
+                : ` - Lecture ${lecIndex + 1} ${c}` }
 
             {this.arraysEqual(lectureToEdit, [secIndex, lecIndex]) ?
               <Button.Group size='mini' basic style={{marginLeft: '1rem',}}>
@@ -127,14 +131,15 @@ class CEditCurri extends React.Component {
               </Button.Group>
             :
               <React.Fragment>
-                <Button.Group size='mini' basic style={{marginLeft: '1rem'}}>
-                   <Button icon='pencil' onClick={() => handleInlineLectureEdit(secIndex, lecIndex)}/>
-                   <Button icon='trash' onClick={() => handleRemoveLecture(secIndex, lecIndex)} />
+                <Button.Group size='mini' style={{marginLeft: '1rem'}}>
+                   <Button icon='pencil' disabled basic inverted />
                  </Button.Group>
 
-                 <Button.Group floated='right' size='mini' basic style={{marginLeft: '1rem'}}>
-                   <Button disabled={lecIndex=== 0} icon='chevron up' onClick={(e) => handleLecMoveUp(e, secIndex, lecIndex)} />
-                   <Button disabled={(sections[secIndex].content.length === (lecIndex +1))} icon='chevron down' onClick={(e) => handleLecMoveDown(e, secIndex, lecIndex)} />
+                 <Button.Group basic floated='right' size='mini' style={{marginLeft: '1rem'}}>
+                   <Button icon='pencil' basic onClick={() => handleInlineLectureEdit(secIndex, lecIndex)}/>
+                   <Button icon='trash' basic onClick={() => handleRemoveLecture(secIndex, lecIndex)} />
+                   <Button basic disabled={lecIndex=== 0} icon='chevron up' onClick={(e) => handleLecMoveUp(e, secIndex, lecIndex)} />
+                   <Button basic disabled={(sections[secIndex].content.length === (lecIndex +1))} icon='chevron down' onClick={(e) => handleLecMoveDown(e, secIndex, lecIndex)} />
                   </Button.Group>
                </React.Fragment>
                }
@@ -148,14 +153,14 @@ class CEditCurri extends React.Component {
                   <input placeholder='Lecture' type='text' value={lectureTitle} onChange={(e) => handleLectureTitleChange(e)} />
                 </Form.Field>
                 <Button basic onClick={handleAddLectureCancel}>Cancel</Button>
-                <Button type='submit' disabled={isInvalidLecture}>Save</Button>
+                <Button type='submit' disabled={isInvalidLecture}>Add Lecture</Button>
               </Form>
           </Segment> : null}
       </Segment.Group>
     )
 
     let addSection = formForSection
-    ? <Segment>
+    ? <Segment style={style.C_EDIT_CURRI_SECTION}>
           <Form onSubmit={handleSaveSection}>
             <Form.Field>
               <label>Add Section</label>
@@ -165,19 +170,23 @@ class CEditCurri extends React.Component {
               />
             </Form.Field>
             <Button basic onClick={handleAddSectionCancel}>Cancel</Button>
-            <Button type='submit' disabled={isInvalidSection}>Submit</Button>
+            <Button type='submit' disabled={isInvalidSection}>Add</Button>
           </Form>
         </Segment>
-    : <Button fluid onClick={handleOpenAddSectionForm} >Add Section</Button>
+    : <Segment basic><Button fluid onClick={handleOpenAddSectionForm}>Add Section</Button></Segment>
 
     return (
         <React.Fragment>
-          <Header as='h1' attached='top'>Curriculum</Header>
+          <Header as='h1' attached='top'>Curriculum
+            <Button onClick={onCurriSubmit}
+              floated='right' color='red'
+              >Save</Button>
+          </Header>
           <Segment attached style={CEditMetaBorder}>
             {sectionList}
             {addSection}
           </Segment>
-          <Button onClick={onCurriSubmit}> Save curri</Button>
+
         </React.Fragment>
         )
       }

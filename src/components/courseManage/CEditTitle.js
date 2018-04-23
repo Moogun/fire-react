@@ -6,16 +6,22 @@ const CEditMetaBorder = {borderRadius: '0px'}
 class CEditTitle extends Component {
 
   render() {
-    const { title, subTitle, titleSubmit } = this.props
-    console.log('props', title);
-    // let prevTitle = title
-    // const isInvalid =
-    // title === '' ||
-    // password === '';
+    const {course, title, subTitle, titleSubmit } = this.props
+    console.log('c edit title props ', title, 'course', course);
+
+    let titleChanged = !!course && course.metadata.title !== title
+    let subTitleChanged = !!course && course.metadata.subTitle !== subTitle
+
+    const isInvalid =
+    title === ''||
+	  titleChanged === false && subTitleChanged === false
+
     return (
       <React.Fragment>
-      <Header as='h1' attached='top'>Title and Subtitle</Header>
-      <Segment attached style={CEditMetaBorder}>
+      <Header as='h1' attached='top'>Title
+        <Button disabled={isInvalid} onClick={titleSubmit} floated='right' color='red'>Save</Button>
+      </Header>
+      <Segment attached style={CEditMetaBorder} stacked>
           <Form>
             <Form.Field>
               <label>Title</label>
@@ -33,7 +39,7 @@ class CEditTitle extends Component {
                  onChange={this.props.change}
                />
             </Form.Field>
-             <Button onClick={titleSubmit}>저장</Button>
+             {/* <Button onClick={titleSubmit}>저장</Button> */}
            </Form>
          </Segment>
        </React.Fragment>

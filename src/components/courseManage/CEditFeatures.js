@@ -8,22 +8,27 @@ const minHeight = { minHeight: '200px'}
 class CEditFeatures extends Component {
 
   render() {
-    const {header, sub, features} = this.props
+    const {course, header, sub, features, submit} = this.props
 
-    const isInvalid =
+    const featIsInvalid =
     header === '' ||
     sub === '';
 
     const isInvalidSave = features ? Object.keys(features).length === 0 : false
     console.log('fe', features);
-    // console.log('fe', Object.keys(features).length === 0) ;
 
+    //let noFeature = course.features == undefined
+    // let featureChanged = course.features == features 
+
+    // save feature locally and
+    // save it to server all at once
+    // invalid save === when object.keys
     return (
       <React.Fragment>
-      <Header as='h1' attached='top'>Features</Header>
-      <Segment attached style={CEditMetaBorder}>
-        {/* <Header as='h2'>Features</Header>
-        <Divider /> */}
+      <Header as='h1' attached='top'>Features
+          <Button disabled={isInvalidSave} onClick={submit} floated='right' color='red'>Save</Button>
+      </Header>
+      <Segment attached stacked style={CEditMetaBorder}>
         <Segment basic style={minHeight}>
           <Grid columns={2}>
             {!!features && Object.keys(features).map(f =>
@@ -56,10 +61,8 @@ class CEditFeatures extends Component {
             name='sub'
             onChange={this.props.change}
           />
-          <Form.Button disabled = {isInvalid}>Add new feature</Form.Button>
+          <Form.Button disabled={featIsInvalid}>Add new feature</Form.Button>
         </Form>
-        <Divider />
-        <Button onClick={this.props.submit} disabled = {isInvalidSave}>Save</Button>
       </Segment>
     </React.Fragment>
     );

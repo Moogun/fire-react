@@ -35,11 +35,10 @@ class CEditGallery extends Component {
     console.log('rdr c edit gallery imgaes', images);
     return (
       <React.Fragment>
-      <Header as='h1' attached='top'>Gallery</Header>
-
-      <Segment attached style={CEditMetaBorder}>
-        {/* <Header as='h2'>Gallery</Header>
-        <Divider /> */}
+      <Header as='h1' attached='top'>Gallery
+          <Button onClick={submit} floated='right' color='red'>Save</Button>
+      </Header>
+      <Segment attached stacked style={CEditMetaBorder}>
         <Segment basic style={minHeight} textAlign='center'>
           <Grid columns={3}>
             {images && Object.keys(images).map(i =>
@@ -71,7 +70,7 @@ class CEditGallery extends Component {
         <input placeholder='image...' type='file' accept='image/*'
           ref={this.setTextInputRef} style={{display: "none"}}
           onChange={handleImageChange} />
-        <Button primary onClick={submit}>Save</Button>
+        {/* <Button primary onClick={submit}>Save</Button> */}
 
       </Segment>
     </React.Fragment>
