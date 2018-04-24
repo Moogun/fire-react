@@ -29,9 +29,6 @@ import * as routes from '../../constants/routes';
 import {Link, withRouter, Switch, Redirect, Route} from 'react-router-dom';
 import {db} from '../../firebase';
 
-import { createEditorState, Editor,} from 'medium-draft';
-import mediumDraftExporter from 'medium-draft/lib/exporter';
-
 const menuStyle = {
   border: 'none',
   borderRadius: 0,
@@ -46,8 +43,6 @@ const fixedMenuStyle = {
   border: '1px solid #ddd',
   boxShadow: '0px 1px rgba(0,0,0, 0.2)',
 }
-
-const textColor = {color: '#fff'}
 
 const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
@@ -65,15 +60,12 @@ class MyCoursePage extends Component {
       openCourse: false,
       modalOpen: false,
       registered: false,
-      editorState: createEditorState(),
 
       questions: '',
       isLoading: false,
       lastPage: false,
     }
-    this.onChange = (editorState) => {
-      this.setState({ editorState });
-    };
+
   }
 
   stickTopMenu = () => this.setState({ menuFixed: true })
@@ -112,18 +104,15 @@ class MyCoursePage extends Component {
             attendee: course.attendee,
             features: course.features,
             images: course.images,
+            curri: course.curri,
             qTitle: '',
             qText: '',
-          })
 
-          let curri = course.curri
-          // console.log('curri', curri);
-          this.onChange(createEditorState(JSON.parse(curri)))
+          })
 
         } else {
           console.log('find a way to display course titles that have dash in it');
         }
-
         this.handleContextUserToState()
       }).then(res => {
         const {tid, cid} = this.state
@@ -235,7 +224,6 @@ class MyCoursePage extends Component {
   }
 
   // new question methods
-
   handleQuestionChange = (e, { value }) => {
     this.setState({[e.target.name]: e.target.value})
     e.preventDefault()
@@ -336,11 +324,11 @@ class MyCoursePage extends Component {
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacherName = tName ? tName : 'Teacher'
 
-    const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images, activeItem, questions, qTitle, qText, isLoading, lastPage } = this.state
+    const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, features, images, activeItem, questions, qTitle, qText, isLoading, lastPage } = this.state
     console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
     let teacherProfile = tProfileImg ? tProfileImg : profile
     // let questionsReversed = questions.reverse()
-    const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
+    // const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
 
     let meta = course ? course.metadata : null
     const {match} = this.props
@@ -461,7 +449,7 @@ class MyCoursePage extends Component {
                          />} />
                       <Route path={`${match.url}/curri`} render = {() =>
                         <CourseCurri
-                          curri={renderedHtml}
+                          // curri={renderedHtml}
                          />} />
                        <Route path={`${match.url}/info`} render = {() =>
                          <CourseMeta
@@ -514,7 +502,7 @@ class MyCoursePage extends Component {
                        />} />
                     <Route path={`${match.url}/curri`} render = {() =>
                       <CourseCurri
-                        curri={renderedHtml}
+                        // curri={renderedHtml}
                        />} />
                      <Route path={`${match.url}/info`} render = {() =>
                        <CourseMeta

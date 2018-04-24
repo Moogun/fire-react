@@ -42,6 +42,9 @@ export const C_EDIT_CURRI_ITEM = {paddingTop: '0.5rem', paddingBottom: '0.5rem'}
 
 export const SEGMENT_LOADER = {padding: '0rem'}
 
+//course page
+export const COURSE_PAGE_BODY_SECTION = {paddingLeft: '0', paddingRight: '0'}
+
 //MY COURSE
 export const MY_COURSES_MIN_HEIGHT = {minHeight: '86vh'}
 

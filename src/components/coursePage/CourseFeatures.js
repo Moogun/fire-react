@@ -1,5 +1,6 @@
 import React from 'react'
 import { Segment, Grid, Header } from 'semantic-ui-react'
+import * as style from '../../style/inline'
 
 const CourseFeatures = ({mobile, features}) => {
   // console.log('features', features && Object.keys(features).map(i => features[i].header) )
@@ -18,7 +19,7 @@ const CourseFeatures = ({mobile, features}) => {
   return (
     <Grid.Row style={{margin: '3em 0em'}}>
       <Grid.Column >
-        <Segment basic>
+        <Segment basic style={style.COURSE_PAGE_BODY_SECTION}>
 
           <Header as="h1" dividing>Course Features</Header>
             {featureList}

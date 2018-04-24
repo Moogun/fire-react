@@ -7,16 +7,13 @@ import CourseGallery from './CourseGallery'
 import CourseCurri from './CourseCurri'
 import CourseTeacherSection from './CourseTeacherSection'
 import CourseOpenQ from './CourseOpenQ'
-import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item, Modal, Form, Input, Icon } from 'semantic-ui-react'
+import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item, Modal, Form, Input, Icon, Message } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 
 import {Link, withRouter} from 'react-router-dom';
 import * as style from '../../style/inline';
 
 import {db} from '../../firebase';
-
-// import { createEditorState, Editor,} from 'medium-draft';
-// import mediumDraftExporter from 'medium-draft/lib/exporter';
 
 const menuStyle = {
   border: 'none',
@@ -85,6 +82,7 @@ class CoursePage extends Component {
         })
     } else {
       console.log('handle register pass is wrong', );
+      this.setState(byPropKey('error', 'Wrong Password'))
     }
   }
 
@@ -95,7 +93,10 @@ class CoursePage extends Component {
     console.log('register', tid, cid, uid);
       db.doEnrollInCourse(tid, cid, '', uid)
         .then(res => {
-          console.log('enroll in res succedded ', res);
+          // console.log('enroll in res succedded ', res);
+          const { match } = this.props
+          // console.log('match', match);
+          this.props.history.push('/my/' + match.params.tname + '/' + match.params.cTitle)
         })
         .catch(error => {
           this.setState(byPropKey('error', error))
@@ -104,7 +105,7 @@ class CoursePage extends Component {
 
   handleRegisterModalOpen = () => this.setState({ modalOpen: true })
 
-  handleRegisterModalClose  = () => this.setState({ modalOpen: false })
+  handleRegisterModalClose  = () => this.setState({ modalOpen: false, error: null })
 
   handleNavToTeacher = () => {
     const {tName, cTitle,} = this.props.match.params
@@ -138,6 +139,7 @@ class CoursePage extends Component {
             features: course.features,
             images: course.images,
             curri: course.curri,
+            attendee: course.attendee,
           })
           const {tid, cid} = this.state
           console.log('tid, cid', tid, cid);
@@ -175,7 +177,7 @@ class CoursePage extends Component {
 
     const {tName, cTitle,} = this.props.match.params
 
-    const { course, cid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg,  features, images, curri } = this.state
+    const { course, cid, subTitle, openCourse, coursePass, error, modalOpen, tProfileImg,  features, images, curri, attendee } = this.state
 
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacherName = tName ? tName : 'Teacher'
@@ -183,8 +185,10 @@ class CoursePage extends Component {
     let meta = course ? course.metadata : null
 
     let lock = openCourse ? 'unlock' : 'lock'
+    let authUserRegistered = !!attendee && Object.keys(attendee).filter(i => i === authUser.uid).length === 1 ? true : false
+    console.log('userRegistered', authUserRegistered)
 
-    let register = openCourse ? <Button icon={lock} content='Register' onClick={this.handleRegisterForOpenCourse} />
+    let register = authUserRegistered ? null : openCourse ? <Button icon={lock} content='Register' onClick={this.handleRegisterForOpenCourse} />
     : <Modal size='mini'
         trigger={<Button icon={lock} content='Register' onClick={this.handleRegisterModalOpen}/>}
         open={modalOpen}
@@ -204,6 +208,7 @@ class CoursePage extends Component {
                    placeholder="Password"
                  />
              </Form.Field>
+             {error && <Message negative>{error}</Message>}
                <Button color='blue' fluid>
                  <Icon name='checkmark' /> Register
                </Button>

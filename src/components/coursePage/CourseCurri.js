@@ -10,7 +10,6 @@ const CourseCurri = ({sections, handleSecToggle}) => {
       <Segment.Group data-id={secIndex} key={secIndex}>
         <Segment>
           <Header as='h6'>
-
             {s.content == undefined ? <Icon  color='grey' name='circle thin' />
             : s.expanded === false ? <Icon  color='teal' name='plus' onClick={(e) => handleSecToggle(e, secIndex)}/>
             : <Icon  color='teal' name='minus' onClick={(e) => handleSecToggle(e, secIndex)}/>}
@@ -22,9 +21,7 @@ const CourseCurri = ({sections, handleSecToggle}) => {
               </Header.Subheader>
             </Header.Content>
           </Header>
-        {/* <Icon name='plus'/> Section {secIndex + 1} {s.title}  */}
       </Segment>
-{/* icon={s.content == undefined ? 'plus' : s.expanded ? 'minus' : 'plus'} */}
       {!!s.content && s.expanded && s.content.map((c, lecIndex) =>
         <Segment key={lecIndex}> <Icon color='teal' name='circle' /> {lecIndex + 1}. {c} </Segment>)}
 
@@ -35,7 +32,7 @@ const CourseCurri = ({sections, handleSecToggle}) => {
   return (
     <Grid.Row style={{margin: '3em 0em'}}>
       <Grid.Column>
-        <Segment basic>
+        <Segment basic style={style.COURSE_PAGE_BODY_SECTION}>
         <Header as="h1" dividing>Curriculum </Header>
           {sectionList}
         </Segment>
