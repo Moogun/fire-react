@@ -79,7 +79,8 @@ class CourseEdit extends Component {
     console.log('title submit');
     const { courseId, teacherId, title, subTitle, isLoading } = this.state
     this.setState({isLoading: !isLoading})
-    db.doUpdateCourseTitle(teacherId, courseId, title, subTitle)
+
+    db.doUpdateCourseTitle(teacherId, courseId, title, !!subTitle ? subTitle : '' )
       .then(res => {
         const { course } = this.state
         course.metadata.title = title
@@ -704,8 +705,7 @@ class CourseEdit extends Component {
     return (
       <div>
 
-        {/* <Responsive {...Responsive.onlyComputer}> */}
-
+        <Responsive {...Responsive.onlyComputer}>
          <Segment basic
            loading={isLoading}
            style={style.C_EDIT_BODY}>
@@ -766,25 +766,18 @@ class CourseEdit extends Component {
                             Curriculum
                         </Menu.Item>
 
-                        {/* <Menu.Item name='assignment'
-                          disabled
-                           active={activeItem === 'assignment'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/assignment`}
-                           >
-                           Assignment (Coming soon)
-                        </Menu.Item> */}
-                        <Menu.Item name='assignment'
-                           active={activeItem === 'assignment'}
-                           onClick={this.handleItemClick}
-                           >
-                           <Button fluid color='red' onClick={this.handlePublish}>Publish</Button>
-                        </Menu.Item>
+                        {isPublished
+                          ? null
+                          : <Menu.Item name='publish'
+                             active={activeItem === 'publish'}
+                             onClick={this.handleItemClick}>
+                               <Button fluid color='red' onClick={this.handlePublish}>Publish</Button>
+                            </Menu.Item>
+                        }
                        </Menu>
-
                     </Grid.Column>
 
-                    <Grid.Column width={11}>
+                    <Grid.Column width={13}>
                         <Switch>
                           <Redirect exact from={match.url} to={`${match.url}/info`} />
                           <Route path={`${match.url}/title`} render={(props) => <CEditTitle
@@ -944,7 +937,10 @@ class CourseEdit extends Component {
 
             </Grid>
           </Segment>
-        {/* </Responsive> */}
+        </Responsive>
+        <Responsive minWidth={320} maxWidth={991}>
+
+        </Responsive>
 
       </div>
     );

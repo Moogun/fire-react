@@ -15,10 +15,10 @@ class CEditMeta extends Component {
     let noChange = textbookChanged === false && dateChanged === false && locationChanged === false && timeChanged === false
 
     const isInvalid =
-    textbook === ''||
-    date === ''||
-    location === ''||
-    time === ''||
+    textbook === '' || textbook == undefined ||
+    date === '' || date == undefined ||
+    location === ''|| location == undefined ||
+    time === ''|| time == undefined ||
 	  noChange === true ||
     infoToSave === false
 
@@ -28,13 +28,13 @@ class CEditMeta extends Component {
           <Header as='h1' attached='top'>Basic Info
             {isInvalid ?
               <Button basic disabled floated='right' content='Saved' />
-            : <Button disabled={isInvalid} onClick={submit} floated='right' color='red' content='Save'/>
+            : <Button onClick={submit} floated='right' color='red' content='Save'/>
             }
           </Header>
 
           <Segment attached stacked style={style.C_EDIT_MENU_PADDING} >
               <Form>
-                 <Form.Field>
+                 <Form.Field required>
                    <label>Textbook</label>
                    <Input placeholder='Textbook'
                      value={textbook || ''}
@@ -42,7 +42,7 @@ class CEditMeta extends Component {
                       onChange={this.props.change}
                     />
                  </Form.Field>
-                 <Form.Field>
+                 <Form.Field required>
                    <label>Date</label>
                    <Input placeholder='Date'
                      value={date || ''}
@@ -50,7 +50,7 @@ class CEditMeta extends Component {
                      onChange={this.props.change}
                    />
                  </Form.Field>
-                 <Form.Field>
+                 <Form.Field required>
                    <label>Time</label>
                    <Input placeholder='Time'
                      value={time || ''}
@@ -58,7 +58,7 @@ class CEditMeta extends Component {
                      onChange={this.props.change}
                    />
                  </Form.Field>
-                 <Form.Field>
+                 <Form.Field required>
                    <label>Location</label>
                    <Input placeholder='Location'
                      value={location || ''}

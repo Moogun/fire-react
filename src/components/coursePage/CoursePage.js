@@ -15,8 +15,8 @@ import * as style from '../../style/inline';
 
 import {db} from '../../firebase';
 
-import { createEditorState, Editor,} from 'medium-draft';
-import mediumDraftExporter from 'medium-draft/lib/exporter';
+// import { createEditorState, Editor,} from 'medium-draft';
+// import mediumDraftExporter from 'medium-draft/lib/exporter';
 
 const menuStyle = {
   border: 'none',
@@ -50,54 +50,11 @@ class CoursePage extends Component {
       openCourse: false,
       modalOpen: false,
       registered: false,
-      editorState: createEditorState(),
     }
-    this.onChange = (editorState) => {
-      this.setState({ editorState });
-    };
   }
 
   stickTopMenu = () => this.setState({ menuFixed: true })
   unStickTopMenu = () => this.setState({ menuFixed: false })
-
-  componentDidMount() {
-    console.log('course page did mount', this.props.match.params);
-    let cTitle = this.props.match.params.cTitle
-    let title = cTitle.replace(/-/g, ' ');
-
-    db.onceGetCourseWithTitle(title)
-      .then(cSnap => {
-        let c = cSnap.val()
-
-        if (c) {
-          let key = Object.keys(c)
-          let course = c[key]
-          console.log('course', course);
-          this.setState ({
-            tid: course.metadata.tid,
-            subTitle: course.metadata.subTitle,
-            tName: course.metadata.tName,
-            tEmail: course.metadata.tEmail,
-            tProfileImg: course.metadata.tProfileImg,
-            cid: key[0],
-            course: course,
-            openCourse: course.metadata.openCourse,
-            coursePass: course.metadata.password,
-            attendee: course.attendee,
-            features: course.features,
-            images: course.images,
-          })
-          const {tid, cid} = this.state
-          console.log('tid, cid', tid, cid);
-          let curri = course.curri
-          console.log('curri', curri);
-          this.onChange(createEditorState(JSON.parse(curri)))
-        } else {
-          console.log('find a way to display course titles that have dash in it');
-        }
-      })
-
-  }
 
   handleRegisterSubmit = (event) => {
     const {openCourse} = this.state;
@@ -154,6 +111,52 @@ class CoursePage extends Component {
     this.props.history.push({pathname: '/' + 'teacher' + '/' + tName })
   }
 
+  componentDidMount() {
+    console.log('course page did mount', this.props.match.params);
+    let cTitle = this.props.match.params.cTitle
+    let title = cTitle.replace(/-/g, ' ');
+
+    db.onceGetCourseWithTitle(title)
+      .then(cSnap => {
+        let c = cSnap.val()
+
+        if (c) {
+          let key = Object.keys(c)
+          let course = c[key]
+          console.log('course', course);
+          this.setState ({
+            tid: course.metadata.tid,
+            subTitle: course.metadata.subTitle,
+            tName: course.metadata.tName,
+            tEmail: course.metadata.tEmail,
+            tProfileImg: course.metadata.tProfileImg,
+            cid: key[0],
+            course: course,
+            openCourse: course.metadata.openCourse,
+            coursePass: course.metadata.password,
+            attendee: course.attendee,
+            features: course.features,
+            images: course.images,
+            curri: course.curri,
+          })
+          const {tid, cid} = this.state
+          console.log('tid, cid', tid, cid);
+          let curri = course.curri
+          console.log('curri', curri);
+
+        } else {
+          console.log('find a way to display course titles that have dash in it');
+        }
+      })
+  }
+
+  handleSecToggle = (e, secIndex) => {
+    const { curri } = this.state
+    console.log('sections' ,curri, 'secIndex', curri);
+    curri[secIndex].expanded = !curri[secIndex].expanded
+    this.setState ({curri})
+  }
+
   // componentWillReceiveProps(nextProps){
   //   console.log('will receive props', nextProps);
   // }
@@ -167,17 +170,16 @@ class CoursePage extends Component {
   }
   render() {
     // const {menuFixed} = this.state
-    console.log('render');
+    // console.log('render');
+    let authUser = this.context.authUser
+
     const {tName, cTitle,} = this.props.match.params
+
+    const { course, cid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg,  features, images, curri } = this.state
+
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacherName = tName ? tName : 'Teacher'
-
-    const { course, cid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, editorState, features, images } = this.state
-
     let teacherProfile = tProfileImg ? tProfileImg : profile
-
-    const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
-
     let meta = course ? course.metadata : null
 
     let lock = openCourse ? 'unlock' : 'lock'
@@ -244,7 +246,7 @@ class CoursePage extends Component {
                     <CourseMeta meta={meta}/>
                     <CourseFeatures features={features}/>
                     <CourseGallery images={images}/>
-                    <CourseCurri curri={renderedHtml}/>
+                    <CourseCurri sections={curri} handleSecToggle={this.handleSecToggle}/>
 
                 </Grid.Column>
              </Grid>

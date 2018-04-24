@@ -248,7 +248,7 @@ class AccountPage extends Component {
             <Grid>
               <Grid.Column>
                    <Container>
-                      <Segment basic clearing >
+                      <Segment basic clearing style={{paddingLeft: '0', paddingRight: '0'}}>
                           <Header as='h5' floated='left' style={{marginBottom: '0'}}>
                             <Image circular src={profile} size='tiny'/>
                             <Header.Content>

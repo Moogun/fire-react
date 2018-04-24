@@ -18,11 +18,11 @@ class CEditTop extends Component {
 
     return (
       <div>
-        <Responsive {...Responsive.onlyComputer}>
+        {/* <Responsive {...Responsive.onlyComputer}> */}
           <Grid container verticalAlign='middle'>
 
             <Grid.Column floated='left' width={12}>
-              <Header as='h1' inverted >
+              <Header as='h2' inverted >
                <Image circular src={teacherProfile}/>
                <Header.Content>
                  {title}
@@ -39,38 +39,34 @@ class CEditTop extends Component {
             <Grid.Column floated='right' width={4}>
               <Button.Group floated='right' >
                 <Button inverted style={{margin: '1px'}}>Preview</Button>
-                <Button  style={{margin: '1px'}}>Save</Button>
-                <Button  icon style={{margin: '1px'}} onClick={settingsClick}><Icon name='settings' /></Button>
+                <Button icon style={{margin: '1px'}} onClick={settingsClick}><Icon name='settings' /></Button>
               </Button.Group>
             </Grid.Column>
           </Grid>
-        </Responsive>
+        {/* </Responsive> */}
 
-        <Responsive
+        {/* <Responsive
           minWidth={320}
-          maxWidth={992}>
-          <Grid container>
+          maxWidth={991}>
+
+          <Grid container verticalAlign='middle'>
             <Grid.Column>
-              <List>
-                <List.Item>
-                  <Image src={teacherProfile} size='tiny'/>
-
-                  <List.Content  verticalAlign='top' style={TEXT_COLOR}>
-                    <List.Header style={TEXT_COLOR}>
-                      {title}
-                      {isPublished ? <p>Published</p> : <p>draft</p>}
-                    </List.Header>
-                    {teacherName}
-                  </List.Content>
-
-                  <List.Content floated='right' >
-                    <Button  icon style={{margin: '1px'}} onClick={settingsClick}><Icon name='settings' /></Button>
-                  </List.Content>
-                </List.Item>
-              </List>
+              <Header as='h4' inverted >
+               <Image circular src={teacherProfile}/>
+               <Header.Content>
+                 {title}
+                 <Header.Subheader >
+                   {published}
+                 </Header.Subheader>
+                 <Header.Subheader >
+                   {teacherName}
+                 </Header.Subheader>
+               </Header.Content>
+              </Header>
             </Grid.Column>
+
           </Grid>
-        </Responsive>
+        </Responsive> */}
       </div>
     );
   }

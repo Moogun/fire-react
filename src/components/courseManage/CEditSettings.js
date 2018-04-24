@@ -36,7 +36,7 @@ class CEditSettings extends Component {
                          onChange={this.props.change}
                        /> : null }
 
-                     {coursePrivacy === 'public'
+                     {coursePrivacy === 'public' || coursePrivacy === ''
                      ? <p>Public courses show up in search result</p>
                      : <p>Private courses don't show up in search result. Instead, share the course URL and password directly with students you want to enroll in your course.</p> }
 

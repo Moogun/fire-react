@@ -28,7 +28,7 @@ class CEditTitle extends Component {
           </Header>
           <Segment attached style={style.C_EDIT_MENU_PADDING} stacked>
               <Form>
-                <Form.Field>
+                <Form.Field required>
                   <label>Title</label>
                   <Input placeholder='Title'
                     value={title || ''}
@@ -44,7 +44,6 @@ class CEditTitle extends Component {
                      onChange={this.props.change}
                    />
                 </Form.Field>
-                 {/* <Button onClick={titleSubmit}>저장</Button> */}
                </Form>
              </Segment>
          {/* </Segment> */}
