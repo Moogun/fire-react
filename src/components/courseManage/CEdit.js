@@ -64,10 +64,9 @@ class CourseEdit extends Component {
   // course edit
   handleTitleInputChange = (event) => this.setState({[event.target.name]: event.target.value, titleToSave: true })
 
-
   handleMetaInputChange = (event) => this.setState({[event.target.name]: event.target.value, infoToSave: true })
 
-  handleFeaturesInputChange = (event) => this.setState({[event.target.name]: event.target.value, featuresToSave: true })
+  handleFeaturesInputChange = (event) => this.setState({[event.target.name]: event.target.value })
 
   handleSettingsInputChange = (event) => this.setState({[event.target.name]: event.target.value, settingsToSave: true })
 
@@ -120,7 +119,7 @@ class CourseEdit extends Component {
       let fList = this.state.featureList
       delete fList[e]
       console.log('new lsit', fList);
-      this.setState ({ featureList: fList })
+      this.setState ({ featureList: fList, featuresToSave: true })
       console.log('state', this.state.featureList);
    }
 
@@ -139,6 +138,7 @@ class CourseEdit extends Component {
        featureList: feats,
        header: '',
        sub: '',
+       featuresToSave: true,
      })
      console.log('state', this.state.featureList, 'course', course);
 
@@ -150,7 +150,7 @@ class CourseEdit extends Component {
     console.log('courseId, tid, featureList', featureList, courseId, teacherId);
 
     db.doUpdateFeatures(teacherId, courseId, featureList)
-      .then(res => console.log('res', res))
+      .then(res => this.setState ({featuresToSave: false}))
       .catch(error => {
         this.setState(byPropKey('error', error));
       });
@@ -652,18 +652,21 @@ class CourseEdit extends Component {
   render() {
     const {activeItem, isLoading,
       course,
-      courseId, title, subTitle, teacherName, teacherId, teacherPhoto,
-      titleToSave,
+      courseId, teacherName, teacherId, teacherPhoto,
+
+      title, subTitle, titleToSave,
       textbook, date, time, location, infoToSave,
-      // curri,
-      openCourse, password, isPublished,
+      // features,
       featureList, formForFeature,
-      header, sub,
+      header, sub, featuresToSave,
+      // gallery,
       images, confirmOpen, selectedImage, handleRemoveModalShow, handleRemoveConfirm, handleRemoveCancel,
       visible,
 
       // CURRI
-      sections, formForSection, sectionTitle, activeSection, lectureTitle, sectionToEdit, lectureToEdit, removeSectionConfirm,
+      sections, formForSection, sectionTitle, activeSection, lectureTitle, sectionToEdit, lectureToEdit, removeSectionConfirm, curriToSave,
+      //settings
+      openCourse, password, isPublished, settingsToSave
 
     } = this.state
     const {match} = this.props
@@ -797,6 +800,7 @@ class CourseEdit extends Component {
                             handleOpenAddFeatureForm={this.handleOpenAddFeatureForm}
                             handleAddFeatureCancel={this.handleAddFeatureCancel}
                             submit={this.onFeaturesSubmit}
+                            featuresToSave={featuresToSave}
                           /> }/>
                           <Route path={`${match.url}/gallery`} render={(props) => <CEditGallery
                             {...props}
