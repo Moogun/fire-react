@@ -54,6 +54,8 @@ class CourseEdit extends Component {
       header: '',
       sub: '',
       infoToSave: false,
+      featuresToSave: false,
+      curriToSave: false,
     };
 
   }
@@ -306,7 +308,7 @@ class CourseEdit extends Component {
   onCurriSubmit = () => {
     const {courseId, teacherId, sections} = this.state
     db.doUpdateCourseCurri(teacherId, courseId, sections)
-      .then(response => console.log('succeded uploading',response))
+      .then(response => this.setState ({ curriToSave: false }))
       .catch(error => {
         this.setState(byPropKey('error', error));
     });
@@ -481,7 +483,7 @@ class CourseEdit extends Component {
     //CURRI
     handleOpenAddSectionForm =()=>{
       const {formForSection} = this.state
-      this.setState({formForSection: !formForSection, activeSection: null})
+      this.setState({formForSection: !formForSection, activeSection: null,})
     }
 
     handleAddSectionCancel = (e) => {
@@ -500,7 +502,7 @@ class CourseEdit extends Component {
       }
       let newEl = {title: sectionTitle, content: [], expanded: false}
       prev.push(newEl)
-      this.setState ({ sections: prev, formForSection: !formForSection, sectionTitle: ''})
+      this.setState ({ sections: prev, formForSection: !formForSection, sectionTitle: '',  curriToSave: true})
     }
 
     handleRemoveSection = (id) => {
@@ -514,7 +516,7 @@ class CourseEdit extends Component {
       const { sections, sectionToRemove } = this.state
       sections.splice(sectionToRemove, 1)
       let updated = sections
-      this.setState ({sections: updated, removeSectionConfirm: false})
+      this.setState ({sections: updated, removeSectionConfirm: false,  curriToSave: true})
     }
 
     handleCancelRemove = () => this.setState({ sectionToRemove: null, removeSectionConfirm: false })
@@ -547,7 +549,7 @@ class CourseEdit extends Component {
       console.log('section', section);
       sections.splice(sectionId, 1, section)
       let updated = sections
-      this.setState ({ sections: updated, lectureTitle: ''})
+      this.setState ({ sections: updated, lectureTitle: '',  curriToSave: true})
     }
 
     handleRemoveLecture =(secIndex, lecIndex) => {
@@ -556,7 +558,7 @@ class CourseEdit extends Component {
       sections[secIndex].content.splice(lecIndex, 1)
       let updated = sections
       console.log('updated ', updated);
-      this.setState ({sections: updated})
+      this.setState ({sections: updated, curriToSave: true})
     }
 
     handleInlineSectionEdit = (secIndex) => {
@@ -568,7 +570,7 @@ class CourseEdit extends Component {
       sections[secIndex].title = sectionTitle
       let updated = sections
       console.log('sections[secIndex].title', sections[secIndex].title, 'sectionToEdit': null)
-      this.setState ({ sections: updated, 'sectionToEdit': null, })
+      this.setState ({ sections: updated, 'sectionToEdit': null,  curriToSave: true})
       // this.setState ({ })
       e.preventDefault()
     }
@@ -583,7 +585,7 @@ class CourseEdit extends Component {
       sections[secIndex].content[lecIndex] = lectureTitle
       let updated = sections
       console.log('  sections[secIndex].content[lecIndex]', sections[secIndex].content[lecIndex])
-      this.setState ({ sections: updated, 'lectureToEdit': null, lectureTitle: '' })
+      this.setState ({ sections: updated, 'lectureToEdit': null, lectureTitle: '',  curriToSave: true })
 
       e.preventDefault()
     }
@@ -867,7 +869,7 @@ class CourseEdit extends Component {
             handleSectionTitleChange = {this.handleSectionTitleChange}
 
             onCurriSubmit={this.onCurriSubmit}
-            course={course}
+            curriToSave={curriToSave}
 
                           />} />
                           <Route path={`${match.url}/settings`} render={() => <CEditSettings

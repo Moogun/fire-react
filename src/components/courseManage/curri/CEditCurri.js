@@ -12,9 +12,6 @@ class CEditCurri extends React.Component {
 
   render() {
 
-    const isInvalidLecture = lectureTitle === ''
-    const isInvalid = false
-
     const {sections, formForSection, activeSection,
       sectionTitle, sectionToEdit,
       lectureTitle, lectureToEdit,
@@ -57,12 +54,15 @@ class CEditCurri extends React.Component {
       handleSaveSection,
       // handleSectionTitleChange,
       onCurriSubmit,
-
-      course,
+      // course,
+      curriToSave,
 
     } = this.props
 
-    console.log('c edit curri', sections, 'curri', course);
+    const isInvalidLecture = lectureTitle === ''
+    const isInvalid = curriToSave === false
+
+    // console.log('c edit curri', sections, 'curri', course);
     let sectionList = !!sections && sections.map((s, secIndex) =>
       <Segment.Group
         data-id={secIndex}
