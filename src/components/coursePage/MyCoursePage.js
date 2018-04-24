@@ -73,6 +73,18 @@ class MyCoursePage extends Component {
 
   componentDidMount() {
     this.handleGetCourseWithTitle()
+
+    const {authUser} = this.context
+    if (authUser) {
+      console.log('My course page authUser', authUser);
+      db.onceGetUser(authUser.uid)
+        .then(res => {
+          this.setState ({ user: res.val(), uid: authUser.uid })
+        })
+        .catch(error => {
+          this.setState({[error]: error});
+        });
+    }
   }
 
   handleGetCourseWithTitle() {
@@ -113,7 +125,7 @@ class MyCoursePage extends Component {
         } else {
           console.log('find a way to display course titles that have dash in it');
         }
-        this.handleContextUserToState()
+
       }).then(res => {
         const {tid, cid} = this.state
         console.log('tid, cid', tid, cid);
@@ -140,21 +152,6 @@ class MyCoursePage extends Component {
       .catch(error => {
         this.setState({[error]: error});
       });
-  }
-
-  handleContextUserToState(){
-    const {authUser} = this.context
-    if (authUser) {
-      console.log('My course page authUser', authUser);
-      db.onceGetUser(authUser.uid)
-        .then(res => {
-          // console.log('my course user', res.val())
-          this.setState ({ user: res.val(), uid: authUser.uid })
-        })
-        .catch(error => {
-          this.setState({[error]: error});
-        });
-    }
   }
 
   handleMore = (e) => {
@@ -327,8 +324,6 @@ class MyCoursePage extends Component {
     const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, features, images, activeItem, questions, qTitle, qText, isLoading, lastPage } = this.state
     console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
     let teacherProfile = tProfileImg ? tProfileImg : profile
-    // let questionsReversed = questions.reverse()
-    // const renderedHtml = mediumDraftExporter(editorState.getCurrentContent())
 
     let meta = course ? course.metadata : null
     const {match} = this.props
