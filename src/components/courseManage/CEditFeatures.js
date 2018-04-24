@@ -40,7 +40,7 @@ class CEditFeatures extends Component {
     } = this.props
 
     let IsInvalidAddForm = header === '' || sub === '';
-    let isInvalid = featureList == undefined || featuresToSave === false
+    let isInvalid = featuresToSave === false
     // let noFeature = featureList == undefined
     // let emptyObj = {key: {header: '1', sub:'1'}}
     // this.featuresEqual(!!featureList ? featureList : emptyObj, !!course ? course.features : emptyObj)

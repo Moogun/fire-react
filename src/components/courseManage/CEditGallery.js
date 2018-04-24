@@ -1,25 +1,9 @@
 import React, {Component} from 'react'
-import { Form, Input, Button, Segment, Icon, Header, Divider, Image, Grid, Dimmer, Progress, Confirm} from 'semantic-ui-react'
-import {db} from '../../firebase';
-import {storage} from '../../firebase/firebase';
-
-const CEditMetaBorder = {borderRadius: '0px'}
-const minHeight = { minHeight: '200px'}
-
-const INITIAL_STATE = {
-  header: '',
-  sub: '',
-  error: null,
-}
-
-const byPropKey = (propertyName, value) => ()=> ({
-  [propertyName]: value
-})
+import { Form, Input, Button, Segment, Icon, Header, Image, Grid, Dimmer, Progress, Confirm} from 'semantic-ui-react'
 
 class CEditGallery extends Component {
   constructor(props) {
   super(props);
-
     this.textInput = null;
     this.setTextInputRef = element => {
       this.textInput = element
@@ -27,14 +11,30 @@ class CEditGallery extends Component {
     this.focusTextInput = () => {
       if (this.textInput) this.textInput.click()
     }
-}
+  }
+
+  unsavedImage = (images) => {
+    let re = Object.keys(images).map(i => images[i].progress)
+
+    let imageNotSaved = re.filter(i => i === 0)
+    let imageToSave
+    if (imageNotSaved.length === 0) {
+      imageToSave = false
+    } else {
+      imageToSave = true
+    }
+    return imageToSave
+  }
 
   render() {
 
-    const {images, confirmOpen, selectedImage, handleImageChange, submit, removeModalShow, removeConfirm, removeCancel } = this.props
+    const {images, confirmOpen, selectedImage, handleImageChange, submit, removeModalShow, removeConfirm, removeCancel, galleryToSave } = this.props
     console.log('rdr c edit gallery imgaes', images);
+    console.log('check', Object.keys(images).map(i =>  images[i].progress
+    ))
+    console.log('check 2', this.unsavedImage(images))
 
-    const isInvalid = false
+    const isInvalid = galleryToSave === false || this.unsavedImage(images) === false
 
     return (
       <React.Fragment>
@@ -45,16 +45,18 @@ class CEditGallery extends Component {
           : <Button disabled={isInvalid} onClick={submit} floated='right' color='red' content='Save'/>
           }
       </Header>
-      <Segment attached stacked style={CEditMetaBorder}>
-        <Segment basic style={minHeight} textAlign='center'>
+      <Segment attached stacked >
+        <Segment basic textAlign='center'>
           <Grid columns={3}>
             {images && Object.keys(images).map(i =>
               <Grid.Column key={i}>
                 <Dimmer.Dimmable
                     as={Image}
+                    bordered
                     onClick={() => this.props.removeModalShow(i)}
                     size='medium'
                     src={images[i].src}
+                    label={{ corner: 'right', icon: 'save', color: `${images[i].progress === 100 ? 'grey': 'red'}`, }}
                   />
                 <Progress percent={images[i].progress} attached='bottom' color='blue' />
                 </Grid.Column>
@@ -72,12 +74,10 @@ class CEditGallery extends Component {
             </Grid.Column>
           </Grid>
         </Segment>
-        <Divider />
 
         <input placeholder='image...' type='file' accept='image/*'
           ref={this.setTextInputRef} style={{display: "none"}}
           onChange={handleImageChange} />
-        {/* <Button primary onClick={submit}>Save</Button> */}
 
       </Segment>
     </React.Fragment>

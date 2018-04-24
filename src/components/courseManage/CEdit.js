@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Link, Route, withRouter, Switch, Redirect, Prompt} from 'react-router-dom'
-import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header } from 'semantic-ui-react'
+import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm } from 'semantic-ui-react'
 
 import CEditTop from './CEditTop'
 import CEditTitle from './CEditTitle'
@@ -55,6 +55,8 @@ class CourseEdit extends Component {
       sub: '',
       infoToSave: false,
       featuresToSave: false,
+      sameFileNameSelectedAlready: false,
+      galleryToSave: false,
       curriToSave: false,
     };
 
@@ -168,6 +170,8 @@ class CourseEdit extends Component {
 
     if (found) {
       console.log('found', found);
+      this.setState ({ sameFileNameSelectedAlready: true })
+      const {sameFileNameSelectedAlready} = this.state
       return
     }
 
@@ -176,7 +180,7 @@ class CourseEdit extends Component {
     reader.onloadend = () => {
       // console.log('reader', reader.result);
       images[newKey] = { file: file, src: reader.result, progress: 0, }
-      this.setState ({images})
+      this.setState ({images, galleryToSave: true})
     }
 
     if (e.target.files[0]) {
@@ -234,7 +238,7 @@ class CourseEdit extends Component {
               // console.log('2 after uploading success images', images);
               images[i] = { caption: 'file', fileName: fileName, src: downloadURL, progress: 100, thumbnail: downloadURL, thumbnailHeight: 240, thumbnailWidth: 320}
               // console.log('update image success', res)
-              this.setState ({ images })
+              this.setState ({ images, galleryToSave: false, })
               // console.log('3 after uploading success images', images);
             })
             .catch(error => {
@@ -271,7 +275,7 @@ class CourseEdit extends Component {
               // console.log('res', res)
               //remove download url
               let newImages = delete images[selectedImage]
-              this.setState({ confirmOpen: false, newImages })
+              this.setState({ confirmOpen: false, newImages, galleryToSave: true })
             })
             .catch(error => {
               this.setState(byPropKey('error', error));
@@ -651,6 +655,12 @@ class CourseEdit extends Component {
       //here save course data to each edit field
       console.log('discard');
     }
+
+    handleConfirmSameFile = () => {
+      const {sameFileNameSelectedAlready} = this.state
+      this.setState ({ sameFileNameSelectedAlready: !sameFileNameSelectedAlready})
+    }
+
   render() {
     const {activeItem, isLoading,
       course,
@@ -663,7 +673,7 @@ class CourseEdit extends Component {
       header, sub, featuresToSave,
       // gallery,
       images, confirmOpen, selectedImage, handleRemoveModalShow, handleRemoveConfirm, handleRemoveCancel,
-      visible,
+      visible, galleryToSave, sameFileNameSelectedAlready,
 
       // CURRI
       sections, formForSection, sectionTitle, activeSection, lectureTitle, sectionToEdit, lectureToEdit, removeSectionConfirm, curriToSave,
@@ -816,6 +826,7 @@ class CourseEdit extends Component {
                             removeModalShow={this.handleRemoveModalShow}
                             removeConfirm={this.handleRemoveConfirm}
                             removeCancel={this.handleRemoveCancel}
+                            galleryToSave={galleryToSave}
                           /> }/>
 
                           <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
@@ -885,6 +896,11 @@ class CourseEdit extends Component {
                           <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
 
                         </Switch>
+                        <Confirm
+                            content='A file that has the same name has been already added'
+                            open={sameFileNameSelectedAlready}
+                            onConfirm={this.handleConfirmSameFile}
+                          />
                         {/* <Confirm
                            open={this.state.titleToSave}
                            onCancel={this.handleDiscardCancel}
