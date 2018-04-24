@@ -1,40 +1,38 @@
 import React, {Component} from 'react'
 import { Form, Input, Button, Segment, Header, Divider } from 'semantic-ui-react'
-import {db} from '../../firebase';
-
-// const CEditMetaBorder = {
+import * as style from '../../style/inline'
 
 class CEditMeta extends Component {
 
   render() {
-    const { course, textbook, date, location, time, submit } = this.props
+    const { course, textbook, date, location, time, submit, infoToSave } = this.props
 
     let textbookChanged = !!course && course.metadata.textbook !== textbook
     let dateChanged = !!course && course.metadata.date !== date
     let locationChanged = !!course && course.metadata.location !== location
     let timeChanged = !!course && course.metadata.time !== time
 
+    let noChange = textbookChanged === false && dateChanged === false && locationChanged === false && timeChanged === false
+
     const isInvalid =
     textbook === ''||
     date === ''||
     location === ''||
     time === ''||
-	  (textbookChanged === false && dateChanged === false && locationChanged === false && timeChanged === false)
+	  noChange === true ||
+    infoToSave === false
 
     return (
       <React.Fragment >
         {/* <Segment basic style={{boxShadow:'1px 1px 10px 1px grey', padding: '0'}}> */}
           <Header as='h1' attached='top'>Basic Info
-            {/* <Button disabled={isInvalid} onClick={submit} floated='right' color='red'>{isInvalid ? 'Saved' : 'Save'}</Button> */}
             {isInvalid ?
               <Button basic disabled floated='right' content='Saved' />
             : <Button disabled={isInvalid} onClick={submit} floated='right' color='red' content='Save'/>
             }
           </Header>
 
-          <Segment attached stacked
-            // style={CEditMetaBorder}
-            >
+          <Segment attached stacked style={style.C_EDIT_MENU_PADDING} >
               <Form>
                  <Form.Field>
                    <label>Textbook</label>
@@ -68,7 +66,6 @@ class CEditMeta extends Component {
                      onChange={this.props.change}
                    />
                  </Form.Field>
-                 {/* <Button onClick={submit}>저장</Button> */}
                </Form>
              </Segment>
          {/* </Segment> */}

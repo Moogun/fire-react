@@ -56,12 +56,13 @@ class CEditCurri extends React.Component {
       handleAddSectionCancel,
       handleSaveSection,
       // handleSectionTitleChange,
+      onCurriSubmit,
 
-      onCurriSubmit
+      course,
 
     } = this.props
 
-    console.log('c edit curri', sections);
+    console.log('c edit curri', sections, 'curri', course);
     let sectionList = !!sections && sections.map((s, secIndex) =>
       <Segment.Group
         data-id={secIndex}
@@ -187,7 +188,7 @@ class CEditCurri extends React.Component {
               : <Button disabled={isInvalid} onClick={onCurriSubmit} floated='right' color='red' content='Save'/>
               }
           </Header>
-          <Segment attached style={CEditMetaBorder}>
+          <Segment attached stacked>
             {sectionList}
             {addSection}
           </Segment>

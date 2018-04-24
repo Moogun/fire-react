@@ -31,9 +31,6 @@ const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
 })
 
-const SEGMENT_BORDER={padding: '0'}
-const MENU_BORDER={borderRadius: '0'}
-
 class CourseEdit extends Component {
   constructor(props) {
     super(props);
@@ -53,9 +50,10 @@ class CourseEdit extends Component {
       activeSection: '',
 
       lectureTitle: '',
-      changeSaved: true,
+      titleToSave: false,
       header: '',
       sub: '',
+      infoToSave: false,
     };
 
   }
@@ -64,17 +62,28 @@ class CourseEdit extends Component {
   handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
 
   // course edit
-  handleInputChange = (event) => {
-    this.setState(byPropKey(event.target.name, event.target.value))
-    this.setState ({ changeSaved: false })
-  }
+  handleTitleInputChange = (event) => this.setState({[event.target.name]: event.target.value, titleToSave: true })
+
+
+  handleMetaInputChange = (event) => this.setState({[event.target.name]: event.target.value, infoToSave: true })
+
+  handleFeaturesInputChange = (event) => this.setState({[event.target.name]: event.target.value, featuresToSave: true })
+
+  handleSettingsInputChange = (event) => this.setState({[event.target.name]: event.target.value, settingsToSave: true })
 
   onTitleSubmit = (e) => {
     console.log('title submit');
-    const { courseId, teacherId, title, subTitle } = this.state
+    const { courseId, teacherId, title, subTitle, isLoading } = this.state
+    this.setState({isLoading: !isLoading})
     db.doUpdateCourseTitle(teacherId, courseId, title, subTitle)
       .then(res => {
-        this.setState ({ changeSaved: true})
+        const { course } = this.state
+        course.metadata.title = title
+        course.metadata.subTitle = subTitle
+        console.log('on title submit course', course)
+
+        const {isLoading} = this.state
+        this.setState ({ titleToSave: false, course: course, isLoading: !isLoading})
       }).catch(error => {
         this.setState(byPropKey('error', error))
       })
@@ -88,10 +97,15 @@ class CourseEdit extends Component {
 
     db.doUpdateCourseMeta(teacherId, courseId, textbook, date, time, location)
         .then((res)=> {
-          console.log(' meta saved', res);
+
+          const { course } = this.state
+          course.metadata.textbook = textbook
+          course.metadata.date = date
+          course.metadata.time = time
+          course.metadata.location = location
           const {isLoading} = this.state
-          console.log('is Loading', isLoading);
-          this.setState({isLoading: !isLoading})
+          this.setState ({ infoToSave: false, course: course, isLoading: !isLoading})
+
         })
         .catch(error => {
           this.setState(byPropKey('error', error))
@@ -103,11 +117,11 @@ class CourseEdit extends Component {
   handleFeatureDismiss = (e) => {
       console.log('e', e);
 
-      let fList = this.state.features
+      let fList = this.state.featureList
       delete fList[e]
       console.log('new lsit', fList);
-      this.setState ({ features: fList })
-      console.log('state', this.state.features);
+      this.setState ({ featureList: fList })
+      console.log('state', this.state.featureList);
    }
 
   handleAddNewFeature = () => {
@@ -116,26 +130,26 @@ class CourseEdit extends Component {
      console.log('newkey', newKey);
      let id = newKey
 
-     const {features, header, sub} = this.state
-     let feats = !!features ? features : {}
+     const {featureList, header, sub, course } = this.state
+     let feats = !!featureList ? featureList : {}
      console.log('featuers', feats);
      feats[newKey] = {header: header, sub: sub}
 
      this.setState ({
-       features: feats,
+       featureList: feats,
        header: '',
        sub: '',
      })
-     console.log('state', this.state.features);
+     console.log('state', this.state.featureList, 'course', course);
 
      // features = [{title: 'abc', list={a,1,2,}, }, {title: 'abc', list={a,1,2,}, },]
   }
 
   onFeaturesSubmit = () => {
-    const {courseId, teacherId, features } = this.state
-    console.log('courseId, tid, features', features, courseId, teacherId);
+    const {courseId, teacherId, featureList } = this.state
+    console.log('courseId, tid, featureList', featureList, courseId, teacherId);
 
-    db.doUpdateFeatures(teacherId, courseId, features)
+    db.doUpdateFeatures(teacherId, courseId, featureList)
       .then(res => console.log('res', res))
       .catch(error => {
         this.setState(byPropKey('error', error));
@@ -412,12 +426,9 @@ class CourseEdit extends Component {
         let course = snapshot.val()
         let meta = course.metadata
         let curri = course.curri
-        let features = course.features
+        let featureList = course.features
         let images = course.images ? course.images : {}
-        // console.log('meta', meta);
-        // console.log('curri', curri);
-        // console.log('features', features);
-        // console.log('dmt images', images);
+
         const {isLoading } = this.state
         this.setState ({
           courseId: courseId,
@@ -439,7 +450,7 @@ class CourseEdit extends Component {
           isPublished: meta.isPublished,
 
           isLoading: !isLoading,
-          features: features,
+          featureList: featureList,
           images: images,
           sections: curri,
           })
@@ -448,198 +459,211 @@ class CourseEdit extends Component {
         this.setState(byPropKey('error', error));
       });
 
-  }
+    }
 
-  componentWillUnmount(){
-    console.log('will un mount', 0);
-  }
+    componentWillUnmount(){
+      console.log('will un mount', 0);
+    }
 
-  toggleVisibility = () => this.setState({ visible: !this.state.visible })
+    toggleVisibility = () => this.setState({ visible: !this.state.visible })
 
+    handleOpenAddFeatureForm = (e) => {
+      const {formForFeature} = this.state
+      this.setState({formForFeature: !formForFeature})
+      e.preventDefault()
+    }
+    handleAddFeatureCancel = (e) => {
+      const {formForFeature} = this.state
+      this.setState({formForFeature: !formForFeature})
+      e.preventDefault()
+    }
 
+    //CURRI
+    handleOpenAddSectionForm =()=>{
+      const {formForSection} = this.state
+      this.setState({formForSection: !formForSection, activeSection: null})
+    }
 
-  //CURRI
-  handleOpenAddSectionForm =()=>{
-  const {formForSection} = this.state
-  this.setState({formForSection: !formForSection, activeSection: null})
-}
+    handleAddSectionCancel = (e) => {
+      const {formForSection} = this.state
+      this.setState({formForSection: !formForSection})
+      e.preventDefault()
+    }
 
-handleAddSectionCancel = (e) => {
-  const {formForSection} = this.state
-  this.setState({formForSection: !formForSection})
-  e.preventDefault()
-}
+    handleSaveSection = () => {
+      const { sections, formForSection, sectionTitle } = this.state
+      let prev
+      if (sections == undefined) {
+        prev = []
+      } else {
+        prev = sections
+      }
+      let newEl = {title: sectionTitle, content: [], expanded: false}
+      prev.push(newEl)
+      this.setState ({ sections: prev, formForSection: !formForSection, sectionTitle: ''})
+    }
 
-handleSaveSection = () => {
-  const { sections, formForSection, sectionTitle } = this.state
-  let prev
-  if (sections == undefined) {
-    prev = []
-  } else {
-    prev = sections
-  }
-  let newEl = {title: sectionTitle, content: [], expanded: false}
-  prev.push(newEl)
-  this.setState ({ sections: prev, formForSection: !formForSection, sectionTitle: ''})
-}
+    handleRemoveSection = (id) => {
+        this.setState ({sectionToRemove: id })
+        this.showRemoveConfirm()
+    }
 
-handleRemoveSection = (id) => {
-    this.setState ({sectionToRemove: id })
-    this.showRemoveConfirm()
-}
+    showRemoveConfirm = () => this.setState({ removeSectionConfirm: true })
 
-showRemoveConfirm = () => this.setState({ removeSectionConfirm: true })
+    handleConfirmRemove = () => {
+      const { sections, sectionToRemove } = this.state
+      sections.splice(sectionToRemove, 1)
+      let updated = sections
+      this.setState ({sections: updated, removeSectionConfirm: false})
+    }
 
-handleConfirmRemove = () => {
-  const { sections, sectionToRemove } = this.state
-  sections.splice(sectionToRemove, 1)
-  let updated = sections
-  this.setState ({sections: updated, removeSectionConfirm: false})
-}
+    handleCancelRemove = () => this.setState({ sectionToRemove: null, removeSectionConfirm: false })
 
-handleCancelRemove = () => this.setState({ sectionToRemove: null, removeSectionConfirm: false })
+    handleOpenAddLectureForm = (id) => {
+      const {activeSection, formForSection} = this.state
+      this.setState({activeSection: id, formForSection: false })
+    }
 
-handleOpenAddLectureForm = (id) => {
-  const {activeSection, formForSection} = this.state
-  this.setState({activeSection: id, formForSection: false })
-}
+    handleAddLectureCancel = (e) => {
+      e.preventDefault()
+      const {activeSection} = this.state
+      console.log('activeSection1', activeSection);
+      this.setState({activeSection: null})
+      // const {activeSection} = this.state
+      console.log('activeSection2', activeSection);
 
-handleAddLectureCancel = (e) => {
-  e.preventDefault()
-  const {activeSection} = this.state
-  console.log('activeSection1', activeSection);
-  this.setState({activeSection: null})
-  // const {activeSection} = this.state
-  console.log('activeSection2', activeSection);
+    }
 
-}
+    handleSaveLecture = (sectionId) => {
+      console.log(sectionId);
+      const { sections, lectureTitle } = this.state
+      let section = sections[sectionId]
+      section.expanded = true
 
-handleSaveLecture = (sectionId) => {
-  console.log(sectionId);
-  const { sections, lectureTitle } = this.state
-  let section = sections[sectionId]
-  section.expanded = true
+      if (section.content == undefined) {
+        sections[sectionId].content = []
+      }
+      section.content.push(lectureTitle)
+      console.log('section', section);
+      sections.splice(sectionId, 1, section)
+      let updated = sections
+      this.setState ({ sections: updated, lectureTitle: ''})
+    }
 
-  if (section.content == undefined) {
-    sections[sectionId].content = []
-  }
-  section.content.push(lectureTitle)
-  console.log('section', section);
-  sections.splice(sectionId, 1, section)
-  let updated = sections
-  this.setState ({ sections: updated, lectureTitle: ''})
-}
+    handleRemoveLecture =(secIndex, lecIndex) => {
+      console.log('remove lec', secIndex, lecIndex);
+      const { sections } = this.state
+      sections[secIndex].content.splice(lecIndex, 1)
+      let updated = sections
+      console.log('updated ', updated);
+      this.setState ({sections: updated})
+    }
 
-handleRemoveLecture =(secIndex, lecIndex) => {
-  console.log('remove lec', secIndex, lecIndex);
-  const { sections } = this.state
-  sections[secIndex].content.splice(lecIndex, 1)
-  let updated = sections
-  console.log('updated ', updated);
-  this.setState ({sections: updated})
-}
+    handleInlineSectionEdit = (secIndex) => {
+      this.setState ({ sectionToEdit: secIndex, sectionTitle: ''})
+    }
 
-handleInlineSectionEdit = (secIndex) => {
-  this.setState ({ sectionToEdit: secIndex, sectionTitle: ''})
-}
+    handleSaveSectionTitleEdit = (e, secIndex) => {
+      const { sections, sectionTitle } = this.state
+      sections[secIndex].title = sectionTitle
+      let updated = sections
+      console.log('sections[secIndex].title', sections[secIndex].title, 'sectionToEdit': null)
+      this.setState ({ sections: updated, 'sectionToEdit': null, })
+      // this.setState ({ })
+      e.preventDefault()
+    }
 
-handleSaveSectionTitleEdit = (e, secIndex) => {
-  const { sections, sectionTitle } = this.state
-  sections[secIndex].title = sectionTitle
-  let updated = sections
-  console.log('sections[secIndex].title', sections[secIndex].title, 'sectionToEdit': null)
-  this.setState ({ sections: updated, 'sectionToEdit': null, })
-  // this.setState ({ })
-  e.preventDefault()
-}
+    handleInlineLectureEdit = (secIndex, lecIndex) => {
+      this.setState ({ lectureToEdit: [secIndex, lecIndex], lectureTitle: '', activeSection: null})
+      console.log('lecture to edit', this.state.lectureToEdit);
+    }
 
-handleInlineLectureEdit = (secIndex, lecIndex) => {
-  this.setState ({ lectureToEdit: [secIndex, lecIndex], lectureTitle: '', activeSection: null})
-  console.log('lecture to edit', this.state.lectureToEdit);
-}
+    handleSaveLectureTitleEdit = (e, secIndex, lecIndex) => {
+      const { sections, lectureTitle} = this.state
+      sections[secIndex].content[lecIndex] = lectureTitle
+      let updated = sections
+      console.log('  sections[secIndex].content[lecIndex]', sections[secIndex].content[lecIndex])
+      this.setState ({ sections: updated, 'lectureToEdit': null, lectureTitle: '' })
 
-handleSaveLectureTitleEdit = (e, secIndex, lecIndex) => {
-  const { sections, lectureTitle} = this.state
-  sections[secIndex].content[lecIndex] = lectureTitle
-  let updated = sections
-  console.log('  sections[secIndex].content[lecIndex]', sections[secIndex].content[lecIndex])
-  this.setState ({ sections: updated, 'lectureToEdit': null, lectureTitle: '' })
+      e.preventDefault()
+    }
 
-  e.preventDefault()
-}
+    handleSecMoveUp = (e, secIndex) => {
+      if (secIndex === 0) {
+        return
+      }
+      const { sections } = this.state
+      let el = sections[secIndex]
+      sections.splice(secIndex, 1)
+      sections.splice(secIndex-1, 0, el)
+      this.setState ({ sections, activeSection: null, })
+      e.preventDefault()
+    }
 
-handleSecMoveUp = (e, secIndex) => {
-  if (secIndex === 0) {
-    return
-  }
-  const { sections } = this.state
-  let el = sections[secIndex]
-  sections.splice(secIndex, 1)
-  sections.splice(secIndex-1, 0, el)
-  this.setState ({ sections, activeSection: null, })
-  e.preventDefault()
-}
+    handleSecMoveDown  = (e, secIndex) => {
+      const { sections } = this.state
+      let el = sections[secIndex]
+      sections.splice(secIndex, 1)
+      sections.splice(secIndex+1, 0, el)
+      this.setState ({ sections, activeSection: null, })
+      e.preventDefault()
+    }
 
-handleSecMoveDown  = (e, secIndex) => {
-  const { sections } = this.state
-  let el = sections[secIndex]
-  sections.splice(secIndex, 1)
-  sections.splice(secIndex+1, 0, el)
-  this.setState ({ sections, activeSection: null, })
-  e.preventDefault()
-}
+    handleLecMoveUp = (e, secIndex, lecIndex) => {
+      if (lecIndex === 0) {
+        return
+      }
 
-handleLecMoveUp = (e, secIndex, lecIndex) => {
-  if (lecIndex === 0) {
-    return
-  }
+      const { sections } = this.state
+      let el = sections[secIndex].content[lecIndex]
+      sections[secIndex].content.splice(lecIndex, 1)
+      sections[secIndex].content.splice(lecIndex-1, 0, el)
+      this.setState ({ sections, activeSection: null, })
+      e.preventDefault()
+    }
 
-  const { sections } = this.state
-  let el = sections[secIndex].content[lecIndex]
-  sections[secIndex].content.splice(lecIndex, 1)
-  sections[secIndex].content.splice(lecIndex-1, 0, el)
-  this.setState ({ sections, activeSection: null, })
-  e.preventDefault()
-}
+    handleLecMoveDown  = (e, secIndex, lecIndex) => {
+      const { sections } = this.state
+      let el = sections[secIndex].content[lecIndex]
+      sections[secIndex].content.splice(lecIndex, 1)
+      sections[secIndex].content.splice(lecIndex+1, 0, el)
+      this.setState ({ sections, activeSection: null, })
+      e.preventDefault()
+    }
 
-handleLecMoveDown  = (e, secIndex, lecIndex) => {
-  const { sections } = this.state
-  let el = sections[secIndex].content[lecIndex]
-  sections[secIndex].content.splice(lecIndex, 1)
-  sections[secIndex].content.splice(lecIndex+1, 0, el)
-  this.setState ({ sections, activeSection: null, })
-  e.preventDefault()
-}
+    handleSecToggle = (e, secIndex) => {
+      const { sections } = this.state
+      console.log('sections' ,sections, 'secIndex', secIndex);
+      sections[secIndex].expanded = !sections[secIndex].expanded
+      this.setState ({sections})
+    }
 
-handleSecToggle = (e, secIndex) => {
-  const { sections } = this.state
-  console.log('sections' ,sections, 'secIndex', secIndex);
-  sections[secIndex].expanded = !sections[secIndex].expanded
-  this.setState ({sections})
-}
+    handleSectionTitleChange = (e) => this.setState ({ sectionTitle: e.target.value})
+    handleSectionTitleChangeCancel = () => this.setState ({ sectionToEdit: null})
 
-handleSectionTitleChange = (e) => this.setState ({ sectionTitle: e.target.value})
-handleSectionTitleChangeCancel = () => this.setState ({ sectionToEdit: null})
+    handleLectureTitleChange = (e) => this.setState ({ lectureTitle: e.target.value})
+    handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
 
-handleLectureTitleChange = (e) => this.setState ({ lectureTitle: e.target.value})
-handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
-
-
+    handleDiscardCancel = () => {}
+    handleDiscardChange = () => {
+      //here save course data to each edit field
+      console.log('discard');
+    }
   render() {
     const {activeItem, isLoading,
       course,
       courseId, title, subTitle, teacherName, teacherId, teacherPhoto,
-      changeSaved,
-      textbook, date, time, location,
+      titleToSave,
+      textbook, date, time, location, infoToSave,
       // curri,
       openCourse, password, isPublished,
-      features,
+      featureList, formForFeature,
       header, sub,
       images, confirmOpen, selectedImage, handleRemoveModalShow, handleRemoveConfirm, handleRemoveCancel,
       visible,
 
       // CURRI
-      sections, formForSection, sectionTitle, activeSection, lectureTitle, sectionToEdit, lectureToEdit, removeSectionConfirm
+      sections, formForSection, sectionTitle, activeSection, lectureTitle, sectionToEdit, lectureToEdit, removeSectionConfirm,
 
     } = this.state
     const {match} = this.props
@@ -655,7 +679,9 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
 
         {/* <Responsive {...Responsive.onlyComputer}> */}
 
-         <Segment basic loading={isLoading} style={style.C_EDIT_BODY}>
+         <Segment basic
+           loading={isLoading}
+           style={style.C_EDIT_BODY}>
 
             <Grid centered>
               <Grid.Row centered>
@@ -739,9 +765,9 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                             course={course}
                             title={title}
                             subTitle={subTitle}
-                            change={this.handleInputChange}
+                            change={this.handleTitleInputChange}
                             titleSubmit={this.onTitleSubmit}
-                            changeSaved={changeSaved}
+                            titleToSave={titleToSave}
                           /> }/>
                           <Route path={`${match.url}/info`} render={(props) => <CEditMeta
                             {...props}
@@ -752,20 +778,24 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                             date={date}
                             time={time}
                             location={location}
-                            change={this.handleInputChange}
+                            change={this.handleMetaInputChange}
                             submit={this.onInfoSubmit}
+                            infoToSave={infoToSave}
                           /> }/>
                           <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
                             {...props}
                             course={course}
                             courseId={courseId}
                             teacherId={teacherId}
-                            features={features}
+                            featureList={featureList}
                             header = {header}
                             sub = {sub}
-                            change={this.handleInputChange}
+                            change={this.handleFeaturesInputChange}
                             dismiss={this.handleFeatureDismiss}
                             addNewFeature={this.handleAddNewFeature}
+                            formForFeature={formForFeature}
+                            handleOpenAddFeatureForm={this.handleOpenAddFeatureForm}
+                            handleAddFeatureCancel={this.handleAddFeatureCancel}
                             submit={this.onFeaturesSubmit}
                           /> }/>
                           <Route path={`${match.url}/gallery`} render={(props) => <CEditGallery
@@ -780,8 +810,6 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                             removeModalShow={this.handleRemoveModalShow}
                             removeConfirm={this.handleRemoveConfirm}
                             removeCancel={this.handleRemoveCancel}
-                            // change={this.handleInputChange}
-                            // submit={this.onInfoSubmit}
                           /> }/>
 
                           <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
@@ -835,6 +863,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
             handleSectionTitleChange = {this.handleSectionTitleChange}
 
             onCurriSubmit={this.onCurriSubmit}
+            course={course}
 
                           />} />
                           <Route path={`${match.url}/settings`} render={() => <CEditSettings
@@ -842,7 +871,7 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                             teacherId={teacherId}
                             openCourse={openCourse}
                             password={password}
-                            change={this.handleInputChange}
+                            change={this.handleSettingsInputChange}
                             toggle={this.handleSettingsOpenOrClose}
                             submit={this.onSettingsSubmit}
                             remove={this.handleRemoveCourse}
@@ -850,12 +879,17 @@ handleLectureTitleChangeCancel = () => this.setState ({ lectureToEdit: null})
                           <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
 
                         </Switch>
-                        <Prompt
-                          when={!changeSaved}
+                        {/* <Confirm
+                           open={this.state.titleToSave}
+                           onCancel={this.handleDiscardCancel}
+                           onConfirm={this.handleDiscardChange}
+                         /> */}
+                        {/* <Prompt
+                          when={titleToSave}
                           message={location =>
-                            `Are you sure you want to leave ? Unsaved data will be lost`
+                            this.handleDiscardChange()
                           }
-                        />
+                        /> */}
                     </Grid.Column>
 
                   </Grid>

@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import { Form, Input, Button, Segment, Icon, Header, Divider, Label, Image, Grid, Message } from 'semantic-ui-react'
-import {db} from '../../firebase';
+import * as style from '../../style/inline'
 
-const CEditMetaBorder = {borderRadius: '0px'}
 const minHeight = { minHeight: '200px'}
 
 class CEditFeatures extends Component {
@@ -31,17 +30,41 @@ class CEditFeatures extends Component {
   }
 
   render() {
-    const {course, header, sub, features, submit} = this.props
+    const {course,
+      handleOpenAddFeatureForm,
+      addNewFeature,
+      handleAddFeatureCancel,
+      formForFeature,
+      header, sub, featureList, submit} = this.props
 
     const addFeatureIsInvalid = header === '' || sub === '';
 
-    let noFeature = features == undefined // true of false
-    console.log('features', features, 'course features', !!course && course.features);
+    let noFeature = featureList == undefined // true of false
+    // console.log('features', features, 'course features', !!course && course.features);
 
     let emptyObj = {key: {header: '1', sub:'1'}}
-    let isInvalid = noFeature || this.featuresEqual(!!features ? features : emptyObj, !!course ? course.features : emptyObj)
-    console.log('isinvalid test', noFeature, this.featuresEqual(!!features ? features : emptyObj, !!course ? course.features : emptyObj));
-    console.log('isinvalid', isInvalid);
+    let isInvalid = noFeature || this.featuresEqual(!!featureList ? featureList : emptyObj, !!course ? course.features : emptyObj)
+
+    let addFeature = formForFeature
+    ? <Segment style={style.C_EDIT_CURRI_SECTION}>
+        <Form onSubmit={addNewFeature}>
+            <Form.Input fluid label='Feature Title' placeholder='Feature Title'
+              value={header}
+              name='header'
+              onChange={this.props.change}
+            />
+
+            <Form.TextArea label='Feature Details' placeholder='Tell us more about your course feature...'
+              value={sub}
+              name='sub'
+              onChange={this.props.change}
+            />
+          <Button basic onClick={handleAddFeatureCancel}>Cancel</Button>
+          <Button disabled={addFeatureIsInvalid}>Add new feature</Button>
+
+        </Form>
+      </Segment>
+    : <Segment basic><Button fluid onClick={handleOpenAddFeatureForm}>Add Feature</Button></Segment>
 
     return (
       <React.Fragment>
@@ -52,26 +75,25 @@ class CEditFeatures extends Component {
           }
       </Header>
 
-      <Segment attached stacked style={CEditMetaBorder}>
+      <Segment attached stacked  style={style.C_EDIT_MENU_PADDING}>
         <Segment basic style={minHeight}>
           <Grid columns={2}>
-            {!!features && Object.keys(features).map(f =>
+            {!!featureList && Object.keys(featureList).map(f =>
               <Grid.Column key={f}>
                 <Message  onDismiss={() => this.props.dismiss(f)}>
                   <Message.Header>
-                    {features[f].header}
+                    {featureList[f].header}
                   </Message.Header>
                   <p>
-                    {features[f].sub}
+                    {featureList[f].sub}
                   </p>
                 </Message>
               </Grid.Column>
             )}
           </Grid>
         </Segment>
-        <Divider />
-        <Form onSubmit={this.props.addNewFeature}>
 
+        {/* <Form onSubmit={this.props.addNewFeature}>
             <Form.Input fluid label='Feature Title' placeholder='Feature Title'
               value={header}
               name='header'
@@ -84,7 +106,9 @@ class CEditFeatures extends Component {
               onChange={this.props.change}
             />
           <Form.Button disabled={addFeatureIsInvalid}>Add new feature</Form.Button>
-        </Form>
+        </Form> */}
+        {addFeature}
+
       </Segment>
     </React.Fragment>
     );
