@@ -58,6 +58,7 @@ class CourseEdit extends Component {
       sameFileNameSelectedAlready: false,
       galleryToSave: false,
       curriToSave: false,
+      coursePrivacy: '',
     };
 
   }
@@ -72,7 +73,7 @@ class CourseEdit extends Component {
 
   handleFeaturesInputChange = (event) => this.setState({[event.target.name]: event.target.value })
 
-  handleSettingsInputChange = (event) => this.setState({[event.target.name]: event.target.value, settingsToSave: true })
+  handleSettingsPasswordInputChange = (event) => this.setState({[event.target.name]: event.target.value, settingsToSave: true })
 
   onTitleSubmit = (e) => {
     console.log('title submit');
@@ -325,13 +326,26 @@ class CourseEdit extends Component {
     history.push({ pathname: `${match.url}/settings`})
   }
 
+  handleSettingsPrivacyChange = (e, {value}) => {
+    console.log(value)
+    if (value === 'public') {
+      this.setState ({ coursePrivacy : 'public' })
+    } else {
+      this.setState ({ coursePrivacy : 'private' })
+    }
+  }
+
   onSettingsSubmit = (event) => {
-      const {courseId, teacherId, openCourse, password } = this.state;
+      const {courseId, teacherId, coursePrivacy, password } = this.state;
       // console.log('on settings submit public', this.state.openCourse );
 
-      db.doUpdateCoursePrivacy(teacherId, courseId, openCourse, password)
+      db.doUpdateCoursePrivacy(teacherId, courseId, coursePrivacy, password)
         .then((res)=> {
-          console.log(' doUpdateCoursePrivacy', res);
+          if (coursePrivacy === 'public') {
+            this.setState ({ openCourse: 'public' })
+          } else {
+            this.setState ({ openCourse: 'private' })
+          }
         })
         .catch(error => {
           this.setState(byPropKey('error', error))
@@ -339,14 +353,14 @@ class CourseEdit extends Component {
         event.preventDefault();
   }
 
-  handleSettingsOpenOrClose = (btn) => {
-    const { openCourse } = this.state
-    if (btn === 1) {
-      this.setState({openCourse: true})
-    } else {
-      this.setState({openCourse: false})
-    }
-  }
+  // handleSettingsOpenOrClose = (btn) => {
+  //   const { openCourse } = this.state
+  //   if (btn === 1) {
+  //     this.setState({openCourse: true})
+  //   } else {
+  //     this.setState({openCourse: false})
+  //   }
+  // }
 
   handleRemoveCourse = () => {
 
@@ -417,59 +431,6 @@ class CourseEdit extends Component {
       notifications: this.state.notifications.filter(n => n.key !== count)
     })
   }
-
-  //life cycle
-  componentDidMount() {
-
-    const {isLoading } = this.state
-    const {match} = this.props
-    // console.log('did mount 1 ', 'beforeIsLoading')
-    this.setState({isLoading: !isLoading})
-
-    let courseId = match.params.cid
-    db.onceGetCourse(match.params.cid)
-      .then(snapshot => {
-        let course = snapshot.val()
-        let meta = course.metadata
-        let curri = course.curri
-        let featureList = course.features
-        let images = course.images ? course.images : {}
-
-        const {isLoading } = this.state
-        this.setState ({
-          courseId: courseId,
-          course: course,
-
-          title: meta.title,
-          subTitle: meta.subTitle,
-          teacherId: meta.tid,
-
-          teacherName: meta.tName,
-          teacherPhoto: meta.tProfileImg,
-
-          textbook: meta.textbook,
-          date: meta.date,
-          time: meta.time,
-          location: meta.location,
-          openCourse: meta.openCourse ? meta.openCourse : false,
-          password: meta.password ? meta.password : '',
-          isPublished: meta.isPublished,
-
-          isLoading: !isLoading,
-          featureList: featureList,
-          images: images,
-          sections: curri,
-          })
-
-      }).catch(error => {
-        this.setState(byPropKey('error', error));
-      });
-
-    }
-
-    componentWillUnmount(){
-      console.log('will un mount', 0);
-    }
 
     toggleVisibility = () => this.setState({ visible: !this.state.visible })
 
@@ -660,6 +621,57 @@ class CourseEdit extends Component {
       const {sameFileNameSelectedAlready} = this.state
       this.setState ({ sameFileNameSelectedAlready: !sameFileNameSelectedAlready})
     }
+    //life cycle
+    componentDidMount() {
+
+      const {isLoading } = this.state
+      const {match} = this.props
+      // console.log('did mount 1 ', 'beforeIsLoading')
+      this.setState({isLoading: !isLoading})
+
+      let courseId = match.params.cid
+      db.onceGetCourse(match.params.cid)
+        .then(snapshot => {
+          let course = snapshot.val()
+          let meta = course.metadata
+          let curri = course.curri
+          let featureList = course.features
+          let images = course.images ? course.images : {}
+
+          const {isLoading } = this.state
+          this.setState ({
+            courseId: courseId,
+            course: course,
+
+            title: meta.title,
+            subTitle: meta.subTitle,
+            teacherId: meta.tid,
+
+            teacherName: meta.tName,
+            teacherPhoto: meta.tProfileImg,
+
+            textbook: meta.textbook,
+            date: meta.date,
+            time: meta.time,
+            location: meta.location,
+            openCourse: meta.openCourse ? meta.openCourse : false,
+            password: meta.password ? meta.password : '',
+            isPublished: meta.isPublished,
+
+            isLoading: !isLoading,
+            featureList: featureList,
+            images: images,
+            sections: curri,
+            })
+
+        }).catch(error => {
+          this.setState(byPropKey('error', error));
+        });
+      }
+
+      componentWillUnmount(){
+        console.log('will un mount', 0);
+      }
 
   render() {
     const {activeItem, isLoading,
@@ -678,7 +690,7 @@ class CourseEdit extends Component {
       // CURRI
       sections, formForSection, sectionTitle, activeSection, lectureTitle, sectionToEdit, lectureToEdit, removeSectionConfirm, curriToSave,
       //settings
-      openCourse, password, isPublished, settingsToSave
+      openCourse, coursePrivacy, password, isPublished, settingsToSave
 
     } = this.state
     const {match} = this.props
@@ -884,12 +896,15 @@ class CourseEdit extends Component {
 
                           />} />
                           <Route path={`${match.url}/settings`} render={() => <CEditSettings
+                            course={course}
                             courseId={courseId}
                             teacherId={teacherId}
                             openCourse={openCourse}
                             password={password}
-                            change={this.handleSettingsInputChange}
-                            toggle={this.handleSettingsOpenOrClose}
+                            change={this.handleSettingsPasswordInputChange}
+                            // toggle={this.handleSettingsOpenOrClose}
+                            coursePrivacy={coursePrivacy}
+                            privacyChange={this.handleSettingsPrivacyChange}
                             submit={this.onSettingsSubmit}
                             remove={this.handleRemoveCourse}
                           />} />
