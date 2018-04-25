@@ -39,7 +39,7 @@ class NewQ extends Component {
             <Form.Field>
               <TextArea placeholder='Tell us more' name="qText" onChange={change} value={qText}/>
             </Form.Field>
-            <Button onClick={this.handleCancel} disabled={isInvalid}>Cancel</Button>
+            <Button onClick={cancel} >Cancel</Button>
             <Button type='submit' disabled={isInvalid}>Submit</Button>
             </Form>
 

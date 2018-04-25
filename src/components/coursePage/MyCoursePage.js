@@ -1,33 +1,35 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 
+import {Link, withRouter, Switch, Redirect, Route} from 'react-router-dom';
+import {db} from '../../firebase';
+import withAuthorization from '../../HOC/withAuthorization';
+
 import CourseMeta from './CourseMeta'
 import CourseFeatures from './CourseFeatures'
 import CourseGallery from './CourseGallery'
 import CourseCurri from './CourseCurri'
-import CourseTeacherSection from './CourseTeacherSection'
-import CourseOpenQ from './CourseOpenQ'
+import CourseAboutTeacher from './CourseAboutTeacher'
 
+//BORROWED from TEACHER
 import Questions from '../teacher/Questions'
 
+//BORROWED from QUE
 import Question from '../questionPage/QuestionPage';
-
+import QuestionTable from '../questions/QuestionTable'
 import NewQ from '../questions/NewQ' 
 
-import { Breadcrumb, Grid, Segment, Rail, Header, Sticky, Menu, Container, Visibility, Image, Table, Rating, Button, Item, Modal, Form, Input, Icon, Responsive } from 'semantic-ui-react'
+import { Grid, Segment, Header, Menu, Container, Visibility, Image, Rating, Button, Item, Icon, Responsive } from 'semantic-ui-react'
+
 import SectionContainer from '../navbar/SectionContainer'
-
 import SectionContainer_M from '../navbar/SectionContainer_M'
-
-import QuestionTable from '../questions/QuestionTable'
 
 import profile from '../../assets/profile-lg.png'
 
 import * as style from '../../style/inline';
 import * as routes from '../../constants/routes';
 
-import {Link, withRouter, Switch, Redirect, Route} from 'react-router-dom';
-import {db} from '../../firebase';
+
 
 const menuStyle = {
   border: 'none',
@@ -58,14 +60,13 @@ class MyCoursePage extends Component {
       subTitle: '',
       menuFixed: false,
       openCourse: false,
-      modalOpen: false,
+      // modalOpen: false,
       registered: false,
 
       questions: '',
       isLoading: false,
       lastPage: false,
     }
-
   }
 
   stickTopMenu = () => this.setState({ menuFixed: true })
@@ -74,17 +75,19 @@ class MyCoursePage extends Component {
   componentDidMount() {
     this.handleGetCourseWithTitle()
 
-    const {authUser} = this.context
-    if (authUser) {
-      console.log('My course page authUser', authUser);
-      db.onceGetUser(authUser.uid)
-        .then(res => {
-          this.setState ({ user: res.val(), uid: authUser.uid })
-        })
-        .catch(error => {
-          this.setState({[error]: error});
-        });
-    }
+    // const {authUser} = this.context
+    // const { user, uid } = this.props
+    // if (user) {
+    //   this.setState ({ user: user, uid: uid})
+      // console.log('My course page authUser', authUser);
+      // db.onceGetUser(uid)
+      //   .then(res => {
+      //     this.setState ({ user: res.val(), uid: authUser.uid })
+      //   })
+      //   .catch(error => {
+      //     this.setState({[error]: error});
+      //   });
+    // }
   }
 
   handleGetCourseWithTitle() {
@@ -116,7 +119,7 @@ class MyCoursePage extends Component {
             attendee: course.attendee,
             features: course.features,
             images: course.images,
-            curri: course.curri,
+            sections: course.curri,
             qTitle: '',
             qText: '',
 
@@ -138,7 +141,7 @@ class MyCoursePage extends Component {
           let q = data.val()
           fetchedItem += 1
           q['qid'] = data.key
-          // // console.log('q', q);
+          console.log('fetchedItem', fetchedItem);
           qList.unshift(q)
 
           if (fetchedItem >= 5) {
@@ -154,51 +157,12 @@ class MyCoursePage extends Component {
       });
   }
 
-  handleMore = (e) => {
-    console.log('load more clicked');
-    e.preventDefault()
-    this.setState ({isLoading: true })
-    console.log('isloading 1 handle more ', this.state.isLoading);
-    const {tid, cid, questions } = this.state
-
-    let leng = questions.length
-    let lastElmQid = questions[leng -1].qid
-    let fetchedItem = 1
-    // console.log('leng', leng, 'lastElmQid', lastElmQid);
-    let paginated = db.doFetchNextQuestions(tid, cid, lastElmQid, 5)
-    paginated.on('child_added', (data) => {
-      let q = data.val()
-        fetchedItem += 1
-
-        console.log('fetchedItem', fetchedItem);
-        if(lastElmQid === data.key) {
-          return
-        }
-        console.log();
-
-        q['qid'] = data.key
-        console.log('p', data.val());
-
-        questions.splice(leng, 0, q)
-
-        if (fetchedItem >= 5) {
-          this.setState ({ questions: questions, isLoading: false, lastPage: false })
-        } else {
-          this.setState ({ questions: questions, isLoading: false, lastPage: true })
-        }
-
-        console.log('handle more  isloading 2 ', this.state.isLoading, 'lastpage', this.state.lastPage);
-    })
-  }
-
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   handleNavToTeacher = () => {
     const {tName, cTitle,} = this.props.match.params
     this.props.history.push({pathname: '/' + 'teacher' + '/' + tName })
   }
-
-  //navigation  courses, questions, new question
 
   handleQuestionClick = (qid) => {
     const { questions } = this.state
@@ -221,16 +185,17 @@ class MyCoursePage extends Component {
   }
 
   // new question methods
-  handleQuestionChange = (e, { value }) => {
+  handleQuestionInputChange = (e, { value }) => {
     this.setState({[e.target.name]: e.target.value})
     e.preventDefault()
   }
 
   handleQuestionSubmit = (event) => {
-
-    const {tid, cid, qTitle, qText, uid, user,} = this.state;
-    console.log('handleQuestionSubmit', tid, cid, qTitle, qText, user);
-
+    event.preventDefault();
+    const {tid, cid, qTitle, qText} = this.state;
+    const { uid, user } = this.props
+    console.log('handleQuestionSubmit', tid, cid, qTitle, qText);
+    console.log('this.props.user', this.props.user)
     let date = new Date();
     let createdAt = Number(date)
 
@@ -243,19 +208,18 @@ class MyCoursePage extends Component {
       .catch(error => {
         this.setState(byPropKey('error', error))
       })
-
-    event.preventDefault();
   }
 
   handleNewQCancel = (e) => {
     e.preventDefault()
     console.log('handle cancel confirm');
+    this.props.history.goBack()
   }
 
-  handleCourseSelect = (e, {value}) => {
-    this.setState({cid: value})
-    e.preventDefault()
-  }
+  // handleCourseSelect = (e, {value}) => {
+  //   this.setState({cid: value})
+  //   e.preventDefault()
+  // }
 
   handleSearchQueryChange =(value) => {
 
@@ -312,6 +276,41 @@ class MyCoursePage extends Component {
     })
   }
 
+  handleFetchQuestionsMore = (e) => {
+    e.preventDefault()
+    this.setState ({isLoading: true })
+    // console.log('isloading 1 handle more ', this.state.isLoading);
+    const {tid, cid, questions } = this.state
+
+    let leng = questions.length
+    let lastElmQid = questions[leng -1].qid // 1. check the last q id of previous set
+    let fetchedItem = 1
+
+    // 2. fetch another 5 including the last qid
+    let paginated = db.doFetchNextQuestions(tid, cid, lastElmQid, 5)
+    paginated.on('child_added', (data) => {
+      let q = data.val()
+        fetchedItem += 1 // 3. increase this num to see if 5 items get fetched or fetched fewer than 5
+        console.log('data 1', data.val());
+        console.log('fetchedItem', fetchedItem);
+        if(lastElmQid === data.key) { //4. if last item was the last of the questions list, then returns
+          return
+        }
+
+        q['qid'] = data.key
+        console.log('p', data.val());
+
+        questions.splice(leng, 0, q) // insert the question at the end of the previous data set
+
+        if (fetchedItem >= 5 ) {
+          this.setState ({ questions: questions, isLoading: false, lastPage: false })
+        } else {
+          this.setState ({ questions: questions, isLoading: false, lastPage: true })
+        }
+
+        console.log('handle more  isloading 2 ', this.state.isLoading, 'lastpage', this.state.lastPage);
+    })
+  }
 
   render() {
 
@@ -321,13 +320,21 @@ class MyCoursePage extends Component {
     let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
     let teacherName = tName ? tName : 'Teacher'
 
-    const { course, cid, tid, subTitle, openCourse, coursePass, attendee, modalOpen, tProfileImg, features, images, activeItem, questions, qTitle, qText, isLoading, lastPage } = this.state
-    console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
+    const {
+      course, cid, tid, subTitle, openCourse, coursePass, tProfileImg,
+      activeItem,
+      features, images, sections, attendee,
+      questions, qTitle, qText,
+      isLoading, lastPage,
+      user } = this.state
+      console.log('state user', user);
+    // console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
+
     let teacherProfile = tProfileImg ? tProfileImg : profile
-
     let meta = course ? course.metadata : null
-    const {match} = this.props
 
+    const {match} = this.props
+    console.log('my course page ', this.props);
     return (
       <Grid >
           <Grid.Column>
@@ -364,13 +371,13 @@ class MyCoursePage extends Component {
                        as={Link} to={`${match.url}/curri`}
                        style={style.DASHBOARD_MENU_ITEM}
                      />
-                     <Menu.Item
+                     {/* <Menu.Item
                        name='announcement'
                        active={activeItem === 'announcement'}
                        onClick={this.handleItemClick}
                        as={Link} to={`${match.url}/announcement`}
                        style={style.DASHBOARD_MENU_ITEM}
-                     />
+                     /> */}
                      <Menu.Item
                        name='info'
                        active={activeItem === 'info'}
@@ -402,13 +409,13 @@ class MyCoursePage extends Component {
                       as={Link} to={`${match.url}/curri`}
                       style={style.DASHBOARD_MENU_ITEM}
                     />
-                    <Menu.Item
+                    {/* <Menu.Item
                       name='announcement'
                       active={activeItem === 'announcement'}
                       onClick={this.handleItemClick}
                       as={Link} to={`${match.url}/announcement`}
                       style={style.DASHBOARD_MENU_ITEM}
-                    />
+                    /> */}
                     <Menu.Item
                       name='info'
                       active={activeItem === 'info'}
@@ -437,14 +444,14 @@ class MyCoursePage extends Component {
                           queClick={this.handleQuestionClick}
                           searchQueryChange={this.handleSearchQueryChange}
                           isLoading={isLoading}
-                          loadMore={this.handleMore}
+                          loadMore={this.handleFetchQuestionsMore}
                           lastPage={lastPage}
                         />}
 
                          />} />
                       <Route path={`${match.url}/curri`} render = {() =>
                         <CourseCurri
-                          // curri={renderedHtml}
+                          sections={sections}
                          />} />
                        <Route path={`${match.url}/info`} render = {() =>
                          <CourseMeta
@@ -459,7 +466,7 @@ class MyCoursePage extends Component {
                           qText={qText}
                           submit={this.handleQuestionSubmit}
                           cancel={this.handleNewQCancel}
-                          change={this.handleQuestionChange}
+                          change={this.handleQuestionInputChange}
                           // chooseCourse={this.handleCourseSelect}
                         />} />
                       />
@@ -490,14 +497,14 @@ class MyCoursePage extends Component {
                         queClick={this.handleQuestionClick}
                         searchQueryChange={this.handleSearchQueryChange}
                         isLoading={isLoading}
-                        loadMore={this.handleMore}
+                        loadMore={this.handleFetchQuestionsMore}
                         lastPage={lastPage}
                       />}
 
                        />} />
                     <Route path={`${match.url}/curri`} render = {() =>
                       <CourseCurri
-                        // curri={renderedHtml}
+                        sections={sections}
                        />} />
                      <Route path={`${match.url}/info`} render = {() =>
                        <CourseMeta
@@ -512,7 +519,7 @@ class MyCoursePage extends Component {
                         qText={qText}
                         submit={this.handleQuestionSubmit}
                         cancel={this.handleNewQCancel}
-                        change={this.handleQuestionChange}
+                        change={this.handleQuestionInputChange}
                         // chooseCourse={this.handleCourseSelect}
                       />} />
 
@@ -542,4 +549,6 @@ MyCoursePage.contextTypes ={
   authUser: PropTypes.object,
 }
 
-export default withRouter(MyCoursePage);
+const authCondition = (authUser) => !!authUser;
+
+export default withAuthorization(authCondition)(MyCoursePage);

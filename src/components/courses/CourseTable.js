@@ -12,7 +12,7 @@ class CourseTable extends Component {
   render() {
 
     const {cTeaching, tName, click,} = this.props
-    console.log('course table render 1 ', cTeaching)
+    // console.log('course table render 1 ', cTeaching)
 
     return (
       <div>

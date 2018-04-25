@@ -8,13 +8,13 @@ const qPanelQuestionTablePadding = {paddingTop: '0px', 'paddingLeft': '0px'}
 class QuestionTable extends Component {
 
   handleQueClick = (qid) => {
-    console.log('q table',qid);
+    // console.log('q table',qid);
     this.props.click(qid)
   }
 
   render() {
     const {questions, loadMore, isLoading, lastPage} = this.props
-    console.log('q table lastPage', lastPage);
+    // console.log('q table lastPage', lastPage);
     return (
       <div>
         <Table unstackable style={{marginTop: '1rem'}}>
