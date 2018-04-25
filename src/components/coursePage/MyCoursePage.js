@@ -74,20 +74,6 @@ class MyCoursePage extends Component {
 
   componentDidMount() {
     this.handleGetCourseWithTitle()
-
-    // const {authUser} = this.context
-    // const { user, uid } = this.props
-    // if (user) {
-    //   this.setState ({ user: user, uid: uid})
-      // console.log('My course page authUser', authUser);
-      // db.onceGetUser(uid)
-      //   .then(res => {
-      //     this.setState ({ user: res.val(), uid: authUser.uid })
-      //   })
-      //   .catch(error => {
-      //     this.setState({[error]: error});
-      //   });
-    // }
   }
 
   handleGetCourseWithTitle() {
@@ -108,6 +94,7 @@ class MyCoursePage extends Component {
 
           this.setState ({
             tid: course.metadata.tid,
+            title: course.metadata.title,
             subTitle: course.metadata.subTitle,
             tName: course.metadata.tName,
             tEmail: course.metadata.tEmail,
@@ -129,24 +116,30 @@ class MyCoursePage extends Component {
           console.log('find a way to display course titles that have dash in it');
         }
 
-      }).then(res => {
+      })
+      .then(res => {
         const {tid, cid} = this.state
-        console.log('tid, cid', tid, cid);
+        console.log('then 2 res tid, cid', tid, cid);
 
         let qList =[]
         let fetchedItem = 1
+
         let questions = db.doFetchRecentQuestions(tid, cid, 5)
+
         questions.on('child_added', (data) => {
-          // console.log('child added data', data.key, data.val(), data.val()["qid"]= data.key);
+
           let q = data.val()
           fetchedItem += 1
           q['qid'] = data.key
-          console.log('fetchedItem', fetchedItem);
+          // console.log('at initial fetchedItem', fetchedItem);
           qList.unshift(q)
+          // console.log('is this called ??? <<<<<<<');
 
-          if (fetchedItem >= 5) {
+          if (fetchedItem > 5 ) {
+            // console.log('initial fetchedItem', fetchedItem);
             this.setState ({ questions: qList, isLoading: false, lastPage: false })
           } else {
+            // console.log('initial fetchedItem', fetchedItem);
             this.setState ({ questions: qList, isLoading: false, lastPage: true })
           }
 
@@ -201,7 +194,7 @@ class MyCoursePage extends Component {
 
     db.doSaveNewQ(tid, cid, uid, user.username, qTitle, qText, createdAt, 'img')
       .then(res => {
-        console.log('res', res)
+        // console.log('res', res)
         this.setState ({ qTitle: '', qText: ''})
         this.props.history.replace(`${this.props.match.url}/questions`)
         })
@@ -216,10 +209,22 @@ class MyCoursePage extends Component {
     this.props.history.goBack()
   }
 
-  // handleCourseSelect = (e, {value}) => {
-  //   this.setState({cid: value})
-  //   e.preventDefault()
-  // }
+  handleCourseSelect = (e, {value}) => {
+    this.setState({cid: value})
+    e.preventDefault()
+  }
+
+  // 1. at questions, fetch from first to last -- good
+  // 2. search for a specific subject then load more --
+  //   need to distingushi normal load more and search load more
+  //
+  // 3. ask a new question and combback to questions -- don't know the last item, set loadmore to true
+  //
+  // 1. add a question count
+  // 2. to increase, fetch the last question with child added
+  //
+  // 3. add initial question that has a count
+
 
   handleSearchQueryChange =(value) => {
 
@@ -243,7 +248,7 @@ class MyCoursePage extends Component {
   }
 
   saveFechedQuestionsToState = (qList) => {
-    console.log('save fetched q to state qlist', qList);
+    // console.log('save fetched q to state qlist', qList);
     let questions = []
     Object.keys(qList).map(key => {
       let askedBy = qList[key].askedById
@@ -291,9 +296,20 @@ class MyCoursePage extends Component {
     paginated.on('child_added', (data) => {
       let q = data.val()
         fetchedItem += 1 // 3. increase this num to see if 5 items get fetched or fetched fewer than 5
-        console.log('data 1', data.val());
-        console.log('fetchedItem', fetchedItem);
-        if(lastElmQid === data.key) { //4. if last item was the last of the questions list, then returns
+        // console.log('data 1', data.val());
+        // console.log('at load more, fetchedItem', fetchedItem);
+
+
+        if (fetchedItem >= 6 ) {
+          // console.log('loadmore fetchedItem over six', fetchedItem);
+          this.setState ({ questions: questions, isLoading: false, lastPage: false })
+        } else {
+          // console.log('loadmore fetchedItem fewer than 6', fetchedItem);
+          this.setState ({ questions: questions, isLoading: false, lastPage: true })
+        }
+
+        if(lastElmQid === data.key) {
+          //4. if last item was the last of the questions list, then returns
           return
         }
 
@@ -301,40 +317,44 @@ class MyCoursePage extends Component {
         console.log('p', data.val());
 
         questions.splice(leng, 0, q) // insert the question at the end of the previous data set
+        //
+        // if (fetchedItem >= 6 ) {
+        //   console.log('fetchedItem', fetchedItem, fetchedItem >= 6);
+        //   console.log('fetchedItem >= 6');
+        //   this.setState ({ questions: questions, isLoading: false, lastPage: false })
+        // } else {
+        //   console.log('fetchedItem', fetchedItem, fetchedItem >= 6);
+        //   console.log('fetchedItem <<<<<< 6');
+        //   this.setState ({ questions: questions, isLoading: false, lastPage: true })
+        // }
 
-        if (fetchedItem >= 5 ) {
-          this.setState ({ questions: questions, isLoading: false, lastPage: false })
-        } else {
-          this.setState ({ questions: questions, isLoading: false, lastPage: true })
-        }
-
-        console.log('handle more  isloading 2 ', this.state.isLoading, 'lastpage', this.state.lastPage);
+        // console.log('handle more  isloading 2 ', this.state.isLoading, 'lastpage', this.state.lastPage);
     })
   }
 
   render() {
 
     // console.log('render');
-    const {tName, cTitle,} = this.props.match.params
+    // const {tName, cTitle,} = this.props.match.params
+    // let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
 
-    let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
-    let teacherName = tName ? tName : 'Teacher'
 
     const {
-      course, cid, tid, subTitle, openCourse, coursePass, tProfileImg,
+      course, cid, tid, tName, title, subTitle, openCourse, coursePass, tProfileImg,
       activeItem,
       features, images, sections, attendee,
       questions, qTitle, qText,
       isLoading, lastPage,
       user } = this.state
-      console.log('state user', user);
-    // console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
+      // console.log('state user', user);
+      // console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
 
+    let teacherName = tName ? tName : 'Teacher'
     let teacherProfile = tProfileImg ? tProfileImg : profile
     let meta = course ? course.metadata : null
 
     const {match} = this.props
-    console.log('my course page ', this.props);
+    // console.log('my course page ', this.props);
     return (
       <Grid >
           <Grid.Column>
@@ -343,12 +363,13 @@ class MyCoursePage extends Component {
                 <Header as='h1' inverted>
                    <Image circular src={profile}/>
                    <Header.Content>
-                     {cTitle}
+                     {title}
                      <Header.Subheader>
-                       course sub title
+                       {subTitle !== undefined || subTitle !== '' ? subTitle : '' }
                      </Header.Subheader>
                      <Header.Subheader onClick={this.handleNavToTeacher}>
-                       {teacherName} <Rating icon='star' defaultRating={5} maxRating={5} disabled/>
+                       {teacherName}
+                       {/* <Rating icon='star' defaultRating={5} maxRating={5} disabled/> */}
                      </Header.Subheader>
 
                    </Header.Content>
@@ -390,7 +411,7 @@ class MyCoursePage extends Component {
               <SectionContainer_M>
                 <Header as='h3'
                   style={style.DASHBOARD_HEADER_M}
-                  >{cTitle} </Header>
+                  >{title} </Header>
 
                 <Menu size='small' secondary pointing inverted
                   style={style.DASHBOARD_MENU_M}
