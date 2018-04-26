@@ -77,9 +77,8 @@ const CourseTeaching = ({click, courses, loading}) => {
     </Responsive>
 
     </Segment>
-    : <Dimmer active >
-      <Loader size='massive' >Loading</Loader>
-    </Dimmer>
+    : <Loader active size='massive' inline='centered'>Loading</Loader>
+
 
   return (
       <div>

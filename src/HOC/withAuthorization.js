@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
+import AuthUserContext from './AuthUserContext'; // error - createContext is not a function
 
 import {firebase, db} from '../firebase';
 import * as routes from '../constants/routes';
@@ -46,3 +47,68 @@ const withAuthorization = (authCondition) => (Component) => {
 }
 
 export default withAuthorization;
+
+// import AuthUserContext from './AuthUserContext';
+
+
+// render() {
+//      const { authUser } = this.state;
+//
+//      return (
+//        <AuthUserContext.Provider value={authUser}>
+//          <Component />
+//        </AuthUserContext.Provider>
+//      );
+//    }
+
+
+// const AccountPage = () =>
+//   <AuthUserContext.Consumer>
+//     {authUser =>
+//       <div>
+//         <h1>Account: {authUser.email}</h1>
+//         <PasswordForgetForm />
+//         <PasswordChangeForm />
+//       </div>
+//     }
+//   </AuthUserContext.Consumer>
+
+// const AdminPage = () =>
+//   <AuthUserContext.Consumer>
+//     {authUser =>
+//       <div>
+//         <h1>Admin</h1>
+//         <p>Restricted area! Only users with the admin rule are authorized.</p>
+//       </div>
+//     }
+//   </AuthUserContext.Consumer>
+//
+// const authCondition = (authUser) => !!authUser && authUser.role === 'ADMIN';
+//
+// export default withAuthorization(authCondition)(AdminPage);
+
+// const withAuthorization = (authCondition) => (Component) => {
+//
+//   class WithAuthorization extends React.Component {
+//
+//     componentDidMount(){
+//       firebase.auth.onAuthStateChanged(authUser => {
+//         if(!authCondition(authUser)) {
+//           this.props.history.push(routes.SIGN_IN);
+//         }
+//       });
+//     }
+//
+//     render() {
+//       return this.context.authUser ? <Component /> : null;
+//     }
+//   }
+//
+//   WithAuthorization.contextTypes = {
+//     authUser: PropTypes.object,
+//   }
+//
+//   return withRouter(WithAuthorization);
+// }
+//
+// export default withAuthorization;

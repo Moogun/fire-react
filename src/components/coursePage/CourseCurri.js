@@ -6,9 +6,9 @@ const CourseCurri = ({sections, handleSecToggle}) => {
 
   console.log('c edit curri', sections);
   let sectionList = !!sections && sections.map((s, secIndex) =>
-    <React.Fragment>
+    <React.Fragment key={secIndex}>
       <Segment.Group data-id={secIndex} key={secIndex}>
-        <Segment>
+        <Segment textAlign='left'>
           <Header as='h6'>
             {s.content == undefined ? <Icon  color='grey' name='circle thin' />
             : s.expanded === false ? <Icon  color='teal' name='plus' onClick={(e) => handleSecToggle(e, secIndex)}/>
@@ -22,8 +22,9 @@ const CourseCurri = ({sections, handleSecToggle}) => {
             </Header.Content>
           </Header>
       </Segment>
+
       {!!s.content && s.expanded && s.content.map((c, lecIndex) =>
-        <Segment key={lecIndex}> <Icon color='teal' name='circle' /> {lecIndex + 1}. {c} </Segment>)}
+        <Segment textAlign='left' key={lecIndex}> <Icon color='teal' name='circle' /> {lecIndex + 1}. {c} </Segment>)}
 
       </Segment.Group>
     </React.Fragment>

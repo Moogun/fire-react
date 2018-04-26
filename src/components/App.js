@@ -26,7 +26,7 @@ import CEdit from './courseManage/CEdit';
 // import Create from './courseManage/Create';
 import Create from './courseManage/CreateC';
 import CoursePage from './coursePage/CoursePage';
-import MyCoursePage from './coursePage/MyCoursePage';
+import MyCoursePage from './coursePageMy/MyCoursePage';
 
 
 import MyCourses from './myCourses/MyCourses';

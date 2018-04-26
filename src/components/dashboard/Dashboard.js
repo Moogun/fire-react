@@ -3,7 +3,8 @@ import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import * as routes from '../../constants/routes';
 import * as style from '../../style/inline';
-import withAuthorization from '../../HOC/withAuthorization';
+// import withAuthorization from '../../HOC/withAuthorization';
+import withAuthorizationDashboard from '../../HOC/withAuthorizationDashboard';
 
 import CourseCards from '../courses/CourseCards'
 import CourseTeaching from './CourseTeaching'
@@ -38,7 +39,7 @@ class Dashboard extends Component {
 
   handleDidChooseCourse = (e, {value}) => {
     // console.log('value', value);
-    const { courseTeaching } = this.state
+    const { courseTeaching } = this.props
     let selectedCourseTitle = courseTeaching[value].metadata.title
     this.setState({cid: value, selectedCourseTitle: selectedCourseTitle})
     // console.log('selected course', selectedCourse);
@@ -59,42 +60,45 @@ class Dashboard extends Component {
   //   })
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps', nextProps);
+  }
+
   componentDidMount() {
 
-     const {authUser} = this.context
-     const {isLoading} = this.state
-
-     if (authUser) {
-        console.log('dmt isLoading 2', isLoading);
-
-       db.doFetchTeaching(authUser.uid)
-        .then(snap => {
-
-          console.log('dmt isLoading 3', isLoading);
-          let teaching = snap.val()
-          console.log('dashboard teaching', teaching);
-          let selectOption=[{key: 'default', text: 'All', value: 'default'}]
-          let item;
-            // console.log('dashboard dmt', 3 );
-            Object.keys(teaching).map(key => {
-              item={key: key, text: teaching[key].metadata.title, value: key}
-              selectOption.push(item)
-            })
-          // const {isLoading } = this.state
-          console.log('dmt isLoading 4', isLoading);
-
-          this.setState( () => ({
-            courseTeaching: teaching,
-            'selectOption': selectOption,
-            // isLoading: !isLoading
-          }))
-          console.log('dashboard dmt 4', this.state.isLoading );
-        })
-        .catch(error => {
-          this.setState({[error]: error});
-        });
-        console.log('dashboard dmt', 5 );
-     }
+     // const {authUser} = this.context
+     // const {isLoading} = this.state
+     //
+     // if (authUser) {
+     //    // console.log('dmt isLoading 2', isLoading);
+     //
+     //   db.doFetchTeaching(authUser.uid)
+     //    .then(snap => {
+     //
+     //      // console.log('dmt isLoading 3', isLoading);
+     //      let teaching = snap.val()
+     //      // console.log('dashboard teaching', teaching);
+     //      let selectOption=[{key: 'default', text: 'All', value: 'default'}]
+     //      let item;
+     //        // console.log('dashboard dmt', 3 );
+     //        Object.keys(teaching).map(key => {
+     //          item={key: key, text: teaching[key].metadata.title, value: key}
+     //          selectOption.push(item)
+     //        })
+     //      // const {isLoading } = this.state
+     //      // console.log('dmt isLoading 4', isLoading);
+     //
+     //      this.setState( () => ({
+     //        courseTeaching: teaching,
+     //        'selectOption': selectOption,
+     //      }))
+     //      // console.log('dashboard dmt 4', this.state.isLoading );
+     //    })
+     //    .catch(error => {
+     //      this.setState({[error]: error});
+     //    });
+     //    // console.log('dashboard dmt', 5 );
+     // }
   }
 
   componentWillUnmount(){
@@ -103,11 +107,11 @@ class Dashboard extends Component {
 
   render() {
     const {match} = this.props
-    const {activeItem, error, user, courseTeaching, selectOption, questions, cid, isLoading, selectedCourseTitle} = this.state
-
-    // console.log('rdr dashboard props', this.props);
-    // console.log('rdr dashboard courseTeaching', courseTeaching);
-    const { } = this.props
+    const {activeItem, error,
+      // user, courseTeaching, selectOption,
+      questions, cid, isLoading, selectedCourseTitle} = this.state
+    const {courseTeaching, selectOption, user, uid} = this.props
+    console.log('rdr dashboard props', user, uid);
       return (
 
         <Grid>
@@ -198,9 +202,6 @@ class Dashboard extends Component {
                                <Route path={routes.DASHBOARD_AN} render = {() => <Announcement
                                 />} />
                             </Switch>
-                            {/* <Dimmer active={isLoading} >
-                              <Loader size='massive' >Loading</Loader>
-                            </Dimmer> */}
                         </Grid.Column>
                     </Grid>
 
@@ -217,4 +218,4 @@ Dashboard.contextTypes ={
 
 const authCondition = (authUser) => !!authUser;
 
-export default withAuthorization(authCondition)(Dashboard);
+export default withAuthorizationDashboard(authCondition)(Dashboard);

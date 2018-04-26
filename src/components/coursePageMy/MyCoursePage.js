@@ -5,11 +5,9 @@ import {Link, withRouter, Switch, Redirect, Route} from 'react-router-dom';
 import {db} from '../../firebase';
 import withAuthorization from '../../HOC/withAuthorization';
 
-import CourseMeta from './CourseMeta'
-import CourseFeatures from './CourseFeatures'
-import CourseGallery from './CourseGallery'
-import CourseCurri from './CourseCurri'
-import CourseAboutTeacher from './CourseAboutTeacher'
+import InfoBundle from './InfoBundle'
+import CourseCurri from '../coursePage/CourseCurri'
+import CourseAboutTeacher from '../coursePage/CourseAboutTeacher'
 
 //BORROWED from TEACHER
 import TeacherQuestions from '../teacher/Questions'
@@ -28,7 +26,6 @@ import profile from '../../assets/profile-lg.png'
 
 import * as style from '../../style/inline';
 import * as routes from '../../constants/routes';
-
 
 
 const menuStyle = {
@@ -106,7 +103,7 @@ class MyCoursePage extends Component {
             attendee: course.attendee,
             features: course.features,
             images: course.images,
-            sections: course.curri,
+            curri: course.curri,
             qTitle: '',
             qText: '',
 
@@ -346,6 +343,14 @@ class MyCoursePage extends Component {
     })
   }
 
+  handleSecToggle = (e, secIndex) => {
+    const { curri } = this.state
+    console.log('sections' ,curri, 'secIndex', curri);
+    curri[secIndex].expanded = !curri[secIndex].expanded
+    this.setState ({curri})
+  }
+
+
   render() {
 
     // console.log('render');
@@ -356,7 +361,7 @@ class MyCoursePage extends Component {
     const {
       course, cid, tid, tName, title, subTitle, openCourse, coursePass, tProfileImg,
       activeItem,
-      features, images, sections, attendee,
+      features, images, curri, attendee,
       questions, qTitle, qText,
       isLoading, lastPage,
       user } = this.state
@@ -486,11 +491,14 @@ class MyCoursePage extends Component {
                          />} />
                       <Route path={`${match.url}/curri`} render = {() =>
                         <CourseCurri
-                          sections={sections}
+                          sections={curri}
+                          handleSecToggle={this.handleSecToggle}
                          />} />
                        <Route path={`${match.url}/info`} render = {() =>
-                         <CourseMeta
+                         <InfoBundle
                            meta={meta}
+                           features={features}
+                           images={images}
                           />} />
                       <Route path={`${match.url}/new-question`} render={() =>
                         <NewQ
@@ -539,11 +547,17 @@ class MyCoursePage extends Component {
                        />} />
                     <Route path={`${match.url}/curri`} render = {() =>
                       <CourseCurri
-                        sections={sections}
+                        sections={curri}
+                        handleSecToggle={this.handleSecToggle}
                        />} />
                      <Route path={`${match.url}/info`} render = {() =>
-                       <CourseMeta
+                       // <CourseMeta
+                       //   meta={meta}
+                       //  />} />
+                       <InfoBundle
                          meta={meta}
+                         features={features}
+                         images={images}
                         />} />
                     <Route path={`${match.url}/new-question`} render={() =>
                       <NewQ
