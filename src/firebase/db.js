@@ -268,10 +268,11 @@ export const doSaveNewQ = (tid, cid, askedById, askedByUsername, title, text, cr
   return db.ref('questions').child(tid).child(cid).push({tid, cid, askedById, askedByUsername, title, text, timeStamp, answerCount})
 }
 
-export const doSaveAnswer = (tid, cid, qid, answeredBy, text, createdAt, img) => {
-  console.log('db', tid, cid, qid, answeredBy, text, createdAt, img);
-  var answer = {answeredBy, text, createdAt, img}
-  return db.ref('questions').child(tid).child(qid).child('answers').push(answer)
+export const doSaveAnswer = (tid, cid, qid, answeredById, answeredByUsername, text, createdAt, img) => {
+  // console.log('db', tid, cid, qid, answeredBy, text, createdAt, img);
+  let timeStamp = fb.database.ServerValue.TIMESTAMP
+  var answer = {answeredById, answeredByUsername, text, timeStamp, img}
+  return db.ref('answers').child(qid).push(answer)
 }
 
 export const doFetchRecentQuestions = (tid, cid, FirstFive) => {

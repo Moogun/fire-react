@@ -8,31 +8,28 @@ import CommentForm from './CommentForm'
 import AnswerList from './AnswerList'
 import {db} from '../../firebase';
 
-const INITIAL_STATE = {
-  answerText: '333',
-  error: null,
-}
-
 const byPropKey = (propertyName, value) => () => ({
   [propertyName]: value
 })
 
 class QuestionPage extends Component {
   state = {
-    INITIAL_STATE,
+    answerText: '',
+    error: null,
   }
 
   handleAnswerSubmit = (event) => {
 
     const {answerText} = this.state;
-    const {tid, cid,} = this.props.location.state.q
+    const {tid, cid,} = this.props.location.state.q[0]
     const qid = this.props.location.state.qid
     const {authUser} = this.context
+    console.log('tid, cid', tid, cid);
 
-    db.doSaveAnswer(tid, cid, qid, authUser.uid, answerText, "2days ago", 'img')
+    db.doSaveAnswer(tid, cid, qid, authUser.uid,  answerText, "2days ago", 'img')
       .then(res => {
         console.log('res', res)
-        this.setState({...INITIAL_STATE})
+        this.setState({answerText: '', error: null,})
       })
       .catch(error => {
         this.setState(byPropKey('error', error))
@@ -46,20 +43,22 @@ class QuestionPage extends Component {
     e.preventDefault()
   }
 
-  componentDidMount(){
-    const {answers} = this.props.location.state.q
-    this.setState({answers: answers})
-  }
+  // componentDidMount(){
+  //   // const {answers} = this.props.location.state.q
+  //   // this.setState({answers: answers})
+  // }
 
   render() {
-    const { answerText, answers } = this.state
-    let answerList = answers ? answers : null
+    const { answerText } = this.state
+    const { location } = this.props
+    // let answerList = answers ? answers : null
     console.log('rdr', 'q page', this.props.location.state.q);
+    // console.log('rdr', 'q page props', this.props);
       return (
           <Segment>
-              <Question question={this.props.location.state.q}/>
+              <Question question={location.state.q}/>
               <AnswerList
-                answers={answerList}
+                answers={location.state.q[0].answers}
                 value={answerText}
                 change={this.handleChange}
                 submit={this.handleAnswerSubmit}

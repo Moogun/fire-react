@@ -5,7 +5,6 @@ import {db} from '../../firebase';
 import Moment from 'react-moment';
 
 const Question = ({question}) => {
-  console.log('qqqq ', question[0], question[0].title);
   return (
     <Comment.Group>
       <Comment>
