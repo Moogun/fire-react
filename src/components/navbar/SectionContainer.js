@@ -7,7 +7,7 @@ class SectionContainer extends Component {
   render() {
     const { children} = this.props
     return (
-      <Responsive {...Responsive.onlyComputer}>
+      <Responsive minWidth={768}>
         <Grid style={style.DASHBOARD_HEAD} centered>
 
             <Grid.Column width={12}>

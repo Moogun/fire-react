@@ -31,9 +31,8 @@ class NonAuthContainer extends Component {
 
   handleToggle = () => this.setState({ sidebarOpened: !this.state.sidebarOpened })
 
-  handleSearchField = () => {this.setState ({ searchFieldActive: !this.state.searchFieldActive})
-    console.log('s field', this.state.searchFieldActive);
-  }
+  handleSearchField = () => this.setState ({ searchFieldActive: !this.state.searchFieldActive})
+
   handleSearchClick = () => { console.log('search clicked')}
 
   render() {
@@ -86,29 +85,7 @@ class NonAuthContainer extends Component {
         </Segment>
       </Responsive>
       <Responsive minWidth={320} maxWidth={991}>
-          {/* { authUser
-              ? <MobileAuth
-                authUser={authUser}
-                activeItem={activeItem}
-                children={children}
-                sidebarOpened={sidebarOpened}
-                handlePusherClick={this.handlePusherClick}
-                handlePusherClickAndLogout={this.handlePusherClickAndLogout}
-                handleToggle={this.handleToggle}
-                searchFieldActive={searchFieldActive}
-                handleSearchField={this.handleSearchField}
-                handleSearchClick={this.handleSearchClick}
-              />
-              : <MobileNonAuth
-                activeItem={activeItem}
-                children={children}
-                sidebarOpened={sidebarOpened}
-                handlePusherClick={this.handlePusherClick}
-                handleToggle={this.handleToggle}
-                handleSearchField={this.handleSearchField}
-                handleSearchClick={this.handleSearchClick}
-              />
-          } */}
+
           <Sidebar.Pushable>
              <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
                 <Menu.Item as={Link} to='/' active onClick={this.handlePusherClick} >We </Menu.Item>

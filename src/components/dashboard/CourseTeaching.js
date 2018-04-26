@@ -1,13 +1,13 @@
 import React from 'react'
-import { Table, Responsive, Image, List, Grid, Segment, Container, Message } from 'semantic-ui-react'
+import { Table, Responsive, Image, List, Grid, Segment, Container,  Loader, Dimmer  } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 import * as style from '../../style/inline';
 
 const CourseTeaching = ({click, courses, loading}) => {
-  // console.log('course teaching', courses);
+
   let courseList = courses
   ? <Segment basic loading={loading} style={style.SEGMENT_LOADER}>
-    <Responsive {...Responsive.onlyComputer} >
+    <Responsive minWidth={768} >
 
         <Grid centered>
         <Grid.Column width={12}>
@@ -36,10 +36,10 @@ const CourseTeaching = ({click, courses, loading}) => {
                     {courses[key].metadata.date}
                   </Table.Cell>
                   <Table.Cell textAlign='center' >
-                    26
+                    26 ??? fix
                   </Table.Cell>
                   <Table.Cell textAlign='center' >
-                    30
+                    30 ??? fix
                   </Table.Cell>
                   {/* <Table.Cell textAlign='left' >
                     14
@@ -53,7 +53,7 @@ const CourseTeaching = ({click, courses, loading}) => {
       </Grid>
     </Responsive>
 
-    <Responsive minWidth={320} maxWidth={991}>
+    <Responsive minWidth={320} maxWidth={767}>
         <Container>
             <List divided >
               {Object.keys(courses).map(key =>
@@ -77,11 +77,9 @@ const CourseTeaching = ({click, courses, loading}) => {
     </Responsive>
 
     </Segment>
-    : <Grid centered>
-        <Grid.Column width={12}>
-          <p> Looks like you haven't registered any course yet. Register your course</p>
-        </Grid.Column>
-      </Grid>
+    : <Dimmer active >
+      <Loader size='massive' >Loading</Loader>
+    </Dimmer>
 
   return (
       <div>
