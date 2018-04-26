@@ -4,8 +4,8 @@ import {
   Button, Container, Divider, Grid, Header, Icon, Image, List, Menu, Responsive, Segment, Sidebar, Visibility,
 } from 'semantic-ui-react'
 
-import DesktopContainer from './DesktopContainer'
-import MobileContainer from './MobileContainer'
+import AuthContainer from './AuthContainer'
+import NonAuthContainer from './NonAuthContainer'
 
 class ResponsiveContainer extends Component {
   constructor(props) {
@@ -15,16 +15,13 @@ class ResponsiveContainer extends Component {
     };
   }
 
-  // April 18
-  // here does not retrieve user from database but from context.
-  // place to use - 1. account menu username and image
-  // and where ??
   render() {
-    // console.log('authUser respsonvie', this.context.authUser);
+    const { authUser } = this.context
     return (
         <div>
-          <DesktopContainer authUser={this.context.authUser}>{this.props.children}</DesktopContainer>
-          <MobileContainer authUser={this.context.authUser}>{this.props.children}</MobileContainer>
+          {authUser
+          ? <AuthContainer authUser={authUser}> {this.props.children} </AuthContainer>
+          : <NonAuthContainer> {this.props.children} </NonAuthContainer> }
         </div>
     );
   }
