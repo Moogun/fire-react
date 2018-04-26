@@ -8,7 +8,7 @@ const QuestionRow = ({question, click}) => (
       collapsing
       >
       <Header as='h4' image>
-        <Image src={helen} rounded size='mini' />
+        <Image src={!!question.photoUrl ? question.photoUrl : helen} rounded size='mini' />
       </Header>
     </Table.Cell>
     <Table.Cell>
@@ -32,7 +32,6 @@ const QuestionRow = ({question, click}) => (
 
     </Table.Cell>
   </Table.Row>
-
 )
 
 export default QuestionRow

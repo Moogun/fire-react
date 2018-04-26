@@ -20,10 +20,9 @@ const byPropKey = (propertyName, value) => () => ({
 class QuestionPage extends Component {
   state = {
     INITIAL_STATE,
-
   }
 
-  handleSubmit = (event) => {
+  handleAnswerSubmit = (event) => {
 
     const {answerText} = this.state;
     const {tid, cid,} = this.props.location.state.q
@@ -59,7 +58,12 @@ class QuestionPage extends Component {
       return (
           <Segment>
               <Question question={this.props.location.state.q}/>
-              <AnswerList answers={answerList} value={answerText} submit={this.handleSubmit} change={this.handleChange}/>
+              <AnswerList
+                answers={answerList}
+                value={answerText}
+                change={this.handleChange}
+                submit={this.handleAnswerSubmit}
+                />
           </Segment>
         )
     }

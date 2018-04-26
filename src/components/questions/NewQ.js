@@ -20,7 +20,7 @@ class NewQ extends Component {
       <Segment basic>
         <Container text>
 
-          //my course page Breadcrumb is useless
+          {/* //my course page Breadcrumb is useless */}
           {/* <Breadcrumb>
             <Breadcrumb.Section>Teacher name</Breadcrumb.Section>
             <Breadcrumb.Divider icon='right angle' />
@@ -29,7 +29,7 @@ class NewQ extends Component {
           </Breadcrumb>
             <br/><br/> */}
           <Form onSubmit={submit}>
-            //my course page select option is useless
+            {/* //my course page select option is useless */}
             {/* <Form.Field>
               <Select placeholder='Select a course' name="cid" search selection options={options} onChange={chooseCourse} />
             </Form.Field> */}

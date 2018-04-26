@@ -12,10 +12,10 @@ import CourseCurri from './CourseCurri'
 import CourseAboutTeacher from './CourseAboutTeacher'
 
 //BORROWED from TEACHER
-import Questions from '../teacher/Questions'
+import TeacherQuestions from '../teacher/Questions'
 
 //BORROWED from QUE
-import Question from '../questionPage/QuestionPage';
+import QuestionPage from '../questionPage/QuestionPage';
 import QuestionTable from '../questions/QuestionTable'
 import NewQ from '../questions/NewQ' 
 
@@ -129,19 +129,31 @@ class MyCoursePage extends Component {
         questions.on('child_added', (data) => {
 
           let q = data.val()
-          fetchedItem += 1
-          q['qid'] = data.key
-          // console.log('at initial fetchedItem', fetchedItem);
-          qList.unshift(q)
-          // console.log('is this called ??? <<<<<<<');
+          console.log('recent', q);
+          db.onceGetUser(q.askedById)
+          .then(res => {
+            // console.log('res', res)
+            let user = res.val()
 
-          if (fetchedItem > 5 ) {
-            // console.log('initial fetchedItem', fetchedItem);
-            this.setState ({ questions: qList, isLoading: false, lastPage: false })
-          } else {
-            // console.log('initial fetchedItem', fetchedItem);
-            this.setState ({ questions: qList, isLoading: false, lastPage: true })
-          }
+            q['photoUrl'] = user.photoUrl
+            q['qid'] = data.key
+            // qList.unshift(q)
+            qList.push(q)
+            console.log('recent qlist', qList);
+            fetchedItem += 1
+
+            if (fetchedItem > 5 ) {
+              // console.log('initial fetchedItem', fetchedItem);
+              this.setState ({ questions: qList, isLoading: false, lastPage: false })
+            } else {
+              // console.log('initial fetchedItem', fetchedItem);
+              this.setState ({ questions: qList, isLoading: false, lastPage: true })
+            }
+
+          })
+          .catch(error => {
+            this.setState({[error]: error});
+          });
 
         })
       })
@@ -187,14 +199,14 @@ class MyCoursePage extends Component {
     event.preventDefault();
     const {tid, cid, qTitle, qText} = this.state;
     const { uid, user } = this.props
-    console.log('handleQuestionSubmit', tid, cid, qTitle, qText);
-    console.log('this.props.user', this.props.user)
+    // console.log('handleQuestionSubmit', tid, cid, qTitle, qText);
+    // console.log('this.props.user', this.props.user)
     let date = new Date();
     let createdAt = Number(date)
 
     db.doSaveNewQ(tid, cid, uid, user.username, qTitle, qText, createdAt, 'img')
       .then(res => {
-        // console.log('res', res)
+        console.log('createdAt', createdAt);
         this.setState ({ qTitle: '', qText: ''})
         this.props.history.replace(`${this.props.match.url}/questions`)
         })
@@ -214,6 +226,7 @@ class MyCoursePage extends Component {
     e.preventDefault()
   }
 
+  // April 25, b
   // 1. at questions, fetch from first to last -- good
   // 2. search for a specific subject then load more --
   //   need to distingushi normal load more and search load more
@@ -290,45 +303,46 @@ class MyCoursePage extends Component {
     let leng = questions.length
     let lastElmQid = questions[leng -1].qid // 1. check the last q id of previous set
     let fetchedItem = 1
-
-    // 2. fetch another 5 including the last qid
+    console.log('load more lastElmQid', lastElmQid);
+    // 2. fetch another 5 <includi></includi>ng the last qid
     let paginated = db.doFetchNextQuestions(tid, cid, lastElmQid, 5)
     paginated.on('child_added', (data) => {
       let q = data.val()
-        fetchedItem += 1 // 3. increase this num to see if 5 items get fetched or fetched fewer than 5
-        // console.log('data 1', data.val());
-        // console.log('at load more, fetchedItem', fetchedItem);
-
+        fetchedItem += 1 // 3. increase this num to see if 5 items get fetched or fetched
+        console.log('load more fetchedItem', fetchedItem);
 
         if (fetchedItem >= 6 ) {
-          // console.log('loadmore fetchedItem over six', fetchedItem);
           this.setState ({ questions: questions, isLoading: false, lastPage: false })
         } else {
-          // console.log('loadmore fetchedItem fewer than 6', fetchedItem);
           this.setState ({ questions: questions, isLoading: false, lastPage: true })
         }
 
-        if(lastElmQid === data.key) {
-          //4. if last item was the last of the questions list, then returns
-          return
-        }
-
-        q['qid'] = data.key
-        console.log('p', data.val());
-
-        questions.splice(leng, 0, q) // insert the question at the end of the previous data set
-        //
-        // if (fetchedItem >= 6 ) {
-        //   console.log('fetchedItem', fetchedItem, fetchedItem >= 6);
-        //   console.log('fetchedItem >= 6');
-        //   this.setState ({ questions: questions, isLoading: false, lastPage: false })
-        // } else {
-        //   console.log('fetchedItem', fetchedItem, fetchedItem >= 6);
-        //   console.log('fetchedItem <<<<<< 6');
-        //   this.setState ({ questions: questions, isLoading: false, lastPage: true })
+        // if(lastElmQid === data.key) {
+        //   //4. if last item was the last of the questions list, then returns
+        //   return
         // }
 
-        // console.log('handle more  isloading 2 ', this.state.isLoading, 'lastpage', this.state.lastPage);
+        db.onceGetUser(q.askedById)
+        .then(res => {
+          // console.log('res', res)
+          let user = res.val()
+
+          q['photoUrl'] = user.photoUrl
+          q['qid'] = data.key
+          // qList.unshift(q)
+          // questions.splice(leng, 0, q) // insert the question at the end of the previous data set
+          questions.push(q)
+
+        })
+        .catch(error => {
+          this.setState({[error]: error});
+        });
+
+        // q['qid'] = data.key
+        // console.log('p', data.val());
+
+        // questions.splice(leng, 0, q) // insert the question at the end of the previous data set
+
     })
   }
 
@@ -457,7 +471,7 @@ class MyCoursePage extends Component {
 
                       <Redirect exact from={match.url} to={`${match.url}/questions`} />
                       <Route path={`${match.url}/questions`} render = {(props) =>
-                        <Questions {...props}
+                        <TeacherQuestions {...props}
                           questions={questions}
                           click={this.handleQuestionClick}
                           tid={tid}
@@ -495,7 +509,7 @@ class MyCoursePage extends Component {
                       <Route
                         // path='/teacher/:teacherId/question/:questionId'
                         path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
-                        render={() => <Question />}
+                        render={() => <QuestionPage />}
                       />
 
                     </Switch>
@@ -510,7 +524,7 @@ class MyCoursePage extends Component {
 
                     <Redirect exact from={match.url} to={`${match.url}/questions`} />
                     <Route path={`${match.url}/questions`} render = {(props) =>
-                      <Questions {...props}
+                      <TeacherQuestions {...props}
                         questions={questions}
                         click={this.handleQuestionClick}
                         tid={tid}
@@ -547,7 +561,7 @@ class MyCoursePage extends Component {
                     <Route
                       // path='/teacher/:teacherId/question/:questionId'
                       path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
-                      render={() => <Question />}
+                      render={() => <QuestionPage />}
                     />
 
                   </Switch>

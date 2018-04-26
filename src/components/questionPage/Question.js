@@ -1,28 +1,29 @@
 import React, {Component} from 'react'
 import { Comment } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
+import {db} from '../../firebase';
+import Moment from 'react-moment';
 
-const Question = (props) => {
-  console.log('qqqq ', props.question[0], props.question[0].title);
+const Question = ({question}) => {
+  console.log('qqqq ', question[0], question[0].title);
   return (
-
     <Comment.Group>
       <Comment>
-        <Comment.Avatar src={profile} />
+        <Comment.Avatar src={question.photoUrl !== undefined ? question.photoUrl : profile} />
         <Comment.Content>
-          <Comment.Author>{props.question[0].title}</Comment.Author>
+          <Comment.Author>{question[0].title}</Comment.Author>
             <Comment.Metadata>
-              <div>{props.question[0].askedByUsername}</div>
+              <div>{question[0].askedByUsername}</div>
               <div>
-                {props.question[0].createdAt}
+                <Moment fromNow unix>{question[0].timeStamp / 1000}</Moment>
               </div>
             </Comment.Metadata>
             <Comment.Text>
-              {props.question[0].text}
+              {question[0].text}
             </Comment.Text>
 
           <Comment.Actions>
-            <Comment.Action>나도 궁금</Comment.Action>
+            <Comment.Action>Follow the answer with gcm ? fcm? </Comment.Action>
             {/* <Comment.Action>Save</Comment.Action>
             <Comment.Action>Hide</Comment.Action> */}
           </Comment.Actions>
