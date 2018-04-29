@@ -92,6 +92,9 @@ class App extends Component {
               // exact path='/:teacherName/courses/:courseName'
               path={routes.MY_COURSE_PAGE} render={() => <MyCoursePage />} />
 
+               {/* <PrivateRoute
+                 path={routes.MY_COURSE_PAGE} render={() => <MyCoursePage />} /> */}
+
             {/* <Route
               // path='/teacher/:teacherId/question/:questionId'
               exact path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
@@ -116,6 +119,36 @@ class App extends Component {
     );
   }
 }
+
+// const PrivateRoute = ({ component: Component, ...rest }) => (
+//   <Route
+//     {...rest}
+//     render={props => authFake.isAuthenticated
+//       ? ( <Component {...props} /> )
+//        : (
+//         <Redirect
+//           to={{
+//             pathname: "/login",
+//             state: { from: props.location }
+//           }}
+//         />
+//       )
+//     }
+//   />
+// );
+//
+// const authFake = {
+//   isAuthenticated: false,
+//   authenticate(cb){
+//     firebase.db.
+//     this.isAuthenticated = true
+//     setTimeout(cb, 100); // fake async
+//   },
+//   signout(cb){
+//     this.isAuthenticated = false
+//      setTimeout(cb, 100); // fake async
+//   }
+// }
 
 const NoMatch = ({ location }) => (
   <Grid verticalAlign='middle' textAlign='center' style={style.NO_MATCH_MIN_HEIGHT}>

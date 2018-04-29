@@ -136,7 +136,8 @@ class MyCourses extends Component {
                       } /> */}
 
                   {/* </Switch> */}
-
+                  {/* <PrivateRoute
+                    path={routes.MY_COURSE_PAGE} render={() => <MyCoursePage />} /> */}
                 </Grid.Column>
             </Grid>
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import {Link, withRouter, Switch, Redirect, Route} from 'react-router-dom';
 import {db} from '../../firebase';
-import withAuthorization from '../../HOC/withAuthorization';
+import withAuthorizationMyCoursePage from '../../HOC/withAuthorizationMyCoursePage';
 
 import InfoBundle from './InfoBundle'
 import CourseCurri from '../coursePage/CourseCurri'
@@ -27,28 +27,6 @@ import profile from '../../assets/profile-lg.png'
 import * as style from '../../style/inline';
 import * as routes from '../../constants/routes';
 
-
-const menuStyle = {
-  border: 'none',
-  borderRadius: 0,
-  boxShadow: 'none',
-  marginBottom: '1em',
-  marginTop: '4em',
-  transition: 'box-shadow 0.5s ease, padding 0.5s ease',
-}
-
-const fixedMenuStyle = {
-  backgroundColor: '#fff',
-  border: '1px solid #ddd',
-  boxShadow: '0px 1px rgba(0,0,0, 0.2)',
-}
-
-const byPropKey = (propertyName, value) => ()=> ({
-  [propertyName]: value
-})
-
-const COURSE_PAGE_HEADER = { backgroundColor: '#34495e', marginTop: '0rem'}
-
 class MyCoursePage extends Component {
   constructor(props){
     super(props)
@@ -65,9 +43,6 @@ class MyCoursePage extends Component {
       lastPage: false,
     }
   }
-
-  stickTopMenu = () => this.setState({ menuFixed: true })
-  unStickTopMenu = () => this.setState({ menuFixed: false })
 
   componentDidMount() {
     this.handleGetCourseWithTitle()
@@ -115,8 +90,18 @@ class MyCoursePage extends Component {
 
       })
       .then(res => {
+        const {authUser} = this.context
+        const {attendee} = this.state
+        console.log('veryfi ', authUser, attendee)
+        if(!verifyStudent(authUser, attendee)) {
+          this.setState ({ attending: false})
+        } else {
+          this.setState ({ attending: true})
+        }
+      })
+      .then(res => {
         const {tid, cid} = this.state
-        console.log('then 2 res tid, cid', tid, cid);
+        // console.log('then 2 res tid, cid', tid, cid);
 
         let qList =[]
         let fetchedItem = 1
@@ -126,7 +111,7 @@ class MyCoursePage extends Component {
         questions.on('child_added', (data) => {
 
           let q = data.val()
-          console.log('recent', q);
+          // console.log('recent', q);
           db.onceGetUser(q.askedById)
           .then(res => {
             // console.log('res', res)
@@ -136,7 +121,7 @@ class MyCoursePage extends Component {
             q['qid'] = data.key
             // qList.unshift(q)
             qList.push(q)
-            console.log('recent qlist', qList);
+            // console.log('recent qlist', qList);
             fetchedItem += 1
 
             if (fetchedItem > 5 ) {
@@ -168,10 +153,7 @@ class MyCoursePage extends Component {
 
   handleQuestionClick = (qid) => {
     const { questions } = this.state
-    console.log('teacher q click', qid);
-    // console.log('teacher q click',questions['qid']);
     let selected = questions.filter(q => q.qid == qid)
-    console.log('selected', selected);
     this.props.history.push({
       pathname: `${this.props.match.url}/question/${qid}`,
       state:
@@ -208,8 +190,9 @@ class MyCoursePage extends Component {
         this.props.history.replace(`${this.props.match.url}/questions`)
         })
       .catch(error => {
-        this.setState(byPropKey('error', error))
-      })
+        this.setState({[error]: error});
+      });
+
   }
 
   handleNewQCancel = (e) => {
@@ -245,10 +228,10 @@ class MyCoursePage extends Component {
         .then(res => {
           let searchResult = res.val()
           if (searchResult){
-            console.log('search result', 1);
+            // console.log('search result', 1);
             this.saveFechedQuestionsToState(searchResult)
           } else {
-            console.log('search result', 2);
+            // console.log('search result', 2);
             this.setState({questions: null})
           }
           this.setState({ isLoading: false,  })
@@ -350,13 +333,10 @@ class MyCoursePage extends Component {
     this.setState ({curri})
   }
 
-
   render() {
 
-    // console.log('render');
     // const {tName, cTitle,} = this.props.match.params
     // let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
-
 
     const {
       course, cid, tid, tName, title, subTitle, openCourse, coursePass, tProfileImg,
@@ -364,9 +344,8 @@ class MyCoursePage extends Component {
       features, images, curri, attendee,
       questions, qTitle, qText,
       isLoading, lastPage,
-      user } = this.state
-      // console.log('state user', user);
-      // console.log('rdr questions', questions, 'isLoading', isLoading, 'lastPage', lastPage);
+      user, attending
+    } = this.state
 
     let teacherName = tName ? tName : 'Teacher'
     let teacherProfile = tProfileImg ? tProfileImg : profile
@@ -374,6 +353,12 @@ class MyCoursePage extends Component {
 
     const {match} = this.props
     // console.log('my course page ', this.props);
+
+    if (!attending) {
+      return <Redirect to ='/' />
+      // return <Redirect to ={`${tName}/${title}`}  /> // this attach the destination to current url
+    }
+
     return (
       <Grid >
           <Grid.Column>
@@ -597,7 +582,21 @@ class MyCoursePage extends Component {
 MyCoursePage.contextTypes ={
   authUser: PropTypes.object,
 }
+//
+const verifyStudent = (authUser, attendee) => {
+  console.log('verify', authUser, attendee);
+  let attending = !!attendee && Object.keys(attendee).filter(a => a == authUser.uid)
+  if (!!attending[0]) {
+    console.log('attendee', !!attending[0]);
+    return true
+  } else {
+    console.log('attendee', !!attending[0]);
+    return false
+  }
+}
 
-const authCondition = (authUser) => !!authUser;
+const authCondition = (authUser) => !!authUser
+// const authCondition = (authUser) => !!authUser && verifyStudent(authUser, attendee);
 
-export default withAuthorization(authCondition)(MyCoursePage);
+export default withAuthorizationMyCoursePage(authCondition)(MyCoursePage);
+ // export default withRouter(MyCoursePage);

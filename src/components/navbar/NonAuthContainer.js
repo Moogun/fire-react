@@ -66,6 +66,10 @@ class NonAuthContainer extends Component {
               </Menu.Item>
 
               <Menu.Menu position='right'>
+                <Menu.Item
+                  as={Link} to={routes.TEACHER_INTRO}
+                  >Are you teaching?</Menu.Item>
+
                 <Menu.Item as={Link} to={routes.SIGN_IN}
                   name='Sign In' active={activeItem === 'signin'}
                   onClick={this.handleItemClick}
@@ -82,6 +86,7 @@ class NonAuthContainer extends Component {
             </Container>
           </Menu>
           {/* <HomepageHeading /> */}
+          {children}
         </Segment>
       </Responsive>
       <Responsive minWidth={320} maxWidth={991}>

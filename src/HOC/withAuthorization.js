@@ -6,9 +6,9 @@ import AuthUserContext from './AuthUserContext'; // error - createContext is not
 import {firebase, db} from '../firebase';
 import * as routes from '../constants/routes';
 
-const byPropKey = (propertyName, value) => ()=> ({
-  [propertyName]: value
-})
+// const byPropKey = (propertyName, value) => ()=> ({
+//   [propertyName]: value
+// })
 
 const withAuthorization = (authCondition) => (Component) => {
 
@@ -27,7 +27,7 @@ const withAuthorization = (authCondition) => (Component) => {
           db.onceGetUser(authUser.uid)
             .then(res => this.setState ({ uid: authUser.uid, user: res.val(), }))
             .catch(error => {
-              this.setState(byPropKey('error', error));
+              this.setState({['error']: error});
             });
         }
       });
@@ -48,9 +48,8 @@ const withAuthorization = (authCondition) => (Component) => {
 
 export default withAuthorization;
 
+//below is auth user context reference
 // import AuthUserContext from './AuthUserContext';
-
-
 // render() {
 //      const { authUser } = this.state;
 //

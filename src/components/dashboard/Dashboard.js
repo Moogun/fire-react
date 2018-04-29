@@ -138,6 +138,13 @@ class Dashboard extends Component {
                           style={style.DASHBOARD_MENU_ITEM}
                         />
                         <Menu.Item
+                          name='Quiz'
+                          active={activeItem === 'quiz'}
+                          onClick={this.handleItemClick}
+                          as={Link} to={`${match.url}/quiz`}
+                          style={style.DASHBOARD_MENU_ITEM}
+                        />
+                        <Menu.Item
                           name='announcement'
                           active={activeItem === 'announcement'}
                           onClick={this.handleItemClick}
