@@ -9,7 +9,6 @@ const QuizPanel = ({click,quizzes,loading, title, quizTitleChange, onNewQuizSubm
   ? <Segment basic loading={loading} style={style.SEGMENT_LOADER}>
      <Responsive minWidth={768} >
 
-
         <Grid centered>
         <Grid.Column width={12}>
 
