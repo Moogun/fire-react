@@ -9,6 +9,7 @@ import withAuthorizationDashboard from '../../HOC/withAuthorizationDashboard';
 import CourseCards from '../courses/CourseCards'
 import CourseTeaching from './CourseTeaching'
 import QPanel from './QPanel'
+import QuizPanel from './QuizPanel'
 import Announcement from './Announcement'
 import {db} from '../../firebase';
 import { Grid, Header, Menu, Visibility, Responsive, Segment,} from 'semantic-ui-react'
@@ -25,6 +26,11 @@ class Dashboard extends Component {
       'selectOption': [],
       questions: '',
       isLoading: false,
+      quizzes: {
+        1:{'title': 'abc', },
+        2:{'title': 'bbc', },
+        3:{'title': 'cbc', },
+      }
     };
   }
 
@@ -38,11 +44,9 @@ class Dashboard extends Component {
   }
 
   handleDidChooseCourse = (e, {value}) => {
-    // console.log('value', value);
     const { courseTeaching } = this.props
     let selectedCourseTitle = courseTeaching[value].metadata.title
     this.setState({cid: value, selectedCourseTitle: selectedCourseTitle})
-    // console.log('selected course', selectedCourse);
     e.preventDefault()
   }
 
@@ -58,6 +62,23 @@ class Dashboard extends Component {
   //         qid: qid
   //       }
   //   })
+  }
+
+  handleQuizTitleChange = (e) => {
+    e.preventDefault()
+    this.setState ({ quizTitle: e.target.value})
+    // console.log('handleCreateQuiz', e.target.value);
+  }
+
+  onNewQuizSubmit = () => {
+    const {user, uid} = this.props
+    const {quizTitle} = this.state
+    console.log('handleCreateQuiz', quizTitle);
+    db.doCreateQuiz(quizTitle, uid)
+    .then(res => console.log('res', res.val()))
+    .catch(error => {
+      this.setState({[error]: error});
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -109,7 +130,7 @@ class Dashboard extends Component {
     const {match} = this.props
     const {activeItem, error,
       // user, courseTeaching, selectOption,
-      questions, cid, isLoading, selectedCourseTitle} = this.state
+      questions, cid, isLoading, selectedCourseTitle, quizzes} = this.state
     const {courseTeaching, selectOption, user, uid} = this.props
     console.log('rdr dashboard props', user, uid);
       return (
@@ -206,6 +227,16 @@ class Dashboard extends Component {
                                 queClick={this.handleQuestionClick}
                                 loading={isLoading}
                                />} />
+                               <Route path={routes.DASHBOARD_QUIZ_PANEL} render = {(props) =>
+                                 <QuizPanel
+                                   {...props}
+                                   quizzes={quizzes}
+                                   // click={this.handleCourseClick}
+                                   loading={isLoading}
+                                   quizTitleChange={this.handleQuizTitleChange}
+                                   onNewQuizSubmit={this.onNewQuizSubmit}
+                                 />
+                                 } />
                                <Route path={routes.DASHBOARD_AN} render = {() => <Announcement
                                 />} />
                             </Switch>

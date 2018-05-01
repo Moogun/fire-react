@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {Link, withRouter, Switch, Redirect, Route} from 'react-router-dom';
 import {db} from '../../firebase';
 import withAuthorizationMyCoursePage from '../../HOC/withAuthorizationMyCoursePage';
+// import withAuthorization from '../../HOC/withAuthorization';
 
 import InfoBundle from './InfoBundle'
 import CourseCurri from '../coursePage/CourseCurri'
@@ -41,6 +42,7 @@ class MyCoursePage extends Component {
       questions: '',
       isLoading: false,
       lastPage: false,
+      attending: true,
     }
   }
 
@@ -49,99 +51,100 @@ class MyCoursePage extends Component {
   }
 
   handleGetCourseWithTitle() {
-    console.log('course page did mount', this.props.match.params);
+    // console.log('course page did mount', this.props.match.params);
     let cTitle = this.props.match.params.cTitle
     let title = cTitle.replace(/-/g, ' ');
 
-    db.onceGetCourseWithTitle(title)
-      .then(cSnap => {
-        this.setState ({isLoading: true})
-        console.log('isloading 1 dmt ', this.state.isLoading);
-        let c = cSnap.val()
-
-        if (c) {
-          let key = Object.keys(c)
-          let course = c[key]
-          // console.log('course', course);
-
-          this.setState ({
-            tid: course.metadata.tid,
-            title: course.metadata.title,
-            subTitle: course.metadata.subTitle,
-            tName: course.metadata.tName,
-            tEmail: course.metadata.tEmail,
-            tProfileImg: course.metadata.tProfileImg,
-            cid: key[0],
-            course: course,
-            openCourse: course.metadata.openCourse,
-            coursePass: course.metadata.password,
-            attendee: course.attendee,
-            features: course.features,
-            images: course.images,
-            curri: course.curri,
-            qTitle: '',
-            qText: '',
-
-          })
-
-        } else {
-          console.log('find a way to display course titles that have dash in it');
-        }
-
-      })
-      .then(res => {
-        const {authUser} = this.context
-        const {attendee} = this.state
-        console.log('veryfi ', authUser, attendee)
-        if(!verifyStudent(authUser, attendee)) {
-          this.setState ({ attending: false})
-        } else {
-          this.setState ({ attending: true})
-        }
-      })
-      .then(res => {
-        const {tid, cid} = this.state
-        // console.log('then 2 res tid, cid', tid, cid);
-
-        let qList =[]
-        let fetchedItem = 1
-
-        let questions = db.doFetchRecentQuestions(tid, cid, 5)
-
-        questions.on('child_added', (data) => {
-
-          let q = data.val()
-          // console.log('recent', q);
-          db.onceGetUser(q.askedById)
-          .then(res => {
-            // console.log('res', res)
-            let user = res.val()
-
-            q['photoUrl'] = user.photoUrl
-            q['qid'] = data.key
-            // qList.unshift(q)
-            qList.push(q)
-            // console.log('recent qlist', qList);
-            fetchedItem += 1
-
-            if (fetchedItem > 5 ) {
-              // console.log('initial fetchedItem', fetchedItem);
-              this.setState ({ questions: qList, isLoading: false, lastPage: false })
-            } else {
-              // console.log('initial fetchedItem', fetchedItem);
-              this.setState ({ questions: qList, isLoading: false, lastPage: true })
-            }
-
-          })
-          .catch(error => {
-            this.setState({[error]: error});
-          });
-
-        })
-      })
-      .catch(error => {
-        this.setState({[error]: error});
-      });
+    // db.onceGetCourseWithTitle(title)
+    //   .then(cSnap => {
+    //     this.setState ({isLoading: true})
+    //     // console.log('isloading 1 dmt ', this.state.isLoading);
+    //     let course = cSnap.val()
+    //
+    //     if (course) {
+    //       let key = Object.keys(course)
+    //       let course = course[key]
+    //       // console.log('course', course);
+    //
+    //       this.setState ({
+    //         tid: course.metadata.tid,
+    //         title: course.metadata.title,
+    //         subTitle: course.metadata.subTitle,
+    //         tName: course.metadata.tName,
+    //         tEmail: course.metadata.tEmail,
+    //         tProfileImg: course.metadata.tProfileImg,
+    //         cid: key[0],
+    //         course: course,
+    //         openCourse: course.metadata.openCourse,
+    //         coursePass: course.metadata.password,
+    //         attendee: course.attendee,
+    //         features: course.features,
+    //         images: course.images,
+    //         curri: course.curri,
+    //         qTitle: '',
+    //         qText: '',
+    //
+    //       })
+    //
+    //       // const {authUser} = this.context
+    //       const {user} = this.props
+    //       console.log('my course page then verify ', user, course.attendee)
+    //
+    //       if(!verifyStudent(user, course.attendee)) {
+    //         this.setState ({ attending: false})
+    //       } else {
+    //         this.setState ({ attending: true})
+    //       }
+    //
+    //     }
+    //     // else {
+    //     //   console.log('find a way to display course titles that have dash in it');
+    //     // }
+    //
+    //   })
+    //   .then(res => {
+    //     const {tid, cid} = this.state
+    //     // console.log('then 2 res tid, cid', tid, cid);
+    //
+    //     let qList =[]
+    //     let fetchedItem = 1
+    //
+    //     let questions = db.doFetchRecentQuestions(tid, cid, 5)
+    //
+    //     questions.on('child_added', (data) => {
+    //
+    //       let q = data.val()
+    //       // console.log('recent', q);
+    //       db.onceGetUser(q.askedById)
+    //       .then(res => {
+    //         // console.log('res', res)
+    //         let user = res.val()
+    //
+    //         q['photoUrl'] = user.photoUrl
+    //         q['qid'] = data.key
+    //         // qList.unshift(q)
+    //         qList.push(q)
+    //         // console.log('recent qlist', qList);
+    //         fetchedItem += 1
+    //
+    //         if (fetchedItem > 5 ) {
+    //           // console.log('initial fetchedItem', fetchedItem);
+    //           this.setState ({ questions: qList, isLoading: false, lastPage: false })
+    //         } else {
+    //           // console.log('initial fetchedItem', fetchedItem);
+    //           this.setState ({ questions: qList, isLoading: false, lastPage: true })
+    //         }
+    //
+    //       })
+    //       .catch(error => {
+    //         this.setState({[error]: error});
+    //       });
+    //
+    //     })
+    //   })
+    //   .catch(error => {
+    //     this.setState({[error]: error});
+    //   });
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
@@ -339,7 +342,8 @@ class MyCoursePage extends Component {
     // let title = cTitle ? cTitle.replace(/-/g, ' ') : 'Title'
 
     const {
-      course, cid, tid, tName, title, subTitle, openCourse, coursePass, tProfileImg,
+      // course,
+      cid, tid, tName, title, subTitle, openCourse, coursePass, tProfileImg,
       activeItem,
       features, images, curri, attendee,
       questions, qTitle, qText,
@@ -351,230 +355,234 @@ class MyCoursePage extends Component {
     let teacherProfile = tProfileImg ? tProfileImg : profile
     let meta = course ? course.metadata : null
 
-    const {match} = this.props
-    // console.log('my course page ', this.props);
+    const {match, course} = this.props
+    console.log('my course page ', this.props);
 
     if (!attending) {
       return <Redirect to ='/' />
       // return <Redirect to ={`${tName}/${title}`}  /> // this attach the destination to current url
     }
 
+
+
     return (
-      <Grid >
-          <Grid.Column>
-              <SectionContainer>
-
-                <Header as='h1' inverted>
-                   <Image circular src={profile}/>
-                   <Header.Content>
-                     {title}
-                     <Header.Subheader>
-                       {subTitle !== undefined || subTitle !== '' ? subTitle : '' }
-                     </Header.Subheader>
-                     <Header.Subheader onClick={this.handleNavToTeacher}>
-                       {teacherName}
-                       {/* <Rating icon='star' defaultRating={5} maxRating={5} disabled/> */}
-                     </Header.Subheader>
-
-                   </Header.Content>
-                </Header>
-
-                <Menu size='small' secondary pointing inverted
-                  style={style.DASHBOARD_MENU_M}
-                   >
-                     <Menu.Item
-                       name='questions'
-                       active={activeItem === 'questions'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/questions`}
-                       style={style.DASHBOARD_MENU_ITEM}
-                     />
-                     <Menu.Item
-                       name='curriculum'
-                       active={activeItem === 'curriculum'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/curri`}
-                       style={style.DASHBOARD_MENU_ITEM}
-                     />
-                     {/* <Menu.Item
-                       name='announcement'
-                       active={activeItem === 'announcement'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/announcement`}
-                       style={style.DASHBOARD_MENU_ITEM}
-                     /> */}
-                     <Menu.Item
-                       name='info'
-                       active={activeItem === 'info'}
-                       onClick={this.handleItemClick}
-                       as={Link} to={`${match.url}/info`}
-                       style={style.DASHBOARD_MENU_ITEM}
-                     />
-                  </Menu>
-              </SectionContainer>
-              <SectionContainer_M>
-                <Header as='h3'
-                  style={style.DASHBOARD_HEADER_M}
-                  >{title} </Header>
-
-                <Menu size='small' secondary pointing inverted
-                  style={style.DASHBOARD_MENU_M}
-                   >
-                    <Menu.Item
-                      name='questions'
-                      active={activeItem === 'questions'}
-                      onClick={this.handleItemClick}
-                      as={Link} to={`${match.url}/questions`}
-                      style={style.DASHBOARD_MENU_ITEM}
-                    />
-                    <Menu.Item
-                      name='curriculum'
-                      active={activeItem === 'curriculum'}
-                      onClick={this.handleItemClick}
-                      as={Link} to={`${match.url}/curri`}
-                      style={style.DASHBOARD_MENU_ITEM}
-                    />
-                    {/* <Menu.Item
-                      name='announcement'
-                      active={activeItem === 'announcement'}
-                      onClick={this.handleItemClick}
-                      as={Link} to={`${match.url}/announcement`}
-                      style={style.DASHBOARD_MENU_ITEM}
-                    /> */}
-                    <Menu.Item
-                      name='info'
-                      active={activeItem === 'info'}
-                      onClick={this.handleItemClick}
-                      as={Link} to={`${match.url}/info`}
-                      style={style.DASHBOARD_MENU_ITEM}
-                    />
-                  </Menu>
-              </SectionContainer_M>
-
-              <Grid style={style.DASHBOARD_BODY}>
-                  <Grid.Column>
-
-                  <Responsive {...Responsive.onlyComputer}>
-                     <Container text>
-
-                      <Switch>
-
-                      <Redirect exact from={match.url} to={`${match.url}/questions`} />
-                      <Route path={`${match.url}/questions`} render = {(props) =>
-                        <TeacherQuestions {...props}
-                          questions={questions}
-                          click={this.handleQuestionClick}
-                          tid={tid}
-                          click={this.handleNewQ} {...props}
-                          queClick={this.handleQuestionClick}
-                          searchQueryChange={this.handleSearchQueryChange}
-                          isLoading={isLoading}
-                          loadMore={this.handleFetchQuestionsMore}
-                          lastPage={lastPage}
-                        />}
-
-                         />} />
-                      <Route path={`${match.url}/curri`} render = {() =>
-                        <CourseCurri
-                          sections={curri}
-                          handleSecToggle={this.handleSecToggle}
-                         />} />
-                       <Route path={`${match.url}/info`} render = {() =>
-                         <InfoBundle
-                           meta={meta}
-                           features={features}
-                           images={images}
-                          />} />
-                      <Route path={`${match.url}/new-question`} render={() =>
-                        <NewQ
-                          // tid={tid}
-                          // cTeaching={cTeaching}
-                          // selectOption={selectOption}
-                          qTitle={qTitle}
-                          qText={qText}
-                          submit={this.handleQuestionSubmit}
-                          cancel={this.handleNewQCancel}
-                          change={this.handleQuestionInputChange}
-                          // chooseCourse={this.handleCourseSelect}
-                        />} />
-                      />
-
-                      <Route
-                        // path='/teacher/:teacherId/question/:questionId'
-                        path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
-                        render={() => <QuestionPage />}
-                      />
-
-                    </Switch>
-
-                  </Container>
-                </Responsive>
-
-                <Responsive minWidth={320} maxWidth={991}>
-                   <Container>
-
-                    <Switch>
-
-                    <Redirect exact from={match.url} to={`${match.url}/questions`} />
-                    <Route path={`${match.url}/questions`} render = {(props) =>
-                      <TeacherQuestions {...props}
-                        questions={questions}
-                        click={this.handleQuestionClick}
-                        tid={tid}
-                        click={this.handleNewQ} {...props}
-                        queClick={this.handleQuestionClick}
-                        searchQueryChange={this.handleSearchQueryChange}
-                        isLoading={isLoading}
-                        loadMore={this.handleFetchQuestionsMore}
-                        lastPage={lastPage}
-                      />}
-
-                       />} />
-                    <Route path={`${match.url}/curri`} render = {() =>
-                      <CourseCurri
-                        sections={curri}
-                        handleSecToggle={this.handleSecToggle}
-                       />} />
-                     <Route path={`${match.url}/info`} render = {() =>
-                       // <CourseMeta
-                       //   meta={meta}
-                       //  />} />
-                       <InfoBundle
-                         meta={meta}
-                         features={features}
-                         images={images}
-                        />} />
-                    <Route path={`${match.url}/new-question`} render={() =>
-                      <NewQ
-                        // tid={tid}
-                        // cTeaching={cTeaching}
-                        // selectOption={selectOption}
-                        qTitle={qTitle}
-                        qText={qText}
-                        submit={this.handleQuestionSubmit}
-                        cancel={this.handleNewQCancel}
-                        change={this.handleQuestionInputChange}
-                        // chooseCourse={this.handleCourseSelect}
-                      />} />
-
-                    <Route
-                      // path='/teacher/:teacherId/question/:questionId'
-                      path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
-                      render={() => <QuestionPage />}
-                    />
-
-                  </Switch>
-
-                </Container>
-              </Responsive>
-
-
-                  </Grid.Column>
-              </Grid>
-
-          </Grid.Column>
-      </Grid>
-
+      // <Grid >
+      //     <Grid.Column>
+      //         <SectionContainer>
+      //
+      //           <Header as='h1' inverted>
+      //              <Image circular src={profile}/>
+      //              <Header.Content>
+      //                {title}
+      //                <Header.Subheader>
+      //                  {subTitle !== undefined || subTitle !== '' ? subTitle : '' }
+      //                </Header.Subheader>
+      //                <Header.Subheader onClick={this.handleNavToTeacher}>
+      //                  {teacherName}
+      //                  {/* <Rating icon='star' defaultRating={5} maxRating={5} disabled/> */}
+      //                </Header.Subheader>
+      //
+      //              </Header.Content>
+      //           </Header>
+      //
+      //           <Menu size='small' secondary pointing inverted
+      //             style={style.DASHBOARD_MENU_M}
+      //              >
+      //                <Menu.Item
+      //                  name='questions'
+      //                  active={activeItem === 'questions'}
+      //                  onClick={this.handleItemClick}
+      //                  as={Link} to={`${match.url}/questions`}
+      //                  style={style.DASHBOARD_MENU_ITEM}
+      //                />
+      //                <Menu.Item
+      //                  name='curriculum'
+      //                  active={activeItem === 'curriculum'}
+      //                  onClick={this.handleItemClick}
+      //                  as={Link} to={`${match.url}/curri`}
+      //                  style={style.DASHBOARD_MENU_ITEM}
+      //                />
+      //                {/* <Menu.Item
+      //                  name='announcement'
+      //                  active={activeItem === 'announcement'}
+      //                  onClick={this.handleItemClick}
+      //                  as={Link} to={`${match.url}/announcement`}
+      //                  style={style.DASHBOARD_MENU_ITEM}
+      //                /> */}
+      //                <Menu.Item
+      //                  name='info'
+      //                  active={activeItem === 'info'}
+      //                  onClick={this.handleItemClick}
+      //                  as={Link} to={`${match.url}/info`}
+      //                  style={style.DASHBOARD_MENU_ITEM}
+      //                />
+      //             </Menu>
+      //         </SectionContainer>
+      //         <SectionContainer_M>
+      //           <Header as='h3'
+      //             style={style.DASHBOARD_HEADER_M}
+      //             >{title} </Header>
+      //
+      //           <Menu size='small' secondary pointing inverted
+      //             style={style.DASHBOARD_MENU_M}
+      //              >
+      //               <Menu.Item
+      //                 name='questions'
+      //                 active={activeItem === 'questions'}
+      //                 onClick={this.handleItemClick}
+      //                 as={Link} to={`${match.url}/questions`}
+      //                 style={style.DASHBOARD_MENU_ITEM}
+      //               />
+      //               <Menu.Item
+      //                 name='curriculum'
+      //                 active={activeItem === 'curriculum'}
+      //                 onClick={this.handleItemClick}
+      //                 as={Link} to={`${match.url}/curri`}
+      //                 style={style.DASHBOARD_MENU_ITEM}
+      //               />
+      //               {/* <Menu.Item
+      //                 name='announcement'
+      //                 active={activeItem === 'announcement'}
+      //                 onClick={this.handleItemClick}
+      //                 as={Link} to={`${match.url}/announcement`}
+      //                 style={style.DASHBOARD_MENU_ITEM}
+      //               /> */}
+      //               <Menu.Item
+      //                 name='info'
+      //                 active={activeItem === 'info'}
+      //                 onClick={this.handleItemClick}
+      //                 as={Link} to={`${match.url}/info`}
+      //                 style={style.DASHBOARD_MENU_ITEM}
+      //               />
+      //             </Menu>
+      //         </SectionContainer_M>
+      //
+      //         <Grid style={style.DASHBOARD_BODY}>
+      //             <Grid.Column>
+      //
+      //             <Responsive {...Responsive.onlyComputer}>
+      //                <Container text>
+      //
+      //                 <Switch>
+      //
+      //                 <Redirect exact from={match.url} to={`${match.url}/questions`} />
+      //                 <Route path={`${match.url}/questions`} render = {(props) =>
+      //                   <TeacherQuestions {...props}
+      //                     questions={questions}
+      //                     click={this.handleQuestionClick}
+      //                     tid={tid}
+      //                     click={this.handleNewQ} {...props}
+      //                     queClick={this.handleQuestionClick}
+      //                     searchQueryChange={this.handleSearchQueryChange}
+      //                     isLoading={isLoading}
+      //                     loadMore={this.handleFetchQuestionsMore}
+      //                     lastPage={lastPage}
+      //                   />}
+      //
+      //                    />} />
+      //                 <Route path={`${match.url}/curri`} render = {() =>
+      //                   <CourseCurri
+      //                     sections={curri}
+      //                     handleSecToggle={this.handleSecToggle}
+      //                    />} />
+      //                  <Route path={`${match.url}/info`} render = {() =>
+      //                    <InfoBundle
+      //                      meta={meta}
+      //                      features={features}
+      //                      images={images}
+      //                     />} />
+      //                 <Route path={`${match.url}/new-question`} render={() =>
+      //                   <NewQ
+      //                     // tid={tid}
+      //                     // cTeaching={cTeaching}
+      //                     // selectOption={selectOption}
+      //                     qTitle={qTitle}
+      //                     qText={qText}
+      //                     submit={this.handleQuestionSubmit}
+      //                     cancel={this.handleNewQCancel}
+      //                     change={this.handleQuestionInputChange}
+      //                     // chooseCourse={this.handleCourseSelect}
+      //                   />} />
+      //                 />
+      //
+      //                 <Route
+      //                   // path='/teacher/:teacherId/question/:questionId'
+      //                   path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
+      //                   render={() => <QuestionPage />}
+      //                 />
+      //
+      //               </Switch>
+      //
+      //             </Container>
+      //           </Responsive>
+      //
+      //           <Responsive minWidth={320} maxWidth={991}>
+      //              <Container>
+      //
+      //               <Switch>
+      //
+      //               <Redirect exact from={match.url} to={`${match.url}/questions`} />
+      //               <Route path={`${match.url}/questions`} render = {(props) =>
+      //                 <TeacherQuestions {...props}
+      //                   questions={questions}
+      //                   click={this.handleQuestionClick}
+      //                   tid={tid}
+      //                   click={this.handleNewQ} {...props}
+      //                   queClick={this.handleQuestionClick}
+      //                   searchQueryChange={this.handleSearchQueryChange}
+      //                   isLoading={isLoading}
+      //                   loadMore={this.handleFetchQuestionsMore}
+      //                   lastPage={lastPage}
+      //                 />}
+      //
+      //                  />} />
+      //               <Route path={`${match.url}/curri`} render = {() =>
+      //                 <CourseCurri
+      //                   sections={curri}
+      //                   handleSecToggle={this.handleSecToggle}
+      //                  />} />
+      //                <Route path={`${match.url}/info`} render = {() =>
+      //                  // <CourseMeta
+      //                  //   meta={meta}
+      //                  //  />} />
+      //                  <InfoBundle
+      //                    meta={meta}
+      //                    features={features}
+      //                    images={images}
+      //                   />} />
+      //               <Route path={`${match.url}/new-question`} render={() =>
+      //                 <NewQ
+      //                   // tid={tid}
+      //                   // cTeaching={cTeaching}
+      //                   // selectOption={selectOption}
+      //                   qTitle={qTitle}
+      //                   qText={qText}
+      //                   submit={this.handleQuestionSubmit}
+      //                   cancel={this.handleNewQCancel}
+      //                   change={this.handleQuestionInputChange}
+      //                   // chooseCourse={this.handleCourseSelect}
+      //                 />} />
+      //
+      //               <Route
+      //                 // path='/teacher/:teacherId/question/:questionId'
+      //                 path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
+      //                 render={() => <QuestionPage />}
+      //               />
+      //
+      //             </Switch>
+      //
+      //           </Container>
+      //         </Responsive>
+      //
+      //
+      //             </Grid.Column>
+      //         </Grid>
+      //
+      //     </Grid.Column>
+      // </Grid>
+      <div>
+        hh
+      </div>
     )
   }
 }
@@ -595,8 +603,9 @@ const verifyStudent = (authUser, attendee) => {
   }
 }
 
-const authCondition = (authUser) => !!authUser
-// const authCondition = (authUser) => !!authUser && verifyStudent(authUser, attendee);
 
-export default withAuthorizationMyCoursePage(authCondition)(MyCoursePage);
- // export default withRouter(MyCoursePage);
+const authCondition = (authUser) => !!authUser
+
+// export default withRouter(MyCoursePage);
+// export default withAuthorization(MyCoursePage);
+export default withAuthorizationMyCoursePage(verifyStudent)(MyCoursePage);

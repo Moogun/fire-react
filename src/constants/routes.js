@@ -29,6 +29,7 @@ export const COURSE_MANAGE_ASSIGNMENT = '/course_manage/:cid/edit/assignment';
 export const DASHBOARD = '/teaching/dashboard/'; // fetch t info with authUser credential
 export const DASHBOARD_COURSES = '/teaching/dashboard/courses';
 export const DASHBOARD_Q_PANEL = '/teaching/dashboard/questions';
+export const DASHBOARD_QUIZ_PANEL = '/teaching/dashboard/quiz';
 export const DASHBOARD_AN = '/teaching/dashboard/announcement';
 
 // export const DASHBOARD_Q_PANEL_BY_C_TITLE = '/t-dashboard/questions/:cTitle';

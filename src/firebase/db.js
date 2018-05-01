@@ -345,3 +345,9 @@ export const doRemoveCourseImage = (tid, cid, newKey, fileName) => {
 export const newKey = () => {
   return db.ref('courses').push().key
 }
+
+export const doCreateQuiz = (title, uid,) =>
+{
+  var metadata = {title,}
+  return db.ref('quizzes').child(uid).push({metadata})
+}
