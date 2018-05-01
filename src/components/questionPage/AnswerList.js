@@ -18,7 +18,7 @@ const AnswerList = ({answers, answerText, change, submit}) => {
             <Form.TextArea
               value={answerText}
               name="answerText"
-              placeholder="Enter your answer repliedBy, title + text, createdAt, image"
+              placeholder="Enter your reply"
               onChange={change}/>
             <Button content='Add Reply' labelPosition='left' icon='edit' primary />
           </Form>

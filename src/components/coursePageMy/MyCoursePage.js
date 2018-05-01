@@ -171,7 +171,9 @@ class MyCoursePage extends Component {
   }
 
   handleQuestionClick = (qid) => {
+    const {user, uid} = this.props
     const { questions } = this.state
+
     let selected = questions.filter(q => q.qid == qid)
     // console.log('selected', selected, qid);
     this.props.history.push({
@@ -179,7 +181,10 @@ class MyCoursePage extends Component {
       state:
         {
           q: selected,
-          qid: qid
+          qid: qid,
+          username: user.username,
+          photoUrl: user.photoUrl,
+          uid: uid,
         }
     })
   }
