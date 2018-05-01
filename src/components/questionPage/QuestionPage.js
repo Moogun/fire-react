@@ -55,7 +55,7 @@ class QuestionPage extends Component {
     console.log('rdr', 'q page', this.props.location.state.q);
     // console.log('rdr', 'q page props', this.props);
       return (
-          <Segment>
+          <Segment textAlign='left'>
               <Question question={location.state.q}/>
               <AnswerList
                 answers={location.state.q[0].answers}

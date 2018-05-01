@@ -256,8 +256,8 @@ export const doEnrollInCourse = (tid, cid, password, uid) => {
 
 
 
-export const doSaveNewQ = (tid, cid, askedById, askedByUsername, title, text, createdAt, img) => {
-  console.log('db askedByUsername is needed April 14', tid, cid, askedById, askedByUsername, title, text, createdAt, img);
+export const doSaveNewQ = (tid, cid, askedById, askedByUsername, askedByUserPhoto, title, text, createdAt, img) => {
+  console.log('db askedByUsername is needed April 14', tid, cid, askedById, askedByUsername, askedByUserPhoto, title, text, createdAt, img);
   let answerCount = 0
   let timeStamp = fb.database.ServerValue.TIMESTAMP
 
@@ -265,7 +265,7 @@ export const doSaveNewQ = (tid, cid, askedById, askedByUsername, title, text, cr
   // updates[`courses/${cid}/meta/questionCount`] = true
   // return db.ref().update(updates)
 
-  return db.ref('questions').child(tid).child(cid).push({tid, cid, askedById, askedByUsername, title, text, timeStamp, answerCount})
+  return db.ref('questions').child(tid).child(cid).push({tid, cid, askedById, askedByUsername, askedByUserPhoto, title, text, timeStamp, answerCount})
 }
 
 export const doSaveAnswer = (tid, cid, qid, answeredById, answeredByUsername, text, createdAt, img) => {
@@ -277,6 +277,13 @@ export const doSaveAnswer = (tid, cid, qid, answeredById, answeredByUsername, te
 
 export const doFetchRecentQuestions = (tid, cid, FirstFive) => {
     return db.ref('questions').child(tid).child(cid).limitToLast(FirstFive)
+}
+
+export const doFetchQuestions = (tid, cid) => {
+  return db.ref('questions').child(tid).child(cid).on('child_added', function(data) {
+    console.log('data', data.val());
+    // addCommentElement(postElement, data.key, data.val().text, data.val().author);
+  });
 }
 
 export const doFetchNextQuestions = (tid, cid, lastQid, FiveMore) => {

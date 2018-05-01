@@ -20,25 +20,28 @@ class QuestionTable extends Component {
         <Table unstackable style={{marginTop: '1rem'}}>
           <Table.Body>
 
-            {/* {Object.keys(questions).map(qid =>
-              <QuestionRow key={qid}
-                question={questions[qid]}
-                click={()=> this.handleQueClick(qid)} /> )} */}
-            {questions.map((q, index) =>
+            {Object.keys(questions).map((q, index) =>
+              <QuestionRow
+                key={index}
+                question={questions[q]}
+                click={()=> this.handleQueClick(questions[q].qid)} /> )}
+            {/* {questions.map((q, index) =>
               <QuestionRow
               key={index}
               question={q}
               click={()=> this.handleQueClick(q.qid)}
              />
-           )}
+           )} */}
 
           </Table.Body>
         </Table>
         {/* <Pagination defaultActivePage={3} totalPages={3} /> */}
         <Loader active={isLoading} inline='centered' />
-        <Segment basic textAlign='center'>
+
+        {/* May 1 hide it until pagination is implemented
+          <Segment basic textAlign='center'>
           <Button content='Load more' disabled={lastPage} onClick={loadMore}/>
-        </Segment>
+        </Segment> */}
       </div>
     );
   }

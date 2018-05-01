@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import {Link, withRouter, Switch, Redirect, Route} from 'react-router-dom';
 import {db} from '../../firebase';
+import {fb} from '../../firebase/firebase';
 import withAuthorizationMyCoursePage from '../../HOC/withAuthorizationMyCoursePage';
 // import withAuthorization from '../../HOC/withAuthorization';
 
@@ -39,7 +40,9 @@ class MyCoursePage extends Component {
       // modalOpen: false,
       registered: false,
 
-      questions: '',
+      qTitle: '',
+      qText: '',
+      questions: [],
       isLoading: false,
       lastPage: false,
       attending: true,
@@ -47,13 +50,26 @@ class MyCoursePage extends Component {
   }
 
   componentDidMount() {
-    this.handleGetCourseWithTitle()
+
+    const { cid, course, uid, user } = this.props
+    let tid = course[cid].metadata.tid
+    // console.log('tid,', tid, 'cid', cid[0]);
+    // let qList = []
+    if (tid && cid ) {
+      fb.database().ref('questions').child(tid).child(cid[0]).on('child_added', this.handleQuestionDataSave)
+    }
+  }
+
+  handleQuestionDataSave = (data) => {
+    const {questions} = this.state
+    let q = {}
+    q = data.val()
+    q['qid'] = data.key
+    questions.push(q)
+    this.setState ({ questions})
   }
 
   handleGetCourseWithTitle() {
-    // console.log('course page did mount', this.props.match.params);
-    let cTitle = this.props.match.params.cTitle
-    let title = cTitle.replace(/-/g, ' ');
 
     // db.onceGetCourseWithTitle(title)
     //   .then(cSnap => {
@@ -157,6 +173,7 @@ class MyCoursePage extends Component {
   handleQuestionClick = (qid) => {
     const { questions } = this.state
     let selected = questions.filter(q => q.qid == qid)
+    // console.log('selected', selected, qid);
     this.props.history.push({
       pathname: `${this.props.match.url}/question/${qid}`,
       state:
@@ -166,6 +183,7 @@ class MyCoursePage extends Component {
         }
     })
   }
+
 
   handleNewQ = () => {
     this.props.history.push(`${this.props.match.url}/new-question`)
@@ -179,16 +197,31 @@ class MyCoursePage extends Component {
 
   handleQuestionSubmit = (event) => {
     event.preventDefault();
-    const {tid, cid, qTitle, qText} = this.state;
-    const { uid, user } = this.props
-    // console.log('handleQuestionSubmit', tid, cid, qTitle, qText);
-    // console.log('this.props.user', this.props.user)
+    const { qTitle, qText} = this.state;
+    const { cid, course, uid, user } = this.props
+    let tid = course[cid].metadata.tid
+
     let date = new Date();
     let createdAt = Number(date)
+    console.log('tid', tid, cid[0]);
 
-    db.doSaveNewQ(tid, cid, uid, user.username, qTitle, qText, createdAt, 'img')
+    db.doSaveNewQ(tid, cid[0], uid, user.username, user.photoUrl, qTitle, qText, createdAt, 'img')
       .then(res => {
-        console.log('createdAt', createdAt);
+         // somethigns wrong here
+
+         // db.ref('courses').child(cid[0]).child('metadata').child('questionCount').transaction(questionCount => {
+        //   console.log('questionCount', questionCount);
+        // })
+        // let courseQuestionRef = db.ref('courses').child(cid[0]).child('metadata').child('questionCount')
+        // courseQuestionRef.transaction(function(questionCount){
+        //     if(questionCount) {
+        //       questionCount++
+        //     } else {
+        //       questionCount = 1
+        //     }
+        //     return questionCount
+        //   })
+
         this.setState ({ qTitle: '', qText: ''})
         this.props.history.replace(`${this.props.match.url}/questions`)
         })
@@ -346,7 +379,7 @@ class MyCoursePage extends Component {
       // cid, tid, tName, title, subTitle, openCourse, coursePass, tProfileImg,
       activeItem,
       // features, images, curri, attendee,
-      // questions,
+      questions,
       qTitle, qText,
       isLoading,
       lastPage,
@@ -359,6 +392,7 @@ class MyCoursePage extends Component {
 
     const {match, cid, course, attending} = this.props
     console.log('my course page ', this.props, attending);
+    console.log('my course page qtitle,', qTitle, qText);
 
     let meta = course[cid].metadata
     console.log('meta', meta);
@@ -370,7 +404,8 @@ class MyCoursePage extends Component {
     let subTitle = meta.subTitle
     let tid = meta.tid
 
-    let questions = course[cid].questions
+    let qList = questions
+    console.log('q list',qList);
 
     let curri = course[cid].curri
     let features = course[cid].features
@@ -380,7 +415,6 @@ class MyCoursePage extends Component {
       // return <Redirect to ='/' />
       // return <Redirect to ={`${tName}/${title}`}  /> // this attach the destination to current url
     // }
-
 
     return (
       <Grid >
@@ -485,7 +519,7 @@ class MyCoursePage extends Component {
                       <Redirect exact from={match.url} to={`${match.url}/questions`} />
                       <Route path={`${match.url}/questions`} render = {(props) =>
                         <TeacherQuestions {...props}
-                          questions={questions}
+                          questions={qList}
                           click={this.handleQuestionClick}
                           tid={tid}
                           click={this.handleNewQ} {...props}
@@ -541,7 +575,7 @@ class MyCoursePage extends Component {
                     <Redirect exact from={match.url} to={`${match.url}/questions`} />
                     <Route path={`${match.url}/questions`} render = {(props) =>
                       <TeacherQuestions {...props}
-                        questions={questions}
+                        questions={qList}
                         click={this.handleQuestionClick}
                         tid={tid}
                         click={this.handleNewQ} {...props}
