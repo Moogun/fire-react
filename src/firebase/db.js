@@ -282,10 +282,15 @@ export const doDeleteQuestion = (tid,cid,qid) => {
 }
 
 export const doSaveAnswer = (tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, createdAt, img) => {
-  console.log('db', tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, createdAt, img);
   let timeStamp = fb.database.ServerValue.TIMESTAMP
-  var answer = {answeredById, answeredByUsername, answeredByUserPhoto, text, timeStamp, img}
+  var answer = {tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, timeStamp, img}
   return db.ref('answers').child(qid).push(answer)
+}
+
+export const doDeleteAnswer = (qid,aid) => {
+  var updates = {}
+    updates[`answers/${qid}/${aid}`] = null
+  return db.ref().update(updates)
 }
 
 export const doFetchRecentQuestions = (tid, cid, FirstFive) => {

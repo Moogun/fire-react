@@ -78,6 +78,20 @@ class QuestionPage extends Component {
 
   handleDeleteAnswer = (answer) => {
     console.log('d answer', answer);
+    const {answers } = this.state
+    let qid = answer['qid']
+    let aid = answer['aid']
+    db.doDeleteAnswer(qid, aid)
+    .then(res => {
+
+        let index = answers.map(a => a['aid'] == aid).indexOf(true)
+        answers.splice(index, 1)
+        console.log('index', index, answers);
+        this.setState ({answers})
+    })
+    .catch(error => {
+      this.setState({[error]: error});
+    });
   }
 
   handleHelpfulAnswer = (answer) => {
