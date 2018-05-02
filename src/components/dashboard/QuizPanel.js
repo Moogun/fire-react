@@ -11,6 +11,11 @@ class QuizPanel extends Component {
 
     };
   }
+  
+  componentDidMount(){
+    console.log('did mount 1 ', )
+  }
+
   render() {
     const { click,quizzes,loading, title, quizTitleChange, onNewQuizSubmit } = this.props
 

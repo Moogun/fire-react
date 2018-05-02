@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import { Segment,Container, Table, Header, Rating, Grid, Image, Menu, Item, Button, Comment, Form, Icon, Label, Responsive } from 'semantic-ui-react'
 import {withRouter} from 'react-router-dom'
+import * as routes from '../../constants/routes';
 
 import Question from './Question'
 import CommentForm from './CommentForm'
@@ -27,7 +28,6 @@ class QuestionPage extends Component {
     const {username, photoUrl, uid,} = this.props.location.state
     const qid = this.props.location.state.qid
     const {authUser} = this.context
-    // console.log('handle answer submit tid, cid', tid, cid, username, uid);
 
     db.doSaveAnswer(tid, cid, qid, uid, username, photoUrl, answerText, "2days ago", 'img')
       .then(res => {
@@ -37,6 +37,16 @@ class QuestionPage extends Component {
       .catch(error => {
         this.setState(byPropKey('error', error))
       })
+
+     // collapsed: true,
+     // comment: {
+     //   1: {title: '1' children: {}},
+     //   2: {title: '2'},
+     //   3: {title: '3', parent: {1}}
+     // }
+     //
+     // 1. fetch all
+     // 2. if !!parent, find the parent's place and splice into it ???
 
     event.preventDefault();
   }
@@ -51,10 +61,8 @@ class QuestionPage extends Component {
     let question = this.props.location.state.q
     let cid = question[0]['cid']
     let qid = question[0]['qid']
-    console.log('qqq', question[0]['qid'], question);
-
+    // console.log('qqq', question[0]['qid'], question);
     fb.database().ref('answers').child(qid).on('child_added', this.handleAnswerDataSave)
-
   }
 
   handleAnswerDataSave = (data) => {
@@ -68,21 +76,35 @@ class QuestionPage extends Component {
     this.setState ({ answers})
   }
 
+  handleDeleteAnswer = (answer) => {
+    console.log('d answer', answer);
+  }
+
+  handleHelpfulAnswer = (answer) => {
+    console.log('hh answer', answer);
+  }
+
   render() {
     const { answers, answerText } = this.state
-    const { location } = this.props
-    // let answerList = answers ? answers : null
-    console.log('rdr', 'q page', this.props.location.state.q);
-    // console.log('rdr', 'q page props', this.props);
+    const { location, handleDeleteQuestion, handleFollowQuestion } = this.props
+    // console.log('rdr', 'q page', this.props.location.state.q);
       return (
           <Segment textAlign='left'>
-              <Question question={location.state.q}/>
+              <Question
+                question={location.state.q}
+                uid={location.state.uid}
+                handleDeleteQuestion={handleDeleteQuestion}
+                handleFollowQuestion={handleFollowQuestion}
+              />
               <AnswerList
                 // answers={location.state.q[0].answers}
+                uid={location.state.uid}
                 answers={answers}
                 answerText={answerText}
                 change={this.handleChange}
                 submit={this.handleAnswerSubmit}
+                handleDeleteAnswer={this.handleDeleteAnswer}
+                handleHelpfulAnswer={this.handleHelpfulAnswer}
                 />
           </Segment>
         )

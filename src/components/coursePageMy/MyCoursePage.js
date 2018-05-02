@@ -58,109 +58,48 @@ class MyCoursePage extends Component {
     if (tid && cid ) {
       fb.database().ref('questions').child(tid).child(cid[0]).on('child_added', this.handleQuestionDataSave)
     }
+      //
+      // fb.database().ref('questions').child(tid).child(cid[0]).on('child_changed', this.handleQuestionDataSave)
   }
 
   handleQuestionDataSave = (data) => {
     const {questions} = this.state
     let q = {}
     q = data.val()
+    console.log('q 10000', q);
     q['qid'] = data.key
     questions.splice(0,0,q)
     this.setState ({ questions})
   }
 
-  handleGetCourseWithTitle() {
+  handleDeleteQuestion = (question) => {
 
-    // db.onceGetCourseWithTitle(title)
-    //   .then(cSnap => {
-    //     this.setState ({isLoading: true})
-    //     // console.log('isloading 1 dmt ', this.state.isLoading);
-    //     let course = cSnap.val()
-    //
-    //     if (course) {
-    //       let key = Object.keys(course)
-    //       let course = course[key]
-    //       // console.log('course', course);
-    //
-    //       this.setState ({
-    //         tid: course.metadata.tid,
-    //         title: course.metadata.title,
-    //         subTitle: course.metadata.subTitle,
-    //         tName: course.metadata.tName,
-    //         tEmail: course.metadata.tEmail,
-    //         tProfileImg: course.metadata.tProfileImg,
-    //         cid: key[0],
-    //         course: course,
-    //         openCourse: course.metadata.openCourse,
-    //         coursePass: course.metadata.password,
-    //         attendee: course.attendee,
-    //         features: course.features,
-    //         images: course.images,
-    //         curri: course.curri,
-    //         qTitle: '',
-    //         qText: '',
-    //
-    //       })
-    //
-    //       // const {authUser} = this.context
-    //       const {user} = this.props
-    //       console.log('my course page then verify ', user, course.attendee)
-    //
-    //       if(!verifyStudent(user, course.attendee)) {
-    //         this.setState ({ attending: false})
-    //       } else {
-    //         this.setState ({ attending: true})
-    //       }
-    //
-    //     }
-    //     // else {
-    //     //   console.log('find a way to display course titles that have dash in it');
-    //     // }
-    //
-    //   })
-    //   .then(res => {
-    //     const {tid, cid} = this.state
-    //     // console.log('then 2 res tid, cid', tid, cid);
-    //
-    //     let qList =[]
-    //     let fetchedItem = 1
-    //
-    //     let questions = db.doFetchRecentQuestions(tid, cid, 5)
-    //
-    //     questions.on('child_added', (data) => {
-    //
-    //       let q = data.val()
-    //       // console.log('recent', q);
-    //       db.onceGetUser(q.askedById)
-    //       .then(res => {
-    //         // console.log('res', res)
-    //         let user = res.val()
-    //
-    //         q['photoUrl'] = user.photoUrl
-    //         q['qid'] = data.key
-    //         // qList.unshift(q)
-    //         qList.push(q)
-    //         // console.log('recent qlist', qList);
-    //         fetchedItem += 1
-    //
-    //         if (fetchedItem > 5 ) {
-    //           // console.log('initial fetchedItem', fetchedItem);
-    //           this.setState ({ questions: qList, isLoading: false, lastPage: false })
-    //         } else {
-    //           // console.log('initial fetchedItem', fetchedItem);
-    //           this.setState ({ questions: qList, isLoading: false, lastPage: true })
-    //         }
-    //
-    //       })
-    //       .catch(error => {
-    //         this.setState({[error]: error});
-    //       });
-    //
-    //     })
-    //   })
-    //   .catch(error => {
-    //     this.setState({[error]: error});
+    const {questions} = this.state
 
+    let tid = question['tid']
+    let cid = question['cid']
+    let qid = question['qid']
+
+    const { match } = this.props
+    console.log('delete tid, cid',  qid);
+    db.doDeleteQuestion(tid, cid, qid)
+    .then(res => {
+      let index = questions.map(q => q['qid'] == qid).indexOf(true)
+      questions.splice(index, 1)
+      this.setState ({questions})
+      this.props.history.replace(`${match.url}`)
+    })
+    .catch(error => {
+      this.setState({[error]: error});
+    });
+  }
+
+  handleFollowQuestion = (qid) => {
+    // let question = this.props.location.state.q
+    // let tid = question[0]['tid']
+    // let cid = question[0]['cid']
+    // let qid = question[0]['qid']
+    console.log('follow tid, cid',  qid);
   }
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
@@ -200,17 +139,17 @@ class MyCoursePage extends Component {
     e.preventDefault()
   }
 
-  handleQuestionSubmit = (event) => {
+  onQuestionSubmit = (event) => {
     event.preventDefault();
     const { qTitle, qText} = this.state;
     const { cid, course, uid, user } = this.props
     let tid = course[cid].metadata.tid
-
+    let courseTitle = course[cid].metadata.title
     let date = new Date();
     let createdAt = Number(date)
     console.log('tid', tid, cid[0]);
 
-    db.doSaveNewQ(tid, cid[0], uid, user.username, user.photoUrl, qTitle, qText, createdAt, 'img')
+    db.doSaveNewQ(tid, cid[0], courseTitle, uid, user.username, user.photoUrl, qTitle, qText, createdAt, 'img')
       .then(res => {
          // somethigns wrong here
 
@@ -397,30 +336,19 @@ class MyCoursePage extends Component {
     // let meta = course ? course.metadata : null
 
     const {match, cid, course, attending} = this.props
-    console.log('my course page ', this.props, attending);
-    console.log('my course page qtitle,', qTitle, qText);
 
     let meta = course[cid].metadata
-    console.log('meta', meta);
     let teacherName = meta.tName
-    // ? meta.tName : 'Teacher'
     let teacherProfile = meta.tProfileImg
-    // ? meta.tProfileImg : profile
     let title = meta.title
     let subTitle = meta.subTitle
     let tid = meta.tid
 
     let qList = questions
-    console.log('q list',qList);
 
     let curri = course[cid].curri
     let features = course[cid].features
     let images = course[cid].images
-
-    // if (!attending) {
-      // return <Redirect to ='/' />
-      // return <Redirect to ={`${tName}/${title}`}  /> // this attach the destination to current url
-    // }
 
     return (
       <Grid >
@@ -555,7 +483,7 @@ class MyCoursePage extends Component {
                           // selectOption={selectOption}
                           qTitle={qTitle}
                           qText={qText}
-                          submit={this.handleQuestionSubmit}
+                          submit={this.onQuestionSubmit}
                           cancel={this.handleNewQCancel}
                           change={this.handleQuestionInputChange}
                           // chooseCourse={this.handleCourseSelect}
@@ -565,7 +493,10 @@ class MyCoursePage extends Component {
                       <Route
                         // path='/teacher/:teacherId/question/:questionId'
                         path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
-                        render={() => <QuestionPage />}
+                        render={() => <QuestionPage
+                          handleDeleteQuestion={this.handleDeleteQuestion}
+                          handleFollowQuestion={this.handleFollowQuestion}
+                        />}
                       />
 
                     </Switch>
@@ -614,7 +545,7 @@ class MyCoursePage extends Component {
                         // selectOption={selectOption}
                         qTitle={qTitle}
                         qText={qText}
-                        submit={this.handleQuestionSubmit}
+                        submit={this.onQuestionSubmit}
                         cancel={this.handleNewQCancel}
                         change={this.handleQuestionInputChange}
                         // chooseCourse={this.handleCourseSelect}
@@ -623,7 +554,10 @@ class MyCoursePage extends Component {
                     <Route
                       // path='/teacher/:teacherId/question/:questionId'
                       path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
-                      render={() => <QuestionPage />}
+                      render={() => <QuestionPage
+                        handleDeleteQuestion={this.handleDeleteQuestion}
+                        handleFollowQuestion={this.handleFollowQuestion}
+                      />}
                     />
 
                   </Switch>

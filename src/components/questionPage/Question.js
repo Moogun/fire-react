@@ -4,7 +4,11 @@ import profile from '../../assets/profile-lg.png'
 import {db} from '../../firebase';
 import Moment from 'react-moment';
 
-const Question = ({question}) => {
+const Question = ({question, uid, handleDeleteQuestion, handleFollowQuestion}) => {
+  let remove = question[0].askedById == uid
+  ? <Comment.Action onClick={() => handleDeleteQuestion(question[0])}>Delete ?</Comment.Action>
+  : <Comment.Action onClick={() => handleFollowQuestion(question[0])}>Follow the answer (fixing) </Comment.Action>
+
   return (
     <Comment.Group>
       <Comment>
@@ -22,9 +26,7 @@ const Question = ({question}) => {
             </Comment.Text>
 
           <Comment.Actions>
-            <Comment.Action>Follow the answer with gcm ? fcm? </Comment.Action>
-            {/* <Comment.Action>Save</Comment.Action>
-            <Comment.Action>Hide</Comment.Action> */}
+            {remove}
           </Comment.Actions>
 
         </Comment.Content>

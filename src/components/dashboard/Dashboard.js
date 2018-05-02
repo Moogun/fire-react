@@ -93,40 +93,8 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-
-     // const {authUser} = this.context
-     // const {isLoading} = this.state
-     //
-     // if (authUser) {
-     //    // console.log('dmt isLoading 2', isLoading);
-     //
-     //   db.doFetchTeaching(authUser.uid)
-     //    .then(snap => {
-     //
-     //      // console.log('dmt isLoading 3', isLoading);
-     //      let teaching = snap.val()
-     //      // console.log('dashboard teaching', teaching);
-     //      let selectOption=[{key: 'default', text: 'All', value: 'default'}]
-     //      let item;
-     //        // console.log('dashboard dmt', 3 );
-     //        Object.keys(teaching).map(key => {
-     //          item={key: key, text: teaching[key].metadata.title, value: key}
-     //          selectOption.push(item)
-     //        })
-     //      // const {isLoading } = this.state
-     //      // console.log('dmt isLoading 4', isLoading);
-     //
-     //      this.setState( () => ({
-     //        courseTeaching: teaching,
-     //        'selectOption': selectOption,
-     //      }))
-     //      // console.log('dashboard dmt 4', this.state.isLoading );
-     //    })
-     //    .catch(error => {
-     //      this.setState({[error]: error});
-     //    });
-     //    // console.log('dashboard dmt', 5 );
-     // }
+    const {uid} = this.props
+    
   }
 
   componentWillUnmount(){

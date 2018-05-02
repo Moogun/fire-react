@@ -256,16 +256,29 @@ export const doEnrollInCourse = (tid, cid, password, uid) => {
 
 
 
-export const doSaveNewQ = (tid, cid, askedById, askedByUsername, askedByUserPhoto, title, text, createdAt, img) => {
-  console.log('db askedByUsername is needed April 14', tid, cid, askedById, askedByUsername, askedByUserPhoto, title, text, createdAt, img);
+export const doSaveNewQ = (tid, cid, courseTitle, askedById, askedByUsername, askedByUserPhoto, title, text, createdAt, img) => {
+  // add course title,
+  // get push key
+  // console.log('db askedByUsername is needed April 14', tid, cid, askedById, askedByUsername, askedByUserPhoto, title, text, createdAt, img);
+
   let answerCount = 0
   let timeStamp = fb.database.ServerValue.TIMESTAMP
 
-  // var updates = {}
-  // updates[`courses/${cid}/meta/questionCount`] = true
-  // return db.ref().update(updates)
+  let question = {tid, cid, courseTitle, askedById, askedByUsername, askedByUserPhoto, title, text, timeStamp, answerCount}
+  let qid = db.ref('questions').push().key
 
-  return db.ref('questions').child(tid).child(cid).push({tid, cid, askedById, askedByUsername, askedByUserPhoto, title, text, timeStamp, answerCount})
+  console.log('qid');
+  var updates = {}
+  updates[`questions/${tid}/${cid}/${qid}`] = question
+  updates[`questionsForT/${tid}/${qid}`] = question
+  return db.ref().update(updates)
+}
+
+export const doDeleteQuestion = (tid,cid,qid) => {
+  var updates = {}
+    updates[`questions/${tid}/${cid}/${qid}`] = null
+    updates[`questionsForT/${tid}/${qid}`] = null
+  return db.ref().update(updates)
 }
 
 export const doSaveAnswer = (tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, createdAt, img) => {

@@ -3,9 +3,11 @@ import { Segment,Container, Table, Header, Rating, Grid, Image, Menu, Item, Butt
 import profile from '../../assets/profile-lg.png'
 import Answer from './Answer'
 
-const AnswerList = ({answers, answerText, change, submit}) => {
+const AnswerList = ({uid, answers, answerText, change, submit, handleDeleteAnswer, handleHelpfulAnswer}) => {
   let aList = answers ? Object.keys(answers).map(aid =>
-     <Answer key={aid} answer={answers[aid]} />)
+     <Answer key={aid} answer={answers[aid]} uid={uid}
+       handleDeleteAnswer={handleDeleteAnswer}
+       handleHelpfulAnswer={handleHelpfulAnswer}/>)
      : <p>no answer yet</p>
   return (
     <Grid centered>
