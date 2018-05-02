@@ -20,7 +20,7 @@ const CourseCard = ({course, click}) => {
             <Image floated='left' size='mini' src={profileImg} style={{marginBottom:'0rem'}}/>
              {course.metadata.tName}
                 <br/>
-            <Rating icon='star' defaultRating={5} maxRating={5} size='mini'/> (230)
+            {/* <Rating icon='star' defaultRating={5} maxRating={5} size='mini'/> (230) */}
          </Card.Content>
 
           <Card.Content>

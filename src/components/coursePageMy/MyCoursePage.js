@@ -368,7 +368,8 @@ class MyCoursePage extends Component {
   }
 
   handleSecToggle = (e, secIndex) => {
-    const { curri } = this.state
+    const {cid, course} = this.props
+    let curri = course[cid].curri
     console.log('sections' ,curri, 'secIndex', curri);
     curri[secIndex].expanded = !curri[secIndex].expanded
     this.setState ({curri})
