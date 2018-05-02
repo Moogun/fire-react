@@ -35,6 +35,9 @@ import MyCourses from './myCourses/MyCourses';
 import Dashboard from './dashboard/Dashboard';
 
 
+import QuizEdit from './quiz/QuizEdit'
+
+
 import Footer from './footer/Footer';
 import About from './footer/About';
 import Faq from './footer/Faq';
@@ -73,11 +76,11 @@ class App extends Component {
               // eaact path='/create'
               exact path={routes.CREATE} render={() => <Create />} />
 
-            <Route path={routes.COURSE_MANAGE} component={() => <CEdit />} />
+            <Route path={routes.COURSE_MANAGE} render={() => <CEdit />} />
 
             <Route path={routes.DASHBOARD} render={() => <Dashboard />} />
 
-
+            <Route path={routes.QUIZ_MANAGE} render={() => <QuizEdit />} />
 
             <Route
               // exact path='/teacher/:teacherId'

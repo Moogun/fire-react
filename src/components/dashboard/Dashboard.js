@@ -64,6 +64,13 @@ class Dashboard extends Component {
   //   })
   }
 
+  handleQuizClick = (quizKey) => {
+    const {history} = this.props;
+    history.push({
+      pathname: '/quiz_manage/' + quizKey + '/edit',
+    })
+  }
+
   handleQuizTitleChange = (e) => {
     e.preventDefault()
     this.setState ({ quizTitle: e.target.value})
@@ -159,7 +166,7 @@ class Dashboard extends Component {
                           style={style.DASHBOARD_MENU_ITEM}
                         />
                         <Menu.Item
-                          name='Quiz'
+                          name='quiz'
                           active={activeItem === 'quiz'}
                           onClick={this.handleItemClick}
                           as={Link} to={`${match.url}/quiz`}
@@ -197,6 +204,13 @@ class Dashboard extends Component {
                             style={style.DASHBOARD_MENU_ITEM}
                           />
                           <Menu.Item
+                            name='quiz'
+                            active={activeItem === 'quiz'}
+                            onClick={this.handleItemClick}
+                            as={Link} to={`${match.url}/quiz`}
+                            style={style.DASHBOARD_MENU_ITEM}
+                          />
+                          <Menu.Item
                             name='announcement'
                             active={activeItem === 'announcement'}
                             onClick={this.handleItemClick}
@@ -231,7 +245,7 @@ class Dashboard extends Component {
                                  <QuizPanel
                                    {...props}
                                    quizzes={quizzes}
-                                   // click={this.handleCourseClick}
+                                   click={this.handleQuizClick}
                                    loading={isLoading}
                                    quizTitleChange={this.handleQuizTitleChange}
                                    onNewQuizSubmit={this.onNewQuizSubmit}

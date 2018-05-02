@@ -65,7 +65,7 @@ class MyCoursePage extends Component {
     let q = {}
     q = data.val()
     q['qid'] = data.key
-    questions.push(q)
+    questions.splice(0,0,q)
     this.setState ({ questions})
   }
 

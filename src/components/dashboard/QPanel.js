@@ -5,6 +5,11 @@ import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, G
 import QuestionTable from '../questions/QuestionTable'
 import * as style from '../../style/inline';
 
+// 1. teacher/questions/qid1, qid2, qid3, qid4, qid5
+// 2. fetch no need to real time - fetch 20 or thirty at a time with query
+// 3. question has a (read ?) property and alter it upon reading by teacher
+
+
 class QPanel extends Component {
 
   handleQuestionClick = (qid) => {
