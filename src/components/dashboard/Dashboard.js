@@ -24,7 +24,7 @@ class Dashboard extends Component {
       activeItem: 'courses',
       courseTeaching: null,
       'selectOption': [],
-      questions: '',
+      questions: [],
       isLoading: false,
       quizzes: {
         1:{'title': 'abc', },
@@ -53,15 +53,15 @@ class Dashboard extends Component {
   handleQuestionClick = (qid) => {
     const { questions } = this.state
     console.log('teacher q click', qid);
-    console.log('teacher q click',questions[qid]);
-  //   this.props.history.push({
-  //     pathname: `${this.props.match.url}/question/${qid}`,
-  //     state:
-  //       {
-  //         q: questions[qid],
-  //         qid: qid
-  //       }
-  //   })
+    let selected = questions.filter(q => q.qid == qid)
+    this.props.history.push({
+      pathname: `${this.props.match.url}/questions`,
+      state:
+        {
+          q: selected,
+          qid: qid
+        }
+    })
   }
 
   handleQuizClick = (quizKey) => {
@@ -93,9 +93,38 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    const {uid} = this.props
-    
+    const {user, uid} = this.props
+    console.log('uid', uid);
+    const {questions} = this.state
+
+    db.doFetchQuestionsForT('MxbMJw31WCUsU0v5GOWMTqwcApR2')
+      .then(res => {
+          // this.setState ({questions: res.val() })
+          let qList = res.val()
+          Object.keys(qList).map(qid => {
+            console.log('qid', qid);
+            let q = {}
+            q = qList[qid]
+            q['qid'] = qid
+            questions.push(q)
+            console.log('questions in dmt', questions);
+          })
+        })
+      .catch(error => {
+        this.setState({[error]: error});
+      });
+
   }
+
+  // handleQuestionDataSave = (data) => {
+  //   const {questions} = this.state
+  //   let q = {}
+  //   q = data.val()
+  //   console.log('q 10000', q);
+  //   q['qid'] = data.key
+  //   questions.splice(0,0,q)
+  //   this.setState ({ questions})
+  // }
 
   componentWillUnmount(){
     console.log('dashboard will un mount 1 ', )
@@ -107,7 +136,9 @@ class Dashboard extends Component {
       // user, courseTeaching, selectOption,
       questions, cid, isLoading, selectedCourseTitle, quizzes} = this.state
     const {courseTeaching, selectOption, user, uid} = this.props
-    console.log('rdr dashboard props', user, uid);
+    // console.log('rdr dashboard props', user, uid, questions);
+    console.log('rdr dashboard props',  questions);
+    console.log('rdr dashboard props location',  this.props);
       return (
 
         <Grid>
@@ -130,7 +161,10 @@ class Dashboard extends Component {
                           name='questions'
                           active={activeItem === 'questions'}
                           onClick={this.handleItemClick}
-                          as={Link} to={`${match.url}/questions`}
+                          as={Link} to= {{
+                            pathname: `${match.url}/questions`,
+                            state: { q: 'null' }
+                          }}
                           style={style.DASHBOARD_MENU_ITEM}
                         />
                         <Menu.Item
@@ -168,7 +202,11 @@ class Dashboard extends Component {
                             name='questions'
                             active={activeItem === 'questions'}
                             onClick={this.handleItemClick}
-                            as={Link} to={`${match.url}/questions`}
+                            as={Link} to= {{
+                              pathname: `${match.url}/questions`,
+                              state: { q: 'null' }
+                            }}
+
                             style={style.DASHBOARD_MENU_ITEM}
                           />
                           <Menu.Item

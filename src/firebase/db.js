@@ -303,6 +303,15 @@ export const doFetchQuestions = (tid, cid) => {
     // addCommentElement(postElement, data.key, data.val().text, data.val().author);
   });
 }
+//
+export const doFetchQuestionsForT = (tid) => {
+  // db.ref('questionsForT').child(tid).on('child_added
+  // ', function(data) {
+  //   console.log('data', data.val());
+  //   return data.val()
+  // });
+  return db.ref('questionsForT').child(tid).once('value')
+}
 
 export const doFetchNextQuestions = (tid, cid, lastQid, FiveMore) => {
   return db.ref('questions').child(tid).child(cid).orderByKey().endAt(lastQid).limitToLast(FiveMore)

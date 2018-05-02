@@ -5,7 +5,8 @@ import {db} from '../../firebase';
 import Moment from 'react-moment';
 
 const Question = ({question, uid, handleDeleteQuestion, handleFollowQuestion}) => {
-  let remove = question[0].askedById == uid
+
+  let remove = !!question && question[0].askedById == uid
   ? <Comment.Action onClick={() => handleDeleteQuestion(question[0])}>Delete ?</Comment.Action>
   : <Comment.Action onClick={() => handleFollowQuestion(question[0])}>Follow the answer (fixing) </Comment.Action>
 

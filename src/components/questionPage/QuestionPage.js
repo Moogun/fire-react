@@ -58,11 +58,16 @@ class QuestionPage extends Component {
 
   componentDidMount(){
 
-    let question = this.props.location.state.q
-    let cid = question[0]['cid']
-    let qid = question[0]['qid']
-    // console.log('qqq', question[0]['qid'], question);
-    fb.database().ref('answers').child(qid).on('child_added', this.handleAnswerDataSave)
+    // if (this.props.location.state.q) {
+    //   let question = this.props.location.state.q
+    //   let cid = question[0]['cid']
+    //   let qid = question[0]['qid']
+    //   // console.log('qqq', question[0]['qid'], question);
+    //   fb.database().ref('answers').child(qid).on('child_added', this.handleAnswerDataSave)
+    // } else {
+    //   // console.log('q q page, dmt', question);
+    // }
+
   }
 
   handleAnswerDataSave = (data) => {
@@ -101,27 +106,37 @@ class QuestionPage extends Component {
   render() {
     const { answers, answerText } = this.state
     const { location, handleDeleteQuestion, handleFollowQuestion } = this.props
-    // console.log('rdr', 'q page', this.props.location.state.q);
-      return (
-          <Segment textAlign='left'>
-              <Question
-                question={location.state.q}
-                uid={location.state.uid}
-                handleDeleteQuestion={handleDeleteQuestion}
-                handleFollowQuestion={handleFollowQuestion}
+    console.log('rdr', 'q page', this.props);
+    let question
+    if (location.state.q != 'null') {
+      console.log('location.state.q', location.state.q);
+      question = <React.Fragment>
+            <Question
+              question={location.state.q}
+              uid={location.state.uid}
+              handleDeleteQuestion={handleDeleteQuestion}
+              handleFollowQuestion={handleFollowQuestion}
+            />
+            <AnswerList
+              // answers={location.state.q[0].answers}
+              uid={location.state.uid}
+              answers={answers}
+              answerText={answerText}
+              change={this.handleChange}
+              submit={this.handleAnswerSubmit}
+              handleDeleteAnswer={this.handleDeleteAnswer}
+              handleHelpfulAnswer={this.handleHelpfulAnswer}
               />
-              <AnswerList
-                // answers={location.state.q[0].answers}
-                uid={location.state.uid}
-                answers={answers}
-                answerText={answerText}
-                change={this.handleChange}
-                submit={this.handleAnswerSubmit}
-                handleDeleteAnswer={this.handleDeleteAnswer}
-                handleHelpfulAnswer={this.handleHelpfulAnswer}
-                />
-          </Segment>
-        )
+          </React.Fragment>
+      } else {
+          question = <p>Select question</p>
+      }
+
+    return (
+        <Segment textAlign='left'>
+            {question}
+        </Segment>
+      )
     }
 }
 

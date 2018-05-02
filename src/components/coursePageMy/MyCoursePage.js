@@ -58,8 +58,8 @@ class MyCoursePage extends Component {
     if (tid && cid ) {
       fb.database().ref('questions').child(tid).child(cid[0]).on('child_added', this.handleQuestionDataSave)
     }
-      //
-      // fb.database().ref('questions').child(tid).child(cid[0]).on('child_changed', this.handleQuestionDataSave)
+
+
   }
 
   handleQuestionDataSave = (data) => {
@@ -598,3 +598,13 @@ const authCondition = (authUser) => !!authUser
 // export default withRouter(MyCoursePage);
 // export default withAuthorization(MyCoursePage);
 export default withAuthorizationMyCoursePage(authCondition, verifyStudent)(MyCoursePage);
+
+// const questionIntoArray = (questions) => {
+//   let q = {}
+//   q = data.val()
+//   // console.log('q 10000', q);
+//   q['qid'] = data.key
+//   questions.splice(0,0,q)
+//   this.setState ({ questions})
+//   return
+// }
