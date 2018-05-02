@@ -17,8 +17,8 @@ class QPanel extends Component {
   }
 
   render() {
-    const {options, questions, didChooseCourse, selectedCourse, loading, selectedCourseTitle} = this.props
-    console.log('selectedCourse', 'questions', selectedCourse, questions);
+    const {questions, didChooseCourse, loading,} = this.props
+    console.log('selectedCourse',this.props);
     let qList = questions
     ? questions.map(q => <List.Item as='a' key={q.qid} onClick={() => this.handleQuestionClick(q.qid)}>
         <Image avatar src={q.askedByUserPhoto} />

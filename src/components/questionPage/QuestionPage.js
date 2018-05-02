@@ -29,6 +29,7 @@ class QuestionPage extends Component {
     const qid = this.props.location.state.qid
     const {authUser} = this.context
 
+    console.log('answers save', answerText, tid, cid, username, photoUrl, uid, qid,);
     db.doSaveAnswer(tid, cid, qid, uid, username, photoUrl, answerText, "2days ago", 'img')
       .then(res => {
         console.log('res', res)
@@ -57,17 +58,6 @@ class QuestionPage extends Component {
   }
 
   componentDidMount(){
-
-    // if (this.props.location.state.q) {
-    //   let question = this.props.location.state.q
-    //   let cid = question[0]['cid']
-    //   let qid = question[0]['qid']
-    //   // console.log('qqq', question[0]['qid'], question);
-    //   fb.database().ref('answers').child(qid).on('child_added', this.handleAnswerDataSave)
-    // } else {
-    //   // console.log('q q page, dmt', question);
-    // }
-
   }
 
   handleAnswerDataSave = (data) => {

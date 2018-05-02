@@ -23,7 +23,7 @@ class Dashboard extends Component {
     this.state = {
       activeItem: 'courses',
       courseTeaching: null,
-      'selectOption': [],
+      // 'selectOption': [],
       questions: [],
       isLoading: false,
       quizzes: {
@@ -52,14 +52,19 @@ class Dashboard extends Component {
 
   handleQuestionClick = (qid) => {
     const { questions } = this.state
-    console.log('teacher q click', qid);
+    const { user, uid} = this.props
+    console.log('teacher q click', qid, user, uid);
+
     let selected = questions.filter(q => q.qid == qid)
     this.props.history.push({
       pathname: `${this.props.match.url}/questions`,
       state:
         {
           q: selected,
-          qid: qid
+          qid: qid,
+          username: user.username,
+          photoUrl: user.photoUrl,
+          uid: uid,
         }
     })
   }
@@ -92,39 +97,36 @@ class Dashboard extends Component {
     console.log('nextProps', nextProps);
   }
 
-  componentDidMount() {
-    const {user, uid} = this.props
-    console.log('uid', uid);
-    const {questions} = this.state
+  shouldComponentUpdate(nextProps, nextState){
+    console.log("shouldComponentUpdate: ", nextProps, nextState);
+    return true;
+}
 
-    db.doFetchQuestionsForT('MxbMJw31WCUsU0v5GOWMTqwcApR2')
-      .then(res => {
-          // this.setState ({questions: res.val() })
-          let qList = res.val()
-          Object.keys(qList).map(qid => {
-            console.log('qid', qid);
-            let q = {}
-            q = qList[qid]
-            q['qid'] = qid
-            questions.push(q)
-            console.log('questions in dmt', questions);
+  componentDidMount() {
+    const {questions} = this.state
+    const { authUser} = this.context
+
+    if (authUser) {
+      db.doFetchQuestionsForT(authUser.uid)
+        .then(res => {
+            // this.setState ({questions: res.val() })
+            let qList = res.val()
+            Object.keys(qList).map(qid => {
+              // console.log('qid', qid);
+              let q = {}
+              q = qList[qid]
+              q['qid'] = qid
+              questions.push(q)
+              this.setState ({ questions, uid: authUser.uid})
+              // console.log('questions in dmt', questions);
+            })
           })
-        })
-      .catch(error => {
-        this.setState({[error]: error});
-      });
+        .catch(error => {
+          this.setState({[error]: error});
+        });
+    }
 
   }
-
-  // handleQuestionDataSave = (data) => {
-  //   const {questions} = this.state
-  //   let q = {}
-  //   q = data.val()
-  //   console.log('q 10000', q);
-  //   q['qid'] = data.key
-  //   questions.splice(0,0,q)
-  //   this.setState ({ questions})
-  // }
 
   componentWillUnmount(){
     console.log('dashboard will un mount 1 ', )
@@ -137,7 +139,7 @@ class Dashboard extends Component {
       questions, cid, isLoading, selectedCourseTitle, quizzes} = this.state
     const {courseTeaching, selectOption, user, uid} = this.props
     // console.log('rdr dashboard props', user, uid, questions);
-    console.log('rdr dashboard props',  questions);
+    // console.log('rdr dashboard props',  questions);
     console.log('rdr dashboard props location',  this.props);
       return (
 
@@ -163,7 +165,7 @@ class Dashboard extends Component {
                           onClick={this.handleItemClick}
                           as={Link} to= {{
                             pathname: `${match.url}/questions`,
-                            state: { q: 'null' }
+                            state: { q: 'null', uid: uid, }
                           }}
                           style={style.DASHBOARD_MENU_ITEM}
                         />
@@ -204,7 +206,7 @@ class Dashboard extends Component {
                             onClick={this.handleItemClick}
                             as={Link} to= {{
                               pathname: `${match.url}/questions`,
-                              state: { q: 'null' }
+                              state: { q: 'null', uid: uid, }
                             }}
 
                             style={style.DASHBOARD_MENU_ITEM}
@@ -239,11 +241,8 @@ class Dashboard extends Component {
                                 />
                                 } />
                               <Route path={routes.DASHBOARD_Q_PANEL} render = {() => <QPanel
-                                options={selectOption}
                                 questions={questions}
                                 didChooseCourse={this.handleDidChooseCourse}
-                                selectedCourse={cid}
-                                selectedCourseTitle={selectedCourseTitle}
                                 queClick={this.handleQuestionClick}
                                 loading={isLoading}
                                />} />

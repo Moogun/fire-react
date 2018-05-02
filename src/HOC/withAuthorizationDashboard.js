@@ -11,6 +11,7 @@ const withAuthorization = (authCondition) => (Component) => {
     constructor(props){
       super(props)
       this.state = {
+        uid: null,
         user: null,
         courseTeaching: null,
       }
@@ -23,22 +24,24 @@ const withAuthorization = (authCondition) => (Component) => {
         } else {
           db.onceGetUser(authUser.uid)
             .then(res => {
-              this.setState ({ uid: authUser.uid, user: res.val(), })
+              // this.setState ({ uid: authUser.uid, user: res.val(), })
 
               db.doFetchTeaching(authUser.uid)
               .then(snap => {
 
                 let teaching = snap.val()
-                let selectOption=[{key: 'default', text: 'All', value: 'default'}]
-                let item;
-                Object.keys(teaching).map(key => {
-                  item={key: key, text: teaching[key].metadata.title, value: key}
-                  selectOption.push(item)
-                })
+                // let selectOption=[{key: 'default', text: 'All', value: 'default'}]
+                // let item;
+                // Object.keys(teaching).map(key => {
+                //   item={key: key, text: teaching[key].metadata.title, value: key}
+                //   selectOption.push(item)
+                // })
 
                 this.setState( () => ({
+                  uid: authUser.uid,
+                  user: res.val(),
                   courseTeaching: teaching,
-                  'selectOption': selectOption,
+                  // 'selectOption': selectOption,
                 }))
               })
               .catch(error => {
