@@ -60,7 +60,7 @@ class NonAuthContainer extends Component {
             <Container>
               <Menu.Item  as={Link} to={routes.LANDING}
                 active={activeItem === 'weqna'} onClick={this.handleItemClick}> We qna </Menu.Item>
-                <Category />
+                {/* <Category /> */}
               <Menu.Item>
                   <Input placeholder='Search...' action={{ icon: 'search' }}/>
               </Menu.Item>
@@ -94,7 +94,7 @@ class NonAuthContainer extends Component {
           <Sidebar.Pushable>
              <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
                 <Menu.Item as={Link} to='/' active onClick={this.handlePusherClick} >We </Menu.Item>
-                <Menu.Item as='a'>Category</Menu.Item>
+                {/* <Menu.Item as='a'>Category</Menu.Item> */}
                 <Menu.Item
                   as={Link} to={routes.TEACHER_INTRO} onClick={this.handlePusherClick}
                   >Are you teaching?</Menu.Item>

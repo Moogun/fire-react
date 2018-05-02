@@ -112,7 +112,7 @@ class AuthContainer extends Component {
                  active={activeItem === 'home'} onClick={this.handleItemClick} >
                 <img src={logo} />
               </Menu.Item>
-              <Category />
+              {/* <Category /> */}
               <Menu.Item>
                   <Input placeholder='Search...' action={{ icon: 'search' }} style={{width: '350px'}}/>
               </Menu.Item>
@@ -178,7 +178,7 @@ class AuthContainer extends Component {
                  : 'My Account'
                }
              </Menu.Item>
-             <Menu.Item as={Link} to='/category' onClick={this.handlePusherClick}>Category</Menu.Item>
+             {/* <Menu.Item as={Link} to='/category' onClick={this.handlePusherClick}>Category</Menu.Item> */}
              <Menu.Item as={Link} to={routes.LEARNING} onClick={this.handlePusherClick}>My Courses</Menu.Item>
              <Menu.Item as={Link} to='/notifications' onClick={this.handlePusherClick}>My Notifications</Menu.Item>
              <Menu.Item as={Link} to={!!teachingList ? routes.DASHBOARD : routes.TEACHER_INTRO} onClick={this.handlePusherClick}>{!!teachingList ? 'Instructor Dashboard' : 'Are You Teaching?'} </Menu.Item>
