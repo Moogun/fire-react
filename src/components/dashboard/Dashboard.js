@@ -53,7 +53,7 @@ class Dashboard extends Component {
   handleQuestionClick = (qid) => {
     const { questions } = this.state
     const { user, uid} = this.props
-    console.log('teacher q click', qid, user, uid);
+    // console.log('teacher q click', qid, user, uid);
 
     let selected = questions.filter(q => q.qid == qid)
     this.props.history.push({
@@ -93,14 +93,14 @@ class Dashboard extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps);
-  }
-
-  shouldComponentUpdate(nextProps, nextState){
-    console.log("shouldComponentUpdate: ", nextProps, nextState);
-    return true;
-}
+  // componentWillReceiveProps(nextProps) {
+  //   console.log('nextProps', nextProps);
+  // }
+  //
+  // shouldComponentUpdate(nextProps, nextState){
+  //   console.log("shouldComponentUpdate: ", nextProps, nextState);
+  //   return true;
+  // }
 
   componentDidMount() {
     const {questions} = this.state
@@ -140,7 +140,7 @@ class Dashboard extends Component {
     const {courseTeaching, selectOption, user, uid} = this.props
     // console.log('rdr dashboard props', user, uid, questions);
     // console.log('rdr dashboard props',  questions);
-    console.log('rdr dashboard props location',  this.props);
+    // console.log('rdr dashboard props location',  this.props);
       return (
 
         <Grid>

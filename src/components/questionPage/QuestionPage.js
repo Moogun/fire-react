@@ -58,11 +58,21 @@ class QuestionPage extends Component {
   }
 
   componentDidMount(){
+    console.log('did mount in [question page]', '-----------------');
+    if (this.props.location.state.q != 'null') {
+      let question = this.props.location.state.q
+      console.log('did mount in [question page]', question[0]['qid']);
+      let cid = question[0]['cid']
+      let qid = question[0]['qid']
+      console.log('question', question);
+      fb.database().ref('answers').child(qid).on('child_added', this.handleAnswerDataSave)
+    } else {
+      // console.log('q q page, dmt', question);
+    }
+
   }
 
   handleAnswerDataSave = (data) => {
-    // console.log('data', data.val());
-    // let question = this.props.location.state.q
     const {answers } = this.state
     let a = {}
     a = data.val()
@@ -93,13 +103,23 @@ class QuestionPage extends Component {
     console.log('hh answer', answer);
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps', nextProps);
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    console.log("shouldComponentUpdate: ", nextProps, nextState);
+    // nextProps.location.state.q[0].qid !=
+    return true;
+  }
+
   render() {
     const { answers, answerText } = this.state
     const { location, handleDeleteQuestion, handleFollowQuestion } = this.props
-    console.log('rdr', 'q page', this.props);
+    // console.log('rdr', 'q page', this.props);
     let question
     if (location.state.q != 'null') {
-      console.log('location.state.q', location.state.q);
+      // console.log('location.state.q', location.state.q);
       question = <React.Fragment>
             <Question
               question={location.state.q}

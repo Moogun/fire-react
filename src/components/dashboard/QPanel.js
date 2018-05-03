@@ -18,12 +18,13 @@ class QPanel extends Component {
 
   render() {
     const {questions, didChooseCourse, loading,} = this.props
-    console.log('selectedCourse',this.props);
+    // console.log('selectedCourse',this.props);
     let qList = questions
     ? questions.map(q => <List.Item as='a' key={q.qid} onClick={() => this.handleQuestionClick(q.qid)}>
         <Image avatar src={q.askedByUserPhoto} />
         <List.Content>
-           <List.Header>{q.askedByUsername}</List.Header> {q.timeStamp}
+           <List.Header>{q.askedByUsername}</List.Header>
+           {/* {q.timeStamp} */}
           {q.title}
         </List.Content>
       </List.Item>)
