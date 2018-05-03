@@ -113,26 +113,15 @@ class Dashboard extends Component {
   }
 
   answerAdded = (qid, aid, answer) => {
-    console.log('[dashboard], answerAdded', qid, answer );
+    // CAUTION
+    // QUESTIon data retrieving methods of dashboard and my course page is totally different
+    // my course page receives location state with question and other info then fetch answers in question page. The answers added from here will be retremoved  by child added method automatically, The answers deleted will be taken care of by local method // can i add child deleted method ? into this?
+    // dashboard fetches question and answer data from questionForT node and then passes it to q panel, panel in turn passes it to question page, 
+
     const { questions } = this.state
-    console.log('[dashboard questions changed to save before]', questions);
     let index = questions.map(q => q['qid'] == qid).indexOf(true)
     questions[index].answers[aid] = answer
-    // questions.map(q => {
-    //   console.log('[dashboard] hello q', q);
-    //   if (q['qid'] == qid) {
-    //     console.log('[dashboard] match ', q);
-    //     q['qid'].answers[aid] = answer
-    //     console.log('[dashboard], match answer saved', q);
-    //   }
-    // })
-    console.log('[dashboard questions changed to save after]', questions);
     this.setState ({ questions })
-    // let index = questions.map(q => q['qid'] == qid).indexOf(true)
-    // questions.splice(index, 1)
-    // console.log('index', index, answers);
-    // this.setState ({answers})
-
   }
 
   componentWillUnmount(){

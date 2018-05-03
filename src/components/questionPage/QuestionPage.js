@@ -102,9 +102,10 @@ class QuestionPage extends Component {
   handleDeleteAnswer = (answer) => {
     console.log('d answer', answer);
     const {answers } = this.state
+    let tid = answer['tid']
     let qid = answer['qid']
     let aid = answer['aid']
-    db.doDeleteAnswer(qid, aid)
+    db.doDeleteAnswer(tid, qid, aid)
     .then(res => {
 
         let index = answers.map(a => a['aid'] == aid).indexOf(true)

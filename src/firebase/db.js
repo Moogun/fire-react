@@ -294,9 +294,10 @@ export const doSaveAnswer = (tid, cid, qid, answeredById, answeredByUsername, an
     return db.ref().update(updates)
 }
 
-export const doDeleteAnswer = (qid,aid) => {
+export const doDeleteAnswer = (tid, qid,aid) => {
   var updates = {}
     updates[`answers/${qid}/${aid}`] = null
+    updates[`questionsForT/${tid}/${qid}/answers/${aid}`] = null
   return db.ref().update(updates)
 }
 
