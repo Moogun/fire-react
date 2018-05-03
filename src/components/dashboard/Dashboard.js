@@ -12,6 +12,7 @@ import QPanel from './QPanel'
 import QuizPanel from './QuizPanel'
 import Announcement from './Announcement'
 import {db} from '../../firebase';
+import {fb} from '../../firebase/firebase';
 import { Grid, Header, Menu, Visibility, Responsive, Segment,} from 'semantic-ui-react'
 import SectionContainer from '../navbar/SectionContainer'
 import SectionContainer_M from '../navbar/SectionContainer_M'
@@ -23,7 +24,7 @@ class Dashboard extends Component {
     this.state = {
       activeItem: 'courses',
       courseTeaching: null,
-      // 'selectOption': [],
+      selectedQuestion: null,
       questions: [],
       isLoading: false,
       quizzes: {
@@ -43,30 +44,20 @@ class Dashboard extends Component {
     })
   }
 
-  handleDidChooseCourse = (e, {value}) => {
-    const { courseTeaching } = this.props
-    let selectedCourseTitle = courseTeaching[value].metadata.title
-    this.setState({cid: value, selectedCourseTitle: selectedCourseTitle})
-    e.preventDefault()
-  }
+  // handleDidChooseCourse = (e, {value}) => {
+  //   const { courseTeaching } = this.props
+  //   let selectedCourseTitle = courseTeaching[value].metadata.title
+  //   this.setState({cid: value, selectedCourseTitle: selectedCourseTitle})
+  //   e.preventDefault()
+  // }
 
   handleQuestionClick = (qid) => {
     const { questions } = this.state
     const { user, uid} = this.props
-    // console.log('teacher q click', qid, user, uid);
+    console.log('teacher q click', qid, user, uid);
 
     let selected = questions.filter(q => q.qid == qid)
-    this.props.history.push({
-      pathname: `${this.props.match.url}/questions`,
-      state:
-        {
-          q: selected,
-          qid: qid,
-          username: user.username,
-          photoUrl: user.photoUrl,
-          uid: uid,
-        }
-    })
+    this.setState ({ selectedQuestion: selected, user: user, uid: uid})
   }
 
   handleQuizClick = (quizKey) => {
@@ -107,24 +98,40 @@ class Dashboard extends Component {
     const { authUser} = this.context
 
     if (authUser) {
-      db.doFetchQuestionsForT(authUser.uid)
-        .then(res => {
-            // this.setState ({questions: res.val() })
-            let qList = res.val()
-            Object.keys(qList).map(qid => {
-              // console.log('qid', qid);
-              let q = {}
-              q = qList[qid]
-              q['qid'] = qid
-              questions.push(q)
-              this.setState ({ questions, uid: authUser.uid})
-              // console.log('questions in dmt', questions);
-            })
-          })
-        .catch(error => {
-          this.setState({[error]: error});
-        });
+      fb.database().ref('questionsForT').child(authUser.uid).on('child_added', this.handleQuestionDataSave)
     }
+  }
+
+  handleQuestionDataSave = (data) => {
+    // console.log('hell ??');
+    const {questions} = this.state
+    let q = {}
+    q = data.val()
+    q['qid'] = data.key
+    questions.splice(0,0,q)
+    this.setState ({ questions})
+  }
+
+  answerAdded = (qid, aid, answer) => {
+    console.log('[dashboard], answerAdded', qid, answer );
+    const { questions } = this.state
+    console.log('[dashboard questions changed to save before]', questions);
+    let index = questions.map(q => q['qid'] == qid).indexOf(true)
+    questions[index].answers[aid] = answer
+    // questions.map(q => {
+    //   console.log('[dashboard] hello q', q);
+    //   if (q['qid'] == qid) {
+    //     console.log('[dashboard] match ', q);
+    //     q['qid'].answers[aid] = answer
+    //     console.log('[dashboard], match answer saved', q);
+    //   }
+    // })
+    console.log('[dashboard questions changed to save after]', questions);
+    this.setState ({ questions })
+    // let index = questions.map(q => q['qid'] == qid).indexOf(true)
+    // questions.splice(index, 1)
+    // console.log('index', index, answers);
+    // this.setState ({answers})
 
   }
 
@@ -134,13 +141,13 @@ class Dashboard extends Component {
 
   render() {
     const {match} = this.props
-    const {activeItem, error,
-      // user, courseTeaching, selectOption,
-      questions, cid, isLoading, selectedCourseTitle, quizzes} = this.state
-    const {courseTeaching, selectOption, user, uid} = this.props
-    // console.log('rdr dashboard props', user, uid, questions);
-    // console.log('rdr dashboard props',  questions);
-    // console.log('rdr dashboard props location',  this.props);
+    const { activeItem, error, isLoading,
+      questions, selectedQuestion,
+      quizzes} = this.state
+    const {courseTeaching, user, uid} = this.props
+    console.log('[render] dashboard props', user, uid, questions);
+
+
       return (
 
         <Grid>
@@ -242,9 +249,13 @@ class Dashboard extends Component {
                                 } />
                               <Route path={routes.DASHBOARD_Q_PANEL} render = {() => <QPanel
                                 questions={questions}
-                                didChooseCourse={this.handleDidChooseCourse}
+                                selectedQuestion={selectedQuestion}
+                                user={user}
+                                uid={uid}
+                                // didChooseCourse={this.handleDidChooseCourse}
                                 queClick={this.handleQuestionClick}
                                 loading={isLoading}
+                                answerAdded = {this.answerAdded}
                                />} />
                                <Route path={routes.DASHBOARD_QUIZ_PANEL} render = {(props) =>
                                  <QuizPanel

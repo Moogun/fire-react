@@ -24,31 +24,50 @@ class QuestionPage extends Component {
   handleAnswerSubmit = (event) => {
 
     const {answerText} = this.state;
-    const {tid, cid,} = this.props.location.state.q[0]
-    const {username, photoUrl, uid,} = this.props.location.state
-    const qid = this.props.location.state.qid
-    const {authUser} = this.context
+    let aid = db.newKey()
 
-    console.log('answers save', answerText, tid, cid, username, photoUrl, uid, qid,);
-    db.doSaveAnswer(tid, cid, qid, uid, username, photoUrl, answerText, "2days ago", 'img')
-      .then(res => {
-        console.log('res', res)
-        this.setState({answerText: '', error: null,})
-      })
-      .catch(error => {
-        this.setState(byPropKey('error', error))
-      })
+    if (this.props.location.state.q != 'null') {
+      // CASE: MY COURSE PAGE
+      const {tid, cid,} = this.props.location.state.q[0]
+      const {username, photoUrl, uid,} = this.props.location.state
+      const qid = this.props.location.state.qid
+      const {authUser} = this.context
 
-     // collapsed: true,
-     // comment: {
-     //   1: {title: '1' children: {}},
-     //   2: {title: '2'},
-     //   3: {title: '3', parent: {1}}
-     // }
-     //
-     // 1. fetch all
-     // 2. if !!parent, find the parent's place and splice into it ???
+      console.log('answers save', answerText, tid, cid, username, photoUrl, uid, qid,);
+      db.doSaveAnswer(tid, cid, qid, uid, username, photoUrl, answerText, "2days ago", 'img', aid)
+        .then(res => {
+          this.setState({answerText: '', error: null,})
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error))
+        })
+    } else {
+      // CASE: DASHBOARD Q PANEL
+      console.log('[q page] why');
+      const {selectedQuestion, user, uid } = this.props
+      let tid = selectedQuestion[0].tid
+      let cid = selectedQuestion[0].cid
+      let qid = selectedQuestion[0].qid
+      let answeredById = uid
+      let answeredByUsername = user.username
+      let answeredByUserPhoto = user.photoUrl
+      let text = answerText
+      let timeStamp = fb.database.ServerValue.TIMESTAMP
+      let img = 'img'
+      db.doSaveAnswer(tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, "2days ago", img, aid)
+        .then(res => {
+          //CALL FUNC IN DASHBOARD AND ADD NEW ANSWER TO THE CURRENT QUESTION - ANSWERS NODE
+          // console.log('[q page] here?');
+          let answer = {tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, timeStamp, img}
+          // console.log('[q page], added answer', answer);
+          this.props.answerAdded(qid, aid, answer)
+          this.setState({answerText: '', error: null,})
+        })
+        .catch(error => {
+          this.setState(byPropKey('error', error))
+        })
 
+    }
     event.preventDefault();
   }
 
@@ -66,10 +85,7 @@ class QuestionPage extends Component {
       let qid = question[0]['qid']
       console.log('question', question);
       fb.database().ref('answers').child(qid).on('child_added', this.handleAnswerDataSave)
-    } else {
-      // console.log('q q page, dmt', question);
     }
-
   }
 
   handleAnswerDataSave = (data) => {
@@ -78,7 +94,9 @@ class QuestionPage extends Component {
     a = data.val()
     a['aid'] = data.key
     answers.push(a)
-    this.setState ({ answers})
+    let question = this.props.location.state.q
+    this.setState ({ question: question, answers})
+    console.log('[dmt question]', this.state.question);
   }
 
   handleDeleteAnswer = (answer) => {
@@ -107,16 +125,17 @@ class QuestionPage extends Component {
     console.log('nextProps', nextProps);
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    console.log("shouldComponentUpdate: ", nextProps, nextState);
-    // nextProps.location.state.q[0].qid !=
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState){
+  //   console.log("shouldComponentUpdate: ", nextProps, nextState);
+  //   return true;
+  // }
 
   render() {
     const { answers, answerText } = this.state
-    const { location, handleDeleteQuestion, handleFollowQuestion } = this.props
-    // console.log('rdr', 'q page', this.props);
+    const { location, handleDeleteQuestion, handleFollowQuestion,
+       selectedQuestion, user, uid } = this.props
+    console.log('rdr', 'selectedQuestion', selectedQuestion, user, uid);
+
     let question
     if (location.state.q != 'null') {
       // console.log('location.state.q', location.state.q);
@@ -129,8 +148,8 @@ class QuestionPage extends Component {
             />
             <AnswerList
               // answers={location.state.q[0].answers}
-              uid={location.state.uid}
               answers={answers}
+              uid={location.state.uid}
               answerText={answerText}
               change={this.handleChange}
               submit={this.handleAnswerSubmit}
@@ -138,8 +157,26 @@ class QuestionPage extends Component {
               handleHelpfulAnswer={this.handleHelpfulAnswer}
               />
           </React.Fragment>
-      } else {
-          question = <p>Select question</p>
+      } else if (selectedQuestion != null){
+        question = <React.Fragment>
+              <Question
+                question={selectedQuestion}
+                uid={uid}
+                handleDeleteQuestion={handleDeleteQuestion}
+                handleFollowQuestion={handleFollowQuestion}
+              />
+              <AnswerList
+                // answers={location.state.q[0].answers}
+                user={user}
+                uid={uid}
+                answers={selectedQuestion[0].answers}
+                answerText={answerText}
+                change={this.handleChange}
+                submit={this.handleAnswerSubmit}
+                handleDeleteAnswer={this.handleDeleteAnswer}
+                handleHelpfulAnswer={this.handleHelpfulAnswer}
+                />
+            </React.Fragment>
       }
 
     return (

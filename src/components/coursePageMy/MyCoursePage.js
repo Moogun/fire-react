@@ -58,8 +58,6 @@ class MyCoursePage extends Component {
     if (tid && cid ) {
       fb.database().ref('questions').child(tid).child(cid[0]).on('child_added', this.handleQuestionDataSave)
     }
-
-
   }
 
   handleQuestionDataSave = (data) => {

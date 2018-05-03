@@ -4,6 +4,7 @@ import profile from '../../assets/profile-lg.png'
 import Answer from './Answer'
 
 const AnswerList = ({uid, answers, answerText, change, submit, handleDeleteAnswer, handleHelpfulAnswer}) => {
+  console.log('[answer list ] answers', answers);
   let aList = answers ? Object.keys(answers).map(aid =>
      <Answer key={aid} answer={answers[aid]} uid={uid}
        handleDeleteAnswer={handleDeleteAnswer}
