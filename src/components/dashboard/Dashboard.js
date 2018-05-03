@@ -112,17 +112,36 @@ class Dashboard extends Component {
     this.setState ({ questions})
   }
 
-  answerAdded = (qid, aid, answer) => {
+  handleAnswerAdded = (qid, aid, answer) => {
     // CAUTION
     // QUESTIon data retrieving methods of dashboard and my course page is totally different
     // my course page receives location state with question and other info then fetch answers in question page. The answers added from here will be retremoved  by child added method automatically, The answers deleted will be taken care of by local method // can i add child deleted method ? into this?
-    // dashboard fetches question and answer data from questionForT node and then passes it to q panel, panel in turn passes it to question page, 
+    // dashboard fetches question and answer data from questionForT node and then passes it to q panel, panel in turn passes it to question page,
 
     const { questions } = this.state
     let index = questions.map(q => q['qid'] == qid).indexOf(true)
     questions[index].answers[aid] = answer
     this.setState ({ questions })
   }
+
+  // handleDeleteAnswer = (answer) => {
+  //   console.log('d answer', answer);
+  //   const {answers } = this.state
+  //   let tid = answer['tid']
+  //   let qid = answer['qid']
+  //   let aid = answer['aid']
+  //   db.doDeleteAnswer(tid, qid, aid)
+  //   .then(res => {
+  //
+  //       let index = answers.map(a => a['aid'] == aid).indexOf(true)
+  //       answers.splice(index, 1)
+  //       console.log('index', index, answers);
+  //       this.setState ({answers})
+  //   })
+  //   .catch(error => {
+  //     this.setState({[error]: error});
+  //   });
+  // }
 
   componentWillUnmount(){
     console.log('dashboard will un mount 1 ', )
@@ -134,8 +153,7 @@ class Dashboard extends Component {
       questions, selectedQuestion,
       quizzes} = this.state
     const {courseTeaching, user, uid} = this.props
-    console.log('[render] dashboard props', user, uid, questions);
-
+    // console.log('[render] dashboard props', user, uid, questions);
 
       return (
 
@@ -244,7 +262,7 @@ class Dashboard extends Component {
                                 // didChooseCourse={this.handleDidChooseCourse}
                                 queClick={this.handleQuestionClick}
                                 loading={isLoading}
-                                answerAdded = {this.answerAdded}
+                                answerAdded = {this.handleAnswerAdded}
                                />} />
                                <Route path={routes.DASHBOARD_QUIZ_PANEL} render = {(props) =>
                                  <QuizPanel

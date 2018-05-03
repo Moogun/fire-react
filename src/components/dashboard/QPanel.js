@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {Link, Route, withRouter,} from 'react-router-dom'
-import { Segment, Container, Button, Header, Icon, Menu, Divider, Card, Image, Grid, Form, Item, Select, Checkbox, Label, Responsive, List, Input} from 'semantic-ui-react'
+import { Segment, Container,  Header, Image, Grid, Responsive, List, Input} from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
-import QuestionTable from '../questions/QuestionTable'
+
 import * as style from '../../style/inline';
-import QuestionPage from '../questionPage/QuestionPage'
+import QuestionManage from '../dashboardQuestionManage/QuestionManage'
 import Moment from 'react-moment';
 // 1. teacher/questions/qid1, qid2, qid3, qid4, qid5
 // 2. fetch no need to real time - fetch 20 or thirty at a time with query
@@ -31,8 +31,6 @@ class QPanel extends Component {
         </List.Content>
       </List.Item>)
     : <p>No Question Yet</p>
-      // let qList = questions ? <QuestionTable options={options} questions={questions} click={this.handleQuestionClick} />
-      // : <p>No question yet</p>
 
     return (
       <Segment basic loading={loading} style={style.SEGMENT_LOADER}>
@@ -59,7 +57,11 @@ class QPanel extends Component {
               </Grid.Column>
 
               <Grid.Column width={8}>
-                <QuestionPage selectedQuestion={selectedQuestion} user={user} uid={uid} answerAdded={answerAdded}/>
+                <QuestionManage
+                  selectedQuestion={selectedQuestion}
+                  user={user} uid={uid}
+                  answerAdded={answerAdded} 
+                />
               </Grid.Column>
 
             </Grid.Row>

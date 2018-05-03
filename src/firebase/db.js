@@ -281,8 +281,8 @@ export const doDeleteQuestion = (tid,cid,qid) => {
   return db.ref().update(updates)
 }
 
-export const doSaveAnswer = (tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, timeStamp, img, aid)  => {
-  // let timeStamp = fb.database.ServerValue.TIMESTAMP
+export const doSaveAnswer = (tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, createdAt, img, aid)  => {
+  let timeStamp = fb.database.ServerValue.TIMESTAMP
 
   let answer = {tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, timeStamp, img}
   // let aid = db.ref('questions').push().key

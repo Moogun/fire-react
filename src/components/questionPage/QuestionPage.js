@@ -99,23 +99,28 @@ class QuestionPage extends Component {
     console.log('[dmt question]', this.state.question);
   }
 
-  handleDeleteAnswer = (answer) => {
-    console.log('d answer', answer);
+  handleDeleteAnswer = (answerToBeDeleted) => {
+    console.log('[question page] delete answer', answerToBeDeleted);
     const {answers } = this.state
-    let tid = answer['tid']
-    let qid = answer['qid']
-    let aid = answer['aid']
-    db.doDeleteAnswer(tid, qid, aid)
-    .then(res => {
+    if (answers) {
+      let tid = answerToBeDeleted['tid']
+      let qid = answerToBeDeleted['qid']
+      let aid = answerToBeDeleted['aid']
+      db.doDeleteAnswer(tid, qid, aid)
+      .then(res => {
 
-        let index = answers.map(a => a['aid'] == aid).indexOf(true)
-        answers.splice(index, 1)
-        console.log('index', index, answers);
-        this.setState ({answers})
-    })
-    .catch(error => {
-      this.setState({[error]: error});
-    });
+          let index = answers.map(a => a['aid'] == aid).indexOf(true)
+          answers.splice(index, 1)
+          console.log('index', index, answers); // index is -1
+          this.setState ({answers})
+      })
+      .catch(error => {
+        this.setState({[error]: error});
+      });
+    } else {
+      console.log('do some');
+    }
+
   }
 
   handleHelpfulAnswer = (answer) => {
@@ -123,7 +128,7 @@ class QuestionPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps);
+    // console.log('nextProps', nextProps);
   }
 
   // shouldComponentUpdate(nextProps, nextState){
@@ -135,7 +140,7 @@ class QuestionPage extends Component {
     const { answers, answerText } = this.state
     const { location, handleDeleteQuestion, handleFollowQuestion,
        selectedQuestion, user, uid } = this.props
-    console.log('rdr', 'selectedQuestion', selectedQuestion, user, uid);
+    // console.log('rdr', 'selectedQuestion', selectedQuestion, user, uid);
 
     let question
     if (location.state.q != 'null') {

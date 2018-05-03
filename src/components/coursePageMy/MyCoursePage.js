@@ -64,7 +64,7 @@ class MyCoursePage extends Component {
     const {questions} = this.state
     let q = {}
     q = data.val()
-    console.log('q 10000', q);
+    // console.log('q 10000', q);
     q['qid'] = data.key
     questions.splice(0,0,q)
     this.setState ({ questions})
