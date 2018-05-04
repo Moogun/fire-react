@@ -3,10 +3,10 @@ import { Segment,Container, Table, Header, Rating, Grid, Image, Menu, Item, Butt
 import profile from '../../assets/profile-lg.png'
 import Moment from 'react-moment';
 
-const Answer = ({answer, uid, handleDeleteAnswer, handleHelpfulAnswer}) => {
+const Answer = ({answer, aid, uid, handleDeleteAnswer, handleHelpfulAnswer}) => {
   // console.log('answer', answer);
   let remove = answer['answeredById'] == uid
-  ? <Comment.Action onClick={() => handleDeleteAnswer(answer)}>Delete ?</Comment.Action>
+  ? <Comment.Action onClick={(e) => handleDeleteAnswer(e, aid, answer)}>Delete ?</Comment.Action>
   : <Comment.Action onClick={() => handleHelpfulAnswer(answer)}>Helpful (fixing) <Icon name='thumbs up' /></Comment.Action>
 
   return (

@@ -183,25 +183,35 @@ class Dashboard extends Component {
     this.setState ({ questions })
   }
 
-  // handleDeleteAnswer = (answer) => {
-  //   console.log('d answer', answer);
-  //   const {answers } = this.state
-  //   let tid = answer['tid']
-  //   let qid = answer['qid']
-  //   let aid = answer['aid']
-  //   db.doDeleteAnswer(tid, qid, aid)
-  //   .then(res => {
-  //
-  //       let index = answers.map(a => a['aid'] == aid).indexOf(true)
-  //       answers.splice(index, 1)
-  //       console.log('index', index, answers);
-  //       this.setState ({answers})
-  //   })
-  //   .catch(error => {
-  //     this.setState({[error]: error});
-  //   });
-  // }
+  handleDeleteAnswer = (e, aid, answer) => {
+    console.log('d answer', answer, aid);
+    const { questions } = this.state
 
+    let tid = answer['tid']
+    let qid = answer['qid']
+    db.doDeleteAnswer(tid, qid, aid)
+    .then(res => {
+        let qIndex = questions.map(q => q['qid'] == qid).indexOf(true)
+        console.log('qIndex', qIndex);
+        let answerKeys = Object.keys(questions[qIndex].answers)
+        let deletedKey = answerKeys.filter(a => a == aid)
+        delete questions[qIndex].answers[deletedKey[0]]
+        this.setState ({ questions })
+    })
+    .catch(error => {
+      this.setState({[error]: error});
+    });
+  }
+
+  handleDeleteQuestion = (e, question) => {
+    // is this needed ? may be not 
+    console.log('[d question]', question);
+    const { questions } = this.state
+    let index = questions.map(q => q['qid'] == question['qid']).indexOf(true)
+    console.log('index', index);
+    questions.splice(index, 1)
+    this.setState ({ questions })
+  }
 
   render() {
     const {courseTeaching, user, uid, match} = this.props
@@ -317,6 +327,8 @@ class Dashboard extends Component {
                                 answerText={answerText}
                                 onAnswerRemoved={this.handleAnswerRemoved}
                                 loading={isLoading}
+                                handleDeleteAnswer={this.handleDeleteAnswer}
+                                handleDeleteQuestion={this.handleDeleteQuestion}
                                />} />
                                <Route path={routes.DASHBOARD_QUIZ_PANEL} render = {(props) =>
                                  <QuizPanel

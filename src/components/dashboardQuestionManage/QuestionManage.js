@@ -28,7 +28,7 @@ class QuestionPage extends Component {
   render() {
     const { answers } = this.state
     const { handleDeleteQuestion, handleFollowQuestion,
-       selectedQuestion, user, uid, answerText, answerChange, onAnswerSubmit } = this.props
+       selectedQuestion, user, uid, answerText, answerChange, onAnswerSubmit, handleDeleteAnswer, handleHelpfulAnswer } = this.props
     // console.log('rdr', 'selectedQuestion', selectedQuestion, user, uid);
 
     let question = selectedQuestion
@@ -48,8 +48,8 @@ class QuestionPage extends Component {
             change={answerChange}
             // submit={this.handleAnswerSubmit}
             submit={onAnswerSubmit}
-            handleDeleteAnswer={this.handleDeleteAnswer}
-            handleHelpfulAnswer={this.handleHelpfulAnswer}
+            handleDeleteAnswer={handleDeleteAnswer}
+            handleHelpfulAnswer={handleHelpfulAnswer}
             />
         </React.Fragment>
       : <p>Select Question</p>

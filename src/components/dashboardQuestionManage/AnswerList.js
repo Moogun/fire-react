@@ -6,7 +6,7 @@ import Answer from './Answer'
 const AnswerList = ({uid, answers, answerText, change, submit, handleDeleteAnswer, handleHelpfulAnswer}) => {
   // console.log('[answer list ] answers', answers);
   let aList = answers ? Object.keys(answers).map(aid =>
-     <Answer key={aid} answer={answers[aid]} uid={uid}
+     <Answer key={aid} aid={aid} answer={answers[aid]} uid={uid}
        handleDeleteAnswer={handleDeleteAnswer}
        handleHelpfulAnswer={handleHelpfulAnswer}/>)
      : <p>no answer yet</p>

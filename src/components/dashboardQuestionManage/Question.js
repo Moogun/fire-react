@@ -7,8 +7,8 @@ import Moment from 'react-moment';
 const Question = ({question, uid, handleDeleteQuestion, handleFollowQuestion}) => {
 
   let remove = !!question && question[0].askedById == uid
-  ? <Comment.Action onClick={() => handleDeleteQuestion(question[0])}>Delete ?</Comment.Action>
-  : <Comment.Action onClick={() => handleFollowQuestion(question[0])}>Follow the answer (fixing) </Comment.Action>
+  ? <Comment.Action onClick={(e) => handleDeleteQuestion(e, question[0])}>Delete ?</Comment.Action>
+  : <Comment.Action onClick={(e) => handleFollowQuestion(e, question[0])}>Follow the answer (fixing) </Comment.Action>
 
   return (
     <Comment.Group>

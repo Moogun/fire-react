@@ -18,7 +18,7 @@ class QPanel extends Component {
   }
 
   render() {
-    const {questions, selectedQuestion, user, uid, loading, match, answerChange, answerText, onAnswerSubmit} = this.props
+    const {questions, selectedQuestion, user, uid, loading, match, answerChange, answerText, onAnswerSubmit, handleDeleteQuestion, handleDeleteAnswer} = this.props
 
     let qList = <React.Fragment>
         <Responsive {...Responsive.onlyComputer}>
@@ -59,6 +59,8 @@ class QPanel extends Component {
                   onAnswerSubmit={onAnswerSubmit}
                   answerChange={answerChange}
                   answerText={answerText}
+                  handleDeleteQuestion={handleDeleteQuestion}
+                  handleDeleteAnswer={handleDeleteAnswer}
                 />
               </Grid.Column>
 
@@ -97,6 +99,8 @@ class QPanel extends Component {
                            onAnswerSubmit={onAnswerSubmit}
                            answerChange={answerChange}
                            answerText={answerText}
+                           handleDeleteQuestion={handleDeleteQuestion}
+                           handleDeleteAnswer={handleDeleteAnswer}
                          /> : null}
                      </React.Fragment>)
                   : <p>No Question Yet</p>
