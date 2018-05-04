@@ -26,6 +26,7 @@ class Dashboard extends Component {
       courseTeaching: null,
       selectedQuestion: null,
       questions: [],
+      answerText: '',
       isLoading: false,
       quizzes: {
         1:{'title': 'abc', },
@@ -44,22 +45,7 @@ class Dashboard extends Component {
     })
   }
 
-  // handleDidChooseCourse = (e, {value}) => {
-  //   const { courseTeaching } = this.props
-  //   let selectedCourseTitle = courseTeaching[value].metadata.title
-  //   this.setState({cid: value, selectedCourseTitle: selectedCourseTitle})
-  //   e.preventDefault()
-  // }
-
-  handleQuestionClick = (qid) => {
-    const { questions } = this.state
-    const { user, uid} = this.props
-    console.log('teacher q click', qid, user, uid);
-
-    let selected = questions.filter(q => q.qid == qid)
-    this.setState ({ selectedQuestion: selected, user: user, uid: uid})
-  }
-
+  //QUIZ
   handleQuizClick = (quizKey) => {
     const {history} = this.props;
     history.push({
@@ -93,31 +79,104 @@ class Dashboard extends Component {
   //   return true;
   // }
 
+  componentWillUnmount(){
+    console.log('dashboard will un mount 1 ', )
+  }
+
   componentDidMount() {
     const {questions} = this.state
-    const { authUser} = this.context
+    const {authUser} = this.context
 
     if (authUser) {
       fb.database().ref('questionsForT').child(authUser.uid).on('child_added', this.handleQuestionDataSave)
+      fb.database().ref('questionsForT').child(authUser.uid).on('child_removed', this.handleQuestionDataSave)
     }
   }
 
+  //QUESTION
+  handleQuestionClick = (qid) => {
+    const { questions, selectedQuestion } = this.state
+    const { user, uid} = this.props
+    console.log('teacher q click', selectedQuestion, questions);
+    //change selected's isExpanded
+    // merge it to the questions
+    // save it
+    if (selectedQuestion) {
+      selectedQuestion[0]['isExpanded'] = !selectedQuestion[0]['isExpanded']
+      let index = questions.map(q => q['qid'] == selectedQuestion[0]['qid']).indexOf(true)
+      console.log('index', index);
+      //below cause an error thoat shows list 'invalid date'
+      // questions.splice(index, 1, selectedQuestion)
+    }
+
+    let selected = questions.filter(q => q.qid == qid)
+    let isExpanded = selected[0]['isExpanded']
+    console.log('isExpanded', selected, isExpanded);
+    selected[0]['isExpanded'] = !isExpanded
+    this.setState ({ questions: questions, selectedQuestion: selected, user: user, uid: uid, answerText: '' })
+  }
+
   handleQuestionDataSave = (data) => {
-    // console.log('hell ??');
     const {questions} = this.state
     let q = {}
     q = data.val()
     q['qid'] = data.key
+    q['isExpanded'] = false
     questions.splice(0,0,q)
     this.setState ({ questions})
   }
 
-  handleAnswerAdded = (qid, aid, answer) => {
-    // CAUTION
-    // QUESTIon data retrieving methods of dashboard and my course page is totally different
-    // my course page receives location state with question and other info then fetch answers in question page. The answers added from here will be retremoved  by child added method automatically, The answers deleted will be taken care of by local method // can i add child deleted method ? into this?
-    // dashboard fetches question and answer data from questionForT node and then passes it to q panel, panel in turn passes it to question page,
+  handleQuestionDataRemoved = (data) => {
+    console.log('[nDataRemoved]', data);
+    // const {questions} = this.state
+    // let q = {}
+    // q = data.val()
+    // q['qid'] = data.key
+    // questions.splice(0,0,q)
+    // this.setState ({ questions})
+  }
 
+  handleAnswerChange = (e, { value }) => {
+    console.log('[answerChange]', value);
+    this.setState({[e.target.name]: e.target.value})
+    e.preventDefault()
+  }
+
+  onAnswerSubmit = (e) => {
+    const {selectedQuestion, answerText, user, uid} = this.state;
+    let aid = db.newKey()
+
+    console.log('[q page] why', selectedQuestion, answerText, aid, user, uid);
+    let tid = selectedQuestion[0].tid
+    let cid = selectedQuestion[0].cid
+    let qid = selectedQuestion[0].qid
+    let answeredById = uid
+    let answeredByUsername = user.username
+    let answeredByUserPhoto = user.photoUrl
+    let text = answerText
+    let timeStamp = fb.database.ServerValue.TIMESTAMP
+
+    let img = 'img'
+    db.doSaveAnswer(tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, timeStamp, img, aid)
+      .then(res => {
+        //CALL FUNC IN DASHBOARD AND ADD NEW ANSWER TO THE CURRENT QUESTION - ANSWERS NODE
+        // console.log('[q page] here?');
+        var d = new Date();
+        var n = d.getTime();
+
+        let answer = {tid, cid, qid, answeredById, answeredByUsername, answeredByUserPhoto, text, timeStamp: n, img}
+        console.log('[q page], added answer', answer);
+        this.handleAnswerAdded(qid, aid, answer)
+        this.setState({answerText: '', error: null,})
+      })
+      .catch(error => {
+        this.setState({['error']: error})
+      })
+    e.preventDefault()
+  }
+
+  handleAnswerAdded = (qid, aid, answer) => {
+    console.log('[answer added]', answer);
     const { questions } = this.state
     let index = questions.map(q => q['qid'] == qid).indexOf(true)
     questions[index].answers[aid] = answer
@@ -143,17 +202,11 @@ class Dashboard extends Component {
   //   });
   // }
 
-  componentWillUnmount(){
-    console.log('dashboard will un mount 1 ', )
-  }
 
   render() {
-    const {match} = this.props
-    const { activeItem, error, isLoading,
-      questions, selectedQuestion,
-      quizzes} = this.state
-    const {courseTeaching, user, uid} = this.props
-    // console.log('[render] dashboard props', user, uid, questions);
+    const {courseTeaching, user, uid, match} = this.props
+    const { activeItem, error, isLoading, questions, selectedQuestion, answerText, quizzes} = this.state
+    console.log('[render] dashboard props', this.props.answerText);
 
       return (
 
@@ -161,7 +214,6 @@ class Dashboard extends Component {
             <Grid.Column
               // style={{minHeight: '87vh'}}
               >
-
                 <SectionContainer>
                     <Header as='h1' style={style.DASHBOARD_HEADER}>Dashboard</Header>
 
@@ -259,10 +311,12 @@ class Dashboard extends Component {
                                 selectedQuestion={selectedQuestion}
                                 user={user}
                                 uid={uid}
-                                // didChooseCourse={this.handleDidChooseCourse}
                                 queClick={this.handleQuestionClick}
+                                answerChange={this.handleAnswerChange}
+                                onAnswerSubmit={this.onAnswerSubmit}
+                                answerText={answerText}
+                                onAnswerRemoved={this.handleAnswerRemoved}
                                 loading={isLoading}
-                                answerAdded = {this.handleAnswerAdded}
                                />} />
                                <Route path={routes.DASHBOARD_QUIZ_PANEL} render = {(props) =>
                                  <QuizPanel

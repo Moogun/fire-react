@@ -32,9 +32,9 @@ class QuestionPage extends Component {
       const {username, photoUrl, uid,} = this.props.location.state
       const qid = this.props.location.state.qid
       const {authUser} = this.context
-
+      let timeStamp = fb.database.ServerValue.TIMESTAMP
       console.log('answers save', answerText, tid, cid, username, photoUrl, uid, qid,);
-      db.doSaveAnswer(tid, cid, qid, uid, username, photoUrl, answerText, "2days ago", 'img', aid)
+      db.doSaveAnswer(tid, cid, qid, uid, username, photoUrl, answerText, timeStamp, 'img', aid)
         .then(res => {
           this.setState({answerText: '', error: null,})
         })

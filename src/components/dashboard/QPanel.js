@@ -18,23 +18,9 @@ class QPanel extends Component {
   }
 
   render() {
-    const {questions, selectedQuestion, user, uid, loading, match, answerAdded} = this.props
+    const {questions, selectedQuestion, user, uid, loading, match, answerChange, answerText, onAnswerSubmit} = this.props
 
-    let qList = questions
-    ? questions.map(q => <List.Item as='a' key={q.qid} onClick={() => this.handleQuestionClick(q.qid)}>
-        <Image avatar src={q.askedByUserPhoto} />
-        <List.Content>
-           <List.Header>{q.askedByUsername}
-          <Moment fromNow unix>{q.timeStamp / 1000}</Moment>
-           </List.Header>
-          {q.title}
-        </List.Content>
-      </List.Item>)
-    : <p>No Question Yet</p>
-
-    return (
-      <Segment basic loading={loading} style={style.SEGMENT_LOADER}>
-
+    let qList = <React.Fragment>
         <Responsive {...Responsive.onlyComputer}>
           <Grid stackable>
             <Grid.Row centered>
@@ -50,7 +36,17 @@ class QPanel extends Component {
                   />
                 <Segment style={{maxHeight: '600px', overflowY: 'scroll'}}>
                 <List animated divided relaxed verticalAlign='middle'>
-                  {qList}
+                  {questions
+                  ? questions.map(q => <List.Item as='a' key={q.qid} onClick={() => this.handleQuestionClick(q.qid)}>
+                       <Image avatar src={q.askedByUserPhoto} />
+                       <List.Content>
+                          <List.Header>{q.askedByUsername}
+                         <Moment fromNow unix>{q.timeStamp / 1000}</Moment>
+                        </List.Header>
+                         {q.title}
+                       </List.Content>
+                     </List.Item>)
+                   : <p>No Question Yet</p>}
                  </List>
                  </Segment>
                  </Container>
@@ -60,7 +56,9 @@ class QPanel extends Component {
                 <QuestionManage
                   selectedQuestion={selectedQuestion}
                   user={user} uid={uid}
-                  answerAdded={answerAdded} 
+                  onAnswerSubmit={onAnswerSubmit}
+                  answerChange={answerChange}
+                  answerText={answerText}
                 />
               </Grid.Column>
 
@@ -78,13 +76,41 @@ class QPanel extends Component {
                 placeholder='not searchble yet...'
                 fluid
               />
-              <Segment style={{maxHeight: '600px', overflowY: 'scroll'}}>
+              <Segment>
                 <List animated divided relaxed verticalAlign='middle'>
-                  {qList}
+                  {questions
+                  ? questions.map(q =>
+                    <React.Fragment key={q.qid}>
+                      <List.Item as='a' onClick={() => this.handleQuestionClick(q.qid)}>
+                         <Image avatar src={q.askedByUserPhoto} />
+                         <List.Content>
+                            <List.Header>{q.askedByUsername}
+                           <Moment fromNow unix>{q.timeStamp / 1000}</Moment>
+                          </List.Header>
+                           {q.title}
+                         </List.Content>
+                       </List.Item>
+                       {q.isExpanded ?
+                         <QuestionManage
+                           selectedQuestion={selectedQuestion}
+                           user={user} uid={uid}
+                           onAnswerSubmit={onAnswerSubmit}
+                           answerChange={answerChange}
+                           answerText={answerText}
+                         /> : null}
+                     </React.Fragment>)
+                  : <p>No Question Yet</p>
+                }
+
                 </List>
               </Segment>
             </Container>
         </Responsive>
+    </React.Fragment>
+
+    return (
+      <Segment basic loading={loading} style={style.SEGMENT_LOADER}>
+        {qList}
       </Segment>
     );
   }

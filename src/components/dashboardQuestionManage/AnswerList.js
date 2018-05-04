@@ -4,7 +4,7 @@ import profile from '../../assets/profile-lg.png'
 import Answer from './Answer'
 
 const AnswerList = ({uid, answers, answerText, change, submit, handleDeleteAnswer, handleHelpfulAnswer}) => {
-  console.log('[answer list ] answers', answers);
+  // console.log('[answer list ] answers', answers);
   let aList = answers ? Object.keys(answers).map(aid =>
      <Answer key={aid} answer={answers[aid]} uid={uid}
        handleDeleteAnswer={handleDeleteAnswer}
@@ -23,7 +23,7 @@ const AnswerList = ({uid, answers, answerText, change, submit, handleDeleteAnswe
               name="answerText"
               placeholder="Enter your reply"
               onChange={change}/>
-            <Button content='Add Reply' labelPosition='left' icon='edit' primary />
+            <Button content='Add Reply' disabled={answerText.length == 0 ? true: false} labelPosition='left' icon='edit' primary />
           </Form>
         </Comment.Group>
 
