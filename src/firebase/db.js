@@ -384,6 +384,12 @@ export const newKey = () => {
 
 export const doCreateQuiz = (title, uid,) =>
 {
-  var metadata = {title,}
+  let questionCount = 0
+  var metadata = {title, questionCount}
   return db.ref('quizzes').child(uid).push({metadata})
+}
+
+export const doFetchQuiz = (uid,) =>
+{
+  return db.ref('quizzes').child(uid).once('value')
 }

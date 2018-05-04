@@ -28,11 +28,7 @@ class Dashboard extends Component {
       questions: [],
       answerText: '',
       isLoading: false,
-      quizzes: {
-        1:{'title': 'abc', },
-        2:{'title': 'bbc', },
-        3:{'title': 'cbc', },
-      }
+      quizzes: null,
     };
   }
 
@@ -70,15 +66,6 @@ class Dashboard extends Component {
     });
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log('nextProps', nextProps);
-  // }
-  //
-  // shouldComponentUpdate(nextProps, nextState){
-  //   console.log("shouldComponentUpdate: ", nextProps, nextState);
-  //   return true;
-  // }
-
   componentWillUnmount(){
     console.log('dashboard will un mount 1 ', )
   }
@@ -89,7 +76,12 @@ class Dashboard extends Component {
 
     if (authUser) {
       fb.database().ref('questionsForT').child(authUser.uid).on('child_added', this.handleQuestionDataSave)
-      fb.database().ref('questionsForT').child(authUser.uid).on('child_removed', this.handleQuestionDataSave)
+
+      db.doFetchQuiz(authUser.uid)
+      .then(res => {this.setState ({ quizzes: res.val()})})
+      .catch(error => {
+        this.setState({[error]: error});
+      });
     }
   }
 
@@ -126,15 +118,15 @@ class Dashboard extends Component {
     this.setState ({ questions})
   }
 
-  handleQuestionDataRemoved = (data) => {
-    console.log('[nDataRemoved]', data);
+  // handleQuestionDataRemoved = (data) => {
+  //   console.log('[nDataRemoved]', data);
     // const {questions} = this.state
     // let q = {}
     // q = data.val()
     // q['qid'] = data.key
     // questions.splice(0,0,q)
     // this.setState ({ questions})
-  }
+  // }
 
   handleAnswerChange = (e, { value }) => {
     console.log('[answerChange]', value);
@@ -204,7 +196,7 @@ class Dashboard extends Component {
   }
 
   handleDeleteQuestion = (e, question) => {
-    // is this needed ? may be not 
+    // is this needed ? may be not
     console.log('[d question]', question);
     const { questions } = this.state
     let index = questions.map(q => q['qid'] == question['qid']).indexOf(true)
@@ -216,7 +208,7 @@ class Dashboard extends Component {
   render() {
     const {courseTeaching, user, uid, match} = this.props
     const { activeItem, error, isLoading, questions, selectedQuestion, answerText, quizzes} = this.state
-    console.log('[render] dashboard props', this.props.answerText);
+    console.log('[render] dashboard props', quizzes);
 
       return (
 

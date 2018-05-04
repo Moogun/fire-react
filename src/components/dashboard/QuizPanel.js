@@ -3,7 +3,6 @@ import { Table, Responsive, Image, List, Grid, Segment, Container,  Loader, Dimm
 import profile from '../../assets/profile-lg.png'
 import * as style from '../../style/inline';
 
-
 class QuizPanel extends Component {
   constructor(props) {
     super(props);
@@ -11,9 +10,8 @@ class QuizPanel extends Component {
 
     };
   }
-  
+
   componentDidMount(){
-    console.log('did mount 1 ', )
   }
 
   render() {
@@ -40,13 +38,13 @@ class QuizPanel extends Component {
                   {Object.keys(quizzes).map(key =>
                   <Table.Row  key={key} onClick={()=> click(key)}>
                     <Table.Cell textAlign='left' >
-                      {quizzes[key].title ? <p>Published</p> : <p>draft</p>}
+                      {quizzes[key].metadata.title ? <p>Published</p> : <p>draft</p>}
                     </Table.Cell>
                     <Table.Cell textAlign='left' >
-                      {quizzes[key].title}
+                      {quizzes[key].metadata.title}
                     </Table.Cell>
                     <Table.Cell textAlign='left' >
-                      {quizzes[key].title}
+                      {quizzes[key].metadata.questionCount}
                     </Table.Cell>
                     <Table.Cell textAlign='center' >
                       26 ??? fix
