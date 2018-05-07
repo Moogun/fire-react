@@ -108,7 +108,7 @@ class Dashboard extends Component {
       db.doFetchAllQuizzes(authUser.uid)
       .then(res => {
         console.log('res', res.val());
-        this.setState ({ quizzes: res.val()})
+        this.setState ({ quizzes: res.val() })
       })
       .catch(error => {
         this.setState({[error]: error});

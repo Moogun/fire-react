@@ -13,7 +13,6 @@ class QuizEdit extends Component {
     super(props);
     this.state = {
       quizId: null,
-      quizSet: null,
       title: null,
       instruction: null,
 
@@ -239,7 +238,10 @@ class QuizEdit extends Component {
       let tid = quizSet.metadata.tid
       let title = quizSet.metadata.title
       let instruction = quizSet.metadata.instruction
-      this.setState ({ quizId: res.key, tid: tid, title: title, instruction: instruction})
+      let questions = quizSet.questions
+      this.setState ({ quizId: res.key, tid: tid, title: title, instruction: instruction,
+        quiz: questions
+      })
     })
     .catch(error => {
       this.setState({[error]: error});
@@ -275,13 +277,14 @@ class QuizEdit extends Component {
   render() {
 
     //TITLE
-    const {activeItem, quizId, quizSet, title, instruction,
+    const {activeItem, quizId, quizSet, title, instruction, quiz,
     isLoading } = this.state
     let quizTitle = title ? title : ''
     let quizInstruction = instruction ? instruction : ''
+    let questionList = quiz ? quiz : []
 
     //EDIT QUESTIONS
-    const { quiz, questionForm, formOptions, formOptionChecked,
+    const { questionForm, formOptions, formOptionChecked,
 
     groupInstructionForShort,
     titleForShort,
@@ -295,6 +298,7 @@ class QuizEdit extends Component {
     deleteConfirmOpen,
   } = this.state
 
+    console.log('[quiz]', quiz);
     const { match } = this.props
         console.log('groupInstructionForShort', groupInstructionForShort, titleForShort, answerForShort, explanationForShort);
     return (
@@ -313,7 +317,7 @@ class QuizEdit extends Component {
                    <QuizEditTop
                      title={quizTitle}
                      instruction={quizInstruction}
-                     quiz={quiz}
+                     quiz={questionList}
                    />
                  </Grid.Column>
                </Grid>
@@ -389,6 +393,7 @@ class QuizEdit extends Component {
                        handleMultipleFormOptionLabelChange={this.handleMultipleFormOptionLabelChange}
 
                        questionSubmit={this.onQuestionSubmit}
+
                      /> }/>
                    </Switch>
                  </Grid.Column>

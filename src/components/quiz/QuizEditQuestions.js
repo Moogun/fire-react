@@ -40,7 +40,7 @@ class QuizEditQuestions extends Component {
 
 
   render() {
-    const { quiz, questionForm, formOptions, formOptionChecked, answerForMultiple,
+    const { quiz, questions, questionForm, formOptions, formOptionChecked, answerForMultiple,
     groupInstructionForShort, titleForShort, answerForShort, explanationForShort,
     questionSubmit,
 
@@ -92,7 +92,7 @@ class QuizEditQuestions extends Component {
                   >
                   <Icon name='minus' />
                 </Button>
-                {/* {q.type} */}
+                {q.type}
                  {index +1}. {q.title.length > 30 ? q.title.substring(0, 30) : q.title}
                 <Button.Group basic size='mini' style={{marginLeft: '2rem'}}>
                    <Button icon='pencil' basic
@@ -320,7 +320,7 @@ const QuestionEditableType  = (index, q, handleChange, handleOptionRadioChange, 
           <input type="text" name='title' value={q.title} onChange={(e) => handleChange(e, index)} style={styles.QUIZ_QUESTION_INPUT} />
         </Form.Field>
 
-          {q.options.map((i, opIndex)=> (
+          {q.options && q.options.map((i, opIndex)=> (
             <Form.Field inline key={opIndex} >
                 <Radio label={opIndex +1}
                   name='answerForMultiple'
