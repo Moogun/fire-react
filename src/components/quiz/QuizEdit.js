@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
 import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm } from 'semantic-ui-react'
 import {db} from '../../firebase';
+import * as routes from '../../constants/routes'
 import * as styles from '../../constants/styles'
 import QuizEditTop from './QuizEditTop'
 import QuizEditMeta from './QuizEditMeta'
@@ -45,7 +46,7 @@ class QuizEdit extends Component {
 
       // entry will look like this
       // entry: {uid: {'id 1': '1'}, {'id 2': '1'}, {'id 3': 'a'},}
-
+      deleteConfirmOpen: false,
     };
   }
 
@@ -58,8 +59,9 @@ class QuizEdit extends Component {
   }
 
   handleTitleSubmit = () => {
-    const { quizId, title, instruction } = this.state
-    db.doSaveQuizMeta(quizId, title, instruction)
+    const { tid, quizId, title, instruction } = this.state
+    console.log('[t submit]', tid, quizId, title, instruction);
+    db.doUpdateQuizMeta(tid, quizId, title, instruction)
       .then(res => console.log('res', res))
       .catch(error => {
         this.setState({[error]: error});
@@ -67,12 +69,13 @@ class QuizEdit extends Component {
   }
 
   onQuestionSubmit = () => {
-    console.log('111');
-    const { quiz } = this.state
-    console.log('[quiz]', quiz);
+    const { tid, quizId, quiz } = this.state
 
-    db.doSaveQuizQuestions()
-
+    db.doSaveQuizQuestions(tid, quizId, quiz)
+      .then(res => console.log('[save quiz  q res]', res.val()))
+      .catch(error => {
+        this.setState({[error]: error});
+      });
   }
 
 
@@ -233,15 +236,41 @@ class QuizEdit extends Component {
     db.onceGetQuiz(quizId)
     .then(res => {
       let quizSet = res.val()
+      let tid = quizSet.metadata.tid
       let title = quizSet.metadata.title
       let instruction = quizSet.metadata.instruction
-      this.setState ({ quizId: res.key, title: title, instruction: instruction})
+      this.setState ({ quizId: res.key, tid: tid, title: title, instruction: instruction})
     })
     .catch(error => {
       this.setState({[error]: error});
     });
   }
 
+  handleDeleteQuiz = () => {
+    console.log('delete');
+    this.setState ({ deleteConfirmOpen: true})
+  }
+
+  handleCancelDeleteQuiz = () => {
+    this.setState ({ deleteConfirmOpen: false})
+  }
+
+  handleConfirmDeleteQuiz = () => {
+    const {tid, quizId,} = this.state
+    db.doDeleteQuiz(tid, quizId, )
+      .then(res => {
+        this.setState ({ deleteConfirmOpen: false})
+        const {history} = this.props;
+        console.log('history', history);
+        history.replace({
+          pathname: '/teaching/dashboard/',
+
+        })
+      })
+      .catch(error => {
+        this.setState({[error]: error});
+      });
+  }
 
   render() {
 
@@ -261,7 +290,10 @@ class QuizEdit extends Component {
 
     answerForMultiple,
 
-    questionSubmit,} = this.state
+    questionSubmit,
+
+    deleteConfirmOpen,
+  } = this.state
 
     const { match } = this.props
         console.log('groupInstructionForShort', groupInstructionForShort, titleForShort, answerForShort, explanationForShort);
@@ -303,60 +335,73 @@ class QuizEdit extends Component {
                          style={activeItem === 'questions' ? styles.C_EDIT_MENU_ITEM: null}
                          >Questions
                       </Menu.Item>
+                      <Menu.Item name='delete'
+                         active={activeItem === 'questions'}
+                         onClick={this.handleDeleteQuiz}
+                         as='a'
+                         style={activeItem === 'questions' ? styles.C_EDIT_MENU_ITEM: null}
+                         >Delete
+                      </Menu.Item>
                    </Menu>
 
                  </Grid.Column>
                  <Grid.Column width={12}>
+                   <Switch>
+                     <Redirect exact from={match.url} to={`${match.url}/questions`} />
+                     <Route path={`${match.url}/title`} render={(props) => <QuizEditMeta
+                       {...props}
+                       title={title}
+                       instruction={instruction}
+                       quiz={quiz}
+                       change={this.handleTitleInputChange}
+                       submit={this.handleTitleSubmit}
+                     /> }/>
+                     <Route path={`${match.url}/questions`} render={(props) => <QuizEditQuestions
+                       {...props}
+                       quiz={quiz}
+                       questionForm={questionForm}
+                       formOptions={formOptions}
+                       formOptionChecked={formOptionChecked}
 
-                   <Route path={`${match.url}/title`} render={(props) => <QuizEditMeta
-                     {...props}
-                     title={title}
-                     instruction={instruction}
-                     quiz={quiz}
-                     change={this.handleTitleInputChange}
-                     submit={this.handleTitleSubmit}
-                   /> }/>
-                   <Route path={`${match.url}/questions`} render={(props) => <QuizEditQuestions
-                     {...props}
-                     quiz={quiz}
-                     questionForm={questionForm}
-                     formOptions={formOptions}
-                     formOptionChecked={formOptionChecked}
+                       groupInstructionForShort={groupInstructionForShort}
+                       titleForShort={titleForShort}
+                       answerForShort={answerForShort}
+                       explanationForShort={explanationForShort}
 
-                     groupInstructionForShort={groupInstructionForShort}
-                     titleForShort={titleForShort}
-                     answerForShort={answerForShort}
-                     explanationForShort={explanationForShort}
+                       answerForMultiple={answerForMultiple}
 
-                     answerForMultiple={answerForMultiple}
+                       handleChange={this.handleChange}
+                       handleQuestionDelete={this.handleQuestionDelete}
+                       handleQuestionToggle={this.handleQuestionToggle}
 
-                     handleChange={this.handleChange}
-                     handleQuestionDelete={this.handleQuestionDelete}
-                     handleQuestionToggle={this.handleQuestionToggle}
+                       handleOpenShortAnswerForm={this.handleOpenShortAnswerForm}
+                       handleOpenMultipleChoiceForm={this.handleOpenMultipleChoiceForm}
+                       handleOpenEssayForm={this.handleOpenEssayForm}
 
-                     handleOpenShortAnswerForm={this.handleOpenShortAnswerForm}
-                     handleOpenMultipleChoiceForm={this.handleOpenMultipleChoiceForm}
-                     handleOpenEssayForm={this.handleOpenEssayForm}
+                       handleInputChange={this.handleInputChange}
+                       handleAddShortAnswer={this.handleAddShortAnswer}
+                       handleAddOption={this.handleAddOption}
+                       handleAddMultipleChoice={this.handleAddMultipleChoice}
+                       handleAddEssay={this.handleAddEssay}
+                       handleOptionRadioChange={this.handleOptionRadioChange}
+                       handleOptionLabelChange={this.handleOptionLabelChange}
+                       handleMultipleFormRadioChange={this.handleMultipleFormRadioChange}
+                       handleMultipleFormOptionLabelChange={this.handleMultipleFormOptionLabelChange}
 
-                     handleInputChange={this.handleInputChange}
-                     handleAddShortAnswer={this.handleAddShortAnswer}
-                     handleAddOption={this.handleAddOption}
-                     handleAddMultipleChoice={this.handleAddMultipleChoice}
-                     handleAddEssay={this.handleAddEssay}
-                     handleOptionRadioChange={this.handleOptionRadioChange}
-                     handleOptionLabelChange={this.handleOptionLabelChange}
-                     handleMultipleFormRadioChange={this.handleMultipleFormRadioChange}
-                     handleMultipleFormOptionLabelChange={this.handleMultipleFormOptionLabelChange}
-
-                     questionSubmit={this.onQuestionSubmit}
-                   /> }/>
-
+                       questionSubmit={this.onQuestionSubmit}
+                     /> }/>
+                   </Switch>
                  </Grid.Column>
                </Grid>
              </Grid.Column>
            </Grid.Row>
          </Grid>
-
+         <Confirm
+            open={deleteConfirmOpen}
+            content='This will delete the quiz. Are you sure to delete the quiz ?'
+            onCancel={this.handleCancelDeleteQuiz}
+            onConfirm={this.handleConfirmDeleteQuiz}
+          />
        </Segment>
      </Responsive>
 

@@ -51,6 +51,7 @@ class Dashboard extends Component {
   }
 
   handleQuizClick = (e, quizKey) => {
+    console.log('quiz click', quizKey);
     e.preventDefault()
     const {history} = this.props;
     history.push({

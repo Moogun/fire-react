@@ -399,16 +399,28 @@ export const doFetchAllQuizzes = (tid,) => db.ref('quizzesForT').child(tid).once
 // QUIZ EDIT get multiple courses
 export const onceGetQuiz = (qid) => db.ref('quizzes').child(qid).once('value')
 
-export const doSaveQuizMeta = (qid, title, instruction) => {
+export const doUpdateQuizMeta = (tid, qid, title, instruction) => {
+  let quizInstruction = instruction ? instruction : ''
+
   var updates = {}
     updates[`quizzes/${qid}/metadata/title`] = title
-    updates[`quizzes/${qid}/metadata/instruction`] = instruction
+    updates[`quizzes/${qid}/metadata/instruction`] = quizInstruction
 
-    updates[`quizzesForT/${qid}/${qid}/metadata/title`] = title
-    updates[`quizzesForT/${qid}/${qid}/metadata/instruction`] = instruction
+    updates[`quizzesForT/${tid}/${qid}/metadata/title`] = title
+    updates[`quizzesForT/${tid}/${qid}/metadata/instruction`] = quizInstruction
   return db.ref().update(updates)
 }
 
-export const doSaveQuizQuestions = (tid, qid, questions) => {
-  return db.ref('quizzes').child(tid).child(qid).child('questions').once('value')
+export const doSaveQuizQuestions = (tid, qid, quiz) => {
+  var updates = {}
+    updates[`quizzes/${qid}/questions`] = quiz
+    updates[`quizzesForT/${tid}/${qid}/questions`] = quiz
+  return db.ref().update(updates)
+}
+
+export const doDeleteQuiz = (tid, qid, ) => {
+  var updates = {}
+    updates[`quizzes/${qid}/`] = null
+    updates[`quizzesForT/${tid}/${qid}/`] = null
+  return db.ref().update(updates)
 }
