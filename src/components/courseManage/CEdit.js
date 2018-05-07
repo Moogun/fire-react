@@ -127,6 +127,7 @@ class CourseEdit extends Component {
       console.log('new lsit', fList);
       this.setState ({ featureList: fList, featuresToSave: true })
       console.log('state', this.state.featureList);
+      //add a method to remove feature 
    }
 
   handleAddNewFeature = () => {
@@ -139,6 +140,7 @@ class CourseEdit extends Component {
      let feats = !!featureList ? featureList : {}
      console.log('featuers', feats);
      feats[newKey] = {header: header, sub: sub}
+
 
      this.setState ({
        featureList: feats,
@@ -153,6 +155,7 @@ class CourseEdit extends Component {
 
   onFeaturesSubmit = () => {
     const {courseId, teacherId, featureList } = this.state
+
     console.log('courseId, tid, featureList', featureList, courseId, teacherId);
 
     db.doUpdateFeatures(teacherId, courseId, featureList)

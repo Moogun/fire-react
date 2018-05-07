@@ -393,3 +393,13 @@ export const doFetchQuiz = (uid,) =>
 {
   return db.ref('quizzes').child(uid).once('value')
 }
+
+//get multiple courses
+export const onceGetQuiz = (qid) => db.ref('quizzes').child(qid).once('value')
+
+export const doSaveQuizMeta = (qid, title, instruction) => {
+  var updates = {}
+    updates[`quizzes/${qid}/metadata/title`] = title
+    updates[`quizzes/${qid}/metadata/instruction`] = instruction
+  return db.ref().update(updates)
+}

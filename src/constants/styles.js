@@ -11,7 +11,7 @@ export const DASHBOARD_HEAD = {marginTop: '-1rem', paddingTop: '2rem', backgroun
 export const DASHBOARD_HEAD_M = { marginTop: '0rem', marginBottom: '0rem',paddingTop: '0rem', backgroundColor: '#2980b9'}
 export const DASHBOARD_HEAD_M_ROW = {paddingBottom: '0'}
 {/* //for container to sit along with the top bar icon */}
-  
+
 
 export const DASHBOARD_HEADER = {color: '#fff', marginBottom: '0' }
 export const DASHBOARD_HEADER_M = {color: '#fff',marginBottom: '0'}
@@ -53,3 +53,17 @@ export const ACCOUNT_MIN_HEIGHT = {minHeight: '80vh'}
 
 //ACCOUNT
 export const NO_MATCH_MIN_HEIGHT = {minHeight: '90vh'}
+
+//Q
+export const  QUIZ_QUESTION_INPUT = {
+  borderTopWidth: '0px',
+  borderLeftWidth: '0px',
+  borderRightWidth: '0px',
+}
+
+export const QUIZ_QUESTION_OPTION_INPUT  = {
+  width: '400px',
+  borderTopWidth: '0px',
+  borderLeftWidth: '0px',
+  borderRightWidth: '0px',
+}
