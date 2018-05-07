@@ -229,8 +229,6 @@ class QuizEdit extends Component {
 
     let quizId = match.params.quizId
     console.log('quizId', match, quizId);
-    // let quizId = '-LBOK9o22WeVJXpi07v8'
-    // console.log('[quiz edit]', quizId);
 
     db.onceGetQuiz(quizId)
     .then(res => {

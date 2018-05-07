@@ -50,7 +50,8 @@ class Dashboard extends Component {
     this.setState ({ createQuizModalOpen: !createQuizModalOpen})
   }
 
-  handleQuizClick = (quizKey) => {
+  handleQuizClick = (e, quizKey) => {
+    e.preventDefault()
     const {history} = this.props;
     history.push({
       pathname: '/quiz_manage/' + quizKey + '/edit',
@@ -78,11 +79,10 @@ class Dashboard extends Component {
       this.setState(() => ({ quizTitle: '', createQuizModalOpen: false, }));
 
       // let quizKey = res.path.pieces_[1]
-      let quizId
       history.push({
-        pathname: '/quiz_manage/' + quizId + '/edit',
+        pathname: '/quiz_manage/' + qid + '/edit',
         state : {
-          quizId: quizId,
+          qid: qid,
           title: quizTitle,
         }
       })
@@ -357,7 +357,7 @@ class Dashboard extends Component {
                                  <QuizPanel
                                    {...props}
                                    quizzes={quizzes}
-                                   click={this.handleQuizClick}
+                                   quizClick={this.handleQuizClick}
                                    loading={isLoading}
                                    quizTitleChange={this.handleQuizTitleChange}
                                    onNewQuizSubmit={this.onNewQuizSubmit}

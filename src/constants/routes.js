@@ -34,6 +34,8 @@ export const DASHBOARD_AN = '/teaching/dashboard/announcement';
 
 //quiz
 export const QUIZ_MANAGE = '/quiz_manage/:quizId/edit';
+export const QUIZ_MANAGE_TITLE = '/quiz_manage/:quizId/edit/title';
+export const QUIZ_MANAGE_QUESTIONS = '/quiz_manage/:quizId/edit/questions';
 // export const DASHBOARD_Q_PANEL_BY_C_TITLE = '/t-dashboard/questions/:cTitle';
 // export const DASHBOARD_Q_PANEL_BY_UNREAD = '/t-dashboard/questions/unread';
 

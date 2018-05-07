@@ -12,7 +12,7 @@ class QuizPanel extends Component {
   }
 
   render() {
-    const { click,quizzes,loading, title, quizTitleChange, onNewQuizSubmit } = this.props
+    const { quizClick,quizzes,loading, title, quizTitleChange, onNewQuizSubmit } = this.props
     let quizList = quizzes
     ? (<Table selectable attached celled textAlign='center'>
         <Table.Header >
@@ -26,7 +26,7 @@ class QuizPanel extends Component {
         </Table.Header>
         <Table.Body>
           {Object.keys(quizzes).map(key =>
-          <Table.Row  key={key} onClick={()=> click(key)}>
+          <Table.Row  key={key} onClick={(e)=> quizClick(e, key)}>
             {/* <Table.Cell textAlign='left' >
               {quizzes[key].metadata.title ? <p>Published</p> : <p>draft</p>}
             </Table.Cell> */}
@@ -55,7 +55,7 @@ class QuizPanel extends Component {
             <Grid.Column width={12}>
 
               {quizList}
-              
+
               <br/>
               <Modal size='tiny' trigger={<Button fluid>Create New Quiz</Button>}>
                   <Modal.Header>Quiz</Modal.Header>
