@@ -63,18 +63,17 @@ HomepageHeading.propTypes = {
 const LandingBody = () => {
   return (
       <div>
-        <Segment style={{ padding: '8em 0em' }} vertical>
+        {/* <Segment style={{ padding: '8em 0em' }} vertical>
         <Grid container stackable verticalAlign='middle'>
           <Grid.Row>
             <Grid.Column width={8}>
-              <Header as='h3' style={{ fontSize: '2em' }}>We Help Companies and Companions</Header>
+              <Header as='h3' style={{ fontSize: '2em' }}>We Help Teachers and Students</Header>
               <p style={{ fontSize: '1.33em' }}>
-                We can give your company superpowers to do things that they never thought possible. Let us delight
-                your customers and empower your needs... through pure data analytics.
+                To be added
               </p>
-              <Header as='h3' style={{ fontSize: '2em' }}>We Make Bananas That Can Dance</Header>
+              <Header as='h3' style={{ fontSize: '2em' }}>To be added </Header>
               <p style={{ fontSize: '1.33em' }}>
-                Yes that's right, you thought it was the stuff of dreams, but even bananas can be bioengineered.
+                To be added
               </p>
             </Grid.Column>
             <Grid.Column floated='right' width={6}>
@@ -109,31 +108,27 @@ const LandingBody = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Segment>
+      </Segment> */}
       <Segment style={{ padding: '8em 0em' }} vertical>
         <Container text>
-          <Header as='h3' style={{ fontSize: '2em' }}>Breaking The Grid, Grabs Your Attention</Header>
+          <Header as='h3' style={{ fontSize: '2em' }}>We Help Teachers and Students</Header>
           <p style={{ fontSize: '1.33em' }}>
-            Instead of focusing on content creation and hard work, we have learned how to master the art of doing
-            nothing by providing massive amounts of whitespace and generic content that can seem massive, monolithic
-            and worth your attention.
+            Teachers can register their courses and quizzes to engage more with their students. Only Enrolled students can access to teachers' material and ask questions.
           </p>
-          <Button as='a' size='large'>Read More</Button>
+          {/* <Button as='a' size='large' disabled>Read More</Button> */}
           <Divider
             as='h4'
             className='header'
             horizontal
             style={{ margin: '3em 0em', textTransform: 'uppercase' }}
           >
-            <a href='#'>Case Studies</a>
+            <p href='#'>Welcome</p>
           </Divider>
-          <Header as='h3' style={{ fontSize: '2em' }}>Did We Tell You About Our Bananas?</Header>
+          <Header as='h3' style={{ fontSize: '2em' }}>We are still developing and testing to best suit teachers' needs. </Header>
           <p style={{ fontSize: '1.33em' }}>
-            Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but it's really
-            true.
-            It took years of gene splicing and combinatory DNA research, but our bananas can really dance.
+             We will do our best to preserve your data safely, but there could be a time when we may not able to restore your data of yours. So Please have a copy of the data of yours on your computer.
           </p>
-          <Button as='a' size='large'>I'm Still Quite Interested</Button>
+          {/* <Button as='a' size='large'>I'm Still Quite Interested</Button> */}
         </Container>
       </Segment>
       </div>

@@ -382,24 +382,33 @@ export const newKey = () => {
   return db.ref('courses').push().key
 }
 
-export const doCreateQuiz = (title, uid,) =>
+export const doCreateQuiz = (tid, qid, title,) =>
 {
+  console.log('do create quiz', tid, qid, title);
   let questionCount = 0
-  var metadata = {title, questionCount}
-  return db.ref('quizzes').child(uid).push({metadata})
+  var metadata = {title, questionCount, tid}
+  var updates = {}
+  updates[`quizzes/${qid}/metadata`] = metadata
+  updates[`quizzesForT/${tid}/${qid}/metadata`] = metadata
+  return db.ref().update(updates)
 }
 
-export const doFetchQuiz = (uid,) =>
-{
-  return db.ref('quizzes').child(uid).once('value')
-}
+//DASHBOARD
+export const doFetchAllQuizzes = (tid,) => db.ref('quizzesForT').child(tid).once('value')
 
-//get multiple courses
+// QUIZ EDIT get multiple courses
 export const onceGetQuiz = (qid) => db.ref('quizzes').child(qid).once('value')
 
 export const doSaveQuizMeta = (qid, title, instruction) => {
   var updates = {}
     updates[`quizzes/${qid}/metadata/title`] = title
     updates[`quizzes/${qid}/metadata/instruction`] = instruction
+
+    updates[`quizzesForT/${qid}/${qid}/metadata/title`] = title
+    updates[`quizzesForT/${qid}/${qid}/metadata/instruction`] = instruction
   return db.ref().update(updates)
+}
+
+export const doSaveQuizQuestions = (tid, qid, questions) => {
+  return db.ref('quizzes').child(tid).child(qid).child('questions').once('value')
 }

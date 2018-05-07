@@ -67,13 +67,8 @@ export default QuizEditTop
 
 const QuestionType = (index, q, handleChange, handleRadioChange) => ({
   shortAnswer: (
-    <React.Fragment>
-      {q.instruction
-        ? <Segment key={index+'a'} >{q.instruction}</Segment>
-        : null
-      }
+      //instruction??
       <Segment key={index}>
-
         <Form>
           <Form.Field>
             {index + 1}. {q.title}
@@ -83,7 +78,6 @@ const QuestionType = (index, q, handleChange, handleRadioChange) => ({
           </Form.Field>
         </Form>
       </Segment>
-  </React.Fragment>
   ),
   multipleChoice: (
     <Segment key={index}>

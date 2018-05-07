@@ -70,7 +70,9 @@ class QuizEdit extends Component {
     console.log('111');
     const { quiz } = this.state
     console.log('[quiz]', quiz);
-    // save it to db
+
+    db.doSaveQuizQuestions()
+
   }
 
 
@@ -225,9 +227,11 @@ class QuizEdit extends Component {
     const {match} = this.props
     // this.setState({isLoading: !isLoading})
 
-    // let quizId = match.params.cid
-    let quizId = '-LBOK9o22WeVJXpi07v8'
+    let quizId = match.params.quizId
+    console.log('quizId', match, quizId);
+    // let quizId = '-LBOK9o22WeVJXpi07v8'
     // console.log('[quiz edit]', quizId);
+
     db.onceGetQuiz(quizId)
     .then(res => {
       let quizSet = res.val()

@@ -13,7 +13,7 @@ import QuizPanel from './QuizPanel'
 import Announcement from './Announcement'
 import {db} from '../../firebase';
 import {fb} from '../../firebase/firebase';
-import { Grid, Header, Menu, Visibility, Responsive, Segment,} from 'semantic-ui-react'
+import { Grid, Header, Menu, Visibility, Responsive, Segment, Modal, Form, Input, Button, Icon} from 'semantic-ui-react'
 import SectionContainer from '../navbar/SectionContainer'
 import SectionContainer_M from '../navbar/SectionContainer_M'
 
@@ -29,6 +29,7 @@ class Dashboard extends Component {
       answerText: '',
       isLoading: false,
       quizzes: null,
+      createQuizModalOpen: false,
     };
   }
 
@@ -41,7 +42,14 @@ class Dashboard extends Component {
     })
   }
 
+
   //QUIZ
+
+  handleCreateQuizModalOpen = () => {
+    const { createQuizModalOpen} = this.state
+    this.setState ({ createQuizModalOpen: !createQuizModalOpen})
+  }
+
   handleQuizClick = (quizKey) => {
     const {history} = this.props;
     history.push({
@@ -59,8 +67,27 @@ class Dashboard extends Component {
     const {user, uid} = this.props
     const {quizTitle} = this.state
     console.log('handleCreateQuiz', quizTitle);
-    db.doCreateQuiz(quizTitle, uid)
-    .then(res => console.log('res', res.val()))
+    const { match, history } = this.props
+    console.log('match', match, history);
+
+    let qid = db.newKey()
+
+    db.doCreateQuiz(uid, qid, quizTitle, )
+    .then(res => {
+      // console.log('res', res.val())
+      this.setState(() => ({ quizTitle: '', createQuizModalOpen: false, }));
+
+      // let quizKey = res.path.pieces_[1]
+      let quizId
+      history.push({
+        pathname: '/quiz_manage/' + quizId + '/edit',
+        state : {
+          quizId: quizId,
+          title: quizTitle,
+        }
+      })
+
+    })
     .catch(error => {
       this.setState({[error]: error});
     });
@@ -71,14 +98,17 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    const {questions} = this.state
+    const {questions, isLoading} = this.state
     const {authUser} = this.context
 
     if (authUser) {
       fb.database().ref('questionsForT').child(authUser.uid).on('child_added', this.handleQuestionDataSave)
 
-      db.doFetchQuiz(authUser.uid)
-      .then(res => {this.setState ({ quizzes: res.val()})})
+      db.doFetchAllQuizzes(authUser.uid)
+      .then(res => {
+        console.log('res', res.val());
+        this.setState ({ quizzes: res.val()})
+      })
       .catch(error => {
         this.setState({[error]: error});
       });
@@ -207,8 +237,9 @@ class Dashboard extends Component {
 
   render() {
     const {courseTeaching, user, uid, match} = this.props
-    const { activeItem, error, isLoading, questions, selectedQuestion, answerText, quizzes} = this.state
-    console.log('[render] dashboard props', quizzes);
+    const { activeItem, error, isLoading, questions, selectedQuestion, answerText,
+      quizzes, createQuizModalOpen, title} = this.state
+    console.log('[render] dashboard props', quizzes, isLoading);
 
       return (
 
@@ -330,6 +361,7 @@ class Dashboard extends Component {
                                    loading={isLoading}
                                    quizTitleChange={this.handleQuizTitleChange}
                                    onNewQuizSubmit={this.onNewQuizSubmit}
+                                   createQuizModalOpen={this.handleCreateQuizModalOpen}
                                  />
                                  } />
                                <Route path={routes.DASHBOARD_AN} render = {() => <Announcement
@@ -337,6 +369,33 @@ class Dashboard extends Component {
                             </Switch>
                         </Grid.Column>
                     </Grid>
+
+                    {/* <Modal size='tiny' open={createQuizModalOpen}>
+                        <Modal.Header>Quiz</Modal.Header>
+                        <Modal.Content >
+
+                          <Modal.Description>
+                            <Header>Create Quiz</Header>
+                            <Form onSubmit={this.onNewQuizSubmit}>
+                              <Form.Field>
+                                <Input
+                                  icon='pencil'
+                                  iconPosition='left'
+                                  name='quizTitle'
+                                  value={title}
+                                  onChange={e => this.setState({[e.target.name]: e.target.value})}
+                                  type="text"
+                                  placeholder="Title"
+                                />
+                                </Form.Field>
+                                <Button color='blue' fluid>
+                                  <Icon name='checkmark' /> Save and Go
+                                </Button>
+                            </Form>
+
+                          </Modal.Description>
+                        </Modal.Content>
+                      </Modal> */}
 
             </Grid.Column>
         </Grid>

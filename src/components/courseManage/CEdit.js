@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Link, Route, withRouter, Switch, Redirect, Prompt} from 'react-router-dom'
-import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm } from 'semantic-ui-react'
+import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm, Modal } from 'semantic-ui-react'
 
 import CEditTop from './CEditTop'
 import CEditTitle from './CEditTitle'
@@ -59,6 +59,8 @@ class CourseEdit extends Component {
       galleryToSave: false,
       curriToSave: false,
       coursePrivacy: '',
+
+      quizAttachModalOpen: false,
     };
 
   }
@@ -127,7 +129,7 @@ class CourseEdit extends Component {
       console.log('new lsit', fList);
       this.setState ({ featureList: fList, featuresToSave: true })
       console.log('state', this.state.featureList);
-      //add a method to remove feature 
+      //add a method to remove feature
    }
 
   handleAddNewFeature = () => {
@@ -514,11 +516,22 @@ class CourseEdit extends Component {
       if (section.content == undefined) {
         sections[sectionId].content = []
       }
-      section.content.push(lectureTitle)
+
+      // SIMPLE ARR CONTENT  - BEFORE TEST
+      // section.content.push(lectureTitle)
+      // console.log('section', section);
+      // sections.splice(sectionId, 1, section)
+      // let updated = sections
+      // this.setState ({ sections: updated, lectureTitle: '',  curriToSave: true})
+
+      // OBJECT ARR CONTENT
+      let lecture = {lectureTitle: lectureTitle, quiz: null, }
+      section.content.push(lecture)
       console.log('section', section);
       sections.splice(sectionId, 1, section)
       let updated = sections
       this.setState ({ sections: updated, lectureTitle: '',  curriToSave: true})
+
     }
 
     handleRemoveLecture =(secIndex, lecIndex) => {
@@ -557,6 +570,36 @@ class CourseEdit extends Component {
       this.setState ({ sections: updated, 'lectureToEdit': null, lectureTitle: '',  curriToSave: true })
 
       e.preventDefault()
+    }
+
+    handleAttachQuiz = (secIndex, lecIndex) => {
+      // this.setState ({ lectureToEdit: [secIndex, lecIndex], lectureTitle: '', activeSection: null})
+      const {quizAttachModalOpen, teacherId } = this.state
+      console.log('attach some to lecture', secIndex, lecIndex);
+      this.setState ({ quizAttachModalOpen: !quizAttachModalOpen, selectedLecForQuiz: [secIndex, lecIndex]})
+
+      db.doFetchQuiz(teacherId)
+      .then(res =>this.setState ({ quizList: res.val()}))
+      .catch(error => {
+        this.setState({[error]: error});
+      });
+    }
+
+    handleQuizSelectToAttach = (e, qid, quizTitle) => {
+      // need to know
+      // 0. sections ? curri ?
+      // 1. sec INdex
+      // 2. lec index
+      //[{title, content:[ {lecTitle: '', quiz: ''} ]}]
+
+      console.log('12345');
+      const {sections, selectedLecForQuiz } = this.state
+      sections[selectedLecForQuiz[0]].content[selectedLecForQuiz[1]]['qid'] = qid
+      sections[selectedLecForQuiz[0]].content[selectedLecForQuiz[1]]['quizTitle'] = quizTitle
+
+      this.setState ({ sections, quizAttachModalOpen: false})
+      e.preventDefault()
+
     }
 
     handleSecMoveUp = (e, secIndex) => {
@@ -694,8 +737,11 @@ class CourseEdit extends Component {
       // CURRI
       sections, formForSection, sectionTitle, activeSection, lectureTitle, sectionToEdit, lectureToEdit, removeSectionConfirm, curriToSave,
       //settings
-      openCourse, coursePrivacy, password, isPublished, settingsToSave
+      openCourse, coursePrivacy, password, isPublished, settingsToSave,
 
+      //Modal for quiz attahcment
+      quizAttachModalOpen,
+      quizList,
     } = this.state
     const {match} = this.props
 
@@ -890,6 +936,8 @@ class CourseEdit extends Component {
             onCurriSubmit={this.onCurriSubmit}
             curriToSave={curriToSave}
 
+            handleAttachQuiz={this.handleAttachQuiz}
+
                           />} />
                           <Route path={`${match.url}/settings`} render={() => <CEditSettings
                             course={course}
@@ -935,6 +983,24 @@ class CourseEdit extends Component {
                 notifications: this.state.notifications.delete(notification)
               })}
             /> */}
+
+            <Modal open={quizAttachModalOpen}>
+              <Modal.Header>Select a Quiz</Modal.Header>
+              <Modal.Content scrolling>
+                <Modal.Description>
+                  <Header>Quiz List</Header>
+                  get uid and fetch all quiz list in quizforT node
+                  {quizList && Object.keys(quizList).map(i => (
+                    <Segment key={i}>
+                      <p onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i].metadata.title)}> {quizList[i].metadata.title}</p>
+                    </Segment>)
+                  )}
+
+                </Modal.Description>
+              </Modal.Content>
+            </Modal>
+
+
                   </Grid.Column>
               </Grid.Row>
 
