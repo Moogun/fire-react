@@ -312,6 +312,19 @@ class MyCoursePage extends Component {
     this.setState ({curri})
   }
 
+  handleTakeQuiz = (e, section, lecture) => {
+    const { history, match } = this.props
+    console.log('history', history, section, lecture);
+
+    history.push({
+      pathname: `${match.url}/curri/${lecture['quizTitle']}`,
+      state:
+        {
+          qid: lecture['qid'],
+        }
+    })
+  }
+
   render() {
 
     // const {tName, cTitle,} = this.props.match.params
@@ -467,6 +480,7 @@ class MyCoursePage extends Component {
                         <CourseCurri
                           sections={curri}
                           handleSecToggle={this.handleSecToggle}
+                          takeQuiz={this.handleTakeQuiz}
                          />} />
                        <Route path={`${match.url}/info`} render = {() =>
                          <InfoBundle

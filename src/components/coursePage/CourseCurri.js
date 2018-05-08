@@ -2,7 +2,7 @@ import React from 'react'
 import { Segment, Button, Header, Icon, Container, Grid } from 'semantic-ui-react'
 import * as style from '../../style/inline'
 
-const CourseCurri = ({sections, handleSecToggle}) => {
+const CourseCurri = ({sections, handleSecToggle, takeQuiz}) => {
 
   console.log('c edit curri', sections);
   let sectionList = !!sections && sections.map((s, secIndex) =>
@@ -23,11 +23,11 @@ const CourseCurri = ({sections, handleSecToggle}) => {
           </Header>
       </Segment>
 
-      {!!s.content && s.expanded && s.content.map((c, lecIndex) =>
+      {!!s.content && s.expanded && s.content.map((l, lecIndex) =>
         <Segment textAlign='left' key={lecIndex}>
-          <Icon color='teal' name='circle' /> {lecIndex + 1}. {c['lectureTitle']}
+          <Icon color='teal' name='circle' /> {lecIndex + 1}. {l['lectureTitle']}
 
-          {c.quizTitle ? <Icon style={{marginLeft: '1rem'}} link name='file text outline' /> : null}
+          {l.quizTitle ? <Icon style={{marginLeft: '1rem'}} link name='file text outline' onClick={(e) => takeQuiz(e, s, l)}/> : null}
         </Segment>)}
 
       </Segment.Group>
@@ -46,13 +46,3 @@ const CourseCurri = ({sections, handleSecToggle}) => {
   )
 }
 export default CourseCurri;
-
-
-const repeatstr = (ch, n) => {
-  var result = "";
-
-  while (n-- > 0)
-    result += ch;
-
-  return result;
-}

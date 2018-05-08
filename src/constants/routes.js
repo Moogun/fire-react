@@ -25,6 +25,8 @@ export const COURSE_MANAGE_CURRI = '/course_manage/:cid/edit/curriculum';
 export const COURSE_MANAGE_SETTINGS = '/course_manage/:cid/edit/settings';
 export const COURSE_MANAGE_ASSIGNMENT = '/course_manage/:cid/edit/assignment';
 
+
+
 //3.
 export const DASHBOARD = '/teaching/dashboard/'; // fetch t info with authUser credential
 export const DASHBOARD_COURSES = '/teaching/dashboard/courses';
@@ -53,6 +55,8 @@ export const MY_COURSE_PAGE_QUESTIONS = '/my/:tName/:cTitle/questions'; // query
 export const MY_COURSE_PAGE_QUESTION_PAGE = '/my/:tName/:cTitle/question/:qNum'; // query t info with c
 export const MY_COURSE_PAGE_META = '/my/:tName/:cTitle/meta'; // query t info with c title
 export const MY_COURSE_PAGE_CURRI = '/my/:tName/:cTitle/curri'; // query t info with c title title
+
+export const MY_COURSE_QUIZ_TAKING = '/my/:tName/:cTitle/curri/:quizTitle'; // query t info with c title title
 
 export const QUESTION_PAGE = '/teacher/:tName/question/:qNum'; // q details, get access from TEACHER_PAGE_QUESTIONS, and fetch q detail from q list
 

@@ -123,6 +123,7 @@ class App extends Component {
   }
 }
 
+
 // const PrivateRoute = ({ component: Component, ...rest }) => (
 //   <Route
 //     {...rest}

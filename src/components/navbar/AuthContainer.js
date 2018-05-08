@@ -12,6 +12,8 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import {auth, db} from '../../firebase'
 import logo from '../../assets/logo.png'
 
+import MyCourseQuizTaking from '../coursePageMy/MyCourseQuizTaking';
+
 import profile from '../../assets/profile-lg.png'
 
 const MENU_BORDER={borderRadius: '0', marginBottom: '0'}
@@ -237,6 +239,8 @@ class AuthContainer extends Component {
           </Sidebar.Pusher>
         </Sidebar.Pushable>
       </Responsive>
+
+      <Route exact path={routes.MY_COURSE_QUIZ_TAKING} render={() => <MyCourseQuizTaking />} />
       </div>
     )
   }
