@@ -24,7 +24,11 @@ const CourseCurri = ({sections, handleSecToggle}) => {
       </Segment>
 
       {!!s.content && s.expanded && s.content.map((c, lecIndex) =>
-        <Segment textAlign='left' key={lecIndex}> <Icon color='teal' name='circle' /> {lecIndex + 1}. {c} </Segment>)}
+        <Segment textAlign='left' key={lecIndex}>
+          <Icon color='teal' name='circle' /> {lecIndex + 1}. {c['lectureTitle']}
+
+          {c.quizTitle ? <Icon style={{marginLeft: '1rem'}} link name='file text outline' /> : null}
+        </Segment>)}
 
       </Segment.Group>
     </React.Fragment>
@@ -42,3 +46,13 @@ const CourseCurri = ({sections, handleSecToggle}) => {
   )
 }
 export default CourseCurri;
+
+
+const repeatstr = (ch, n) => {
+  var result = "";
+
+  while (n-- > 0)
+    result += ch;
+
+  return result;
+}

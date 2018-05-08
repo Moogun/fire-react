@@ -15,7 +15,7 @@ import {storage} from '../../firebase/firebase';
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
 
-import * as style from '../../style/inline'
+import * as style from '../../constants/styles'
 
 const INITIAL_STATE = {
   open: true,
@@ -578,20 +578,21 @@ class CourseEdit extends Component {
       console.log('attach some to lecture', secIndex, lecIndex);
       this.setState ({ quizAttachModalOpen: !quizAttachModalOpen, selectedLecForQuiz: [secIndex, lecIndex]})
 
-      db.doFetchQuiz(teacherId)
+      db.doFetchAllQuizzes(teacherId)
       .then(res =>this.setState ({ quizList: res.val()}))
       .catch(error => {
         this.setState({[error]: error});
       });
     }
 
-    handleQuizSelectToAttach = (e, qid, quizTitle) => {
-      // need to know
-      // 0. sections ? curri ?
-      // 1. sec INdex
-      // 2. lec index
-      //[{title, content:[ {lecTitle: '', quiz: ''} ]}]
+    handleCancelAttachQuiz = () => {
+      const {quizAttachModalOpen} = this.state
+      console.log('1111', quizAttachModalOpen);
+      this.setState ({ quizAttachModalOpen: false})
+    }
 
+
+    handleQuizSelectToAttach = (e, qid, quizTitle) => {
       console.log('12345');
       const {sections, selectedLecForQuiz } = this.state
       sections[selectedLecForQuiz[0]].content[selectedLecForQuiz[1]]['qid'] = qid
@@ -984,20 +985,28 @@ class CourseEdit extends Component {
               })}
             /> */}
 
-            <Modal open={quizAttachModalOpen}>
+            <Modal open={quizAttachModalOpen}
+              >
               <Modal.Header>Select a Quiz</Modal.Header>
               <Modal.Content scrolling>
                 <Modal.Description>
-                  <Header>Quiz List</Header>
-                  get uid and fetch all quiz list in quizforT node
-                  {quizList && Object.keys(quizList).map(i => (
-                    <Segment key={i}>
-                      <p onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i].metadata.title)}> {quizList[i].metadata.title}</p>
-                    </Segment>)
-                  )}
 
+                  {quizList && Object.keys(quizList).map(i => (
+
+                      <Segment clearing vertical key={i} clearing onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i].metadata.title)} >
+                          <Button icon basic>
+                            <Icon name='eye' /> Preview
+                          </Button>
+                          <Button style={{backgroundColor: 'white'}}>{quizList[i].metadata.title} - {quizList[i].metadata.questionCount} question(s)</Button>
+                      </Segment>)
+                  )}
                 </Modal.Description>
               </Modal.Content>
+              <Modal.Actions>
+                <Button color='red' onClick={this.handleCancelAttachQuiz}>
+                   <Icon name='cancel' /> Cancel
+                 </Button>
+               </Modal.Actions>
             </Modal>
 
 
@@ -1018,6 +1027,35 @@ class CourseEdit extends Component {
 
 export default withRouter(CourseEdit)
 
+class NestedModal extends Component {
+  state = { open: false }
+
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
+
+  render() {
+    const { open } = this.state
+
+    return (
+      <Modal
+        dimmer={false}
+        open={open}
+        onOpen={this.open}
+        onClose={this.close}
+        size='small'
+        trigger={<Button primary icon>Proceed <Icon name='right chevron' /></Button>}
+      >
+        <Modal.Header>Modal #2</Modal.Header>
+        <Modal.Content>
+          <p>That's everything!</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button icon='check' content='All Done' onClick={this.close} />
+        </Modal.Actions>
+      </Modal>
+    )
+  }
+}
 
 // secure course key 1) from create page, 2) from the url match, 3)
 // 1. fetch course meta info
