@@ -39,7 +39,7 @@ export const doUpdateUserProfile = (uid, username, displayName) =>
       updateObj[`users/${uid}/username`] = username
       updateObj[`users/${uid}/lowercaseUsername`] = lowercaseUsername
       updateObj[`users/${uid}/displayName`] = displayName
-      console.log('db t list updateObj', updateObj);
+      // console.log('db t list updateObj', updateObj);
       return db.ref().update(updateObj)
     })
 }
