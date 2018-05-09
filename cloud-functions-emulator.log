@@ -1,0 +1,5 @@
+2018-05-09T03:49:45.039Z - info: User function triggered, starting execution
+2018-05-09T03:49:45.052Z - info: Execution took 17 ms, user function completed successfully
+2018-05-09T03:50:10.987Z - info: User function triggered, starting execution
+2018-05-09T03:50:10.989Z - info: Execution took 2 ms, user function completed successfully
+2018-05-09T04:22:57.041Z - info: Worker for bigben closed due to file changes.

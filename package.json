@@ -6,6 +6,8 @@
     "draft-convert": "^2.0.1",
     "draft-js": "^0.10.5",
     "firebase": "^4.9.1",
+    "firebase-admin": "^5.12.0",
+    "firebase-functions": "^1.0.2",
     "font-awesome": "^4.7.0",
     "immutable": "^3.8.2",
     "medium-draft": "^0.6.0-beta1",
