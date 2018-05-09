@@ -39,19 +39,13 @@ exports.countQuestion = functions.database.ref('/questions/{tid}/{cid}/{qid}').o
     (change, context) => {
       // const collectionRef = change.after.ref.parent;
       // const countRef = collectionRef.parent.child('questions_count');
-      // console.log('change', change, context);
+
       let tid = context.params.tid
       let cid = context.params.cid
 
       const countRef = admin.database().ref(`/courses/${cid}/metadata/questionCount`)
-
-
-      // const countRef = admin.database().ref(`/courses/${cid}/metadata/questionCount`).transaction(current => {
-      //   return (current || 0) + 1;
-      // });
-
       const original = change.after.val();
-      // console.log('Uppercasing', context.params.tid, original);
+      console.log('Uppercasing', context.params.tid, original);
 
       let increment;
       if (change.after.exists() && !change.before.exists()) {
@@ -81,3 +75,61 @@ exports.countQuestion = functions.database.ref('/questions/{tid}/{cid}/{qid}').o
 //   return collectionRef.once('value')
 //       .then((messagesData) => counterRef.set(messagesData.numChildren()));
 // });
+
+exports.countAnswer = functions.database.ref('/questionsForT/{tid}/{qid}/answers/{aid}').onWrite(
+    (change, context) => {
+      const collectionRef = change.after.ref.parent;
+
+      const original = change.after.val();
+      // console.log('Uppercasing', context.params.tid, original);
+      // console.log('change after val', change.after.val())
+      // console.log('change before val', change.before.val())
+      console.log('change  val', change.before.val() === null)
+      console.log('change  val', change.after.val() === null)
+      // console.log('Original', original['cid']);
+
+      let cid
+      if (original !== null) {
+        cid = original['cid']
+      } else {
+        cid = change.before.val()['cid']
+      }
+      console.log('cid', cid);
+      let tid = context.params.tid
+      let qid = context.params.qid
+      let aid = context.params.aid
+
+      const promises = [];
+      // const countRef = admin.database().ref(`/questions/${tid}/${cid}/${qid}`)
+      const countRef = admin.database().ref(`/questionsForT/${tid}/${qid}/answerCount`)
+
+      let increment;
+      if (change.after.exists() && !change.before.exists()) {
+        increment = 1;
+      } else if (!change.after.exists() && change.before.exists()) {
+        increment = -1;
+      } else {
+        return null;
+      }
+
+      const prom1 = countRef.transaction(current => {
+           return (current || 0) + increment;
+        });
+      const prom2 = admin.database().ref(`/questions/${tid}/${cid}/${qid}/answerCount`).transaction(current => {
+           return (current || 0) + increment;
+         });
+      return Promise.all([prom1, prom2])
+      .then(() => {
+        return console.log('Counter updated.');
+      });
+
+
+
+      // Return the promise from countRef.transaction() so our function
+      // waits for this async event to complete before it exits.
+      // return countRef.transaction((current) => {
+      //   return (current || 0) + increment;
+      // }).then(() => {
+      //   return console.log('Counter updated.');
+      // });
+    });
