@@ -55,26 +55,7 @@ class AuthContainer extends Component {
           this.setState({[error]: error});
         })
       )
-      // .then(
-      //
-      //   db.onceGetMyCourses(authUser.uid)
-      //     .then(snap => {
-      //       let courseObj = {}
-      //       if (snap.val()) {
-      //         let aList = Object.keys(snap.val())
-      //         aList.forEach(cid => {
-      //           db.onceGetCourse(cid)
-      //             .then(res => {
-      //               courseObj[cid] = res.val()
-      //               this.setState ({ attendingCourses: courseObj})
-      //             })
-      //             .catch(error => {
-      //               this.setState({[error]: error});
-      //             });
-      //         })
-      //       }
-      //     })
-      // )
+
       .catch(error => {
         this.setState({[error]: error});
       })
@@ -240,7 +221,6 @@ class AuthContainer extends Component {
         </Sidebar.Pushable>
       </Responsive>
 
-      <Route exact path={routes.MY_COURSE_QUIZ_TAKING} render={() => <MyCourseQuizTaking />} />
       </div>
     )
   }

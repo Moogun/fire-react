@@ -44,11 +44,9 @@ class HomePage extends Component {
     //     <p>No course yet</p>
     //   </Segment>
     return (
-      <Grid>
-          <Grid.Column>
+      
             <CourseCards courses={courses} loading={isLoading}/>
-          </Grid.Column>
-      </Grid>
+
     );
   }
 }

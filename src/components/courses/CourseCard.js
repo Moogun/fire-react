@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Card, Image, Grid, Rating } from 'semantic-ui-react'
+import { Icon, Card, Image, Grid, Rating, Button } from 'semantic-ui-react'
 import helen from '../../assets/helen.png'
 import {Link, Route} from 'react-router-dom'
 import Teacher from '../teacher/Teacher'
@@ -14,26 +14,16 @@ const CourseCard = ({course, click}) => {
       profileImg = profile
     }
     return (
-        <Card fluid onClick={click} style={{borderRadius: '0rem'}} >
-
-         <Card.Content>
-            <Image floated='left' size='mini' src={profileImg} style={{marginBottom:'0rem'}}/>
-             {course.metadata.tName}
-                <br/>
-            {/* <Rating icon='star' defaultRating={5} maxRating={5} size='mini'/> (230) */}
-         </Card.Content>
-
-          <Card.Content>
-            <Card.Header> {course.metadata.title} </Card.Header>
-            <Card.Description> - {course.metadata.date} </Card.Description>
-            <Card.Description> - {course.metadata.textbook} </Card.Description>
-            <Card.Description> - {course.metadata.date} </Card.Description>
-          </Card.Content>
-{/* <Route path="/teacher" render={Teacher} /> */}
-        </Card>
-
-
-
+      <Card fluid onClick={click} style={{fontSize: '0.8rem'}}
+        image={<Image src={profileImg} />}
+        header={course.metadata.title}
+        meta={<div>{course.metadata.tName}</div>}
+        description='출제자가 노리는 함정을 정확히 짚어주는 강의'
+        extra={<div style={{textAlign:'center'}} >
+        <Icon name='user' />16
+        <Icon name='comment' style={{marginLeft:'2rem'}}/>45
+        <Icon name='star' style={{marginLeft:'2rem'}}/>4.8
+      </div>} />
     );
   }
 

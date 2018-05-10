@@ -28,40 +28,18 @@ class CourseCards extends Component {
 
     let courseList = courses ?
         <div>
-          <Responsive {...Responsive.onlyComputer}>
-            <Grid centered>
-              <Grid.Column width={12}>
-                  <Grid stackable doubling columns={3} style={{marginTop: '0em'}}>
-                    {Object.keys(courses).map(key =>
-                      <Grid.Column key={key}>
-                        <CourseCard
-                          key={key}
-                          course={courses[key]} click={() => this.handleClick( key,
-                          courses[key].metadata.tid,
-                          courses[key].metadata.title,
-                          courses[key].metadata.tName)} />
-                          </Grid.Column>
-                        )}
-                  </Grid>
-              </Grid.Column>
+          <Grid container columns={4} textAlign='left' stackable doubling >
+            {Object.keys(courses).map(key =>
+              <Grid.Column key={key} mobile={16} tablet={8} computer={4}>
+                <CourseCard
+                  key={key}
+                  course={courses[key]} click={() => this.handleClick( key,
+                  courses[key].metadata.tid,
+                  courses[key].metadata.title,
+                  courses[key].metadata.tName)} />
+                  </Grid.Column>
+                )}
             </Grid>
-          </Responsive>
-          <Responsive minWidth={320} maxWidth={992}>
-            <Grid>
-              <Grid.Column
-                style={{marginLeft: '1rem', marginRight: '1rem', marginBottom: '1rem',}}
-                // The column position is not the same with that of above, but I leave it there as it shows proper margin outside the card
-                >
-                  {Object.keys(courses).map(key =>
-                    <CourseCard
-                      key={key}
-                      course={courses[key]} click={() => this.handleClick( key,
-                      courses[key].metadata.tid,
-                      courses[key].metadata.title,
-                      courses[key].metadata.tName)} />)}
-                </Grid.Column>
-            </Grid>
-          </Responsive>
         </div>
       : <Grid centered>
           <Grid.Column width={12} textAlign='center'>
