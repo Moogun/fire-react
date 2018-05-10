@@ -54,70 +54,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <ResponsiveContainer>
-
-          <Switch>
-            <Route exact path='/structure' component={() => <Structure />} />
-
-            <Route exact path={routes.LANDING} component={() => <LandingPage />} />
-            <Route exact path={routes.HOME} component={() => <HomePage />} />
-            <Route exact path={routes.SIGN_IN} render={() => <SignInPage />} />
-            <Route exact path={routes.SIGN_UP} render={() => <SignUpPage />} />
-
-            <Route path={routes.ACCOUNT} render={() => <AccountPage />} />
-
-
-            <Route exact path={routes.LEARNING} component={() => <MyCourses />} />
-
-
-            <Route exact path={routes.TEACHER_INTRO} render={() => <TeacherIntro />} />
-
-            <Route
-              // eaact path='/create'
-              exact path={routes.CREATE} render={() => <Create />} />
-
-            <Route path={routes.COURSE_MANAGE} render={() => <CEdit />} />
-
-            <Route path={routes.DASHBOARD} render={() => <Dashboard />} />
-
-            <Route path={routes.QUIZ_MANAGE} render={() => <QuizEdit />} />
-
-            <Route
-              // exact path='/teacher/:teacherId'
-              // exact path='/:teacherName'
-              path={routes.TEACHER_PAGE} render={() => <Teacher />} />
-
-            <Route
-              // exact path='/:teacherName/courses/:courseName'
-              exact path={routes.COURSE_PAGE} render={() => <CoursePage />} />
-
-            <Route
-              // exact path='/:teacherName/courses/:courseName'
-              path={routes.MY_COURSE_PAGE} render={() => <MyCoursePage />} />
-
-               {/* <PrivateRoute
-                 path={routes.MY_COURSE_PAGE} render={() => <MyCoursePage />} /> */}
-
-            {/* <Route
-              // path='/teacher/:teacherId/question/:questionId'
-              exact path ={routes.MY_COURSE_PAGE_QUESTION_PAGE}
-              render={() => <Question />}
-            /> */}
-
-
-
-            <Route exact path={routes.FOOTER_ABOUT} render={() => <About />} />
-            <Route exact path={routes.FOOTER_TERMS} render={() => <Terms />} />
-            <Route exact path={routes.FOOTER_FAQ} render={() => <Faq />} />
-            <Route exact path={routes.FOOTER_HELP} render={() => <Help />} />
-
-            <Route component={NoMatch} />
-          </Switch>
-
-          <Footer />
-
-        </ResponsiveContainer>
-
+        <ResponsiveContainer></ResponsiveContainer>
       </Router>
     );
   }
