@@ -81,8 +81,8 @@ class MyCourses extends Component {
     console.log('width', calculations.width, 'attendingCourses', attendingCourses);
 
     return (
-      <Grid>
-          <Grid.Column>
+      <React.Fragment>
+          {/* <Grid.Column> */}
 
             <SectionContainer>
                 <Header as='h1' style={style.DASHBOARD_HEADER}>My Courses</Header>
@@ -124,25 +124,16 @@ class MyCourses extends Component {
                 </Menu>
             </SectionContainer_M>
 
-            <Grid style={style.DASHBOARD_BODY}>
-                <Grid.Column>
+            {/* <Grid style={style.DASHBOARD_BODY} centered>
+                <Grid.Column> */}
+
                   <MyCourseCards courses={attendingCourses} loading={isLoading}/>
-                  {/* <Switch> */}
-                    {/* <Redirect exact from={match.url} to={routes.LEARNING_MY_COURSES} />
-                    <Route path={routes.LEARNING_MY_COURSES} render = {(props) =>
-                      // <MyCourseCards {...props}
-                        courses={attendingCourses}
-                      />
-                      } /> */}
 
-                  {/* </Switch> */}
-                  {/* <PrivateRoute
-                    path={routes.MY_COURSE_PAGE} render={() => <MyCoursePage />} /> */}
-                </Grid.Column>
-            </Grid>
+                {/* </Grid.Column>
+            </Grid> */}
 
-          </Grid.Column>
-      </Grid>
+          {/* </Grid.Column> */}
+      </React.Fragment>
     );
   }
 }

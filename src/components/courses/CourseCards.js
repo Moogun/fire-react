@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Segment, Container, Grid, Header, Responsive } from 'semantic-ui-react'
+import { Segment, Container, Grid, Header, Responsive, Loader } from 'semantic-ui-react'
 import CourseCard from './CourseCard'
 import Teacher from '../teacher/Teacher'
 import {Route, withRouter } from 'react-router-dom'
@@ -41,11 +41,7 @@ class CourseCards extends Component {
                 )}
             </Grid>
         </div>
-      : <Grid centered>
-          <Grid.Column width={12} textAlign='center'>
-            <p> Loading</p>
-          </Grid.Column>
-        </Grid>
+      : <Loader active inline='centered' />
 
     return (
         <Segment basic loading={loading} style={style.SEGMENT_LOADER}>

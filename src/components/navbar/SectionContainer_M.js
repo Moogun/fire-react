@@ -7,11 +7,11 @@ class SectionContainer_M extends Component {
   render() {
     const { children} = this.props
     return (
-      <Responsive minWidth={320} maxWidth={767} >
+      <Responsive minWidth={320} maxWidth={991} >
         <Grid style={style.DASHBOARD_HEAD_M} >
             <Grid.Row style={style.DASHBOARD_HEAD_M_ROW} >
 
-              <Grid container>
+              <Grid container centered>
                   <Grid.Column >
 
                     {children}

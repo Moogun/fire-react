@@ -243,11 +243,8 @@ class Dashboard extends Component {
     console.log('[render] dashboard props', quizzes, isLoading);
 
       return (
+        <React.Fragment>
 
-        <Grid>
-            <Grid.Column
-              // style={{minHeight: '87vh'}}
-              >
                 <SectionContainer>
                     <Header as='h1' style={style.DASHBOARD_HEADER}>Dashboard</Header>
 
@@ -329,8 +326,7 @@ class Dashboard extends Component {
                     </SectionContainer_M>
 
 
-                    <Grid style={style.DASHBOARD_BODY}>
-                        <Grid.Column>
+
                             <Switch>
                               <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
                               <Route path={routes.DASHBOARD_COURSES} render = {(props) =>
@@ -368,8 +364,7 @@ class Dashboard extends Component {
                                <Route path={routes.DASHBOARD_AN} render = {() => <Announcement
                                 />} />
                             </Switch>
-                        </Grid.Column>
-                    </Grid>
+                  
 
                     {/* <Modal size='tiny' open={createQuizModalOpen}>
                         <Modal.Header>Quiz</Modal.Header>
@@ -398,9 +393,7 @@ class Dashboard extends Component {
                         </Modal.Content>
                       </Modal> */}
 
-            </Grid.Column>
-        </Grid>
-
+      </React.Fragment>
       );
     }
 }
