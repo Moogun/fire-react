@@ -19,7 +19,7 @@ import QuestionPage from '../questionPage/QuestionPage';
 import QuestionTable from '../questions/QuestionTable'
 import NewQ from '../questions/NewQ' 
 
-import { Grid, Segment, Header, Menu, Container, Visibility, Image, Rating, Button, Item, Icon, Responsive } from 'semantic-ui-react'
+import { Grid, Segment, Header, Menu, Container, Visibility, Image, Rating, Button, Item, Icon, Responsive, Modal } from 'semantic-ui-react'
 
 import SectionContainer from '../navbar/SectionContainer'
 import SectionContainer_M from '../navbar/SectionContainer_M'
@@ -46,6 +46,9 @@ class MyCoursePage extends Component {
       isLoading: false,
       lastPage: false,
       attending: true,
+
+      quizModalOpen: false,
+
     }
   }
 
@@ -313,17 +316,21 @@ class MyCoursePage extends Component {
   }
 
   handleTakeQuiz = (e, section, lecture) => {
-    const { history, match } = this.props
+    const { history, match, course } = this.props
     console.log('history', history, section, lecture);
+    // curri[secIndex]
+    // let title = lecture.quiz.metadata.title.replace(/\s+/g, '-').toLowerCase()
+    // history.push({
+    //   pathname: `${match.url}/curri/${lecture.quiz.metadata.title}`,
+    //   state:
+    //     {
+    //       qid: lecture['qid'],
+    //     }
+    // })
+    this.setState ({ quizSelectedQid: lecture.qid, quizSelected: lecture.quiz, quizModalOpen: true})
 
-    history.push({
-      pathname: `${match.url}/curri/${lecture['quizTitle']}`,
-      state:
-        {
-          qid: lecture['qid'],
-        }
-    })
   }
+
 
   render() {
 
@@ -340,12 +347,15 @@ class MyCoursePage extends Component {
       isLoading,
       lastPage,
       // user
+      quizModalOpen,
+      quizSelectedQid,
+      quizSelected,
     } = this.state
 
     // let teacherName = tName ? tName : 'Teacher'
     // let teacherProfile = tProfileImg ? tProfileImg : profile
     // let meta = course ? course.metadata : null
-
+    console.log('quiz selected', quizSelected);
     const {match, cid, course, attending} = this.props
 
     let meta = course[cid].metadata
@@ -580,6 +590,21 @@ class MyCoursePage extends Component {
 
                   </Grid.Column>
               </Grid>
+
+              <Modal size='fullscreen' open={quizModalOpen} onClose={this.quizModalClose}>
+                  <Modal.Header>
+                    {quizSelected ? quizSelected.metadata.title : null}
+                  </Modal.Header>
+                  <Modal.Content>
+                    <p>Are you sure you want to delete your account</p>
+                  </Modal.Content>
+                  <Modal.Actions>
+                    <Button negative>
+                      No
+                    </Button>
+                    <Button positive icon='checkmark' labelPosition='right' content='Yes' />
+                  </Modal.Actions>
+                </Modal>
 
           </Grid.Column>
       </Grid>

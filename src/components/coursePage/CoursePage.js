@@ -114,7 +114,7 @@ class CoursePage extends Component {
   componentDidMount() {
     console.log('course page did mount', this.props.match.params);
     let cTitle = this.props.match.params.cTitle
-    let title = cTitle.replace(/-/g, ' ');
+    let title = cTitle.replace(/-/g, );
 
     db.onceGetCourseWithTitle(title)
       .then(cSnap => {
