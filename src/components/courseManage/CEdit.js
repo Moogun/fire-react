@@ -525,7 +525,7 @@ class CourseEdit extends Component {
       // this.setState ({ sections: updated, lectureTitle: '',  curriToSave: true})
 
       // OBJECT ARR CONTENT
-      let lecture = {lectureTitle: lectureTitle, quiz: null, }
+      let lecture = {lectureTitle: lectureTitle, quiz: null, isExpanded: false }
       section.content.push(lecture)
       console.log('section', section);
       sections.splice(sectionId, 1, section)
@@ -576,13 +576,15 @@ class CourseEdit extends Component {
       // this.setState ({ lectureToEdit: [secIndex, lecIndex], lectureTitle: '', activeSection: null})
       const {quizAttachModalOpen, teacherId } = this.state
       console.log('attach some to lecture', secIndex, lecIndex);
-      this.setState ({ quizAttachModalOpen: !quizAttachModalOpen, selectedLecForQuiz: [secIndex, lecIndex]})
+      this.setState ({ quizAttachModalOpen: !quizAttachModalOpen, selectedLecForQuiz: [secIndex, lecIndex], })
 
       db.doFetchAllQuizzes(teacherId)
       .then(res =>this.setState ({ quizList: res.val()}))
       .catch(error => {
         this.setState({[error]: error});
       });
+
+      //
     }
 
     handleCancelAttachQuiz = () => {
@@ -592,13 +594,13 @@ class CourseEdit extends Component {
     }
 
 
-    handleQuizSelectToAttach = (e, qid, quizTitle) => {
-      console.log('12345');
+    handleQuizSelectToAttach = (e, qid, quiz, quizTitle) => {
+      console.log('12345', quiz );
       const {sections, selectedLecForQuiz } = this.state
       sections[selectedLecForQuiz[0]].content[selectedLecForQuiz[1]]['qid'] = qid
-      sections[selectedLecForQuiz[0]].content[selectedLecForQuiz[1]]['quizTitle'] = quizTitle
+      sections[selectedLecForQuiz[0]].content[selectedLecForQuiz[1]]['quiz'] = quiz
 
-      this.setState ({ sections, quizAttachModalOpen: false})
+      this.setState ({ sections, quizAttachModalOpen: false, curriToSave: true})
       e.preventDefault()
 
     }
@@ -644,6 +646,17 @@ class CourseEdit extends Component {
       sections[secIndex].content.splice(lecIndex+1, 0, el)
       this.setState ({ sections, activeSection: null, })
       e.preventDefault()
+    }
+
+    handleLecToggle = (e, secIndex, lecIndex) => {
+      const { sections } = this.state
+      console.log('sections' ,sections, 'secIndex', secIndex, 'lecIndex', lecIndex);
+      // let el = sections[secIndex].content[lecIndex]
+      sections[secIndex].content[lecIndex].isExpanded = !sections[secIndex].content[lecIndex].isExpanded
+      // sections[secIndex].content.splice(lecIndex, 1)
+      // sections[secIndex].content.splice(lecIndex+1, 0, el)
+      // this.setState ({ sections, activeSection: null, })
+      this.setState ({sections})
     }
 
     handleSecToggle = (e, secIndex) => {
@@ -925,6 +938,8 @@ class CourseEdit extends Component {
             handleLecMoveUp = {this.handleLecMoveUp}
             handleLecMoveDown = {this.handleLecMoveDown}
 
+            handleLecToggle = {this.handleLecToggle}
+
             handleSecToggle = {this.handleSecToggle}
 
             formForSection={formForSection}
@@ -993,7 +1008,7 @@ class CourseEdit extends Component {
 
                   {quizList && Object.keys(quizList).map(i => (
 
-                      <Segment clearing vertical key={i} clearing onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i].metadata.title)} >
+                      <Segment clearing vertical key={i} clearing onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i], quizList[i].metadata.title )} >
                           <Button icon basic>
                             <Icon name='eye' /> Preview
                           </Button>

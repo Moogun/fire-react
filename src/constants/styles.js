@@ -25,7 +25,7 @@ export const DASHBOARD_MENU_ITEM = {borderWidth: '5px', paddingLeft: '0', paddin
 export const DASHBOARD_MENU_ITEM_M = {borderWidth: '5px', paddingLeft: '2px', paddingRight: '2px', marginRight: '20px'}
 
 //
-export const DASHBOARD_BODY = {marginTop: '0rem', marginBottom: '0rem', backgroundColor: '#ecf0f1', minHeight: '67vh'}
+export const DASHBOARD_BODY = {marginTop: '1rem', marginBottom: '0rem', backgroundColor: '#ecf0f1', minHeight: '67vh'}
 export const DASHBOARD_BODY_M = {marginTop: '0rem', backgroundColor: '#ecf0f1'}
 
 //C EDIT

@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types';
 import * as routes from '../../constants/routes';
-import * as style from '../../style/inline';
+import * as style from '../../constants/styles';
 // import withAuthorization from '../../HOC/withAuthorization';
 import withAuthorizationDashboard from '../../HOC/withAuthorizationDashboard';
 
@@ -326,7 +326,8 @@ class Dashboard extends Component {
                     </SectionContainer_M>
 
 
-
+                    <Grid style={style.DASHBOARD_BODY}>
+                        <Grid.Column>
                             <Switch>
                               <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
                               <Route path={routes.DASHBOARD_COURSES} render = {(props) =>
@@ -364,7 +365,8 @@ class Dashboard extends Component {
                                <Route path={routes.DASHBOARD_AN} render = {() => <Announcement
                                 />} />
                             </Switch>
-                  
+                        </Grid.Column>
+                    </Grid>
 
                     {/* <Modal size='tiny' open={createQuizModalOpen}>
                         <Modal.Header>Quiz</Modal.Header>

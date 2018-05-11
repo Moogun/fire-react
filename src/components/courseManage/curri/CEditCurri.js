@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment, Button, Form, Confirm, Header, Icon } from 'semantic-ui-react'
+import { Segment, Button, Form, Confirm, Header, Icon, List } from 'semantic-ui-react'
 import * as style from '../../../style/inline'
 
 const CEditMetaBorder = {borderRadius: '0px'}
@@ -43,6 +43,8 @@ class CEditCurri extends React.Component {
       handleSecMoveDown,
       handleLecMoveUp,
       handleLecMoveDown,
+
+      handleLecToggle,
 
       handleSecToggle,
 
@@ -118,36 +120,55 @@ class CEditCurri extends React.Component {
             onConfirm={handleConfirmRemove}
           />
 
+{/* LECTURE */}
+
           {s.expanded && s.content.map((c, lecIndex) =>
-            <Segment key={lecIndex} style={style.C_EDIT_CURRI_ITEM}>
+            <React.Fragment key={lecIndex}>
+            <Segment secondary key={lecIndex} style={style.C_EDIT_CURRI_ITEM}>
               {this.arraysEqual(lectureToEdit, [secIndex, lecIndex]) ? <input value={lectureTitle} placeholder='' type='text'
                 onChange={(e) => handleLectureTitleChange(e)}
               />
                 : ` - Lecture ${lecIndex + 1} ${c['lectureTitle']},` }
 
-            {this.arraysEqual(lectureToEdit, [secIndex, lecIndex])
-              ? <Button.Group size='mini' basic style={{marginLeft: '1rem',}}>
-                  <Button icon='save' onClick={(e) => handleSaveLectureTitleEdit(e, secIndex, lecIndex)} />
-                  <Button icon='cancel'
-                    onClick={handleLectureTitleChangeCancel}
-                    // onClick={() => this.setState ({ lectureToEdit: null})}
-                  />
-                </Button.Group>
-              : <React.Fragment>
-                  <Button.Group size='mini' style={{marginLeft: '1rem'}}>
-                     <Button icon='pencil' inverted basic  />
-                   </Button.Group>
+                  {this.arraysEqual(lectureToEdit, [secIndex, lecIndex])
+                    ? <Button.Group size='mini' basic style={{marginLeft: '1rem',}}>
+                        <Button icon='save' onClick={(e) => handleSaveLectureTitleEdit(e, secIndex, lecIndex)} />
+                        <Button icon='cancel'
+                          onClick={handleLectureTitleChangeCancel}
+                          // onClick={() => this.setState ({ lectureToEdit: null})}
+                        />
+                      </Button.Group>
+                    : <React.Fragment>
+                        <Button.Group size='mini' style={{marginLeft: '1rem'}}>
+                           <Button icon='pencil' inverted basic  />
+                         </Button.Group>
 
-                   <Button.Group basic floated='right' size='mini' style={{marginLeft: '1rem'}}>
-                     <Button icon='attach' content={c['quizTitle'] ? c['quizTitle'] : 'Attach Quiz'} basic onClick={() => handleAttachQuiz(secIndex, lecIndex)} />
-                     <Button icon='pencil' basic onClick={() => handleInlineLectureEdit(secIndex, lecIndex)}/>
-                     <Button icon='trash' basic onClick={() => handleRemoveLecture(secIndex, lecIndex)} />
-                     <Button basic disabled={lecIndex=== 0} icon='chevron up' onClick={(e) => handleLecMoveUp(e, secIndex, lecIndex)} />
-                     <Button basic disabled={(sections[secIndex].content.length === (lecIndex +1))} icon='chevron down' onClick={(e) => handleLecMoveDown(e, secIndex, lecIndex)} />
-                    </Button.Group>
-                 </React.Fragment>
-                 }
+                         <Button.Group basic floated='right' size='mini' style={{marginLeft: '1rem'}}>
+                           <Button icon='copy' content={c.quiz ? c.quiz.metadata.title : 'Attach Quiz'} basic onClick={() => handleAttachQuiz(secIndex, lecIndex)} />
+                           <Button icon='pencil' basic onClick={() => handleInlineLectureEdit(secIndex, lecIndex)}/>
+                           <Button icon='trash' basic onClick={() => handleRemoveLecture(secIndex, lecIndex)} />
+                           <Button basic disabled={lecIndex=== 0} icon='chevron up' onClick={(e) => handleLecMoveUp(e, secIndex, lecIndex)} />
+                           <Button basic disabled={(sections[secIndex].content.length === (lecIndex +1))} icon='chevron down' onClick={(e) => handleLecMoveDown(e, secIndex, lecIndex)} />
+                           <Button
+                             disabled={(c.quiz == undefined ? true : false) }
+                             icon={c.quiz == undefined ? 'plus' : c.isExpanded ? 'minus' : 'plus'}
+                             onClick={(e) => handleLecToggle(e, secIndex, lecIndex)}
+                           />
+                          </Button.Group>
+                       </React.Fragment>
+                       }
+{/* Quiz */}
+{c.quiz && c.isExpanded ? (<Segment style={{marginBottom: '0.5rem'}}>
+                     <Header as='h4'> {c.quiz.metadata.title} </Header>
+                       <List as='ol'>
+                          {c.quiz.questions && c.quiz.questions.map((question, index) =>
+                            <List.Item as='li' key={index}>{question.title}</List.Item> )}
+                       </List>
+                   </Segment>) : null }
             </Segment>
+
+
+          </React.Fragment>
           )}
 
           { activeSection === secIndex ?

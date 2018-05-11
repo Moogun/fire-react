@@ -44,8 +44,8 @@ class HomePage extends Component {
     //     <p>No course yet</p>
     //   </Segment>
     return (
-      
-            <CourseCards courses={courses} loading={isLoading}/>
+
+        <CourseCards courses={courses} loading={isLoading}/>
 
     );
   }

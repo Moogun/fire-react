@@ -82,7 +82,6 @@ class MyCourses extends Component {
 
     return (
       <React.Fragment>
-          {/* <Grid.Column> */}
 
             <SectionContainer>
                 <Header as='h1' style={style.DASHBOARD_HEADER}>My Courses</Header>
@@ -132,7 +131,6 @@ class MyCourses extends Component {
                 {/* </Grid.Column>
             </Grid> */}
 
-          {/* </Grid.Column> */}
       </React.Fragment>
     );
   }
