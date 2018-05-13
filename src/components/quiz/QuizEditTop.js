@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
 import profile from '../../assets/profile-lg.png'
-import {Segment, Image, Item, Grid, Button, Icon, Responsive, List, Header, Modal, Form} from 'semantic-ui-react'
+import {Segment, Image, Item, Grid, Button, Icon, Responsive, List, Header, Modal, Form, Message} from 'semantic-ui-react'
 import * as styles from '../../constants/styles'
 
 class QuizEditTop extends Component {
 
   render() {
     const {title, instruction, quiz, handleChange, handleRadioChange} = this.props
-
+    let quizEntryResult = false
     return (
       <Grid container verticalAlign='middle'>
 
@@ -41,7 +41,7 @@ class QuizEditTop extends Component {
                  </Header.Subheader>
                   {quiz.length > 0 && quiz.map((q, index) =>
 
-                    QuestionType(index, q, handleChange, handleRadioChange)[q.type]
+                    QuestionType(index, q, handleChange, handleRadioChange, quizEntryResult)[q.type]
                   )}
 
                 </Modal.Description>
@@ -65,7 +65,7 @@ class QuizEditTop extends Component {
 
 export default QuizEditTop
 
-export const QuestionType = (index, q, handleChange, handleRadioChange) => ({
+export const QuestionType = (index, q, handleChange, handleRadioChange, quizEntryResult) => ({
   shortAnswer: (
       //instruction??
       <Segment key={index}>
@@ -73,9 +73,28 @@ export const QuestionType = (index, q, handleChange, handleRadioChange) => ({
           <Form.Field>
             {index + 1}. {q.title}
           </Form.Field>
-          <Form.Field>
-            <input type="text" placeholder='Enter the answer' style={styles.QUIZ_QUESTION_INPUT} onChange={(e) => handleChange(e, index, q)} />
-          </Form.Field>
+            {quizEntryResult
+            ? null
+            : <Form.Field>
+              <input type="text" placeholder='Enter the answer' style={styles.QUIZ_QUESTION_INPUT} onChange={(e) => handleChange(e, index, q)} />
+            </Form.Field> }
+
+          {quizEntryResult
+
+            ? <Message
+                 color={q.entry['user1'] == q.answer ? 'blue' : 'red'}
+                 header={q.entry['user1'] == q.answer ? 'Correct' : 'Wrong'}
+                 list={[
+                   `Your answer:' ${q.entry['user1']}`,
+                   `Correct Answer : ${q.answer}`,
+                   `Explanation : ${q.explanation}`,
+                   `Correct Total:
+                   ${correctCount(Object.values(q.entry).filter(a => a == q.answer).length)} / ${totalCount(Object.keys(q.entry).length)},
+                   ( ${percentile(Object.values(q.entry).filter(a => a == q.answer).length, Object.keys(q.entry).length)} %)`,
+                 ]}
+               />
+            : null}
+
         </Form>
       </Segment>
   ),
@@ -85,3 +104,7 @@ export const QuestionType = (index, q, handleChange, handleRadioChange) => ({
     </Segment>
   ),
 })
+
+const correctCount = (correct) => correct
+const totalCount = (total) => total
+const percentile = (correct, total) => Math.round(correct/total * 100)

@@ -27,7 +27,7 @@ const CourseCurri = ({sections, handleSecToggle, takeQuiz}) => {
         <Segment textAlign='left' key={lecIndex}>
           <Icon color='teal' name='circle' /> {lecIndex + 1}. {l['lectureTitle']}
 
-          {l.quiz ? <Icon style={{marginLeft: '1rem'}} link name='ordered list' onClick={(e) => takeQuiz(e, s, l)}/> : null}
+          {l.quiz ? <Icon style={{marginLeft: '1rem'}} link name='ordered list' onClick={(e) => takeQuiz(e, s, secIndex, l, lecIndex)}/> : null}
         </Segment>)}
 
       </Segment.Group>
