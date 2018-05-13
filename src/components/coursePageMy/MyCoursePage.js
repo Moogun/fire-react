@@ -19,15 +19,17 @@ import QuestionPage from '../questionPage/QuestionPage';
 import QuestionTable from '../questions/QuestionTable'
 import NewQ from '../questions/NewQ' 
 
-import { Grid, Segment, Header, Menu, Container, Visibility, Image, Rating, Button, Item, Icon, Responsive, Modal } from 'semantic-ui-react'
+import { Grid, Segment, Header, Menu, Container, Visibility, Image, Rating, Button, Item, Icon, Responsive, Modal, Form } from 'semantic-ui-react'
 
 import SectionContainer from '../navbar/SectionContainer'
 import SectionContainer_M from '../navbar/SectionContainer_M'
 
 import profile from '../../assets/profile-lg.png'
 
-import * as style from '../../style/inline';
+import * as style from '../../constants/styles';
 import * as routes from '../../constants/routes';
+
+import {QuestionType} from '../quiz/QuizEditTop'
 
 class MyCoursePage extends Component {
   constructor(props){
@@ -47,8 +49,13 @@ class MyCoursePage extends Component {
       lastPage: false,
       attending: true,
 
-      quizModalOpen: false,
+      QuizStatus: 'quizNotTakenBeforeQuestion',
 
+      quizModalOpen: false,
+      userEntryExist: false,
+      startTest: true,
+
+// modalStatus 1. readyToQuiz, 2.readyToSubmit, readyToReview, readyToclose
     }
   }
 
@@ -316,6 +323,7 @@ class MyCoursePage extends Component {
   }
 
   handleTakeQuiz = (e, section, lecture) => {
+    e.preventDefault()
     const { history, match, course } = this.props
     console.log('history', history, section, lecture);
     // curri[secIndex]
@@ -327,10 +335,53 @@ class MyCoursePage extends Component {
     //       qid: lecture['qid'],
     //     }
     // })
-    this.setState ({ quizSelectedQid: lecture.qid, quizSelected: lecture.quiz, quizModalOpen: true})
+
+    // check whether the user entry exsits with uid
+    // case quiz not taken - started or not
+    // case quiz taken - (re-try) show result or not
+
+   let userEntry = true
+
+   if (userEntry) {
+    this.setState ({ quizSelectedQid: lecture.qid, quizSelected: lecture.quiz, userEntryExist: userEntry, quizModalOpen: true})
+
+      // user specific result and statistics
+      //
+    } else {
+      this.setState ({ quizSelectedQid: lecture.qid, quizSelected: lecture.quiz, userEntryExist: false, quizModalOpen: true})
+    }
 
   }
 
+  handleQuizModalClose = () => {
+    console.log('close');
+    this.setState ({quizModalOpen: false, startTest: false , QuizStatus: 'quizNotTakenBeforeQuestion'})
+  }
+  handleStartTest = () => {
+    console.log('med test')
+    this.setState ({ QuizStatus: 'quizNotTakenQuestion', startTest: true})
+  }
+
+  handleChange=(e, index, q )=>{
+
+    console.log('cc', e, index, q)
+    console.log('[state]', this.state);
+    console.log('[props]', this.props);
+    const {cid } = this.props
+
+    // 1. courses/cid/curri/id or index / content / id or index / quiz / questions / id or index / {uid: answer}
+    //$cid, curri, item , section , lecture, quiz, questions / entry
+    // 2. add cid, curri id,
+
+  }
+
+  handleRadioChange = () => {
+    console.log(222);
+  }
+
+  handleQuizSubmit = () => {
+    console.log('med test');
+  }
 
   render() {
 
@@ -347,9 +398,15 @@ class MyCoursePage extends Component {
       isLoading,
       lastPage,
       // user
+      QuizStatus,
+
       quizModalOpen,
+      userEntryExist,
+      startTest,
+
       quizSelectedQid,
       quizSelected,
+
     } = this.state
 
     // let teacherName = tName ? tName : 'Teacher'
@@ -550,6 +607,7 @@ class MyCoursePage extends Component {
                       <CourseCurri
                         sections={curri}
                         handleSecToggle={this.handleSecToggle}
+                        takeQuiz={this.handleTakeQuiz}
                        />} />
                      <Route path={`${match.url}/info`} render = {() =>
                        // <CourseMeta
@@ -591,20 +649,14 @@ class MyCoursePage extends Component {
                   </Grid.Column>
               </Grid>
 
-              <Modal size='fullscreen' open={quizModalOpen} onClose={this.quizModalClose}>
+              {quizModalOpen
+                ? <Modal size='small' open={quizModalOpen} >
                   <Modal.Header>
-                    {quizSelected ? quizSelected.metadata.title : null}
+                      {quizSelected ? quizSelected.metadata.title : null}
                   </Modal.Header>
-                  <Modal.Content>
-                    <p>Are you sure you want to delete your account</p>
-                  </Modal.Content>
-                  <Modal.Actions>
-                    <Button negative>
-                      No
-                    </Button>
-                    <Button positive icon='checkmark' labelPosition='right' content='Yes' />
-                  </Modal.Actions>
+                  {QuizModalType(quizModalOpen, this.handleQuizModalClose, userEntryExist, startTest, this.handleStartTest, quizSelected, this.handleChange, this.handleRadioChange, this.handleQuizSubmit)[QuizStatus]}
                 </Modal>
+              : null}
 
           </Grid.Column>
       </Grid>
@@ -636,12 +688,80 @@ const authCondition = (authUser) => !!authUser
 // export default withAuthorization(MyCoursePage);
 export default withAuthorizationMyCoursePage(authCondition, verifyStudent)(MyCoursePage);
 
-// const questionIntoArray = (questions) => {
-//   let q = {}
-//   q = data.val()
-//   // console.log('q 10000', q);
-//   q['qid'] = data.key
-//   questions.splice(0,0,q)
-//   this.setState ({ questions})
-//   return
-// }
+// QuestionType(index, q, handleChange, handleRadioChange)[q.type]
+
+const QuizModalType = (quizModalOpen, handleQuizModalClose, userEntryExist, startTest, handleStartTest, quizSelected, handleChange, handleRadioChange, handleQuizSubmit) => ({
+  quizNotTakenBeforeQuestion: (
+    <React.Fragment>
+
+      <Modal.Content>
+        <Segment basic>
+          {quizSelected ? quizSelected.metadata.instruction : null}
+        </Segment>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button negative onClick={handleQuizModalClose}>
+          Cancel
+        </Button>
+          <Button primary icon='checkmark' labelPosition='right' content='Start' onClick={handleStartTest}/>
+      </Modal.Actions>
+    </React.Fragment>
+  ),
+  quizNotTakenQuestion: (
+  <React.Fragment>
+      <Modal.Content>
+        {/* need to check // QUESTION:  */}
+        {quizSelected && startTest === true
+          ? quizSelected.questions.map((q, index) => QuestionType(index, q, handleChange, handleRadioChange)[q.type])
+          : null
+        }
+      </Modal.Content>
+      <Modal.Actions>
+        <Button negative onClick={handleQuizModalClose}>
+          Cancel
+        </Button>
+        {startTest
+          ? <Button positive icon='checkmark' labelPosition='right'
+            content='Submit' onClick={handleQuizSubmit}/>
+          : null }
+      </Modal.Actions>
+    </React.Fragment>
+  ),
+  quizTakenBeforeResult: (
+    <Modal size='small' open={quizModalOpen} >
+      <Modal.Header>
+          {quizSelected ? quizSelected.metadata.title : null}
+      </Modal.Header>
+      <Modal.Content>
+        <p>You have taken this quiz already and here's the detail </p>
+        <p>You want to review the result ?</p>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button negative onClick={this.handleQuizModalClose}>
+          Cancel
+        </Button>
+
+        {/* {reviewResult
+          ? <Button positive icon='checkmark' labelPosition='right'
+            content='Review' onClick={this.handleQuizSubmit}/>
+          : null } */}
+      </Modal.Actions>
+    </Modal>
+  ),
+  quizTakenResult: (
+    <Modal size='small' open={quizModalOpen} >
+      <Modal.Header>
+          {quizSelected ? quizSelected.metadata.title : null}
+      </Modal.Header>
+      <Modal.Content>
+        <p>This is the result</p>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button negative onClick={this.handleQuizModalClose}>
+          Cancel
+        </Button>
+      </Modal.Actions>
+    </Modal>
+  ),
+
+})

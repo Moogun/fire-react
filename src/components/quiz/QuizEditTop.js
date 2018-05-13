@@ -65,7 +65,7 @@ class QuizEditTop extends Component {
 
 export default QuizEditTop
 
-const QuestionType = (index, q, handleChange, handleRadioChange) => ({
+export const QuestionType = (index, q, handleChange, handleRadioChange) => ({
   shortAnswer: (
       //instruction??
       <Segment key={index}>
@@ -74,7 +74,7 @@ const QuestionType = (index, q, handleChange, handleRadioChange) => ({
             {index + 1}. {q.title}
           </Form.Field>
           <Form.Field>
-            <input type="text" placeholder='Enter the answer' style={styles.QUIZ_QUESTION_INPUT} />
+            <input type="text" placeholder='Enter the answer' style={styles.QUIZ_QUESTION_INPUT} onChange={(e) => handleChange(e, index, q)} />
           </Form.Field>
         </Form>
       </Segment>
