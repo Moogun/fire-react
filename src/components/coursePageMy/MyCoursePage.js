@@ -54,6 +54,7 @@ class MyCoursePage extends Component {
       quizModalOpen: false,
       userEntryExist: false,
       startTest: true,
+      quizEntryResult: false,
 
 // modalStatus 1. readyToQuiz, 2.readyToSubmit, readyToReview, readyToclose
     }
@@ -159,21 +160,6 @@ class MyCoursePage extends Component {
 
     db.doSaveNewQ(tid, cid[0], courseTitle, uid, user.username, user.photoUrl, qTitle, qText, createdAt, 'img')
       .then(res => {
-         // somethigns wrong here
-
-         // db.ref('courses').child(cid[0]).child('metadata').child('questionCount').transaction(questionCount => {
-        //   console.log('questionCount', questionCount);
-        // })
-        // let courseQuestionRef = db.ref('courses').child(cid[0]).child('metadata').child('questionCount')
-        // courseQuestionRef.transaction(function(questionCount){
-        //     if(questionCount) {
-        //       questionCount++
-        //     } else {
-        //       questionCount = 1
-        //     }
-        //     return questionCount
-        //   })
-
         this.setState ({ qTitle: '', qText: ''})
         this.props.history.replace(`${this.props.match.url}/questions`)
         })
@@ -336,9 +322,6 @@ class MyCoursePage extends Component {
     //     }
     // })
 
-    // check whether the user entry exsits with uid
-    // case quiz not taken - started or not
-    // case quiz taken - (re-try) show result or not
     let uid = 'user1'
     // const {uid } = this.props
 
@@ -359,7 +342,8 @@ class MyCoursePage extends Component {
     } else {
       console.log('userEntry', 2);
       this.setState ({ quizModalOpen: true,
-        quizSelectedQid: lecture.qid, quizSelected: lecture.quiz,
+        quizSelectedQid: lecture.qid,
+        quizSelected: lecture.quiz,
         userEntryExist: false,
         QuizStatus: 'quizNotTakenBeforeQuestion',
         quizSelectedIndex: [secIndex, lecIndex],
@@ -380,26 +364,14 @@ class MyCoursePage extends Component {
   handleChange=(e, index, q )=>{
 
     console.log('[q input]', index, e.target.value, q['id'])
-    let uid = 'user2'
+    // let uid = 'user2'
     // console.log('[state]', this.state);
-    // console.log('[props]', this.props);
-    // const {uid } = this.props
+    const {uid } = this.props
 
-    // 1. courses/cid/curri/id or index / content / id or index / quiz / questions / id or index / {uid: answer}
-    //$cid, curri, item , section , lecture, quiz, questions / entry
-    // 2. add cid, curri id,
-    // 3.
     const { quizSelected } = this.state
     quizSelected.questions[index]['entry'][uid] = e.target.value
     this.setState ({ quizSelected: quizSelected})
-    console.log(this.state.quizSelected);
-    // let userEntryForQuestion = {}
-    // userEntryForQuestion[uid] = e.target.value
-    // console.log('userEntryForQuestion', userEntryForQuestion);
-
-    // quizSelected.questions[index]['entry'] = userEntryForQuestion
-    // console.log('quizSelected.questions[index]', quizSelected.questions[index][uid]);
-
+    // console.log(this.state.quizSelected);
   }
 
   handleRadioChange = () => {
@@ -410,19 +382,24 @@ class MyCoursePage extends Component {
     // 1. courses/cid/curri/id or index / content / id or index / quiz / questions / id or index / {uid: answer}
     //$cid, curri, item , section , lecture, quiz, questions / entry
     // 2. add cid, curri id,
-    // 3.
+    const {cid } = this.props
     const { quizSelectedQid, quizSelected, quizSelectedIndex } = this.state
     console.log('[quizSubmit]', quizSelectedQid, quizSelected, quizSelectedIndex);
-    // db.doSaveQuizSubmit(cid, id/index, content id / index, )
+    db.doSaveQuizEntry(cid, quizSelectedIndex[0], quizSelectedIndex[1], quizSelected)
+    .then(res => console.log('res', res))
+    .catch(error => {
+      this.setState({[error]: error});
+    });
+
   }
 
   handleQuizReview = () => {
     console.log('med test')
-    this.setState ({QuizStatus: 'quizTakenResult', startTest: true , })
+    this.setState ({QuizStatus: 'quizTakenResult', startTest: true, quizEntryResult: true })
   }
 
   handleQuizReTry = () => {
-      this.setState ({ QuizStatus: 'quizNotTakenQuestion', startTest: true, })
+      this.setState ({ QuizStatus: 'quizNotTakenQuestion', startTest: true, quizEntryResult: false })
   }
 
   render() {
@@ -448,6 +425,7 @@ class MyCoursePage extends Component {
 
       quizSelectedQid,
       quizSelected,
+      quizEntryResult,
 
     } = this.state
 
@@ -470,7 +448,6 @@ class MyCoursePage extends Component {
     let features = course[cid].features
     let images = course[cid].images
 
-    let quizEntryResult = true
 
     return (
       <Grid >
@@ -805,7 +782,10 @@ const QuizModalType = (quizModalOpen, handleQuizModalClose, userEntryExist, star
       </Modal.Content>
       <Modal.Actions>
         <Button positive onClick={handleQuizModalClose}>
-          Confirm
+          Close
+        </Button>
+        <Button primary onClick={handleQuizReTry}>
+          Re-try ?
         </Button>
       </Modal.Actions>
     </Modal>

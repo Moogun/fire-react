@@ -424,3 +424,9 @@ export const doDeleteQuiz = (tid, qid, ) => {
     updates[`quizzesForT/${tid}/${qid}/`] = null
   return db.ref().update(updates)
 }
+
+export const doSaveQuizEntry = (cid, curriSecIndex, lecIndex, entry) => {
+  var updates = {}
+    updates[`courses/${cid}/curri/${curriSecIndex}/content/${lecIndex}/quiz/`] = entry
+  return db.ref().update(updates)
+}
