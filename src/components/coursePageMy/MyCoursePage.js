@@ -322,8 +322,8 @@ class MyCoursePage extends Component {
     //     }
     // })
 
-    let uid = 'user1'
-    // const {uid } = this.props
+    // let uid = 'user1'
+    const {uid } = this.props
 
     let userEntry = !!Object.keys(lecture.quiz.questions[0].entry).filter(id => id === uid)[0] ? true : false
 
@@ -386,7 +386,7 @@ class MyCoursePage extends Component {
     const { quizSelectedQid, quizSelected, quizSelectedIndex } = this.state
     console.log('[quizSubmit]', quizSelectedQid, quizSelected, quizSelectedIndex);
     db.doSaveQuizEntry(cid, quizSelectedIndex[0], quizSelectedIndex[1], quizSelected)
-    .then(res => console.log('res', res))
+    .then(res => this.setState ({ QuizStatus: 'quizTakenResult', startTest: true, quizEntryResult: true, }) )
     .catch(error => {
       this.setState({[error]: error});
     });
@@ -394,7 +394,6 @@ class MyCoursePage extends Component {
   }
 
   handleQuizReview = () => {
-    console.log('med test')
     this.setState ({QuizStatus: 'quizTakenResult', startTest: true, quizEntryResult: true })
   }
 
@@ -433,7 +432,7 @@ class MyCoursePage extends Component {
     // let teacherProfile = tProfileImg ? tProfileImg : profile
     // let meta = course ? course.metadata : null
     console.log('quiz selected', quizSelected);
-    const {match, cid, course, attending} = this.props
+    const {match, cid, course, attending, uid} = this.props
 
     let meta = course[cid].metadata
     let teacherName = meta.tName
@@ -675,7 +674,7 @@ class MyCoursePage extends Component {
                   <Modal.Header>
                       {quizSelected ? quizSelected.metadata.title : null}
                   </Modal.Header>
-                  {QuizModalType(quizModalOpen, this.handleQuizModalClose, userEntryExist, startTest, this.handleStartTest, quizSelected, this.handleChange, this.handleRadioChange, this.handleQuizSubmit, this.handleQuizReview, this.handleQuizReTry, quizEntryResult)[QuizStatus]}
+                  {QuizModalType(quizModalOpen, this.handleQuizModalClose, userEntryExist, startTest, this.handleStartTest, quizSelected, this.handleChange, this.handleRadioChange, this.handleQuizSubmit, this.handleQuizReview, this.handleQuizReTry, quizEntryResult, uid)[QuizStatus]}
                 </Modal>
               : null}
 
@@ -711,7 +710,7 @@ export default withAuthorizationMyCoursePage(authCondition, verifyStudent)(MyCou
 
 // QuestionType(index, q, handleChange, handleRadioChange)[q.type]
 
-const QuizModalType = (quizModalOpen, handleQuizModalClose, userEntryExist, startTest, handleStartTest, quizSelected, handleChange, handleRadioChange, handleQuizSubmit, handleQuizReview, handleQuizReTry, quizEntryResult) => ({
+const QuizModalType = (quizModalOpen, handleQuizModalClose, userEntryExist, startTest, handleStartTest, quizSelected, handleChange, handleRadioChange, handleQuizSubmit, handleQuizReview, handleQuizReTry, quizEntryResult, uid) => ({
   quizNotTakenBeforeQuestion: (
     <React.Fragment>
 
@@ -776,7 +775,7 @@ const QuizModalType = (quizModalOpen, handleQuizModalClose, userEntryExist, star
       </Modal.Header>
       <Modal.Content>
         {quizSelected && startTest === true
-          ? quizSelected.questions.map((q, index) => QuestionType(index, q, handleChange, handleRadioChange, quizEntryResult)[q.type])
+          ? quizSelected.questions.map((q, index) => QuestionType(index, q, handleChange, handleRadioChange, quizEntryResult, uid)[q.type])
           : null
         }
       </Modal.Content>

@@ -65,7 +65,7 @@ class QuizEditTop extends Component {
 
 export default QuizEditTop
 
-export const QuestionType = (index, q, handleChange, handleRadioChange, quizEntryResult) => ({
+export const QuestionType = (index, q, handleChange, handleRadioChange, quizEntryResult, uid) => ({
   shortAnswer: (
       //instruction??
       <Segment key={index}>
@@ -82,10 +82,10 @@ export const QuestionType = (index, q, handleChange, handleRadioChange, quizEntr
           {quizEntryResult
 
             ? <Message
-                 color={q.entry['user1'] == q.answer ? 'blue' : 'red'}
-                 header={q.entry['user1'] == q.answer ? 'Correct' : 'Wrong'}
+                 color={q.entry[uid] == q.answer ? 'blue' : 'red'}
+                 header={q.entry[uid] == q.answer ? 'Correct' : 'Wrong'}
                  list={[
-                   `Your answer:' ${q.entry['user1']}`,
+                   `Your answer:' ${q.entry[uid]}`,
                    `Correct Answer : ${q.answer}`,
                    `Explanation : ${q.explanation}`,
                    `Correct Total:
