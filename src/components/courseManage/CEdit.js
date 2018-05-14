@@ -298,23 +298,6 @@ class CourseEdit extends Component {
     this.setState({ confirmOpen: false })
   }
 
-  // //CURRI
-  // onCurriSubmit = ( ) => {
-  //   const {courseId, teacherId} = this.state
-  //   console.log('course teacher', courseId, teacherId);
-  //
-  //   var editorData = convertToRaw(this.state.editorState.getCurrentContent());
-  //   console.log('editor1 data getCurrentContent',editorData);
-  //
-  //   var strData = JSON.stringify(editorData)
-  //
-  //   db.doUpdateCourseCurri(teacherId, courseId, strData)
-  //     .then(response => console.log('succeded uploading',response))
-  //     .catch(error => {
-  //       this.setState(byPropKey('error', error));
-  //     });
-  // }
-
   //CURRI
   onCurriSubmit = () => {
     const {courseId, teacherId, sections} = this.state
@@ -376,7 +359,7 @@ class CourseEdit extends Component {
       .then(res => {
         console.log('remove', res)
         console.log('history', history)
-        history.replace({pathname: '/dashboard/courses'})
+        history.replace({pathname: '/teaching/dashboard/courses'})
         })
   }
 
@@ -581,7 +564,7 @@ class CourseEdit extends Component {
       if (sections[secIndex].content[lecIndex]['qid'] != null) {
         console.log('warning');
       }
-      
+
       this.setState ({ quizAttachModalOpen: !quizAttachModalOpen, selectedLecForQuiz: [secIndex, lecIndex], })
 
       db.doFetchAllQuizzes(teacherId)
@@ -991,50 +974,50 @@ class CourseEdit extends Component {
                           }
                         /> */}
                     </Grid.Column>
-
                   </Grid>
-
-            {/* <NotificationStack
-              barStyleFactory={this.barStyleFactory}
-              activeBarStyleFactory={this.activeBarStyleFactory}
-              // notifications={this.state.notifications.toArray()}
-              onDismiss={notification => this.setState({
-                notifications: this.state.notifications.delete(notification)
-              })}
-            /> */}
-
-            <Modal open={quizAttachModalOpen}
-              >
-              <Modal.Header>Select a Quiz</Modal.Header>
-              <Modal.Content scrolling>
-                <Modal.Description>
-
-                  {quizList && Object.keys(quizList).map(i => (
-
-                      <Segment clearing vertical key={i} clearing  >
-                          <PreviewModal quiz={quizList[i]}/>
-
-                          <Button style={{backgroundColor: 'white'}} disabled={quizList[i].metadata.questionCount===0}
-                            onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i], quizList[i].metadata.title )} > {quizList[i].metadata.title} - {quizList[i].metadata.questionCount} question(s)</Button>
-
-                      </Segment>)
-                  )}
-                </Modal.Description>
-              </Modal.Content>
-              <Modal.Actions>
-                <Button color='red' onClick={this.handleCancelAttachQuiz}>
-                   <Icon name='cancel' /> Cancel
-                 </Button>
-               </Modal.Actions>
-            </Modal>
-
 
                   </Grid.Column>
               </Grid.Row>
-
             </Grid>
+
           </Segment>
+
+          <Modal open={quizAttachModalOpen}>
+            <Modal.Header>Select a Quiz</Modal.Header>
+            <Modal.Content scrolling>
+              <Modal.Description>
+
+                {quizList && Object.keys(quizList).map(i => (
+
+                    <Segment clearing vertical key={i} clearing  >
+                        <PreviewModal quiz={quizList[i]}/>
+
+                        <Button style={{backgroundColor: 'white'}} disabled={quizList[i].metadata.questionCount===0}
+                          onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i], quizList[i].metadata.title )} > {quizList[i].metadata.title} - {quizList[i].metadata.questionCount} question(s)</Button>
+
+                    </Segment>)
+                )}
+              </Modal.Description>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color='red' onClick={this.handleCancelAttachQuiz}>
+                 <Icon name='cancel' /> Cancel
+               </Button>
+             </Modal.Actions>
+          </Modal>
+
         </Responsive>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <Header as='h2' icon textAlign='center' style={{maxWidth: '500px'}}>
+             <Icon name='exclamation' />
+             We are developing smaller version of this page.
+             <br/>Please make your brwoser fullscreen to edit your course for the time   being
+           </Header>
         <Responsive minWidth={320} maxWidth={991}>
 
         </Responsive>

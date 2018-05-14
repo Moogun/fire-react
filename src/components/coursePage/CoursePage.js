@@ -114,12 +114,13 @@ class CoursePage extends Component {
   componentDidMount() {
     console.log('course page did mount', this.props.match.params);
     let cTitle = this.props.match.params.cTitle
-    let title = cTitle.replace(/-/g, );
+    let title = cTitle.replace(/-/g, ' ');
 
+    console.log('title', title);
     db.onceGetCourseWithTitle(title)
       .then(cSnap => {
         let c = cSnap.val()
-
+        console.log('c', c);
         if (c) {
           let key = Object.keys(c)
           let course = c[key]
@@ -156,6 +157,10 @@ class CoursePage extends Component {
     console.log('sections' ,curri, 'secIndex', curri);
     curri[secIndex].expanded = !curri[secIndex].expanded
     this.setState ({curri})
+  }
+
+  handleTakeQuiz = (e, section, secIndex, lecture, lecIndex) => {
+    console.log('need to implement');
   }
 
   // componentWillReceiveProps(nextProps){
@@ -243,14 +248,14 @@ class CoursePage extends Component {
             </Grid>
 
 
-            <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}}       stackable centered
+            <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} stackable centered
               >
                 <Grid.Column width={10} >
 
                     <CourseMeta meta={meta}/>
                     <CourseFeatures features={features}/>
                     <CourseGallery images={images}/>
-                    <CourseCurri sections={curri} handleSecToggle={this.handleSecToggle}/>
+                    <CourseCurri sections={curri} handleSecToggle={this.handleSecToggle} takeQuiz={this.handleTakeQuiz}/>
 
                 </Grid.Column>
              </Grid>

@@ -112,7 +112,7 @@ class AuthContainer extends Component {
                         active={activeItem === 'dashboard'}
                         onClick={this.handleItemClick}
                         >
-                          Manage Courses
+                          Dashboard
                       </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
