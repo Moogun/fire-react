@@ -11,10 +11,6 @@ class QuizEditMeta extends Component {
     };
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
     const {} = this.state
     const {title, instruction, change, submit} = this.props

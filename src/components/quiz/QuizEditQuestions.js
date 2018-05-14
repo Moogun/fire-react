@@ -7,37 +7,9 @@ class QuizEditQuestions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // quiz : [],
-      // questionsForm: '',
-      //
-      // groupInstructionForShort: '',
-      // titleForShort: '',
-      // answerForShort: '',
-      // explanationForShort: '',
-      //
-      // groupQInstructionForMultiple: '',
-      // titleForMultiple: '',
-      // answerForMultiple: '',
-      // explanationForMultiple: '',
-      // formOptions: ['a','b','c','d'],
-      // formOptionChecked: '',
-      // // options: [{a: 'option 1'},{b: 'option 2'},{c: 'option 3'},{d: 'option d'},],
-      // // optionCount: ['a','b','c','d'],
-      //
-      // groupQInstructionForEssay: '',
-      // titleForEssay: '',
-      // answerForEssay: '',
-      // explanationForEssay: '',
-      //
-      // edit:null,
-      //
-      // // entry will look like this
-      // // entry: {uid: {'id 1': '1'}, {'id 2': '1'}, {'id 3': 'a'},}
+
     };
   }
-
-
-
 
   render() {
     const { quiz, questions, questionForm, formOptions, formOptionChecked, answerForMultiple,

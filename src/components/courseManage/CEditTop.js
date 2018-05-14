@@ -18,8 +18,8 @@ class CEditTop extends Component {
 
     return (
       <div>
-        {/* <Responsive {...Responsive.onlyComputer}> */}
-          <Grid container verticalAlign='middle'>
+        <Responsive {...Responsive.onlyComputer}>
+          <Grid container verticalAlign='middle' textAlign='left'>
 
             <Grid.Column floated='left' width={12}>
               <Header as='h2' inverted >
@@ -43,16 +43,13 @@ class CEditTop extends Component {
               </Button.Group>
             </Grid.Column>
           </Grid>
-        {/* </Responsive> */}
+        </Responsive>
 
-        {/* <Responsive
-          minWidth={320}
-          maxWidth={991}>
+        <Responsive minWidth={320} maxWidth={991}>
 
-          <Grid container verticalAlign='middle'>
+          <Grid container verticalAlign='middle' textAlign='left'>
             <Grid.Column>
-              <Header as='h4' inverted >
-               <Image circular src={teacherProfile}/>
+              <Header as='h4' inverted floated='left'>
                <Header.Content>
                  {title}
                  <Header.Subheader >
@@ -63,10 +60,14 @@ class CEditTop extends Component {
                  </Header.Subheader>
                </Header.Content>
               </Header>
+              <Button.Group floated='right' inverted>
+                <Button icon style={{margin: '1px'}} ><Icon name='eye' /></Button>
+                <Button icon style={{margin: '1px'}} onClick={settingsClick}><Icon name='settings' /></Button>
+              </Button.Group>
             </Grid.Column>
 
           </Grid>
-        </Responsive> */}
+        </Responsive>
       </div>
     );
   }

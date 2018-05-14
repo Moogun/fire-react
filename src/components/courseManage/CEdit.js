@@ -753,24 +753,19 @@ class CourseEdit extends Component {
 
     return (
       <div>
-
-        <Responsive {...Responsive.onlyComputer}>
          <Segment basic
            loading={isLoading}
            style={style.C_EDIT_BODY}>
 
             <Grid centered>
+
+              <Grid.Row className='c-edit-head'>
+                  <CEditTop
+                    title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
+                    settingsClick={this.handleSettingsClick}/>
+              </Grid.Row>
+
               <Grid.Row centered>
-                <Grid.Column>
-
-                <Grid >
-                  <Grid.Column style={style.C_EDIT_HEAD}>
-                    <CEditTop
-                      title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
-                      settingsClick={this.handleSettingsClick}/>
-                  </Grid.Column>
-                </Grid>
-
                   <Grid container stackable centered>
                     <Grid.Column width={3}>
                       <Menu vertical secondary fluid style={style.C_EDIT_MENU} >
@@ -976,9 +971,8 @@ class CourseEdit extends Component {
                     </Grid.Column>
                   </Grid>
 
-                  </Grid.Column>
-              </Grid.Row>
-            </Grid>
+                </Grid.Row>
+              </Grid>
 
           </Segment>
 
@@ -1005,23 +999,6 @@ class CourseEdit extends Component {
                </Button>
              </Modal.Actions>
           </Modal>
-
-        </Responsive>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <Header as='h2' icon textAlign='center' style={{maxWidth: '500px'}}>
-             <Icon name='exclamation' />
-             We are developing smaller version of this page.
-             <br/>Please make your brwoser fullscreen to edit your course for the time   being
-           </Header>
-        <Responsive minWidth={320} maxWidth={991}>
-
-        </Responsive>
-
       </div>
     );
   }
