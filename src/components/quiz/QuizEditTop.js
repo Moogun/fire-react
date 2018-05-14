@@ -11,54 +11,16 @@ class QuizEditTop extends Component {
     let uid = ''
     return (
       <Grid container verticalAlign='middle'>
-
-        <Grid.Column floated='left' width={12}>
-          <Header as='h2' inverted >
-           {/* <Image circular src={teacherProfile}/> */}
-           <Header.Content>
-             {title}
-             {/* <Header.Subheader >
-               {published}
-             </Header.Subheader>
-             <Header.Subheader >
-               {teacherName}
-             </Header.Subheader> */}
-           </Header.Content>
-          </Header>
-        </Grid.Column>
-
-        <Grid.Column floated='right' width={4}>
-          <Button.Group floated='right' >
-
-            {/* <Modal trigger={<Button inverted>Preview</Button>}>
-              <Modal.Header>Preview</Modal.Header>
-              <Modal.Content scrolling>
-
-                <Modal.Description>
-                  <Header>{title}</Header>
-                  <Header.Subheader>
-                   {instruction}
-                 </Header.Subheader>
-                  {quiz.length > 0 && quiz.map((q, index) =>
-
-                    QuestionType(index, q, handleChange, handleRadioChange, quizEntryResult)[q.type]
-                  )}
-
-                </Modal.Description>
-              </Modal.Content>
-              <Modal.Actions>
-                <Button primary onClick={}>
-                  Done <Icon name='right chevron' />
-                </Button>
-              </Modal.Actions>
-            </Modal> */}
+          <Grid.Column >
+            <Header as='h2' inverted floated='left'>
+             <Header.Content>
+               {title}
+             </Header.Content>
+            </Header>
 
             <PreviewModal title={title} instruction={instruction} quiz={quiz} handleChange={handleChange} handleRadioChange={handleRadioChange} quizEntryResult={quizEntryResult} />
-
-          </Button.Group>
-        </Grid.Column>
+          </Grid.Column>
       </Grid>
-
 
     );
   }
@@ -126,7 +88,7 @@ class PreviewModal extends Component {
         onOpen={this.open}
         onClose={this.close}
         size='small'
-        trigger={ <Button icon> <Icon name='eye' /> Preview </Button> }>
+        trigger={ <Button icon floated='right'> <Icon name='eye' /> Preview </Button> }>
 
         <Modal.Header>{title}</Modal.Header>
         <Modal.Content scrolling>

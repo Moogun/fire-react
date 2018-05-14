@@ -40,3 +40,7 @@
   transform: translate(-5%, -50%);
   /* margin: 1rem 0; */
 }
+
+.c-edit-head {
+  background-color: #2c3e50;
+}

@@ -302,28 +302,23 @@ class QuizEdit extends Component {
     const { match } = this.props
         console.log('groupInstructionForShort', groupInstructionForShort, titleForShort, answerForShort, explanationForShort);
     return (
-
-      <Responsive {...Responsive.onlyComputer}>
        <Segment basic
          loading={isLoading}
          style={styles.C_EDIT_BODY}>
 
          <Grid centered>
-           <Grid.Row centered>
-             <Grid.Column>
 
-               <Grid >
-                 <Grid.Column style={styles.C_EDIT_HEAD}>
-                   <QuizEditTop
-                     title={quizTitle}
-                     instruction={quizInstruction}
-                     quiz={questionList}
-                   />
-                 </Grid.Column>
-               </Grid>
+           <Grid.Row className='c-edit-head'>
+               <QuizEditTop
+                 title={quizTitle}
+                 instruction={quizInstruction}
+                 quiz={questionList}
+               />
+            </Grid.Row>
 
+            <Grid.Row centered>
                <Grid container stackable centered>
-                 <Grid.Column width={4}>
+                 <Grid.Column computer={3}>
                    <Menu vertical secondary fluid style={styles.C_EDIT_MENU} >
                      <Menu.Item name='title'
                         active={activeItem === 'title'}
@@ -349,7 +344,7 @@ class QuizEdit extends Component {
                    </Menu>
 
                  </Grid.Column>
-                 <Grid.Column width={12}>
+                 <Grid.Column computer={13}>
                    <Switch>
                      <Redirect exact from={match.url} to={`${match.url}/questions`} />
                      <Route path={`${match.url}/title`} render={(props) => <QuizEditMeta
@@ -398,7 +393,7 @@ class QuizEdit extends Component {
                    </Switch>
                  </Grid.Column>
                </Grid>
-             </Grid.Column>
+
            </Grid.Row>
          </Grid>
          <Confirm
@@ -408,8 +403,6 @@ class QuizEdit extends Component {
             onConfirm={this.handleConfirmDeleteQuiz}
           />
        </Segment>
-     </Responsive>
-
 
     );
   }
