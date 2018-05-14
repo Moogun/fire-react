@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import profile from '../../assets/profile-lg.png'
-import {Image, Item, Grid, Button, Icon, Responsive, List, Header} from 'semantic-ui-react'
-
+import {Image, Item, Grid, Button, Icon, Responsive, List, Header, Segment} from 'semantic-ui-react'
+import '../App.css' // not working ??
+import * as style from '../../constants/styles'
 const TEXT_COLOR = {color: '#fff'}
 
 class CEditTop extends Component {
@@ -17,11 +18,13 @@ class CEditTop extends Component {
     let published = isPublished ? 'published' : 'draft'
 
     return (
-      <div>
+      <Segment vertical style={style.C_EDIT_HEAD}
+        // className='c-edit-head'
+        >
         <Responsive {...Responsive.onlyComputer}>
-          <Grid container verticalAlign='middle' textAlign='left'>
+          <Grid centered container verticalAlign='middle'>
 
-            <Grid.Column floated='left' width={12}>
+            <Grid.Column width={12}>
               <Header as='h2' inverted >
                <Image circular src={teacherProfile}/>
                <Header.Content>
@@ -45,7 +48,7 @@ class CEditTop extends Component {
           </Grid>
         </Responsive>
 
-        <Responsive minWidth={320} maxWidth={991}>
+        <Responsive minWidth={Responsive.onlyMobile.minWidth} maxWidth={Responsive.onlyTablet.maxWidth}>
 
           <Grid container verticalAlign='middle' textAlign='left'>
             <Grid.Column>
@@ -68,7 +71,7 @@ class CEditTop extends Component {
 
           </Grid>
         </Responsive>
-      </div>
+      </Segment>
     );
   }
 }

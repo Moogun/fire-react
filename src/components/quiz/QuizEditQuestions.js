@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
-import { Container, Segment, Button, Icon, Header, Modal, Form, Radio } from 'semantic-ui-react'
+import { Container, Segment, Button, Icon, Header, Modal, Form, Radio,  } from 'semantic-ui-react'
 import * as styles from '../../constants/styles'
 
 class QuizEditQuestions extends Component {

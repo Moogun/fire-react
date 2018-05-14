@@ -752,228 +752,220 @@ class CourseEdit extends Component {
     const isInvalidLecture = lectureTitle === ''
 
     return (
-      <div>
-         <Segment basic
-           loading={isLoading}
-           style={style.C_EDIT_BODY}>
+      <div style={style.C_EDIT_BODY}>
 
-            <Grid centered>
+{/* HEAD */}
+        <CEditTop
+          title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
+          settingsClick={this.handleSettingsClick}/>
 
-              <Grid.Row className='c-edit-head'>
-                  <CEditTop
-                    title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
-                    settingsClick={this.handleSettingsClick}/>
-              </Grid.Row>
+{/* MENU */}
+        <Segment vertical>
+            <Grid container stackable centered>
+              <Grid.Column width={3}>
+                <Menu vertical secondary fluid style={style.C_EDIT_MENU} >
+                  <Menu.Item name='title'
+                     active={activeItem === 'title'}
+                     onClick={this.handleItemClick}
+                     as={Link} to={`${match.url}/title`}
+                     style={activeItem === 'title' ? style.C_EDIT_MENU_ITEM: null}
+                     >
+                     Title
+                  </Menu.Item>
+                  <Menu.Item name='info'
+                     active={activeItem === 'info'}
+                     onClick={this.handleItemClick}
+                     as={Link} to={`${match.url}/info`}
+                     style={activeItem === 'info' ? style.C_EDIT_MENU_ITEM: null}
+                     >
+                     Info
+                  </Menu.Item>
+                  <Menu.Item name='features'
+                     active={activeItem === 'features'}
+                     onClick={this.handleItemClick}
+                     as={Link} to={`${match.url}/features`}
+                     style={activeItem === 'features' ? style.C_EDIT_MENU_ITEM: null}
+                     >
+                    Features
+                  </Menu.Item>
+                  <Menu.Item name='gallery'
+                     active={activeItem === 'gallery'}
+                     onClick={this.handleItemClick}
+                     as={Link} to={`${match.url}/gallery`}
+                     style={activeItem === 'gallery' ? style.C_EDIT_MENU_ITEM: null}
+                     >
+                    Gallery
+                  </Menu.Item>
+                  <Menu.Item name='curri'
+                     active={activeItem === 'curri'}
+                     onClick={this.handleItemClick}
+                     as={Link} to={`${match.url}/curriculum`}
+                     style={activeItem === 'curri' ? style.C_EDIT_MENU_ITEM: null}
+                     >
+                      Curriculum
+                  </Menu.Item>
 
-              <Grid.Row centered>
-                  <Grid container stackable centered>
-                    <Grid.Column width={3}>
-                      <Menu vertical secondary fluid style={style.C_EDIT_MENU} >
-                        <Menu.Item name='title'
-                           active={activeItem === 'title'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/title`}
-                           style={activeItem === 'title' ? style.C_EDIT_MENU_ITEM: null}
-                           >
-                           Title
-                        </Menu.Item>
-                        <Menu.Item name='info'
-                           active={activeItem === 'info'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/info`}
-                           style={activeItem === 'info' ? style.C_EDIT_MENU_ITEM: null}
-                           >
-                           Info
-                        </Menu.Item>
-                        <Menu.Item name='features'
-                           active={activeItem === 'features'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/features`}
-                           style={activeItem === 'features' ? style.C_EDIT_MENU_ITEM: null}
-                           >
-                          Features
-                        </Menu.Item>
-                        <Menu.Item name='gallery'
-                           active={activeItem === 'gallery'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/gallery`}
-                           style={activeItem === 'gallery' ? style.C_EDIT_MENU_ITEM: null}
-                           >
-                          Gallery
-                        </Menu.Item>
-                        <Menu.Item name='curri'
-                           active={activeItem === 'curri'}
-                           onClick={this.handleItemClick}
-                           as={Link} to={`${match.url}/curriculum`}
-                           style={activeItem === 'curri' ? style.C_EDIT_MENU_ITEM: null}
-                           >
-                            Curriculum
-                        </Menu.Item>
+                  {isPublished
+                    ? null
+                    : <Menu.Item name='publish'
+                       active={activeItem === 'publish'}
+                       onClick={this.handleItemClick}>
+                         <Button fluid color='red' onClick={this.handlePublish}>Publish</Button>
+                      </Menu.Item>
+                  }
+                 </Menu>
+              </Grid.Column>
 
-                        {isPublished
-                          ? null
-                          : <Menu.Item name='publish'
-                             active={activeItem === 'publish'}
-                             onClick={this.handleItemClick}>
-                               <Button fluid color='red' onClick={this.handlePublish}>Publish</Button>
-                            </Menu.Item>
-                        }
-                       </Menu>
-                    </Grid.Column>
+{/* BODY */}
+                  <Grid.Column width={13}>
+                      <Switch>
+                        <Redirect exact from={match.url} to={`${match.url}/info`} />
+                        <Route path={`${match.url}/title`} render={(props) => <CEditTitle
+                          {...props}
+                          course={course}
+                          title={title}
+                          subTitle={subTitle}
+                          change={this.handleTitleInputChange}
+                          titleSubmit={this.onTitleSubmit}
+                          titleToSave={titleToSave}
+                        /> }/>
+                        <Route path={`${match.url}/info`} render={(props) => <CEditMeta
+                          {...props}
+                          course={course}
+                          title={title}
+                          subTitle={subTitle}
+                          textbook={textbook}
+                          date={date}
+                          time={time}
+                          location={location}
+                          change={this.handleMetaInputChange}
+                          submit={this.onInfoSubmit}
+                          infoToSave={infoToSave}
+                        /> }/>
+                        <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
+                          {...props}
+                          course={course}
+                          courseId={courseId}
+                          teacherId={teacherId}
+                          featureList={featureList}
+                          header = {header}
+                          sub = {sub}
+                          change={this.handleFeaturesInputChange}
+                          dismiss={this.handleFeatureDismiss}
+                          addNewFeature={this.handleAddNewFeature}
+                          formForFeature={formForFeature}
+                          handleOpenAddFeatureForm={this.handleOpenAddFeatureForm}
+                          handleAddFeatureCancel={this.handleAddFeatureCancel}
+                          submit={this.onFeaturesSubmit}
+                          featuresToSave={featuresToSave}
+                        /> }/>
+                        <Route path={`${match.url}/gallery`} render={(props) => <CEditGallery
+                          {...props}
+                          courseId={courseId}
+                          teacherId={teacherId}
+                          images={images}
+                          handleImageChange={this.handleImageChange}
+                          submit={this.onImageSubmit}
+                          confirmOpen={confirmOpen}
+                          selectedImage={selectedImage}
+                          removeModalShow={this.handleRemoveModalShow}
+                          removeConfirm={this.handleRemoveConfirm}
+                          removeCancel={this.handleRemoveCancel}
+                          galleryToSave={galleryToSave}
+                        /> }/>
 
-                    <Grid.Column width={13}>
-                        <Switch>
-                          <Redirect exact from={match.url} to={`${match.url}/info`} />
-                          <Route path={`${match.url}/title`} render={(props) => <CEditTitle
-                            {...props}
-                            course={course}
-                            title={title}
-                            subTitle={subTitle}
-                            change={this.handleTitleInputChange}
-                            titleSubmit={this.onTitleSubmit}
-                            titleToSave={titleToSave}
-                          /> }/>
-                          <Route path={`${match.url}/info`} render={(props) => <CEditMeta
-                            {...props}
-                            course={course}
-                            title={title}
-                            subTitle={subTitle}
-                            textbook={textbook}
-                            date={date}
-                            time={time}
-                            location={location}
-                            change={this.handleMetaInputChange}
-                            submit={this.onInfoSubmit}
-                            infoToSave={infoToSave}
-                          /> }/>
-                          <Route path={`${match.url}/features`} render={(props) => <CEditFeatures
-                            {...props}
-                            course={course}
-                            courseId={courseId}
-                            teacherId={teacherId}
-                            featureList={featureList}
-                            header = {header}
-                            sub = {sub}
-                            change={this.handleFeaturesInputChange}
-                            dismiss={this.handleFeatureDismiss}
-                            addNewFeature={this.handleAddNewFeature}
-                            formForFeature={formForFeature}
-                            handleOpenAddFeatureForm={this.handleOpenAddFeatureForm}
-                            handleAddFeatureCancel={this.handleAddFeatureCancel}
-                            submit={this.onFeaturesSubmit}
-                            featuresToSave={featuresToSave}
-                          /> }/>
-                          <Route path={`${match.url}/gallery`} render={(props) => <CEditGallery
-                            {...props}
-                            courseId={courseId}
-                            teacherId={teacherId}
-                            images={images}
-                            handleImageChange={this.handleImageChange}
-                            submit={this.onImageSubmit}
-                            confirmOpen={confirmOpen}
-                            selectedImage={selectedImage}
-                            removeModalShow={this.handleRemoveModalShow}
-                            removeConfirm={this.handleRemoveConfirm}
-                            removeCancel={this.handleRemoveCancel}
-                            galleryToSave={galleryToSave}
-                          /> }/>
+                        <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
+                          {...props}
+                    sections={sections}
+                    isInvalidSection={isInvalidSection} isInvalidLecture={isInvalidLecture}
 
-                          <Route path={`${match.url}/curriculum`} render={(props) =><CEditCurri
-                            {...props}
-            sections={sections}
-            isInvalidSection={isInvalidSection} isInvalidLecture={isInvalidLecture}
+                    activeSection={activeSection}
 
-            activeSection={activeSection}
+                    sectionTitle={sectionTitle} sectionToEdit={sectionToEdit}
+                    lectureTitle={lectureTitle} lectureToEdit={lectureToEdit}
 
-            sectionTitle={sectionTitle} sectionToEdit={sectionToEdit}
-            lectureTitle={lectureTitle} lectureToEdit={lectureToEdit}
+                    removeSectionConfirm = {removeSectionConfirm}
 
-            removeSectionConfirm = {removeSectionConfirm}
+                    handleSectionTitleChange ={this.handleSectionTitleChange}
+                    handleSectionTitleChangeCancel = {this.handleSectionTitleChangeCancel}
 
-            handleSectionTitleChange ={this.handleSectionTitleChange}
-            handleSectionTitleChangeCancel = {this.handleSectionTitleChangeCancel}
+                    handleRemoveSection = {this.handleRemoveSection}
 
-            handleRemoveSection = {this.handleRemoveSection}
-
-            showRemoveConfirm = {this.showRemoveConfirm}
-            handleConfirmRemove = {this.handleConfirmRemove}
-            handleCancelRemove = {this.handleCancelRemove}
+                    showRemoveConfirm = {this.showRemoveConfirm}
+                    handleConfirmRemove = {this.handleConfirmRemove}
+                    handleCancelRemove = {this.handleCancelRemove}
 
 
-            handleOpenAddLectureForm = {this.handleOpenAddLectureForm}
-            handleAddLectureCancel = {this.handleAddLectureCancel}
-            handleSaveLecture = {this.handleSaveLecture}
-            handleRemoveLecture = {this.handleRemoveLecture}
+                    handleOpenAddLectureForm = {this.handleOpenAddLectureForm}
+                    handleAddLectureCancel = {this.handleAddLectureCancel}
+                    handleSaveLecture = {this.handleSaveLecture}
+                    handleRemoveLecture = {this.handleRemoveLecture}
 
-            handleLectureTitleChange = {this.handleLectureTitleChange}
-            handleLectureTitleChangeCancel = {this.handleLectureTitleChangeCancel}
+                    handleLectureTitleChange = {this.handleLectureTitleChange}
+                    handleLectureTitleChangeCancel = {this.handleLectureTitleChangeCancel}
 
-            handleInlineSectionEdit = {this.handleInlineSectionEdit}
-            handleSaveSectionTitleEdit = {this.handleSaveSectionTitleEdit}
+                    handleInlineSectionEdit = {this.handleInlineSectionEdit}
+                    handleSaveSectionTitleEdit = {this.handleSaveSectionTitleEdit}
 
-            handleInlineLectureEdit = {this.handleInlineLectureEdit}
-            handleSaveLectureTitleEdit = {this.handleSaveLectureTitleEdit}
+                    handleInlineLectureEdit = {this.handleInlineLectureEdit}
+                    handleSaveLectureTitleEdit = {this.handleSaveLectureTitleEdit}
 
-            handleSecMoveUp = {this.handleSecMoveUp}
-            handleSecMoveDown = {this.handleSecMoveDown}
-            handleLecMoveUp = {this.handleLecMoveUp}
-            handleLecMoveDown = {this.handleLecMoveDown}
+                    handleSecMoveUp = {this.handleSecMoveUp}
+                    handleSecMoveDown = {this.handleSecMoveDown}
+                    handleLecMoveUp = {this.handleLecMoveUp}
+                    handleLecMoveDown = {this.handleLecMoveDown}
 
-            handleLecToggle = {this.handleLecToggle}
+                    handleLecToggle = {this.handleLecToggle}
 
-            handleSecToggle = {this.handleSecToggle}
+                    handleSecToggle = {this.handleSecToggle}
 
-            formForSection={formForSection}
-            isInvalidSection={isInvalidSection}
-            handleOpenAddSectionForm = {this.handleOpenAddSectionForm}
-            handleAddSectionCancel = {this.handleAddSectionCancel}
-            handleSaveSection = {this.handleSaveSection}
-            handleSectionTitleChange = {this.handleSectionTitleChange}
+                    formForSection={formForSection}
+                    isInvalidSection={isInvalidSection}
+                    handleOpenAddSectionForm = {this.handleOpenAddSectionForm}
+                    handleAddSectionCancel = {this.handleAddSectionCancel}
+                    handleSaveSection = {this.handleSaveSection}
+                    handleSectionTitleChange = {this.handleSectionTitleChange}
 
-            onCurriSubmit={this.onCurriSubmit}
-            curriToSave={curriToSave}
+                    onCurriSubmit={this.onCurriSubmit}
+                    curriToSave={curriToSave}
 
-            handleAttachQuiz={this.handleAttachQuiz}
+                    handleAttachQuiz={this.handleAttachQuiz}
 
-                          />} />
-                          <Route path={`${match.url}/settings`} render={() => <CEditSettings
-                            course={course}
-                            courseId={courseId}
-                            teacherId={teacherId}
-                            openCourse={openCourse}
-                            password={password}
-                            change={this.handleSettingsPasswordInputChange}
-                            // toggle={this.handleSettingsOpenOrClose}
-                            coursePrivacy={coursePrivacy}
-                            privacyChange={this.handleSettingsPrivacyChange}
-                            submit={this.onSettingsSubmit}
-                            remove={this.handleRemoveCourse}
-                          />} />
-                          <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
+                    />} />
+                    <Route path={`${match.url}/settings`} render={() => <CEditSettings
+                      course={course}
+                      courseId={courseId}
+                      teacherId={teacherId}
+                      openCourse={openCourse}
+                      password={password}
+                      change={this.handleSettingsPasswordInputChange}
+                      // toggle={this.handleSettingsOpenOrClose}
+                      coursePrivacy={coursePrivacy}
+                      privacyChange={this.handleSettingsPrivacyChange}
+                      submit={this.onSettingsSubmit}
+                      remove={this.handleRemoveCourse}
+                    />} />
+                    <Route path={`${match.url}/assignment`} render={() => <CEditSettings />} />
 
-                        </Switch>
-                        <Confirm
-                            content='A file that has the same name has been already added'
-                            open={sameFileNameSelectedAlready}
-                            onConfirm={this.handleConfirmSameFile}
-                          />
-                        {/* <Confirm
-                           open={this.state.titleToSave}
-                           onCancel={this.handleDiscardCancel}
-                           onConfirm={this.handleDiscardChange}
-                         /> */}
-                        {/* <Prompt
-                          when={titleToSave}
-                          message={location =>
-                            this.handleDiscardChange()
-                          }
-                        /> */}
-                    </Grid.Column>
-                  </Grid>
-
-                </Grid.Row>
-              </Grid>
-
+                  </Switch>
+                  <Confirm
+                      content='A file that has the same name has been already added'
+                      open={sameFileNameSelectedAlready}
+                      onConfirm={this.handleConfirmSameFile}
+                    />
+                  {/* <Confirm
+                     open={this.state.titleToSave}
+                     onCancel={this.handleDiscardCancel}
+                     onConfirm={this.handleDiscardChange}
+                   /> */}
+                  {/* <Prompt
+                    when={titleToSave}
+                    message={location =>
+                      this.handleDiscardChange()
+                    }
+                  /> */}
+              </Grid.Column>
+            </Grid>
           </Segment>
 
           <Modal open={quizAttachModalOpen}>
