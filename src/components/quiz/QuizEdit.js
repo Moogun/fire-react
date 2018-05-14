@@ -19,7 +19,7 @@ class QuizEdit extends Component {
       isLoading: false,
 
       //QUIZ EDIT QUESTION
-      quiz : [],
+      quiz : null,
       questionsForm: '',
 
       groupInstructionForShort: '',
@@ -69,7 +69,7 @@ class QuizEdit extends Component {
 
   onQuestionSubmit = () => {
     const { tid, quizId, quiz } = this.state
-
+    console.log('[quiz edit] length', quiz.length);
     db.doSaveQuizQuestions(tid, quizId, quiz)
       .then(res => console.log('[save quiz  q res]', res.val()))
       .catch(error => {
@@ -238,7 +238,7 @@ class QuizEdit extends Component {
       let tid = quizSet.metadata.tid
       let title = quizSet.metadata.title
       let instruction = quizSet.metadata.instruction
-      let questions = quizSet.questions
+      let questions = quizSet.questions ? quizSet.questions : []
       this.setState ({ quizId: res.key, tid: tid, title: title, instruction: instruction,
         quiz: questions
       })
@@ -298,7 +298,7 @@ class QuizEdit extends Component {
     deleteConfirmOpen,
   } = this.state
 
-    console.log('[quiz]', quiz);
+    console.log('[quiz edit]', quiz);
     const { match } = this.props
         console.log('groupInstructionForShort', groupInstructionForShort, titleForShort, answerForShort, explanationForShort);
     return (

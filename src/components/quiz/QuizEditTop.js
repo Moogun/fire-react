@@ -8,6 +8,7 @@ class QuizEditTop extends Component {
   render() {
     const {title, instruction, quiz, handleChange, handleRadioChange} = this.props
     let quizEntryResult = false
+    let uid = ''
     return (
       <Grid container verticalAlign='middle'>
 
@@ -28,9 +29,8 @@ class QuizEditTop extends Component {
 
         <Grid.Column floated='right' width={4}>
           <Button.Group floated='right' >
-            {/* <Button inverted style={{margin: '1px'}}>Preview</Button> */}
 
-            <Modal trigger={<Button inverted>Preview</Button>}>
+            {/* <Modal trigger={<Button inverted>Preview</Button>}>
               <Modal.Header>Preview</Modal.Header>
               <Modal.Content scrolling>
 
@@ -47,12 +47,13 @@ class QuizEditTop extends Component {
                 </Modal.Description>
               </Modal.Content>
               <Modal.Actions>
-                <Button primary>
-                  Proceed <Icon name='right chevron' />
+                <Button primary onClick={}>
+                  Done <Icon name='right chevron' />
                 </Button>
               </Modal.Actions>
-            </Modal>
+            </Modal> */}
 
+            <PreviewModal title={title} instruction={instruction} quiz={quiz} handleChange={handleChange} handleRadioChange={handleRadioChange} quizEntryResult={quizEntryResult} />
 
           </Button.Group>
         </Grid.Column>
@@ -80,7 +81,6 @@ export const QuestionType = (index, q, handleChange, handleRadioChange, quizEntr
             </Form.Field> }
 
           {quizEntryResult
-
             ? <Message
                  color={q.entry[uid] == q.answer ? 'blue' : 'red'}
                  header={q.entry[uid] == q.answer ? 'Correct' : 'Wrong'}
@@ -108,3 +108,39 @@ export const QuestionType = (index, q, handleChange, handleRadioChange, quizEntr
 const correctCount = (correct) => correct
 const totalCount = (total) => total
 const percentile = (correct, total) => Math.round(correct/total * 100)
+
+class PreviewModal extends Component {
+  state = { open: false }
+
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
+
+  render() {
+    const { open } = this.state
+    const { title, instruction, quiz, handleChange, handleRadioChange, quizEntryResult, uid } = this.props
+    console.log('[nested quiz]', quiz);
+    return (
+      <Modal
+        dimmer
+        open={open}
+        onOpen={this.open}
+        onClose={this.close}
+        size='small'
+        trigger={ <Button icon> <Icon name='eye' /> Preview </Button> }>
+
+        <Modal.Header>{title}</Modal.Header>
+        <Modal.Content scrolling>
+          <Segment basic>
+            <Segment>{instruction}</Segment>
+            {quiz.map((q, index) =>
+               QuestionType(index, q, handleChange, handleRadioChange, quizEntryResult, uid)[q.type]
+             )}
+           </Segment>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button icon='check' content='Done' onClick={this.close} />
+        </Modal.Actions>
+      </Modal>
+    )
+  }
+}

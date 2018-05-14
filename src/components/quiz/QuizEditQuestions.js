@@ -68,6 +68,7 @@ class QuizEditQuestions extends Component {
       handleAddShortAnswer, handleAddMultipleChoice, handleAddOption, handleAddEssay, handleInputChange, handleMultipleFormRadioChange, handleMultipleFormOptionLabelChange,
       formOptions, formOptionChecked)[questionForm]
 
+    console.log('[quiz edit question]', quiz);
 
     let isInvalid = false
     return (
@@ -82,7 +83,7 @@ class QuizEditQuestions extends Component {
           </Header>
           <Segment attached stacked style={styles.C_EDIT_MENU_PADDING} textAlign='left' >
 
-          {quiz.length > 0 && quiz.map((q, index) =>
+          { !!quiz && quiz.length> 0 && quiz.map((q, index) =>
             <Segment.Group key={index} >
               <Segment secondary style={{paddingTop: '0.5rem', paddingBottom: '0.5rem', }}>
 
@@ -128,6 +129,7 @@ class QuizEditQuestions extends Component {
           </Segment>
 
         </React.Fragment>
+
     );
   }
 }

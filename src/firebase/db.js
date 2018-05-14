@@ -413,7 +413,9 @@ export const doUpdateQuizMeta = (tid, qid, title, instruction) => {
 
 export const doSaveQuizQuestions = (tid, qid, quiz) => {
   var updates = {}
+    updates[`quizzes/${qid}/metadata/questionCount`] = quiz.length
     updates[`quizzes/${qid}/questions`] = quiz
+    updates[`quizzesForT/${tid}/${qid}/metadata/questionCount`] = quiz.length
     updates[`quizzesForT/${tid}/${qid}/questions`] = quiz
   return db.ref().update(updates)
 }

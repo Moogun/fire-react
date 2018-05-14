@@ -74,9 +74,9 @@ class CEditCurri extends React.Component {
         key={secIndex}
         style={style.C_EDIT_CURRI_SECTION}
         >
-          <Segment color='red' style={style.C_EDIT_CURRI_ITEM}>
-            {sectionToEdit === secIndex ?
-              <input value={sectionTitle} placeholder='Section' type='text' onChange={handleSectionTitleChange} />
+          <Segment color='red' >
+            {sectionToEdit === secIndex
+              ? <input value={sectionTitle} placeholder='Section' type='text' onChange={handleSectionTitleChange} />
               : `Section ${secIndex + 1} ${s.title}`}
 
             {sectionToEdit === secIndex
@@ -84,20 +84,15 @@ class CEditCurri extends React.Component {
                   <Button icon='save' onClick={(e) => handleSaveSectionTitleEdit(e, secIndex)} />
                   <Button icon='cancel'
                      onClick={handleSectionTitleChangeCancel}
-                     // onClick={() => this.setState ({ sectionToEdit: null})}
                    />
                 </Button.Group>
                 :
-                <React.Fragment>
-                  <Button.Group size='mini' style={{marginLeft: '1rem'}}>
-                    <Button icon='pencil' disabled basic inverted />
-                  </Button.Group>
-
-                  <Button.Group floated='right' size='mini' basic style={{marginLeft: '1rem'}}>
-                    <Button icon='plus' content='Add lecture' onClick={() => handleOpenAddLectureForm(secIndex)} />
+                  <Button.Group floated='right' size='mini' basic
+                    className='segment-floated-button-group'
+                    >
+                    <Button icon='plus' content='Add lecture' onClick={() => handleOpenAddLectureForm(secIndex)}/>
                     <Button icon='pencil' onClick={() => handleInlineSectionEdit(secIndex)}/>
                     <Button icon='trash' onClick={() => handleRemoveSection(secIndex)} />
-
 
                     <Button icon='chevron up' disabled={secIndex === 0 } onClick={(e) => handleSecMoveUp(e, secIndex)} />
                     <Button icon='chevron down'
@@ -108,9 +103,8 @@ class CEditCurri extends React.Component {
                       icon={s.content == undefined ? 'plus' : s.expanded ? 'minus' : 'plus'}
                       onClick={(e) => handleSecToggle(e, secIndex)}
                     />
-                      {s.title}
+                      {/* {s.title} */}
                   </Button.Group>
-                </React.Fragment>
               }
           </Segment>
 
@@ -125,7 +119,7 @@ class CEditCurri extends React.Component {
 
           {s.expanded && s.content.map((c, lecIndex) =>
             <React.Fragment key={lecIndex}>
-            <Segment secondary key={lecIndex} style={style.C_EDIT_CURRI_ITEM}>
+            <Segment secondary key={lecIndex}>
               {this.arraysEqual(lectureToEdit, [secIndex, lecIndex]) ? <input value={lectureTitle} placeholder='' type='text'
                 onChange={(e) => handleLectureTitleChange(e)}
               />
@@ -139,13 +133,9 @@ class CEditCurri extends React.Component {
                           // onClick={() => this.setState ({ lectureToEdit: null})}
                         />
                       </Button.Group>
-                    : <React.Fragment>
-                        <Button.Group size='mini' style={{marginLeft: '1rem'}}>
-                           <Button icon='pencil' inverted basic  />
-                         </Button.Group>
-
-                         <Button.Group basic floated='right' size='mini' style={{marginLeft: '1rem'}}>
-                           <Button icon='copy' content={c.quiz ? c.quiz.metadata.title : 'Attach Quiz'} basic onClick={() => handleAttachQuiz(secIndex, lecIndex)} />
+                    :  <Button.Group basic floated='right' size='mini'
+                          className='segment-floated-button-group'>
+                           <Button icon='copy' content={c.quiz ? c.quiz.metadata.title : 'Add Quiz'} basic onClick={() => handleAttachQuiz(secIndex, lecIndex)} />
                            <Button icon='pencil' basic onClick={() => handleInlineLectureEdit(secIndex, lecIndex)}/>
                            <Button icon='trash' basic onClick={() => handleRemoveLecture(secIndex, lecIndex)} />
                            <Button basic disabled={lecIndex=== 0} icon='chevron up' onClick={(e) => handleLecMoveUp(e, secIndex, lecIndex)} />
@@ -155,8 +145,7 @@ class CEditCurri extends React.Component {
                              icon={c.quiz == undefined ? 'plus' : c.isExpanded ? 'minus' : 'plus'}
                              onClick={(e) => handleLecToggle(e, secIndex, lecIndex)}
                            />
-                          </Button.Group>
-                       </React.Fragment>
+                        </Button.Group>
                        }
 {/* Quiz */}
 {c.quiz && c.isExpanded ? (<Segment style={{marginBottom: '0.5rem'}}>

@@ -574,8 +574,14 @@ class CourseEdit extends Component {
 
     handleAttachQuiz = (secIndex, lecIndex) => {
       // this.setState ({ lectureToEdit: [secIndex, lecIndex], lectureTitle: '', activeSection: null})
-      const {quizAttachModalOpen, teacherId } = this.state
-      console.log('attach some to lecture', secIndex, lecIndex);
+      const {quizAttachModalOpen, teacherId, selectedLecForQuiz } = this.state
+      console.log('attach some to lecture', selectedLecForQuiz);
+
+      const {sections } = this.state
+      if (sections[secIndex].content[lecIndex]['qid'] != null) {
+        console.log('warning');
+      }
+      
       this.setState ({ quizAttachModalOpen: !quizAttachModalOpen, selectedLecForQuiz: [secIndex, lecIndex], })
 
       db.doFetchAllQuizzes(teacherId)
@@ -583,13 +589,10 @@ class CourseEdit extends Component {
       .catch(error => {
         this.setState({[error]: error});
       });
-
-      //
     }
 
     handleCancelAttachQuiz = () => {
       const {quizAttachModalOpen} = this.state
-      console.log('1111', quizAttachModalOpen);
       this.setState ({ quizAttachModalOpen: false})
     }
 
@@ -1069,7 +1072,7 @@ class PreviewModal extends Component {
             : <Segment basic>
               <Segment>{quiz.metadata.instruction}</Segment>
               {quiz.questions.map((q, index) =>
-               <Segment>
+               <Segment key={index}>
                  {q.title}
                </Segment>)}
             </Segment>}

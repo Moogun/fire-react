@@ -32,3 +32,11 @@
   right: 0%;
   transform: translate(-50%, -50%)
 }
+
+.segment-floated-button-group {
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  transform: translate(-5%, -50%);
+  /* margin: 1rem 0; */
+}
