@@ -23,7 +23,10 @@
       {
         "source": "/bigben", "function": "bigben"
       }
-    ]
+    ],
+    "headers": [
+     { "source":"/service-worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}] }
+   ]
   },
   "storage": {
     "rules": "storage.rules"
