@@ -1008,11 +1008,12 @@ class CourseEdit extends Component {
 
                   {quizList && Object.keys(quizList).map(i => (
 
-                      <Segment clearing vertical key={i} clearing onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i], quizList[i].metadata.title )} >
-                          <Button icon basic>
-                            <Icon name='eye' /> Preview
-                          </Button>
-                          <Button style={{backgroundColor: 'white'}}>{quizList[i].metadata.title} - {quizList[i].metadata.questionCount} question(s)</Button>
+                      <Segment clearing vertical key={i} clearing  >
+                          <PreviewModal quiz={quizList[i]}/>
+
+                          <Button style={{backgroundColor: 'white'}} disabled={quizList[i].metadata.questionCount===0}
+                            onClick={(e) => this.handleQuizSelectToAttach(e, i, quizList[i], quizList[i].metadata.title )} > {quizList[i].metadata.title} - {quizList[i].metadata.questionCount} question(s)</Button>
+
                       </Segment>)
                   )}
                 </Modal.Description>
@@ -1042,7 +1043,7 @@ class CourseEdit extends Component {
 
 export default withRouter(CourseEdit)
 
-class NestedModal extends Component {
+class PreviewModal extends Component {
   state = { open: false }
 
   open = () => this.setState({ open: true })
@@ -1050,7 +1051,8 @@ class NestedModal extends Component {
 
   render() {
     const { open } = this.state
-
+    const { quiz } = this.props
+    console.log('[nested quiz]', quiz);
     return (
       <Modal
         dimmer={false}
@@ -1058,26 +1060,24 @@ class NestedModal extends Component {
         onOpen={this.open}
         onClose={this.close}
         size='small'
-        trigger={<Button primary icon>Proceed <Icon name='right chevron' /></Button>}
-      >
-        <Modal.Header>Modal #2</Modal.Header>
-        <Modal.Content>
-          <p>That's everything!</p>
+        trigger={  <Button icon basic> <Icon name='eye' /> Preview </Button>}>
+
+        <Modal.Header>{quiz.metadata.title}</Modal.Header>
+        <Modal.Content scrolling>
+          {!!quiz.questions == false
+            ? <p>No question added yet. Go to <strong>'Instructor Dashboard'</strong> -> <strong>'Quiz'</strong> to add some questions </p>
+            : <Segment basic>
+              <Segment>{quiz.metadata.instruction}</Segment>
+              {quiz.questions.map((q, index) =>
+               <Segment>
+                 {q.title}
+               </Segment>)}
+            </Segment>}
         </Modal.Content>
         <Modal.Actions>
-          <Button icon='check' content='All Done' onClick={this.close} />
+          <Button icon='check' content='Back to the list' onClick={this.close} />
         </Modal.Actions>
       </Modal>
     )
   }
 }
-
-// secure course key 1) from create page, 2) from the url match, 3)
-// 1. fetch course meta info
-// 2. check teacher id
-// compare ids
-// const teacherId = () => db.onceGetCourse(courseKey);
-//
-// const authCondition = (authUser) => !!authUser
-//
-// export default withTeacherAuthorization(authCondition)(CourseEdit);

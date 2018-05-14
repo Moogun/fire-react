@@ -1,6 +1,7 @@
 import React from 'react'
 import { Segment, Button, Form, Confirm, Header, Icon, List } from 'semantic-ui-react'
-import * as style from '../../../style/inline'
+import * as style from '../../../constants/styles'
+import '../../App.css';
 
 const CEditMetaBorder = {borderRadius: '0px'}
 
@@ -160,10 +161,13 @@ class CEditCurri extends React.Component {
 {/* Quiz */}
 {c.quiz && c.isExpanded ? (<Segment style={{marginBottom: '0.5rem'}}>
                      <Header as='h4'> {c.quiz.metadata.title} </Header>
-                       <List as='ol'>
+                       {/* <List divided> */}
                           {c.quiz.questions && c.quiz.questions.map((question, index) =>
-                            <List.Item as='li' key={index}>{question.title}</List.Item> )}
-                       </List>
+                            <Segment key={index}>
+                                {index + 1}. {truncate(question.title)}
+                                 <Button floated='right' size='mini' basic icon className='segment-floated'><Icon name='pencil' /> </Button>
+                            </Segment> )}
+                       {/* </List> */}
                    </Segment>) : null }
             </Segment>
 
@@ -223,7 +227,15 @@ class CEditCurri extends React.Component {
 
 export default CEditCurri
 
-
+const truncate = (questionTitle) => {
+  let title
+  if (questionTitle.length > 100) {
+    title = questionTitle.substring(0, 100) + '...'
+  } else {
+    title = questionTitle
+  }
+  return title
+}
 
 // section = [{title: '', expanded: '', content:['a', 'b'] }]
 // let curriItem = CurriItemType(
