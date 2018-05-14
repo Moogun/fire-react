@@ -302,21 +302,21 @@ class QuizEdit extends Component {
     const { match } = this.props
         console.log('groupInstructionForShort', groupInstructionForShort, titleForShort, answerForShort, explanationForShort);
     return (
-       <Segment basic
+      <div style={styles.C_EDIT_BODY}>
+       {/* <Segment basic
          loading={isLoading}
-         style={styles.C_EDIT_BODY}>
+         styles={styles.C_EDIT_BODY}>
 
-         <Grid centered>
-
-           <Grid.Row className='c-edit-head'>
+           <Grid.Row className='c-edit-head'> */}
+          <Segment vertical className='c-edit-head' style={styles.C_EDIT_HEAD}>
                <QuizEditTop
                  title={quizTitle}
                  instruction={quizInstruction}
                  quiz={questionList}
                />
-            </Grid.Row>
+          </Segment>
+          <Segment vertical>
 
-            <Grid.Row centered>
                <Grid container stackable centered>
                  <Grid.Column computer={3}>
                    <Menu vertical secondary fluid style={styles.C_EDIT_MENU} >
@@ -394,15 +394,14 @@ class QuizEdit extends Component {
                  </Grid.Column>
                </Grid>
 
-           </Grid.Row>
-         </Grid>
+         </Segment>
          <Confirm
             open={deleteConfirmOpen}
             content='This will delete the quiz. Are you sure to delete the quiz ?'
             onCancel={this.handleCancelDeleteQuiz}
             onConfirm={this.handleConfirmDeleteQuiz}
           />
-       </Segment>
+    </div>
 
     );
   }
