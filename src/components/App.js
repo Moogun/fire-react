@@ -54,6 +54,7 @@ class App extends Component {
   render() {
     return (
       <Router>
+
         <ResponsiveContainer>
 
           <Switch>
@@ -115,7 +116,6 @@ class App extends Component {
           </Switch>
 
           <Footer />
-
         </ResponsiveContainer>
 
       </Router>
