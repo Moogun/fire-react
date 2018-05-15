@@ -139,59 +139,66 @@ class AuthContainer extends Component {
 
                 <Menu secondary>
                   <Container>
-                        <Menu.Item name='weqna' active={activeItem === 'weqna'} onClick={this.handleItemClick}
-                          as={Link} to={routes.HOME}>
+                    {!mobile
+                      ? null
+                      : <Menu.Item onClick={this.handleToggle}>
+                          <Icon name='sidebar' />
+                        </Menu.Item> }
 
-                          {!mobile ? 'We qna' : <Icon name='heart' />}</Menu.Item>
+                    <Menu.Item name='weqna' active={activeItem === 'weqna'} onClick={this.handleItemClick}
+                      as={Link} to={routes.HOME}>
+                      {!mobile ? 'We qna' : 'We qna'}
+                    </Menu.Item>
 
+                    <Menu.Menu position='right'>
+                      {!!teachingList ?
+                      <Dropdown item text='Teacher'>
+                          <Dropdown.Menu>
+                            <Dropdown.Item as={Link} to={routes.CREATE}
+                              name='create' active={activeItem === 'create'} onClick={this.handleItemClick}>
+                              <Icon name='pencil' style={{marginRight: '0.5rem'}} />
+                              Create New Course
+                            </Dropdown.Item>
+                            <Dropdown.Item as={Link} to={routes.DASHBOARD}
+                              name='dashboard'
+                              active={activeItem === 'dashboard'}
+                              onClick={this.handleItemClick}
+                              >
+                              <Icon name='dashboard' style={{marginRight: '0.5rem'}} />
+                                Dashboard
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                      </Dropdown>
+                      : <Menu.Item as={Link} to={routes.TEACHER_INTRO}
+                        name='teaching' active={activeItem === 'teaching?'} onClick={this.handleItemClick}> Are You Teaching?</Menu.Item>
+                      }
 
-                        <Menu.Menu position='right'>
-                          {!!teachingList ?
-                          <Dropdown item text='Teacher'>
-                              <Dropdown.Menu>
-                                <Dropdown.Item as={Link} to={routes.CREATE}
-                                  name='create' active={activeItem === 'create'} onClick={this.handleItemClick}>
-                                  Create New Course
-                                </Dropdown.Item>
-                                <Dropdown.Item as={Link} to={routes.DASHBOARD}
-                                  name='dashboard'
-                                  active={activeItem === 'dashboard'}
-                                  onClick={this.handleItemClick}
-                                  >
-                                    Manage Courses
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                          </Dropdown>
-                          : <Menu.Item as={Link} to={routes.TEACHER_INTRO}
-                            name='teaching' active={activeItem === 'teaching?'} onClick={this.handleItemClick}> Are You Teaching?</Menu.Item>
-                          }
+                      {/* <Menu.Item name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}
+                        as={Link} to={routes.DASHBOARD}
+                      > {!mobile ? 'Are you teaching?' : <Icon name='pencil' />}</Menu.Item> */}
+                      <Menu.Item name='mycourses' active={activeItem === 'mycourses'} onClick={this.handleItemClick}
+                        as={Link} to={routes.LEARNING}
+                        > {!mobile ? 'My Courses' : 'My Courses'}</Menu.Item>
+                        {/* <Icon name='folder outline' /> */}
 
-                          {/* <Menu.Item name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}
-                            as={Link} to={routes.DASHBOARD}
-                          > {!mobile ? 'Are you teaching?' : <Icon name='pencil' />}</Menu.Item> */}
-                          <Menu.Item name='mycourses' active={activeItem === 'mycourses'} onClick={this.handleItemClick}
-                            as={Link} to={routes.LEARNING}
-                            > {!mobile ? 'My Courses' : <Icon name='folder' />}</Menu.Item>
+                      <Dropdown item text={ !!user ? user.username : 'Account' } >
+                        <Dropdown.Menu>
+                          <Dropdown.Item as={Link} to={routes.ACCOUNT}>
+                            Profile
+                            {/* {!mobile ? authUser.email : <Icon name='user outline' />} */}
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={auth.doSignOut}>
+                               SignOut
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
 
-                            <Dropdown item text={ !mobile && !!user
-                              ? user.username : <Icon name='user outline' />} >
-                              <Dropdown.Menu>
-                                <Dropdown.Item as={Link} to={routes.ACCOUNT}>
-                                  Account
-                                  {/* {!mobile ? authUser.email : <Icon name='user outline' />} */}
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={auth.doSignOut}>
-                                     SignOut
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-
-                          {/* <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.handleItemClick}
-                            as={Link} to={routes.ACCOUNT}
-                            > {!mobile ? 'username' : <Icon name='user outline' />}</Menu.Item> */}
-                        </Menu.Menu>
-                      </Container>
-                      </Menu>
+                      {/* <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.handleItemClick}
+                        as={Link} to={routes.ACCOUNT}
+                        > {!mobile ? 'username' : <Icon name='user outline' />}</Menu.Item> */}
+                    </Menu.Menu>
+                  </Container>
+                  </Menu>
 
               {/* <HomepageHeading mobile /> */}
             </Segment>
