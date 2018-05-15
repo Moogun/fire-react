@@ -151,7 +151,9 @@ class AuthContainer extends Component {
                     </Menu.Item>
 
                     <Menu.Menu position='right'>
-                      {!!teachingList ?
+                      {mobile ? <Menu.Item name='dashboard' active={activeItem === 'dashboard'} onClick={this.handleItemClick}
+                        as={Link} to={routes.DASHBOARD}> <Icon name='dashboard' /></Menu.Item> :
+                      !!teachingList ?
                       <Dropdown item text='Teacher'>
                           <Dropdown.Menu>
                             <Dropdown.Item as={Link} to={routes.CREATE}
@@ -176,10 +178,13 @@ class AuthContainer extends Component {
                       {/* <Menu.Item name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}
                         as={Link} to={routes.DASHBOARD}
                       > {!mobile ? 'Are you teaching?' : <Icon name='pencil' />}</Menu.Item> */}
+
                       <Menu.Item name='mycourses' active={activeItem === 'mycourses'} onClick={this.handleItemClick}
                         as={Link} to={routes.LEARNING}
-                        > {!mobile ? 'My Courses' : 'My Courses'}</Menu.Item>
-                        {/* <Icon name='folder outline' /> */}
+                        > {!mobile ? 'My Courses' : <Icon name='folder outline' />}</Menu.Item>
+
+                      {mobile ? <Menu.Item name='user' active={activeItem === 'user'} onClick={this.handleItemClick}
+                          as={Link} to={routes.ACCOUNT}> <Icon name='user circle outline' /></Menu.Item> :
 
                       <Dropdown item text={ !!user ? user.username : 'Account' } >
                         <Dropdown.Menu>
@@ -192,7 +197,7 @@ class AuthContainer extends Component {
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
-
+                      }
                       {/* <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.handleItemClick}
                         as={Link} to={routes.ACCOUNT}
                         > {!mobile ? 'username' : <Icon name='user outline' />}</Menu.Item> */}
