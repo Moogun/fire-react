@@ -41,56 +41,6 @@ class NonAuthContainer extends Component {
     // console.log('mobile container', authUser);
     return (
       <div>
-      <Responsive minWidth={992}>
-        <Segment
-          // inverted
-           textAlign='center' vertical
-           basic
-           style={style.NAV_MENU_SEGMENT_BORDER}
-           >
-          <Menu
-            fixed={fixed ? 'top' : null}
-            // inverted={!fixed}
-            // color='blue'
-            // pointing={!fixed}
-            // secondary={!fixed}
-            size='large'
-            style={style.NAV_MENU_BORDER}
-          >
-            <Container>
-              <Menu.Item  as={Link} to={routes.LANDING}
-                active={activeItem === 'weqna'} onClick={this.handleItemClick}> We qna </Menu.Item>
-                {/* <Category /> */}
-              <Menu.Item>
-                  <Input placeholder='Search...' action={{ icon: 'search' }}/>
-              </Menu.Item>
-
-              <Menu.Menu position='right'>
-                <Menu.Item
-                  as={Link} to={routes.TEACHER_INTRO}
-                  >Are you teaching?</Menu.Item>
-
-                <Menu.Item as={Link} to={routes.SIGN_IN}
-                  name='Sign In' active={activeItem === 'signin'}
-                  onClick={this.handleItemClick}
-                   >
-                </Menu.Item>
-
-                <Menu.Item as={Link} to={routes.SIGN_UP}
-                  name='Sign Up' active={activeItem === 'signup'}
-                  onClick={this.handleItemClick}
-                   >
-                </Menu.Item>
-              </Menu.Menu>
-
-            </Container>
-          </Menu>
-          {/* <HomepageHeading /> */}
-          {children}
-        </Segment>
-      </Responsive>
-      <Responsive minWidth={320} maxWidth={991}>
-
           <Sidebar.Pushable>
              <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
                 <Menu.Item as={Link} to='/' active onClick={this.handlePusherClick} >We </Menu.Item>
@@ -116,22 +66,24 @@ class NonAuthContainer extends Component {
             </Sidebar>
 
             <Sidebar.Pusher dimmed={sidebarOpened} onClick={this.handlePusherClick} style={{ minHeight: '100vh' }}>
-              <Segment inverted textAlign='center'
+              <Segment textAlign='center'
                 style={NAV_MOBILE_NON_AUTH}
                 // style={{ minHeight: 350, padding: '1em 0em' }}
                 vertical>
                 {/* <Container> */}
-                    <Menu inverted pointing secondary >
-                      <Menu.Item onClick={this.handleToggle}>
-                        <Icon name='sidebar' />
-                      </Menu.Item>
-                      <Menu.Item position='right'>
-                        <Button
-                          as={Link} to={routes.SIGN_IN} inverted>
-                          Log in</Button>
-                        <Button   as={Link} to={routes.SIGN_UP} inverted style={{ marginLeft: '0.5em' }}>
-                          Sign Up</Button>
-                      </Menu.Item>
+                    <Menu pointing secondary >
+                      <Container>
+                        <Menu.Item onClick={this.handleToggle}>
+                          <Icon name='sidebar' />
+                        </Menu.Item>
+                        <Menu.Item position='right'>
+                          <Button
+                            as={Link} to={routes.SIGN_IN}>
+                            Log in</Button>
+                          <Button   as={Link} to={routes.SIGN_UP} style={{ marginLeft: '0.5em' }}>
+                            Sign Up</Button>
+                        </Menu.Item>
+                      </Container>
                     </Menu>
                       {searchFieldActive? <Input className='icon' icon='search' placeholder='Search...' fluid
                         // size='large'
@@ -143,7 +95,6 @@ class NonAuthContainer extends Component {
             {children}
             </Sidebar.Pusher>
           </Sidebar.Pushable>
-      </Responsive>
       </div>
     )
   }

@@ -19,7 +19,26 @@ import profile from '../../assets/profile-lg.png'
 const MENU_BORDER={borderRadius: '0', marginBottom: '0'}
 
 class AuthContainer extends Component {
-  state = {}
+  state = {
+    calculations: {
+     direction: 'none',
+     height: 0,
+     width: 768,
+     topPassed: false,
+     bottomPassed: false,
+     pixelsPassed: 0,
+     percentagePassed: 0,
+     topVisible: false,
+     bottomVisible: false,
+     fits: false,
+     passing: false,
+     onScreen: false,
+     offScreen: false,
+   },
+  }
+
+  handleContextRef = contextRef => this.setState({ contextRef })
+  handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
@@ -71,10 +90,12 @@ class AuthContainer extends Component {
 
     const { children, authUser, fixed } = this.props
 
-    let mobile = false
+    const { calculations, contextRef } = this.state
+    // console.log('calculations. width', calculations.width);
+    let mobile = calculations.width < 768 ? true : false
 
     return (
-      <div>
+      <div ref={this.handleContextRef}>
 
         <Sidebar.Pushable>
            <Sidebar as={Menu} animation='push' inverted vertical visible={sidebarOpened}>
@@ -104,6 +125,7 @@ class AuthContainer extends Component {
           <Sidebar.Pusher dimmed={sidebarOpened}
             onClick={this.handlePusherClick} style={{ minHeight: '100vh' }}>
 
+            <Visibility onUpdate={this.handleUpdate}>
             <Segment
               // inverted
               textAlign='center'
@@ -122,23 +144,58 @@ class AuthContainer extends Component {
 
                           {!mobile ? 'We qna' : <Icon name='heart' />}</Menu.Item>
 
+
                         <Menu.Menu position='right'>
-                          <Menu.Item name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}
+                          {!!teachingList ?
+                          <Dropdown item text='Teacher'>
+                              <Dropdown.Menu>
+                                <Dropdown.Item as={Link} to={routes.CREATE}
+                                  name='create' active={activeItem === 'create'} onClick={this.handleItemClick}>
+                                  Create New Course
+                                </Dropdown.Item>
+                                <Dropdown.Item as={Link} to={routes.DASHBOARD}
+                                  name='dashboard'
+                                  active={activeItem === 'dashboard'}
+                                  onClick={this.handleItemClick}
+                                  >
+                                    Manage Courses
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                          </Dropdown>
+                          : <Menu.Item as={Link} to={routes.TEACHER_INTRO}
+                            name='teaching' active={activeItem === 'teaching?'} onClick={this.handleItemClick}> Are You Teaching?</Menu.Item>
+                          }
+
+                          {/* <Menu.Item name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}
                             as={Link} to={routes.DASHBOARD}
-                          > {!mobile ? 'Are you teaching?' : <Icon name='pencil' />}</Menu.Item>
+                          > {!mobile ? 'Are you teaching?' : <Icon name='pencil' />}</Menu.Item> */}
                           <Menu.Item name='mycourses' active={activeItem === 'mycourses'} onClick={this.handleItemClick}
                             as={Link} to={routes.LEARNING}
                             > {!mobile ? 'My Courses' : <Icon name='folder' />}</Menu.Item>
 
-                          <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.handleItemClick}
+                            <Dropdown item text={ !mobile && !!user
+                              ? user.username : <Icon name='user outline' />} >
+                              <Dropdown.Menu>
+                                <Dropdown.Item as={Link} to={routes.ACCOUNT}>
+                                  Account
+                                  {/* {!mobile ? authUser.email : <Icon name='user outline' />} */}
+                                </Dropdown.Item>
+                                <Dropdown.Item onClick={auth.doSignOut}>
+                                     SignOut
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+
+                          {/* <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.handleItemClick}
                             as={Link} to={routes.ACCOUNT}
-                            > {!mobile ? 'username' : <Icon name='user outline' />}</Menu.Item>
+                            > {!mobile ? 'username' : <Icon name='user outline' />}</Menu.Item> */}
                         </Menu.Menu>
                       </Container>
                       </Menu>
 
               {/* <HomepageHeading mobile /> */}
             </Segment>
+            </Visibility>
           {children}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
