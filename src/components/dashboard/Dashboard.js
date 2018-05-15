@@ -13,7 +13,7 @@ import QuizPanel from './QuizPanel'
 import Announcement from './Announcement'
 import {db} from '../../firebase';
 import {fb} from '../../firebase/firebase';
-import { Grid, Header, Menu, Visibility, Responsive, Segment, Modal, Form, Input, Button, Icon} from 'semantic-ui-react'
+import { Grid, Header, Menu, Visibility, Responsive, Segment, Modal, Form, Input, Button, Icon, Container} from 'semantic-ui-react'
 import SectionContainer from '../navbar/SectionContainer'
 import SectionContainer_M from '../navbar/SectionContainer_M'
 
@@ -325,9 +325,10 @@ class Dashboard extends Component {
                         </Menu>
                     </SectionContainer_M>
 
-
-                    <Grid style={style.DASHBOARD_BODY}>
-                        <Grid.Column>
+                    {/* // May 16 dashboard body margin top 1rem  affected white bar between head and body*/}
+                    <Grid centered style={style.DASHBOARD_BODY}>
+                        <Grid.Column mobile={16} tablet={16} computer={16}>
+                          <Container>
                             <Switch>
                               <Redirect exact from={match.url} to={routes.DASHBOARD_COURSES} />
                               <Route path={routes.DASHBOARD_COURSES} render = {(props) =>
@@ -365,35 +366,10 @@ class Dashboard extends Component {
                                <Route path={routes.DASHBOARD_AN} render = {() => <Announcement
                                 />} />
                             </Switch>
+                            </Container>
                         </Grid.Column>
                     </Grid>
 
-                    {/* <Modal size='tiny' open={createQuizModalOpen}>
-                        <Modal.Header>Quiz</Modal.Header>
-                        <Modal.Content >
-
-                          <Modal.Description>
-                            <Header>Create Quiz</Header>
-                            <Form onSubmit={this.onNewQuizSubmit}>
-                              <Form.Field>
-                                <Input
-                                  icon='pencil'
-                                  iconPosition='left'
-                                  name='quizTitle'
-                                  value={title}
-                                  onChange={e => this.setState({[e.target.name]: e.target.value})}
-                                  type="text"
-                                  placeholder="Title"
-                                />
-                                </Form.Field>
-                                <Button color='blue' fluid>
-                                  <Icon name='checkmark' /> Save and Go
-                                </Button>
-                            </Form>
-
-                          </Modal.Description>
-                        </Modal.Content>
-                      </Modal> */}
 
       </React.Fragment>
       );

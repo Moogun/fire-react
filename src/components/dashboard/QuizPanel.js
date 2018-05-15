@@ -14,12 +14,12 @@ class QuizPanel extends Component {
   render() {
     const { quizClick,quizzes,loading, title, quizTitleChange, onNewQuizSubmit } = this.props
     let quizList = quizzes
-    ? (<Table selectable attached celled textAlign='center'>
+    ? (<Table selectable attached celled textAlign='center' >
         <Table.Header >
           <Table.Row >
             {/* <Table.HeaderCell collapsing>Status</Table.HeaderCell> */}
             <Table.HeaderCell >Title</Table.HeaderCell>
-            <Table.HeaderCell collapsing># of Questions (To be fixed)</Table.HeaderCell>
+            <Table.HeaderCell collapsing># of Questions</Table.HeaderCell>
             {/* <Table.HeaderCell collapsing>Students</Table.HeaderCell> */}
             {/* <Table.HeaderCell collapsing>Questions</Table.HeaderCell> */}
           </Table.Row>
@@ -52,7 +52,7 @@ class QuizPanel extends Component {
          <Responsive minWidth={768} >
 
             <Grid centered>
-            <Grid.Column width={12}>
+            <Grid.Column width={16}>
 
               {quizList}
 
@@ -88,27 +88,10 @@ class QuizPanel extends Component {
           </Grid>
          </Responsive>
 
-         <Responsive minWidth={320} maxWidth={767}>
-             <Container>
-                {/* <List divided >
-                  {Object.keys(quizzes).map(key =>
-                    <List.Item key={key} onClick={()=> click(key)}>
+         <Responsive maxWidth={767}>
 
-                      <Image src={profile} size='tiny'/>
+               {quizList}
 
-                      <List.Content  verticalAlign='top'>
-                        <List.Header>{quizzes[key].title}</List.Header>
-                        {quizzes[key].title}
-                        {quizzes[key].title ? <p>Published</p> : <p>draft</p>}
-                      </List.Content>
-
-                      <List.Content floated='right' >
-                        {quizzes[key].title ? <p>Open</p> : <p>Private</p>}
-                      </List.Content>
-                    </List.Item>
-                  )}
-                </List> */}
-             </Container>
          </Responsive>
        </Segment>
     );

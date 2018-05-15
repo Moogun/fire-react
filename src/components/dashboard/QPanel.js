@@ -21,7 +21,7 @@ class QPanel extends Component {
     const {questions, selectedQuestion, user, uid, loading, match, answerChange, answerText, onAnswerSubmit, handleDeleteQuestion, handleDeleteAnswer} = this.props
 
     let qList = <React.Fragment>
-        <Responsive {...Responsive.onlyComputer}>
+        <Responsive minWidth={768}>
           <Grid stackable>
             <Grid.Row centered>
 
@@ -52,7 +52,7 @@ class QPanel extends Component {
                  </Container>
               </Grid.Column>
 
-              <Grid.Column width={8}>
+              <Grid.Column width={12}>
                 <QuestionManage
                   selectedQuestion={selectedQuestion}
                   user={user} uid={uid}
@@ -68,8 +68,7 @@ class QPanel extends Component {
           </Grid>
         </Responsive>
 
-        <Responsive minWidth={320} maxWidth={991}>
-            <Container>
+        <Responsive minWidth={320} maxWidth={767}>
               <Header as='h1' content='Recent questions' dividing/>
               <Input
                 type='text'
@@ -108,7 +107,6 @@ class QPanel extends Component {
 
                 </List>
               </Segment>
-            </Container>
         </Responsive>
     </React.Fragment>
 

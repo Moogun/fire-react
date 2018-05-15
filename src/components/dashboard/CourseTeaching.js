@@ -10,7 +10,7 @@ const CourseTeaching = ({click, courses, loading}) => {
     <Responsive minWidth={768} >
 
         <Grid centered>
-        <Grid.Column width={12}>
+        <Grid.Column mobile={16} tablet={16} computer={16}>
 
           <Table selectable attached celled textAlign='center'>
               <Table.Header >
@@ -54,7 +54,7 @@ const CourseTeaching = ({click, courses, loading}) => {
     </Responsive>
 
     <Responsive minWidth={320} maxWidth={767}>
-        <Container>
+        {/* <Container> */}
             <List divided >
               {Object.keys(courses).map(key =>
                 <List.Item key={key} onClick={()=> click(key)}>
@@ -73,7 +73,7 @@ const CourseTeaching = ({click, courses, loading}) => {
                 </List.Item>
               )}
             </List>
-        </Container>
+        {/* </Container> */}
     </Responsive>
 
     </Segment>
