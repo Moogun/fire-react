@@ -20,8 +20,8 @@ const CourseCard = ({course, click}) => {
         meta={<div>{course.metadata.tName}</div>}
         description='출제자가 노리는 함정을 정확히 짚어주는 강의'
         extra={<div style={{textAlign:'center'}} >
-        <Icon name='user' />16
-        <Icon name='comment' style={{marginLeft:'2rem'}}/>45
+        <Icon name='users' />{course.metadata.attendeeCount}
+        <Icon name='comment' style={{marginLeft:'2rem'}}/>{course.metadata.questionCount}
         <Icon name='star' style={{marginLeft:'2rem'}}/>4.8
       </div>} />
     );

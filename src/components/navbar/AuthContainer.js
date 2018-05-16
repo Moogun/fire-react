@@ -93,30 +93,7 @@ class AuthContainer extends Component {
     const { calculations, contextRef } = this.state
     // console.log('calculations. width', calculations.width, match);
     let mobile = calculations.width < 768 ? true : false
-    // console.log('[auth container props]',this.props.location.pathname.split('/'));
-    // let page = this.props.location.pathname.split('/')[1]
 
-    // let additionalMenu
-    // if (page === 'course_manage') {
-    //   additionalMenu = (
-    //     <Menu.Item>
-    //       Home
-    //       <Menu.Menu>
-    //         <Menu.Item name='title'
-    //            active={activeItem === 'title'}
-    //            // as={Link} to={`/course_manage/:cid/edit/title`}
-    //            >
-    //            Title
-    //         </Menu.Item>
-    //         <Menu.Item name='add' active={activeItem === 'add'} onClick={this.handleItemClick}>
-    //           Add
-    //         </Menu.Item>
-    //         <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick}>
-    //           Remove
-    //         </Menu.Item>
-    //       </Menu.Menu>
-    //     </Menu.Item>)
-    // }
     return (
       <div ref={this.handleContextRef}>
 
@@ -171,14 +148,15 @@ class AuthContainer extends Component {
                           <Icon name='sidebar' />
                         </Menu.Item> }
 
-                    <Menu.Item name='weqna' active={activeItem === 'weqna'} onClick={this.handleItemClick}
+                    <Menu.Item Header name='weqna' active={activeItem === 'weqna'} onClick={this.handleItemClick}
                       as={Link} to={routes.HOME}>
                       {!mobile ? 'We qna' : 'We qna'}
                     </Menu.Item>
 
+                    {/* <Menu.Item name='dashboard' active={activeItem === 'dashboard'} onClick={this.handleItemClick}
+                      as={Link} to={routes.DASHBOARD}> <Icon name='dashboard' /></Menu.Item> */}
                     <Menu.Menu position='right'>
-                      {mobile ? <Menu.Item name='dashboard' active={activeItem === 'dashboard'} onClick={this.handleItemClick}
-                        as={Link} to={routes.DASHBOARD}> <Icon name='dashboard' /></Menu.Item> :
+                      {mobile ? null :
                       !!teachingList ?
                       <Dropdown item text='Teacher'>
                           <Dropdown.Menu>

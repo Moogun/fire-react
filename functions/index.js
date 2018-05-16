@@ -43,6 +43,8 @@ exports.countQuestion = functions.database.ref('/questions/{tid}/{cid}/{qid}').o
       let tid = context.params.tid
       let cid = context.params.cid
 
+      const promises = [];
+
       const countRef = admin.database().ref(`/courses/${cid}/metadata/questionCount`)
       const original = change.after.val();
       console.log('Uppercasing', context.params.tid, original);
@@ -56,13 +58,24 @@ exports.countQuestion = functions.database.ref('/questions/{tid}/{cid}/{qid}').o
         return null;
       }
 
-      // Return the promise from countRef.transaction() so our function
-      // waits for this async event to complete before it exits.
-      return countRef.transaction((current) => {
-        return (current || 0) + increment;
-      }).then(() => {
+      const prom1 = countRef.transaction(current => {
+           return (current || 0) + increment;
+        });
+      const prom2 = admin.database().ref(`/teaching/${tid}/${cid}/metadata/questionCount`).transaction(current => {
+           return (current || 0) + increment;
+         });
+      return Promise.all([prom1, prom2])
+      .then(() => {
         return console.log('Counter updated.');
       });
+
+      // Return the promise from countRef.transaction() so our function
+      // waits for this async event to complete before it exits.
+    //   return countRef.transaction((current) => {
+    //     return (current || 0) + increment;
+    //   }).then(() => {
+    //     return console.log('Counter updated.');
+    //   });
     });
 
 // If the number of likes gets deleted, recount the number of likes
@@ -81,12 +94,6 @@ exports.countAnswer = functions.database.ref('/questionsForT/{tid}/{qid}/answers
       const collectionRef = change.after.ref.parent;
 
       const original = change.after.val();
-      // console.log('Uppercasing', context.params.tid, original);
-      // console.log('change after val', change.after.val())
-      // console.log('change before val', change.before.val())
-      console.log('change  val', change.before.val() === null)
-      console.log('change  val', change.after.val() === null)
-      // console.log('Original', original['cid']);
 
       let cid
       if (original !== null) {
@@ -133,3 +140,46 @@ exports.countAnswer = functions.database.ref('/questionsForT/{tid}/{qid}/answers
       //   return console.log('Counter updated.');
       // });
     });
+
+  exports.countAttendee = functions.database.ref('/teaching/{tid}/{cid}/attendee/{uid}').onWrite(
+      (change, context) => {
+        // const collectionRef = change.after.ref.parent;
+        // const countRef = collectionRef.parent.child('questions_count');
+
+        let tid = context.params.tid
+        let cid = context.params.cid
+
+        const promises = [];
+
+        const countRef = admin.database().ref(`/courses/${cid}/metadata/attendeeCount`)
+        const original = change.after.val();
+        // console.log('Uppercasing', context.params.tid, original);
+
+        let increment;
+        if (change.after.exists() && !change.before.exists()) {
+          increment = 1;
+        } else if (!change.after.exists() && change.before.exists()) {
+          increment = -1;
+        } else {
+          return null;
+        }
+
+        const prom1 = countRef.transaction(current => {
+             return (current || 0) + increment;
+          });
+        const prom2 = admin.database().ref(`/teaching/${tid}/${cid}/metadata/attendeeCount`).transaction(current => {
+             return (current || 0) + increment;
+           });
+        return Promise.all([prom1, prom2])
+        .then(() => {
+          return console.log('Counter updated.');
+        });
+
+        // Return the promise from countRef.transaction() so our function
+        // waits for this async event to complete before it exits.
+      //   return countRef.transaction((current) => {
+      //     return (current || 0) + increment;
+      //   }).then(() => {
+      //     return console.log('Counter updated.');
+      //   });
+      });

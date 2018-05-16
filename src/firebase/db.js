@@ -133,6 +133,7 @@ export const doCreateCourse = (title, tid,  tEmail, tName, tDisplayName, tProfil
      tProfileImg,
      isPublished: false,
      readyToPublish: false,
+     questionCount: 0,
    }
   return db.ref('courses').push({metadata})
 }
@@ -148,6 +149,7 @@ export const doUpdateTeaching = (title, tid, tEmail, tName, tDisplayName, tProfi
   updates[`teaching/${tid}/${cid}/metadata/tProfileImg`] = tProfileImg
   updates[`teaching/${tid}/${cid}/metadata/isPublished`] = false
   updates[`teaching/${tid}/${cid}/metadata/readyToPublish`] = false
+  updates[`teaching/${tid}/${cid}/metadata/questionCount`] = 0
 
   updates[`teachingList/${tid}/${cid}`] = true
   return db.ref().update(updates)

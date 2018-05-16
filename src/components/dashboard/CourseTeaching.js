@@ -4,7 +4,7 @@ import profile from '../../assets/profile-lg.png'
 import * as style from '../../style/inline';
 
 const CourseTeaching = ({click, courses, loading}) => {
-
+  console.log('courses', courses);
   let courseList = courses
   ? <Segment basic loading={loading} style={style.SEGMENT_LOADER}>
     <Responsive minWidth={768} >
@@ -36,10 +36,10 @@ const CourseTeaching = ({click, courses, loading}) => {
                     {courses[key].metadata.date}
                   </Table.Cell>
                   <Table.Cell textAlign='center' >
-                    26 ??? fix
+                    fix
                   </Table.Cell>
                   <Table.Cell textAlign='center' >
-                    30 ??? fix
+                    {courses[key].metadata.questionCount}
                   </Table.Cell>
                   {/* <Table.Cell textAlign='left' >
                     14

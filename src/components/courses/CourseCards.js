@@ -33,7 +33,8 @@ class CourseCards extends Component {
               <Grid.Column key={key} mobile={16} tablet={8} computer={4}>
                 <CourseCard
                   key={key}
-                  course={courses[key]} click={() => this.handleClick( key,
+                  course={courses[key]}
+                  click={() => this.handleClick( key,
                   courses[key].metadata.tid,
                   courses[key].metadata.title,
                   courses[key].metadata.tName)} />
