@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Link, Route, withRouter, Switch, Redirect, Prompt} from 'react-router-dom'
-import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm, Modal } from 'semantic-ui-react'
+import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm, Modal, Visibility } from 'semantic-ui-react'
 
 import CEditTop from './CEditTop'
 import CEditTitle from './CEditTitle'
@@ -61,9 +61,18 @@ class CourseEdit extends Component {
       coursePrivacy: '',
 
       quizAttachModalOpen: false,
+
+      activeItem: 'title',
+      calculations: {
+        width: 0,
+      },
+
     };
 
   }
+
+  handleContextRef = contextRef => this.setState({ contextRef })
+  handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
   //MENU
   handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
@@ -721,6 +730,9 @@ class CourseEdit extends Component {
       }
 
   render() {
+    const { calculations, contextRef } = this.state
+    let mobile = calculations.width < 768 ? true : false
+
     const {activeItem, isLoading,
       course,
       courseId, teacherName, teacherId, teacherPhoto,
@@ -746,24 +758,26 @@ class CourseEdit extends Component {
     const {match} = this.props
 
     // console.log('render 1 ', 'images', images)
-    console.log('curri', sections );
+    console.log('curri', sections, this.state.calculations.width );
 
     const isInvalidSection = sectionTitle === ''
     const isInvalidLecture = lectureTitle === ''
 
     return (
-      <div style={style.C_EDIT_BODY}>
+      <div style={style.C_EDIT_BODY} ref={this.handleContextRef}>
 
 {/* HEAD */}
+        <Visibility onUpdate={this.handleUpdate}>
         <CEditTop
           title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
           settingsClick={this.handleSettingsClick}/>
+        </Visibility>
 
 {/* MENU */}
         <Segment vertical>
             <Grid container stackable centered>
               <Grid.Column width={3}>
-                <Menu vertical secondary fluid style={style.C_EDIT_MENU} >
+                <Menu vertical={!mobile ? true : false} fluid style={style.C_EDIT_MENU}>
                   <Menu.Item name='title'
                      active={activeItem === 'title'}
                      onClick={this.handleItemClick}

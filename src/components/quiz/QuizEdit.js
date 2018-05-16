@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
-import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm } from 'semantic-ui-react'
+import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm, Visibility } from 'semantic-ui-react'
 import {db} from '../../firebase';
 import * as routes from '../../constants/routes'
 import * as styles from '../../constants/styles'
@@ -46,10 +46,20 @@ class QuizEdit extends Component {
       // entry will look like this
       // entry: {uid: {'id 1': '1'}, {'id 2': '1'}, {'id 3': 'a'},}
       deleteConfirmOpen: false,
+
+      activeItem: 'title',
+      calculations: {
+        width: 0,
+      },
+
     };
   }
 
+  handleContextRef = contextRef => this.setState({ contextRef })
+  handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
+  //MENU
+  handleItemClick = (e, {name}) => { this.setState({activeItem: name}) }
 
   //META
   handleTitleInputChange = (e) => {
@@ -275,6 +285,8 @@ class QuizEdit extends Component {
   }
 
   render() {
+    const { calculations, contextRef } = this.state
+    let mobile = calculations.width < 768 ? true : false
 
     //TITLE
     const {activeItem, quizId, quizSet, title, instruction, quiz,
@@ -300,26 +312,28 @@ class QuizEdit extends Component {
 
     console.log('[quiz edit]', quiz);
     const { match } = this.props
-        console.log('groupInstructionForShort', groupInstructionForShort, titleForShort, answerForShort, explanationForShort);
+        // console.log('groupInstructionForShort', groupInstructionForShort, titleForShort, answerForShort, explanationForShort);
     return (
-      <div style={styles.C_EDIT_BODY}>
+      <div style={styles.C_EDIT_BODY} ref={this.handleContextRef}>
        {/* <Segment basic
          loading={isLoading}
          styles={styles.C_EDIT_BODY}>
 
            <Grid.Row className='c-edit-head'> */}
-          <Segment vertical className='c-edit-head' style={styles.C_EDIT_HEAD}>
-               <QuizEditTop
-                 title={quizTitle}
-                 instruction={quizInstruction}
-                 quiz={questionList}
-               />
-          </Segment>
+          <Visibility onUpdate={this.handleUpdate}>
+            <Segment vertical className='c-edit-head' style={styles.C_EDIT_HEAD}>
+                 <QuizEditTop
+                   title={quizTitle}
+                   instruction={quizInstruction}
+                   quiz={questionList}
+                 />
+            </Segment>
+          </Visibility>
           <Segment vertical>
 
                <Grid container stackable centered>
                  <Grid.Column computer={3}>
-                   <Menu vertical secondary fluid style={styles.C_EDIT_MENU} >
+                   <Menu vertical={!mobile ? true : false} fluid style={styles.C_EDIT_MENU}>
                      <Menu.Item name='title'
                         active={activeItem === 'title'}
                         onClick={this.handleItemClick}
@@ -335,10 +349,10 @@ class QuizEdit extends Component {
                          >Questions
                       </Menu.Item>
                       <Menu.Item name='delete'
-                         active={activeItem === 'questions'}
+                         active={activeItem === 'delete'}
                          onClick={this.handleDeleteQuiz}
                          as='a'
-                         style={activeItem === 'questions' ? styles.C_EDIT_MENU_ITEM: null}
+                         style={activeItem === 'delete' ? styles.C_EDIT_MENU_ITEM: null}
                          >Delete
                       </Menu.Item>
                    </Menu>

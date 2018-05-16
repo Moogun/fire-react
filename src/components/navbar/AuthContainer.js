@@ -8,7 +8,7 @@ import * as style from '../../style/inline';
 
 import Category from './Category'
 import HomepageHeading from './HomepageHeading'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import {Route, Link, withRouter } from 'react-router-dom';
 import {auth, db} from '../../firebase'
 import logo from '../../assets/logo.png'
 
@@ -88,12 +88,35 @@ class AuthContainer extends Component {
       searchFieldActive, handleSearchField, handleSearchClick,
       } = this.state
 
-    const { children, authUser, fixed } = this.props
+    const { children, authUser, fixed, match } = this.props
 
     const { calculations, contextRef } = this.state
-    // console.log('calculations. width', calculations.width);
+    // console.log('calculations. width', calculations.width, match);
     let mobile = calculations.width < 768 ? true : false
+    // console.log('[auth container props]',this.props.location.pathname.split('/'));
+    // let page = this.props.location.pathname.split('/')[1]
 
+    // let additionalMenu
+    // if (page === 'course_manage') {
+    //   additionalMenu = (
+    //     <Menu.Item>
+    //       Home
+    //       <Menu.Menu>
+    //         <Menu.Item name='title'
+    //            active={activeItem === 'title'}
+    //            // as={Link} to={`/course_manage/:cid/edit/title`}
+    //            >
+    //            Title
+    //         </Menu.Item>
+    //         <Menu.Item name='add' active={activeItem === 'add'} onClick={this.handleItemClick}>
+    //           Add
+    //         </Menu.Item>
+    //         <Menu.Item name='about' active={activeItem === 'about'} onClick={this.handleItemClick}>
+    //           Remove
+    //         </Menu.Item>
+    //       </Menu.Menu>
+    //     </Menu.Item>)
+    // }
     return (
       <div ref={this.handleContextRef}>
 
@@ -115,6 +138,9 @@ class AuthContainer extends Component {
                }
              </Menu.Item>
              {/* <Menu.Item as={Link} to='/category' onClick={this.handlePusherClick}>Category</Menu.Item> */}
+
+              {/* {additionalMenu} */}
+
              <Menu.Item as={Link} to={routes.LEARNING} onClick={this.handlePusherClick}>My Courses</Menu.Item>
              <Menu.Item as={Link} to='/notifications' onClick={this.handlePusherClick}>My Notifications</Menu.Item>
              <Menu.Item as={Link} to={!!teachingList ? routes.DASHBOARD : routes.TEACHER_INTRO} onClick={this.handlePusherClick}>{!!teachingList ? 'Instructor Dashboard' : 'Are You Teaching?'} </Menu.Item>
@@ -221,4 +247,4 @@ AuthContainer.propTypes = {
   children: PropTypes.node,
 }
 
-export default AuthContainer
+export default withRouter(AuthContainer)
