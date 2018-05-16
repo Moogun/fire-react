@@ -234,7 +234,7 @@ class SignUpForm extends Component {
                 <Form.Field>
                   By signing up, you agree to our Terms of Conditions.
                 </Form.Field>
-                <Button color='teal' fluid disabled={isInvalid}>
+                <Button primary fluid disabled={isInvalid}>
                   <Icon name='checkmark' /> Sign Up
                 </Button>
               </Segment>

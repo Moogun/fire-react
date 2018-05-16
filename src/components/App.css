@@ -26,6 +26,10 @@
   border: 1px solid #e3e3e3;
 } */
 
+.segment-flat {
+  border-radius: 0;
+}
+
 .segment-floated {
   position: absolute;
   top: 50%;

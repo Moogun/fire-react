@@ -150,7 +150,7 @@ class SignInForm extends Component {
                 type="password"
                 placeholder="Password"/>
                 {error && <Message negative>{error.message}</Message>}
-              <Button color='teal' fluid size='large' disabled = {isInvalid} type="submit">Sign In</Button>
+              <Button color='teal' fluid size='large' disabled = {isInvalid} type="submit">Log in</Button>
 
             </Segment>
           </Form>

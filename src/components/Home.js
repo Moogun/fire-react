@@ -60,6 +60,8 @@ const UserList = ({users}) =>
   )}
 </div>
 
-const authCondition = (authUser) => !!authUser;
+// const authCondition = (authUser) => !!authUser;
 
-export default withAuthorization(authCondition)(HomePage);
+// export default withAuthorization(authCondition)(HomePage);
+//May 16 this keeps loading 
+export default HomePage;

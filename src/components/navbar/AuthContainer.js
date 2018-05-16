@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import './Navbar.css'
 import {
   Button, Container, Divider, Grid, Header, Icon, Image, List, Menu, Responsive, Segment, Sidebar, Visibility, Dropdown, Input
 } from 'semantic-ui-react'
@@ -20,6 +21,7 @@ const MENU_BORDER={borderRadius: '0', marginBottom: '0'}
 
 class AuthContainer extends Component {
   state = {
+    activeItem: 'home',
     calculations: {
      direction: 'none',
      height: 0,
@@ -39,6 +41,7 @@ class AuthContainer extends Component {
 
   handleContextRef = contextRef => this.setState({ contextRef })
   handleUpdate = (e, { calculations }) => this.setState({ calculations })
+  handleItemClick = (e, {name}) => this.setState ({ activeItem: name})
 
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
@@ -130,14 +133,15 @@ class AuthContainer extends Component {
 
             <Visibility onUpdate={this.handleUpdate}>
             <Segment
-              // inverted
+              // className='segment-flat'
+              // vertical
+              style={{borderRadius: '0'}}
               textAlign='center'
               // style={{
               //    // minHeight: 350,
               //    padding: '1em 0em'
               //  }}
               // style={NAV_MOBILE_AUTH}
-              vertical
               >
 
                 <Menu secondary>
@@ -148,8 +152,9 @@ class AuthContainer extends Component {
                           <Icon name='sidebar' />
                         </Menu.Item> }
 
-                    <Menu.Item Header name='weqna' active={activeItem === 'weqna'} onClick={this.handleItemClick}
-                      as={Link} to={routes.HOME}>
+                    <Menu.Item Header name='home' active={activeItem === 'home'} onClick={this.handleItemClick}
+                      as={Link} to={routes.HOME}
+                      >
                       {!mobile ? 'We qna' : 'We qna'}
                     </Menu.Item>
 
@@ -176,7 +181,7 @@ class AuthContainer extends Component {
                           </Dropdown.Menu>
                       </Dropdown>
                       : <Menu.Item as={Link} to={routes.TEACHER_INTRO}
-                        name='teaching' active={activeItem === 'teaching?'} onClick={this.handleItemClick}> Are You Teaching?</Menu.Item>
+                        name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}> Are You Teaching?</Menu.Item>
                       }
 
                       {/* <Menu.Item name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}
@@ -190,11 +195,10 @@ class AuthContainer extends Component {
                       {mobile ? <Menu.Item name='user' active={activeItem === 'user'} onClick={this.handleItemClick}
                           as={Link} to={routes.ACCOUNT}> <Icon name='user circle outline' /></Menu.Item> :
 
-                      <Dropdown item text={ !!user ? user.username : 'Account' } >
+                      <Dropdown item text={ !!user ? user.username : 'Account' } button >
                         <Dropdown.Menu>
-                          <Dropdown.Item as={Link} to={routes.ACCOUNT}>
+                          <Dropdown.Item as={Link} to={routes.ACCOUNT} name='profile' active={activeItem === 'profile'} onClick={this.handleItemClick}>
                             Profile
-                            {/* {!mobile ? authUser.email : <Icon name='user outline' />} */}
                           </Dropdown.Item>
                           <Dropdown.Item onClick={auth.doSignOut}>
                                SignOut
@@ -202,6 +206,7 @@ class AuthContainer extends Component {
                         </Dropdown.Menu>
                       </Dropdown>
                       }
+
                       {/* <Menu.Item name='logout' active={activeItem === 'logout'} onClick={this.handleItemClick}
                         as={Link} to={routes.ACCOUNT}
                         > {!mobile ? 'username' : <Icon name='user outline' />}</Menu.Item> */}

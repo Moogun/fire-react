@@ -36,7 +36,7 @@ class NonAuthContainer extends Component {
 
   handleContextRef = contextRef => this.setState({ contextRef })
   handleUpdate = (e, { calculations }) => this.setState({ calculations })
-
+  handleItemClick = (e, {name}) => this.setState ({ activeItem: name})
   handlePusherClick = () => {
     const { sidebarOpened } = this.state
     if (sidebarOpened) this.setState({ sidebarOpened: false })
@@ -91,28 +91,39 @@ class NonAuthContainer extends Component {
 
             <Sidebar.Pusher dimmed={sidebarOpened} onClick={this.handlePusherClick} style={{ minHeight: '100vh' }}>
               <Visibility onUpdate={this.handleUpdate}>
-                <Segment textAlign='center'
+                <Segment
+                  vertical
+                  textAlign='center'
+                  // inverted
                   // style={NAV_MOBILE_NON_AUTH}
                   // style={{ minHeight: 350, padding: '1em 0em' }}
-                  vertical>
+                  >
                   {/* <Container> */}
-                      <Menu pointing secondary >
+                      <Menu secondary >
                         <Container>
+
                           {!mobile
                             ? null
                             : <Menu.Item onClick={this.handleToggle}>
                                 <Icon name='sidebar' />
                               </Menu.Item> }
-                          <Menu.Item name='weqna' active={activeItem === 'weqna'} onClick={this.handleItemClick}
-                            as={Link} to={routes.HOME}>
+
+                          <Menu.Item Header name='home' active={activeItem === 'home'} onClick={this.handleItemClick}
+                            as={Link} to={routes.LANDING}
+                            >
                             {!mobile ? 'We qna' : 'We qna'}
                           </Menu.Item>
 
                           <Menu.Item position='right'>
                             <Button
-                              as={Link} to={routes.SIGN_IN}>
+                              color='teal'
+                              as={Link} to={routes.SIGN_IN}
+                              name='login' active={activeItem === 'login'} onClick={this.handleItemClick}>
                               Log in</Button>
-                            <Button   as={Link} to={routes.SIGN_UP} style={{ marginLeft: '0.5em' }}>
+                            <Button
+                              primary
+                              as={Link} to={routes.SIGN_UP} style={{ marginLeft: '0.5em' }}
+                              name='signup' active={activeItem === 'signup'} onClick={this.handleItemClick}>
                               Sign Up</Button>
                           </Menu.Item>
                         </Container>
