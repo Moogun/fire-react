@@ -4,7 +4,7 @@ import profile from '../../assets/profile-lg.png'
 import * as style from '../../style/inline'
 
 const CourseMeta = ({meta}) => {
-  // console.log('course meta ', meta);
+  console.log('course meta ', meta);
   let date = meta ? meta.date : ''
   let time = meta ? meta.time : ''
   let textbook = meta ? meta.textbook : ''
@@ -18,19 +18,19 @@ const CourseMeta = ({meta}) => {
             <Table definition attached>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Date</Table.Cell>
+                  <Table.Cell width={4}>Date</Table.Cell>
                   <Table.Cell>{date}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Time</Table.Cell>
+                  <Table.Cell width={4}>Time</Table.Cell>
                   <Table.Cell>{time}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Textbook</Table.Cell>
+                  <Table.Cell width={4}>Textbook</Table.Cell>
                   <Table.Cell>{textbook}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Location</Table.Cell>
+                  <Table.Cell width={4}>Location</Table.Cell>
                   <Table.Cell>{location}</Table.Cell>
                 </Table.Row>
               </Table.Body>

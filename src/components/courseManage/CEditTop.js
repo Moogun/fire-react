@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
 import profile from '../../assets/profile-lg.png'
 import {Image, Item, Grid, Button, Icon, Responsive, List, Header, Segment} from 'semantic-ui-react'
-import '../App.css' // not working ??
+import '../App.css' //May 16  not working ??
 import * as style from '../../constants/styles'
-const TEXT_COLOR = {color: '#fff'}
 
 class CEditTop extends Component {
   constructor(props) {
@@ -13,7 +12,7 @@ class CEditTop extends Component {
     };
   }
   render() {
-    const {title, teacherName, teacherPhoto, isPublished, settingsClick} = this.props
+    const {title, teacherName, teacherPhoto, isPublished, settingsClick, coursePreview} = this.props
     let teacherProfile = teacherPhoto ? teacherPhoto : profile
     let published = isPublished ? 'published' : 'draft'
 
@@ -41,7 +40,7 @@ class CEditTop extends Component {
 
             <Grid.Column floated='right' width={4}>
               <Button.Group floated='right' >
-                <Button inverted style={{margin: '1px'}}>Preview</Button>
+                <Button inverted style={{margin: '1px'}} onClick={coursePreview}>Preview</Button>
                 <Button icon style={{margin: '1px'}} onClick={settingsClick}><Icon name='settings' /></Button>
               </Button.Group>
             </Grid.Column>

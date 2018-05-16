@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Segment, Container, Grid, Header, Button, Icon, Image, Divider } from 'semantic-ui-react'
 import './color.css'
+import './App.css'
 
 class Landing extends Component {
   constructor(props) {
@@ -62,7 +63,8 @@ HomepageHeading.propTypes = {
 
 const LandingBody = () => {
   return (
-      <div>
+      <div className='landing'>
+
         {/* <Segment style={{ padding: '8em 0em' }} vertical>
         <Grid container stackable verticalAlign='middle'>
           <Grid.Row>

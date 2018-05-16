@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Link, Route, withRouter, Switch, Redirect, Prompt} from 'react-router-dom'
-import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm, Modal, Visibility } from 'semantic-ui-react'
+import { Segment,Grid, Menu, Button, Icon, Responsive, Sidebar, Header, Confirm, Modal, Visibility, Container, Image } from 'semantic-ui-react'
+import profile from '../../assets/profile-lg.png'
 
 import CEditTop from './CEditTop'
 import CEditTitle from './CEditTitle'
@@ -11,6 +12,12 @@ import CEditCurri from './curri/CEditCurri'
 import CEditSettings from './CEditSettings'
 import {db} from '../../firebase';
 import {storage} from '../../firebase/firebase';
+
+import CoursePage from '../coursePage/CoursePage';
+import CourseMeta from '../coursePage/CourseMeta';
+import CourseFeatures from '../coursePage/CourseFeatures';
+import CourseGallery from '../coursePage/CourseGallery';
+import CourseCurri from '../coursePage/CourseCurri';
 
 import { NotificationStack } from 'react-notification';
 import { OrderedSet } from 'immutable';
@@ -61,6 +68,7 @@ class CourseEdit extends Component {
       coursePrivacy: '',
 
       quizAttachModalOpen: false,
+      coursePreviewModalOpen: false,
 
       activeItem: 'title',
       calculations: {
@@ -677,6 +685,10 @@ class CourseEdit extends Component {
       const {sameFileNameSelectedAlready} = this.state
       this.setState ({ sameFileNameSelectedAlready: !sameFileNameSelectedAlready})
     }
+
+    handleTakeQuiz = () => {
+      console.log('[handleTakeQuiz]',)
+    }
     //life cycle
     componentDidMount() {
 
@@ -729,6 +741,14 @@ class CourseEdit extends Component {
         console.log('will un mount', 0);
       }
 
+  handleCoursePreview = () => {
+    this.setState ({ coursePreviewModalOpen: true})
+  }
+
+  handleCancelCoursePreview = () => {
+    this.setState ({ coursePreviewModalOpen: false})
+  }
+
   render() {
     const { calculations, contextRef } = this.state
     let mobile = calculations.width < 768 ? true : false
@@ -753,11 +773,13 @@ class CourseEdit extends Component {
 
       //Modal for quiz attahcment
       quizAttachModalOpen,
+      coursePreviewModalOpen,
+
       quizList,
     } = this.state
     const {match} = this.props
 
-    // console.log('render 1 ', 'images', images)
+    console.log('[render 1] ', 'course', course)
     console.log('curri', sections, this.state.calculations.width );
 
     const isInvalidSection = sectionTitle === ''
@@ -770,7 +792,7 @@ class CourseEdit extends Component {
         <Visibility onUpdate={this.handleUpdate}>
         <CEditTop
           title={title} teacherName={teacherName} teacherId={teacherId} teacherPhoto={teacherPhoto} isPublished={isPublished}
-          settingsClick={this.handleSettingsClick}/>
+          settingsClick={this.handleSettingsClick} coursePreview={this.handleCoursePreview}/>
         </Visibility>
 
 {/* MENU */}
@@ -1001,6 +1023,47 @@ class CourseEdit extends Component {
             </Modal.Content>
             <Modal.Actions>
               <Button color='red' onClick={this.handleCancelAttachQuiz}>
+                 <Icon name='cancel' /> Cancel
+               </Button>
+             </Modal.Actions>
+          </Modal>
+
+          <Modal open={coursePreviewModalOpen} size='large'>
+            <Modal.Header>Course Preview</Modal.Header>
+            <Modal.Content scrolling>
+              <Grid >
+                <Grid.Row>
+                  <Grid.Column style={{backgroundColor: '#34495e', paddingTop: '2rem', paddingBottom: '2rem'}}>
+                    <Container text>
+                      <Header as='h1' inverted content={title} subheader={subTitle} />
+                      <Header as='h2' onClick={this.handleNavToTeacher}  style={{color: '#fff'}}>
+                         <Image circular src={profile}/>
+                         <Header.Content>
+                           {teacherName}
+                            {/* <Rating icon='star' defaultRating={5} maxRating={5} disabled/> */}
+                           <Header.Subheader style={{color: '#fff'}}>
+                             The best of the best
+                           </Header.Subheader>
+                         </Header.Content>
+                       </Header>
+                     </Container>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Column>
+                    <Container text>
+                      <CourseMeta meta={!!course && course.metadata}/>
+                      <CourseFeatures features={featureList}/>
+                      <CourseGallery images={images}/>
+                      <CourseCurri sections={sections} handleSecToggle={this.handleSecToggle} takeQuiz={this.handleTakeQuiz}/>
+                    </Container>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color='red' onClick={this.handleCancelCoursePreview}>
                  <Icon name='cancel' /> Cancel
                </Button>
              </Modal.Actions>

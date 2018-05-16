@@ -108,7 +108,7 @@ class NonAuthContainer extends Component {
                                 <Icon name='sidebar' />
                               </Menu.Item> }
 
-                          <Menu.Item Header name='home' active={activeItem === 'home'} onClick={this.handleItemClick}
+                          <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick}
                             as={Link} to={routes.LANDING}
                             >
                             {!mobile ? 'We qna' : 'We qna'}

@@ -26,6 +26,15 @@
   border: 1px solid #e3e3e3;
 } */
 
+.landing {
+  background: url('../assets/book.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 700px;
+}
+
+
 .segment-flat {
   border-radius: 0;
 }
