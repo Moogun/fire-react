@@ -15,11 +15,11 @@ const CourseTeaching = ({click, courses, loading}) => {
           <Table selectable attached celled textAlign='center'>
               <Table.Header >
                 <Table.Row >
-                  <Table.HeaderCell collapsing>Status</Table.HeaderCell>
-                  <Table.HeaderCell >Title</Table.HeaderCell>
-                  <Table.HeaderCell >Date</Table.HeaderCell>
-                  <Table.HeaderCell collapsing>Students</Table.HeaderCell>
-                  <Table.HeaderCell collapsing>Questions</Table.HeaderCell>
+                  <Table.HeaderCell collapsing>상태</Table.HeaderCell>
+                  <Table.HeaderCell >제목</Table.HeaderCell>
+                  <Table.HeaderCell >기간</Table.HeaderCell>
+                  <Table.HeaderCell collapsing>학생</Table.HeaderCell>
+                  <Table.HeaderCell collapsing>질문</Table.HeaderCell>
                   {/* <Table.HeaderCell width='six'>reviews</Table.HeaderCell> */}
                 </Table.Row>
               </Table.Header>
@@ -36,10 +36,10 @@ const CourseTeaching = ({click, courses, loading}) => {
                     {courses[key].metadata.date}
                   </Table.Cell>
                   <Table.Cell textAlign='center' >
-                    fix
+                    {courses[key].metadata.attendeeCount ? courses[key].metadata.attendeeCount : 0}
                   </Table.Cell>
                   <Table.Cell textAlign='center' >
-                    {courses[key].metadata.questionCount}
+                    {courses[key].metadata.questionCount ? courses[key].metadata.questionCount : 0}
                   </Table.Cell>
                   {/* <Table.Cell textAlign='left' >
                     14

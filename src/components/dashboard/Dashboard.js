@@ -246,19 +246,19 @@ class Dashboard extends Component {
         <React.Fragment>
 
                 <SectionContainer>
-                    <Header as='h1' style={style.DASHBOARD_HEADER}>Dashboard</Header>
-
+                    <Header as='h1' style={style.DASHBOARD_HEADER}>대쉬보드</Header>
+{/* dashboard */}
                     <Menu size='small' secondary pointing inverted
                       style={style.DASHBOARD_MENU} >
-                        <Menu.Item name='courses'
-                          active={activeItem === 'courses'}
+                        <Menu.Item name='수업'
+                          active={activeItem === '수업'}
                           onClick={this.handleItemClick}
                           as={Link} to={`${match.url}/courses`}
                           style={style.DASHBOARD_MENU_ITEM}
                         />
                         <Menu.Item
-                          name='questions'
-                          active={activeItem === 'questions'}
+                          name='질문'
+                          active={activeItem === '질문'}
                           onClick={this.handleItemClick}
                           as={Link} to= {{
                             pathname: `${match.url}/questions`,
@@ -267,15 +267,15 @@ class Dashboard extends Component {
                           style={style.DASHBOARD_MENU_ITEM}
                         />
                         <Menu.Item
-                          name='quiz'
-                          active={activeItem === 'quiz'}
+                          name='온라인 퀴즈'
+                          active={activeItem === '온라인 퀴즈'}
                           onClick={this.handleItemClick}
                           as={Link} to={`${match.url}/quiz`}
                           style={style.DASHBOARD_MENU_ITEM}
                         />
                         <Menu.Item
-                          name='announcement'
-                          active={activeItem === 'announcement'}
+                          name='공지'
+                          active={activeItem === '공지'}
                           onClick={this.handleItemClick}
                           as={Link} to={`${match.url}/announcement`}
                           style={style.DASHBOARD_MENU_ITEM}
@@ -286,20 +286,20 @@ class Dashboard extends Component {
                   <SectionContainer_M>
                       <Header as='h3'
                         style={style.DASHBOARD_HEADER_M}
-                        >Dashboard</Header>
+                        >대쉬보드</Header>
 
                       <Menu size='small' secondary pointing inverted
                         style={style.DASHBOARD_MENU_M}
                          >
-                          <Menu.Item name='courses'
-                            active={activeItem === 'courses'}
+                          <Menu.Item name='수업'
+                            active={activeItem === '수업'}
                             onClick={this.handleItemClick}
                             as={Link} to={`${match.url}/courses`}
                             style={style.DASHBOARD_MENU_ITEM}
                           />
                           <Menu.Item
-                            name='questions'
-                            active={activeItem === 'questions'}
+                            name='질문'
+                            active={activeItem === '질문'}
                             onClick={this.handleItemClick}
                             as={Link} to= {{
                               pathname: `${match.url}/questions`,
@@ -308,16 +308,27 @@ class Dashboard extends Component {
 
                             style={style.DASHBOARD_MENU_ITEM}
                           />
+                          {/* <Menu.Item
+                            name='과제(추가 예정)'
+                            active={activeItem === '과제'}
+                            onClick={this.handleItemClick}
+                            as={Link} to= {{
+                              pathname: `${match.url}/assignment`,
+                              state: { q: 'null', uid: uid, }
+                            }}
+
+                            style={style.DASHBOARD_MENU_ITEM}
+                          /> */}
                           <Menu.Item
-                            name='quiz'
-                            active={activeItem === 'quiz'}
+                            name='온라인 퀴즈'
+                            active={activeItem === '온라인 퀴즈'}
                             onClick={this.handleItemClick}
                             as={Link} to={`${match.url}/quiz`}
                             style={style.DASHBOARD_MENU_ITEM}
                           />
                           <Menu.Item
-                            name='announcement'
-                            active={activeItem === 'announcement'}
+                            name='공지'
+                            active={activeItem === '공지'}
                             onClick={this.handleItemClick}
                             as={Link} to={`${match.url}/announcement`}
                             style={style.DASHBOARD_MENU_ITEM}

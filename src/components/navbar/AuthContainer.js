@@ -114,61 +114,60 @@ class AuthContainer extends Component {
                      </Header.Subheader>
                    </Header.Content>
                  </Header>
-                 : 'My Account'
+                 : '내 계정'
                }
              </Menu.Item>
              {/* <Menu.Item as={Link} to='/category' onClick={this.handlePusherClick}>Category</Menu.Item> */}
 
               {/* {additionalMenu} */}
 
-             <Menu.Item as={Link} to={routes.LEARNING} onClick={this.handlePusherClick}>My Courses</Menu.Item>
-             <Menu.Item as={Link} to='/notifications' onClick={this.handlePusherClick}>My Notifications</Menu.Item>
-             <Menu.Item as={Link} to={!!teachingList ? routes.DASHBOARD : routes.TEACHER_INTRO} onClick={this.handlePusherClick}>{!!teachingList ? 'Instructor Dashboard' : 'Are You Teaching?'} </Menu.Item>
-             <Menu.Item as={Link} to={routes.FOOTER_HELP} onClick={this.handlePusherClick}>Help</Menu.Item>
-             <Menu.Item as='a' onClick={this.handlePusherClickAndLogout}>Log out</Menu.Item>
+             <Menu.Item as={Link} to={routes.LEARNING} onClick={this.handlePusherClick}>내 수업</Menu.Item>
+             <Menu.Item as={Link} to='/notifications' onClick={this.handlePusherClick}>알림 (준비 중)</Menu.Item>
+             <Menu.Item as={Link} to={!!teachingList ? routes.DASHBOARD : routes.TEACHER_INTRO} onClick={this.handlePusherClick}>{!!teachingList ? '대쉬보드' : '선생님이세요?'} </Menu.Item>
+             <Menu.Item as={Link} to={routes.FOOTER_HELP} onClick={this.handlePusherClick}>도와주세요</Menu.Item>
+             <Menu.Item as='a' onClick={this.handlePusherClickAndLogout}>로그 아웃</Menu.Item>
           </Sidebar>
 
           <Sidebar.Pusher dimmed={sidebarOpened}
             onClick={this.handlePusherClick} style={{ minHeight: '100vh' }}>
 
             <Visibility onUpdate={this.handleUpdate}>
-            <Segment
-              // className='segment-flat'
-              // vertical
-              style={{borderRadius: '0'}}
-              textAlign='center'
-              // style={{
-              //    // minHeight: 350,
-              //    padding: '1em 0em'
-              //  }}
-              // style={NAV_MOBILE_AUTH}
-              >
 
-                <Menu secondary>
+                <Menu style={{fontSize: '1.3rem', borderStyle: 'solid', borderWidth: '0px 0px 1px 0px', borderColor: '#dfe6e9', marginBottom: '0rem'}} text>
                   <Container>
                     {!mobile
                       ? null
                       : <Menu.Item onClick={this.handleToggle}>
-                          <Icon name='sidebar' />
+                          <Icon name='sidebar' style={{marginLeft: '1rem'}}/>
                         </Menu.Item> }
 
-                    <Menu.Item Header name='home' active={activeItem === 'home'} onClick={this.handleItemClick}
+                    {/* <Menu.Item Header name='home' active={activeItem === 'home'} onClick={this.handleItemClick}
                       as={Link} to={routes.HOME}
                       >
                       {!mobile ? 'We qna' : 'We qna'}
+                    </Menu.Item> */}
+
+                    <Menu.Item
+                      name='home'
+                      // active={activeItem === 'home'}
+                      onClick={this.handleItemClick}
+                    >
+                      <Button style={{backgroundColor: 'white', color: '#e0004d'}} onClick={this.handleItemClick}
+                        as={Link} to={routes.HOME}>We QnA</Button>
                     </Menu.Item>
+
 
                     {/* <Menu.Item name='dashboard' active={activeItem === 'dashboard'} onClick={this.handleItemClick}
                       as={Link} to={routes.DASHBOARD}> <Icon name='dashboard' /></Menu.Item> */}
                     <Menu.Menu position='right'>
                       {mobile ? null :
                       !!teachingList ?
-                      <Dropdown item text='Teacher'>
+                      <Dropdown item text='대쉬보드'>
                           <Dropdown.Menu>
                             <Dropdown.Item as={Link} to={routes.CREATE}
                               name='create' active={activeItem === 'create'} onClick={this.handleItemClick}>
                               <Icon name='pencil' style={{marginRight: '0.5rem'}} />
-                              Create New Course
+                              수업 정보 등록
                             </Dropdown.Item>
                             <Dropdown.Item as={Link} to={routes.DASHBOARD}
                               name='dashboard'
@@ -176,12 +175,12 @@ class AuthContainer extends Component {
                               onClick={this.handleItemClick}
                               >
                               <Icon name='dashboard' style={{marginRight: '0.5rem'}} />
-                                Dashboard
+                              대쉬보드
                             </Dropdown.Item>
                           </Dropdown.Menu>
                       </Dropdown>
                       : <Menu.Item as={Link} to={routes.TEACHER_INTRO}
-                        name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}> Are You Teaching?</Menu.Item>
+                        name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}>선생님이세요?</Menu.Item>
                       }
 
                       {/* <Menu.Item name='teaching' active={activeItem === 'teaching'} onClick={this.handleItemClick}
@@ -190,18 +189,18 @@ class AuthContainer extends Component {
 
                       <Menu.Item name='mycourses' active={activeItem === 'mycourses'} onClick={this.handleItemClick}
                         as={Link} to={routes.LEARNING}
-                        > {!mobile ? 'My Courses' : <Icon name='folder outline' />}</Menu.Item>
+                        > {!mobile ? '내 수업' : <Icon name='folder outline' />}</Menu.Item>
 
                       {mobile ? <Menu.Item name='user' active={activeItem === 'user'} onClick={this.handleItemClick}
-                          as={Link} to={routes.ACCOUNT}> <Icon name='user circle outline' /></Menu.Item> :
+                          as={Link} to={routes.ACCOUNT}> <Icon name='user circle outline' style={{marginRight: '1rem'}}/></Menu.Item> :
 
-                      <Dropdown item text={ !!user ? user.username : 'Account' } button >
+                      <Dropdown style={{fontSize: '1.3rem'}} item text={ !!user ? user.username : '계정' } button >
                         <Dropdown.Menu>
                           <Dropdown.Item as={Link} to={routes.ACCOUNT} name='profile' active={activeItem === 'profile'} onClick={this.handleItemClick}>
-                            Profile
+                            프로필
                           </Dropdown.Item>
                           <Dropdown.Item onClick={auth.doSignOut}>
-                               SignOut
+                               로그 아웃
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
@@ -215,7 +214,6 @@ class AuthContainer extends Component {
                   </Menu>
 
               {/* <HomepageHeading mobile /> */}
-            </Segment>
             </Visibility>
           {children}
           </Sidebar.Pusher>

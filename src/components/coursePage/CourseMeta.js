@@ -14,23 +14,23 @@ const CourseMeta = ({meta}) => {
     <Grid.Row style={{margin: '3em 0em'}}>
         <Grid.Column >
           <Segment basic style={style.COURSE_PAGE_BODY_SECTION}>
-            <Header as="h1" dividing>기본정보</Header>
-            <Table definition attached>
+            <Header as="h3" dividing color='teal'>기본정보</Header>
+            <Table basic='very'  size='large'>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell width={4}>Date</Table.Cell>
+                  <Table.Cell width={4}>일정</Table.Cell>
                   <Table.Cell>{date}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell width={4}>Time</Table.Cell>
+                  <Table.Cell width={4}>시간</Table.Cell>
                   <Table.Cell>{time}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell width={4}>Textbook</Table.Cell>
+                  <Table.Cell width={4}>교재</Table.Cell>
                   <Table.Cell>{textbook}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell width={4}>Location</Table.Cell>
+                  <Table.Cell width={4}>장소</Table.Cell>
                   <Table.Cell>{location}</Table.Cell>
                 </Table.Row>
               </Table.Body>

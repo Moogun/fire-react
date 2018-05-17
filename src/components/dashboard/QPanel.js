@@ -22,10 +22,10 @@ class QPanel extends Component {
 
     let qList = <React.Fragment>
         <Responsive minWidth={768}>
-          <Grid stackable>
+          <Grid stackable celled>
             <Grid.Row centered>
 
-              <Grid.Column width={4}>
+              <Grid.Column mobile={16} tablet={8} computer={6}>
                 <Container>
                   <Input
                     type='text'
@@ -34,7 +34,7 @@ class QPanel extends Component {
                     placeholder='not searchble yet...'
                     fluid
                   />
-                <Segment style={{maxHeight: '600px', overflowY: 'scroll'}}>
+                {/* <Segment style={{maxHeight: '600px', overflowY: 'scroll'}}>
                 <List animated divided relaxed verticalAlign='middle'>
                   {questions
                   ? questions.map(q => <List.Item as='a' key={q.qid} onClick={() => this.handleQuestionClick(q.qid)}>
@@ -47,12 +47,42 @@ class QPanel extends Component {
                        </List.Content>
                      </List.Item>)
                    : <p>No Question Yet</p>}
-                 </List>
+                 </List> */}
+                {questions
+                  ? questions.map(q => <Segment vertical key={q.qid} onClick={() => this.handleQuestionClick(q.qid)}
+                    style={{paddingLeft: '0.5rem', paddingRight: '0.5rem', }} >
+                    <Header as='h5'>
+                      <Image avatar src={profile }/>
+                      {/* //q.askedByUserPhoto */}
+                      <Header.Content>
+                        <Header.Subheader>
+                          {q.askedByUsername} <Moment fromNow unix>{q.timeStamp / 1000}</Moment>
+                        </Header.Subheader>
+                           {q.title}
+                      </Header.Content>
+                    </Header>
+                  </Segment>)
+                  : <Segment vertical> 질문이 아직 없습니다. </Segment>
+                }
+
+                 <Segment vertical style={{paddingLeft: '0.5rem', paddingRight: '0.5rem', }}>
+                   <Header as='h5'>
+                     <Image avatar src={profile}/>
+                     <Header.Content>
+                       Account Settings
+                       <Header.Subheader>
+                         Manage your preferences
+                       </Header.Subheader>
+                     </Header.Content>
+                   </Header>
                  </Segment>
+
+
+                 {/* </Segment> */}
                  </Container>
               </Grid.Column>
 
-              <Grid.Column width={12}>
+              <Grid.Column mobile={0} tablet={8} computer={10}>
                 <QuestionManage
                   selectedQuestion={selectedQuestion}
                   user={user} uid={uid}

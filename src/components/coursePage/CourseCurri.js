@@ -7,8 +7,8 @@ const CourseCurri = ({sections, handleSecToggle, takeQuiz}) => {
   console.log('c edit curri', sections);
   let sectionList = !!sections && sections.map((s, secIndex) =>
     <React.Fragment key={secIndex}>
-      <Segment.Group data-id={secIndex} key={secIndex}>
-        <Segment textAlign='left'>
+      {/* <Segment.Group data-id={secIndex} key={secIndex}> */}
+        <Segment textAlign='left' vertical data-id={secIndex} key={secIndex}>
           <Header as='h6'>
             {s.content == undefined ? <Icon  color='grey' name='circle thin' />
             : s.expanded === false ? <Icon  color='teal' name='plus' onClick={(e) => handleSecToggle(e, secIndex)}/>
@@ -30,7 +30,7 @@ const CourseCurri = ({sections, handleSecToggle, takeQuiz}) => {
           {l.quiz ? <Icon style={{marginLeft: '1rem'}} link name='ordered list' onClick={(e) => takeQuiz(e, s, secIndex, l, lecIndex)}/> : null}
         </Segment>)}
 
-      </Segment.Group>
+      {/* </Segment.Group> */}
     </React.Fragment>
   )
 
@@ -38,7 +38,7 @@ const CourseCurri = ({sections, handleSecToggle, takeQuiz}) => {
     <Grid.Row style={{margin: '3em 0em'}}>
       <Grid.Column>
         <Segment basic style={style.COURSE_PAGE_BODY_SECTION}>
-        <Header as="h1" dividing>Curriculum </Header>
+        <Header as="h3" dividing color='teal'>Curriculum </Header>
           {sectionList}
         </Segment>
       </Grid.Column>

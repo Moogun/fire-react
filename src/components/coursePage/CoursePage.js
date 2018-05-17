@@ -248,7 +248,7 @@ class CoursePage extends Component {
             </Grid>
 
 
-            <Grid style={{ backgroundColor: '#ecf0f1', marginTop: '0rem'}} stackable centered
+            <Grid style={{ marginTop: '0rem',}} stackable centered
               >
                 <Grid.Column width={10} >
 

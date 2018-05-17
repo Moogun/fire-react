@@ -26,7 +26,7 @@ const CourseGallery = ({mobile, images}) => {
     <Grid.Row style={{margin: '3em 0em'}}>
       <Grid.Column >
           <Segment basic clearing style={style.COURSE_PAGE_BODY_SECTION}>
-              <Header as="h1" dividing>Course Gallery</Header>
+              <Header as="h3" dividing color='teal'>갤러리</Header>
                <Gallery images={imgList} enableImageSelection={false} />
           </Segment>
         </Grid.Column>

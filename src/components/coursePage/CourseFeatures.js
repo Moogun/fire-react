@@ -21,7 +21,7 @@ const CourseFeatures = ({mobile, features}) => {
       <Grid.Column >
         <Segment basic style={style.COURSE_PAGE_BODY_SECTION}>
 
-          <Header as="h1" dividing>Course Features</Header>
+          <Header as="h3" dividing color='teal'>수업 특징</Header>
             {featureList}
           </Segment>
 

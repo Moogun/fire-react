@@ -52,10 +52,10 @@ class QuestionPage extends Component {
             handleHelpfulAnswer={handleHelpfulAnswer}
             />
         </React.Fragment>
-      : <p>Select Question</p>
+      : <p>질문을 선택해주세요</p>
 
     return (
-        <Segment textAlign='left'>
+        <Segment textAlign='left' basic>
             {question}
         </Segment>
       )
