@@ -46,6 +46,10 @@ class CoursePage extends Component {
       openCourse: false,
       modalOpen: false,
       registered: false,
+
+      calculations: {
+       width: 0,
+     },
     }
   }
 
@@ -174,7 +178,13 @@ class CoursePage extends Component {
   componentWillUnMount(){
     console.log('UnMount');
   }
+
+  handleContextRef = contextRef => this.setState({ contextRef })
+  handleUpdate = (e, { calculations }) => this.setState({ calculations })
+
   render() {
+    const { calculations, contextRef } = this.state
+    let mobile = calculations.width < 768 ? true : false
     // const {menuFixed} = this.state
     // console.log('render');
     let authUser = this.context.authUser
@@ -222,43 +232,40 @@ class CoursePage extends Component {
        </Modal.Content>
      </Modal>
 
+
     return (
-      <div>
-          <Grid style={style.COURSE_PAGE_HEAD_GRID} stackable centered>
-                <Grid.Row
-                  style={style.COURSE_PAGE_HEAD_GRID_ROW}
-                  >
-                  <Grid.Column width={12} >
-
-                       <Header as='h1' inverted content={title} subheader='좌절하지 말고 오라' />
-                       <Header as='h2' onClick={this.handleNavToTeacher}  style={{color: '#fff'}}>
-                        <Image circular src={profile}/>
-                        <Header.Content>
-                          {tName} <Rating icon='star' defaultRating={5} maxRating={5} disabled/>
-                          <Header.Subheader style={{color: '#fff'}}>
-                            The best of the best
-                          </Header.Subheader>
-                        </Header.Content>
-
-                      </Header>
-
-                       {register}
-                  </Grid.Column>
-                </Grid.Row>
-            </Grid>
-
-{/*
-            <Grid style={{ marginTop: '0rem',}} stackable centered
+      <div ref={this.handleContextRef}>
+           <Visibility onUpdate={this.handleUpdate}>
+            <Segment style={style.COURSE_PAGE_HEAD_GRID} padded stackable centered basic
+              // style={{ paddingTop: '3rem', paddingBottom: '3rem'}}
               >
-                <Grid.Column width={10} > */}
+                      <Grid container>
+                          <Grid.Column mobile={6} tablet={4} computer={4} verticalAlign='middle' >
+                                <Image size='small' centered src={profile} circular />
+                          </Grid.Column>
+                          <Grid.Column mobile={10} tablet={9} computer={9} verticalAlign='middle' textAlign='left'>
+                            <Header as={!mobile ? 'h1' : 'h3'} inverted content={title} subheader={!mobile ? '좌절하지 말고 오라' : null} />
+                            <Header as={!mobile ? 'h2' : 'h4'} inverted
+                              onClick={this.handleNavToTeacher} style={{marginTop: '0rem'}}>
+                               <Header.Content>
+                                 {/* {tName} */}
+                                 {/* <Rating icon='star' defaultRating={5} maxRating={5} disabled/> */}
+                                 <Header.Subheader>
+                                   {tName}
+                                 </Header.Subheader>
+                               </Header.Content>
+                             </Header>
+                            {register}
+                          </Grid.Column>
+                        </Grid>
 
-                    <CourseMeta meta={meta}/>
-                    <CourseFeatures features={features}/>
-                    <CourseGallery images={images}/>
-                    <CourseCurri sections={curri} handleSecToggle={this.handleSecToggle} takeQuiz={this.handleTakeQuiz}/>
+                </Segment>
+              </Visibility>
 
-                {/* </Grid.Column> */}
-             {/* </Grid> */}
+              <CourseMeta meta={meta}/>
+              <CourseFeatures features={features}/>
+              <CourseGallery images={images}/>
+              <CourseCurri sections={curri} handleSecToggle={this.handleSecToggle} takeQuiz={this.handleTakeQuiz}/>
 
           </div>
 

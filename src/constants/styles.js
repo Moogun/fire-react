@@ -2,7 +2,7 @@
 export const NAV_MENU_SEGMENT_BORDER={padding: '0'}
 export const NAV_MENU_BORDER={borderRadius: '0', fontSize: '0.9rem'}
 
-export const COURSE_PAGE_HEAD_GRID = { backgroundColor: '#34495e', marginTop: '0rem'}
+export const COURSE_PAGE_HEAD_GRID = { backgroundColor: '#34495e', marginTop: '0rem', }
 export const COURSE_PAGE_HEAD_GRID_ROW = { marginTop: '2rem', marginBottom: '2rem'}
 
 export const SUB_MENU = { marginBottom: '0rem'}
@@ -45,7 +45,7 @@ export const C_EDIT_CURRI_ITEM = {paddingTop: '0.5rem', paddingBottom: '0.5rem'}
 export const SEGMENT_LOADER = {padding: '0rem', minHeight: '67vh'}
 
 //course page
-export const COURSE_PAGE_BODY_SECTION = {paddingLeft: '0', paddingRight: '0'}
+// export const COURSE_PAGE_BODY_SECTION = {paddingLeft: '0', paddingRight: '0'}
 
 //MY COURSE
 export const MY_COURSES_MIN_HEIGHT = {minHeight: '86vh'}
