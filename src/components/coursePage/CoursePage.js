@@ -247,18 +247,18 @@ class CoursePage extends Component {
                 </Grid.Row>
             </Grid>
 
-
+{/*
             <Grid style={{ marginTop: '0rem',}} stackable centered
               >
-                <Grid.Column width={10} >
+                <Grid.Column width={10} > */}
 
                     <CourseMeta meta={meta}/>
                     <CourseFeatures features={features}/>
                     <CourseGallery images={images}/>
                     <CourseCurri sections={curri} handleSecToggle={this.handleSecToggle} takeQuiz={this.handleTakeQuiz}/>
 
-                </Grid.Column>
-             </Grid>
+                {/* </Grid.Column> */}
+             {/* </Grid> */}
 
           </div>
 

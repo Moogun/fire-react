@@ -11,8 +11,8 @@ const CourseCurri = ({sections, handleSecToggle, takeQuiz}) => {
         <Segment textAlign='left' vertical data-id={secIndex} key={secIndex}>
           <Header as='h6'>
             {s.content == undefined ? <Icon  color='grey' name='circle thin' />
-            : s.expanded === false ? <Icon  color='teal' name='plus' onClick={(e) => handleSecToggle(e, secIndex)}/>
-            : <Icon  color='teal' name='minus' onClick={(e) => handleSecToggle(e, secIndex)}/>}
+            : s.expanded === false ? <Icon name='plus' onClick={(e) => handleSecToggle(e, secIndex)} style={{color: '#2c3e50'}}/>
+            : <Icon name='minus' onClick={(e) => handleSecToggle(e, secIndex)}/>}
 
             <Header.Content>
               Section {secIndex + 1}
@@ -25,9 +25,9 @@ const CourseCurri = ({sections, handleSecToggle, takeQuiz}) => {
 
       {!!s.content && s.expanded && s.content.map((l, lecIndex) =>
         <Segment textAlign='left' key={lecIndex}>
-          <Icon color='teal' name='circle' /> {lecIndex + 1}. {l['lectureTitle']}
+          <Icon name='circle' /> {lecIndex + 1}. {l['lectureTitle']}
 
-          {l.quiz ? <Icon style={{marginLeft: '1rem'}} link name='ordered list' onClick={(e) => takeQuiz(e, s, secIndex, l, lecIndex)}/> : null}
+          {l.quiz ? <Icon disabled style={{marginLeft: '1rem', color: '#2c3e50'}} link name='ordered list' onClick={(e) => takeQuiz(e, s, secIndex, l, lecIndex)}/> : null}
         </Segment>)}
 
       {/* </Segment.Group> */}
@@ -35,14 +35,14 @@ const CourseCurri = ({sections, handleSecToggle, takeQuiz}) => {
   )
 
   return (
-    <Grid.Row style={{margin: '3em 0em'}}>
+    <Grid style={{padding: '5rem 0rem'}}>
       <Grid.Column>
-        <Segment basic style={style.COURSE_PAGE_BODY_SECTION}>
-        <Header as="h3" dividing color='teal'>Curriculum </Header>
+        <Container text>
+        <Header as="h3" dividing color='teal'>커리큘럼 </Header>
           {sectionList}
-        </Segment>
+        </Container>
       </Grid.Column>
-    </Grid.Row>
+    </Grid>
   )
 }
 export default CourseCurri;

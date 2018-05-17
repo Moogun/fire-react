@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment, Grid, Header, Image } from 'semantic-ui-react'
+import { Segment, Grid, Header, Image, Container } from 'semantic-ui-react'
 import src from '../../assets/profile-lg.png'
 import Gallery from 'react-grid-gallery';
 import * as style from '../../style/inline'
@@ -23,14 +23,14 @@ const CourseGallery = ({mobile, images}) => {
   }
 
   return (
-    <Grid.Row style={{margin: '3em 0em'}}>
-      <Grid.Column >
-          <Segment basic clearing style={style.COURSE_PAGE_BODY_SECTION}>
+    <Grid style={{paddingTop: '5em', backgroundColor: '#fafafa'}}>
+      <Grid.Column>
+        <Container text>
               <Header as="h3" dividing color='teal'>갤러리</Header>
-               <Gallery images={imgList} enableImageSelection={false} />
-          </Segment>
+              <Gallery images={imgList} enableImageSelection={false} />
+          </Container>
         </Grid.Column>
-      </Grid.Row>
+      </Grid>
   )
 }
 export default CourseGallery;

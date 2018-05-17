@@ -11,11 +11,13 @@ const CourseMeta = ({meta}) => {
   let location = meta ? meta.location : ''
   return (
 
-    <Grid.Row style={{margin: '3em 0em'}}>
+    <Grid style={{ paddingTop: '5rem', backgroundColor: '#fafafa'}} stackable centered>
         <Grid.Column >
-          <Segment basic style={style.COURSE_PAGE_BODY_SECTION}>
+          <Container text>
+
+          {/* <Segment basic style={style.COURSE_PAGE_BODY_SECTION}> */}
             <Header as="h3" dividing color='teal'>기본정보</Header>
-            <Table basic='very'  size='large'>
+            <Table basic='very'>
               <Table.Body>
                 <Table.Row>
                   <Table.Cell width={4}>일정</Table.Cell>
@@ -35,10 +37,10 @@ const CourseMeta = ({meta}) => {
                 </Table.Row>
               </Table.Body>
             </Table>
-            </Segment>
+            </Container>
 
          </Grid.Column>
-      </Grid.Row>
+      </Grid>
   )
 }
 export default CourseMeta;

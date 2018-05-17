@@ -6,27 +6,21 @@ const CourseFeatures = ({mobile, features}) => {
   // console.log('features', features && Object.keys(features).map(i => features[i].header) )
 
   let featureList = features ?
-    <Grid stackable doubling columns={2} style={{marginTop: '0em'}}>
+    <Grid container doubling centered columns={3} style={{padding: '5rem 0rem', }}>
       {Object.keys(features).map(key =>
-        <Grid.Column key={key} >
-          <Header as="h3" attached='top'> {features[key].header}</Header>
+        <Grid.Column key={key} textAlign='center'>
+          <Header as="h3" attached='top' style={{fontSize: '2rem',}}> {features[key].header}
+          </Header>
           <Segment attached>{features[key].sub}</Segment>
         </Grid.Column>
       )}
       </Grid>
-    : <p> no feature yet</p>
+    : null
 
   return (
-    <Grid.Row style={{margin: '3em 0em'}}>
-      <Grid.Column >
-        <Segment basic style={style.COURSE_PAGE_BODY_SECTION}>
-
-          <Header as="h3" dividing color='teal'>수업 특징</Header>
-            {featureList}
-          </Segment>
-
-        </Grid.Column>
-      </Grid.Row>
+    <div>
+      {featureList}
+    </div>
   )
 }
 export default CourseFeatures;

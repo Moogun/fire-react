@@ -149,11 +149,11 @@ class AuthContainer extends Component {
 
                     <Menu.Item
                       name='home'
-                      // active={activeItem === 'home'}
+                      style={{backgroundColor: 'white', color: '#e0004d'}}
+                      active={activeItem === 'home'}
                       onClick={this.handleItemClick}
-                    >
-                      <Button style={{backgroundColor: 'white', color: '#e0004d'}} onClick={this.handleItemClick}
-                        as={Link} to={routes.HOME}>We QnA</Button>
+                      as={Link} to={routes.HOME}>
+                        We QnA
                     </Menu.Item>
 
 
