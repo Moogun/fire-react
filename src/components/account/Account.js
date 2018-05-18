@@ -14,7 +14,10 @@ import Danger from './Danger'
 import {db} from '../../firebase';
 import {storage} from '../../firebase/firebase';
 
-import { Container, Menu, Grid, Image, Responsive, Segment, Header, Icon, Sidebar} from 'semantic-ui-react'
+import { Container, Menu, Grid, Image, Responsive, Segment, Header, Icon, Sidebar, Modal, Button} from 'semantic-ui-react'
+
+import ReactCrop, { makeAspectCrop }  from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css'
 
 const byPropKey = (propertyName, value) => ()=> ({
   [propertyName]: value
@@ -32,6 +35,14 @@ class AccountPage extends Component {
       photoUrl: '',
       visible: false,
       dimmed: false,
+
+      cropperModalOpen: false,
+      crop: {
+        x: 0,
+        y: 0,
+        height: 50,
+        width: 50,
+      }
     };
   }
 
@@ -92,23 +103,105 @@ class AccountPage extends Component {
   }
 
   handlePhotoChange = (e) => {
-    // const {images} = this.state
+    //select image
+    // pass it to cropper
+    const {images} = this.state
     let img = {}
     let newKey = db.newKey();
-
+    //1. seclect added file
     console.log(e.target.files[0]);
     let reader = new FileReader()
     let file =  e.target.files[0]
-
+    console.log('[file]', file, file.name);
+    //2. seclected file load complete ?
     reader.onloadend = () => {
       console.log('reader', reader.result);
       img[newKey] = { file: file, imagePreviewUrl: reader.result, progress: 0}
-      this.setState ({images: img})
+      this.setState ({imageBeforeCropping: img})
     }
 
+    // 3. if selected file === true, give a sign for
     if(e.target.files[0]){
       reader.readAsDataURL(file)
     }
+    //
+    console.log('handle change');
+    this.setState ({cropperModalOpen: true })
+  }
+
+  onChange = (crop) => {
+   this.setState({ crop });
+  }
+
+   onImageLoaded = (image) => {
+     const crop = makeAspectCrop({
+        x: 0,
+        y: 0,
+        aspect: 1,
+        width: 50,
+      }, image.width / image.height);
+
+      this.setState({ crop, image: image });
+    }
+
+  // onCropComplete = (crop, pixelCrop) => {
+  //
+  // }
+
+  handleSelect = (e) => {
+    e.preventDefault()
+
+    // console.log('onCropComplete, pixelCrop:', pixelCrop);
+      const {image, crop } = this.state
+
+      const sX = this.state.image.naturalWidth * (crop.x / 100);
+      const sY = this.state.image.naturalHeight * (crop.y / 100);
+      const croppedImgWidth = this.state.image.naturalWidth * (crop.width / 100);
+      const croppedImgHeight = this.state.image.naturalHeight * (crop.height / 100);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = croppedImgWidth;
+      canvas.height = croppedImgHeight;
+      const ctx = canvas.getContext('2d');
+
+      ctx.drawImage(
+        this.state.image,
+        sX,
+        sY,
+        croppedImgWidth,
+        croppedImgHeight,
+        0,
+        0,
+        croppedImgWidth,
+        croppedImgHeight
+      );
+
+      const { imageBeforeCropping } = this.state
+      let imageKey
+      // let image
+      let filename
+      let type
+      if (!!imageBeforeCropping && !!Object.keys(imageBeforeCropping)) {
+        imageKey = Object.keys(imageBeforeCropping)[0]
+        filename = imageBeforeCropping[imageKey].file.name
+        type = imageBeforeCropping[imageKey].file.type
+        // console.log('hello', imageKey, images[imageKey], filename, type);
+      }
+
+      const base64Image = canvas.toDataURL(type);
+      // console.log('base64image', base64Image);
+
+      canvas.toBlob((blob) => {
+          // console.log('blob', new File([blob], filename));
+          imageBeforeCropping[imageKey].file = new File([blob], filename)
+          imageBeforeCropping[imageKey].imagePreviewUrl = base64Image
+          imageBeforeCropping[imageKey].progress = 0
+          console.log('new file', imageBeforeCropping);
+          this.setState ({ images: imageBeforeCropping, cropperModalOpen: false, })
+      }, type);
+
+    // const { imageAfterCropping } = this.state
+    // this.setState ({ cropperModalOpen: true, images: imageAfterCropping })
   }
 
   onPhotoSubmit = () => {
@@ -172,8 +265,11 @@ class AccountPage extends Component {
     const {authUser} = this.context
     const { activeItem, //menu
       user, email, username, displayName, photoUrl, usernameTaken, images, //sub menu
-      visible, dimmed // mobile toggle
+      visible, dimmed, // mobile toggle
+      imageBeforeCropping,
     } = this.state
+
+    // console.log('[render]images', !!images && !! Object.keys(images)[0] ? images[Object.keys(images)[0]].imagePreviewUrl : null );
 
     return (
       <div>
@@ -333,6 +429,27 @@ class AccountPage extends Component {
               </Grid.Column>
             </Grid>
           </Responsive>
+
+          <Modal open={this.state.cropperModalOpen} size='tiny'>
+            {/* <Modal.Header>Select a Photo</Modal.Header> */}
+            <Modal.Content>
+              {!!imageBeforeCropping && !! Object.keys(imageBeforeCropping)[0]
+                ? <ReactCrop
+                  src={imageBeforeCropping[Object.keys(imageBeforeCropping)[0]].imagePreviewUrl}
+                  crop={this.state.crop}
+                 onImageLoaded={this.onImageLoaded}
+                 onChange={this.onChange}
+                 // onComplete={this.onCropComplete}
+               />
+               : null
+             }
+            </Modal.Content>
+            <Modal.Actions>
+              <Button onClick={() => this.setState ({ cropperModalOpen: false})}> Cancel</Button>
+              <Button onClick={this.handleSelect}> Done</Button>
+
+            </Modal.Actions>
+          </Modal>
   </div>
     );
   }

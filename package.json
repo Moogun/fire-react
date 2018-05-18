@@ -19,6 +19,7 @@
     "react-dom": "^16.2.0",
     "react-facebook-login": "^4.0.1",
     "react-grid-gallery": "^0.4.8",
+    "react-image-crop": "^3.0.11",
     "react-moment": "^0.7.0",
     "react-notification": "^6.8.2",
     "react-router-dom": "^4.2.2",

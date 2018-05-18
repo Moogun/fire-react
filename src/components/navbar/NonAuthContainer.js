@@ -71,21 +71,21 @@ class NonAuthContainer extends Component {
                 {/* <Menu.Item as='a'>Category</Menu.Item> */}
                 <Menu.Item
                   as={Link} to={routes.TEACHER_INTRO} onClick={this.handlePusherClick}
-                  >Are you teaching?</Menu.Item>
+                  >선생님이세요?</Menu.Item>
                 <Menu.Item
                   as={Link} to={routes.FOOTER_HELP}
                   onClick={this.handlePusherClick}
-                  >Help</Menu.Item>
+                  >고객센터</Menu.Item>
                 <Menu.Item name='Log in' active={activeItem === 'signin'}
                   as={Link} to={routes.SIGN_IN}
                   onClick={this.handlePusherClick}
-                   >
+                   >로그인
                 </Menu.Item>
 
                 <Menu.Item name='Sign Up' active={activeItem === 'signup'}
                   as={Link} to={routes.SIGN_UP}
                   onClick={this.handleToggle}
-                   >
+                   >회원가입
                 </Menu.Item>
             </Sidebar>
 
@@ -108,10 +108,14 @@ class NonAuthContainer extends Component {
                                 <Icon name='sidebar' />
                               </Menu.Item> }
 
-                          <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick}
-                            as={Link} to={routes.LANDING}
-                            >
-                            {!mobile ? 'We qna' : 'We qna'}
+                          <Menu.Item
+                            name='home'
+                            style={{backgroundColor: 'white', color: '#e0004d'}}
+                            active={activeItem === 'home'}
+                            onClick={this.handleItemClick}
+                            as={Link} to='/'
+                            style={{fontSize: '1.3rem', backgroundColor: 'white', color: '#e0004d'}}>
+                              We QnA
                           </Menu.Item>
 
                           <Menu.Item position='right'>
@@ -119,12 +123,12 @@ class NonAuthContainer extends Component {
                               color='teal'
                               as={Link} to={routes.SIGN_IN}
                               name='login' active={activeItem === 'login'} onClick={this.handleItemClick}>
-                              Log in</Button>
+                              로그인</Button>
                             <Button
                               primary
                               as={Link} to={routes.SIGN_UP} style={{ marginLeft: '0.5em' }}
                               name='signup' active={activeItem === 'signup'} onClick={this.handleItemClick}>
-                              Sign Up</Button>
+                              회원가입</Button>
                           </Menu.Item>
                         </Container>
                       </Menu>

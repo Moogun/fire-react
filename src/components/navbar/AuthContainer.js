@@ -124,7 +124,7 @@ class AuthContainer extends Component {
              <Menu.Item as={Link} to={routes.LEARNING} onClick={this.handlePusherClick}>내 수업</Menu.Item>
              <Menu.Item as={Link} to='/notifications' onClick={this.handlePusherClick}>알림 (준비 중)</Menu.Item>
              <Menu.Item as={Link} to={!!teachingList ? routes.DASHBOARD : routes.TEACHER_INTRO} onClick={this.handlePusherClick}>{!!teachingList ? '대쉬보드' : '선생님이세요?'} </Menu.Item>
-             <Menu.Item as={Link} to={routes.FOOTER_HELP} onClick={this.handlePusherClick}>도와주세요</Menu.Item>
+             <Menu.Item as={Link} to={routes.FOOTER_HELP} onClick={this.handlePusherClick}>고객센터</Menu.Item>
              <Menu.Item as='a' onClick={this.handlePusherClickAndLogout}>로그 아웃</Menu.Item>
           </Sidebar>
 
@@ -133,7 +133,7 @@ class AuthContainer extends Component {
 
             <Visibility onUpdate={this.handleUpdate}>
 
-                <Menu style={{fontSize: '1.3rem', borderStyle: 'solid', borderWidth: '0px 0px 1px 0px', borderColor: '#dfe6e9', marginBottom: '0rem'}} text>
+                <Menu style={{fontSize: '1.3rem', borderStyle: 'solid', borderWidth: '0px 0px 1px 0px', borderColor: '#dfe6e9', marginBottom: '0rem', marginTop: '0.5rem'}} text>
                   <Container>
                     {!mobile
                       ? null

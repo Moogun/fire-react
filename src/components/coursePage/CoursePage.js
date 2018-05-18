@@ -239,6 +239,7 @@ class CoursePage extends Component {
             <Segment style={style.COURSE_PAGE_HEAD_GRID} basic
               // style={{ paddingTop: '3rem', paddingBottom: '3rem'}}
               >
+                {!mobile}
                       <Grid container>
                           <Grid.Column mobile={6} tablet={4} computer={4} verticalAlign='middle' >
                             <Image size='small' src={profile} circular
@@ -270,6 +271,8 @@ class CoursePage extends Component {
               <CourseFeatures features={features}/>
               <CourseGallery images={images}/>
               <CourseCurri sections={curri} handleSecToggle={this.handleSecToggle} takeQuiz={this.handleTakeQuiz}/>
+              {/* video  */}
+              {/* 교재 */}
 
           </div>
 
