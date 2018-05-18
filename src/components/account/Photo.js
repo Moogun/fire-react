@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
-import { Segment, Container, Button, Header, Icon, Menu, Divider, Image, Form, Input } from 'semantic-ui-react'
+import { Segment, Container, Button, Header, Icon, Menu, Divider, Image, Form, Input, Progress } from 'semantic-ui-react'
 import profile from '../../assets/profile-lg.png'
 import {db} from '../../firebase';
 
 const Photo = ({image, photo, photoChange, submit}) => {
   let photoUrl
-  console.log('img[0]', !!image && !!Object.keys(image)[0]);
+  console.log('img[0]', !!image && !!Object.keys(image)[0], );
   if (!!image && !!Object.keys(image)[0]) {
     let i = Object.keys(image)[0]
     photoUrl = image[i].imagePreviewUrl
@@ -22,6 +22,12 @@ const Photo = ({image, photo, photoChange, submit}) => {
 
         <Form onSubmit={submit}>
           <Image src={photoUrl} circular centered size='small'/>
+          <Progress size='small'
+            percent={!!image && !!Object.keys(image)[0] ? image[Object.keys(image)[0]].progress : 0} attached='bottom'
+            indicating
+            >
+            Uploading...
+          </Progress>
           <br/>
           <Form.Field>
             <Input type='file' placeholder='upload new file' onChange={photoChange}/>

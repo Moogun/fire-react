@@ -8,17 +8,17 @@ import profile from '../../assets/profile-lg.png'
 const CourseCard = ({course, click}) => {
 
     let profileImg;
-    if (course.tProfileImg) {
-      profileImg = course.tProfileImg
+    if (course.metadata.tProfileImg) {
+      profileImg = course.metadata.tProfileImg
     } else {
       profileImg = profile
     }
     return (
-      <Card fluid onClick={click} style={{fontSize: '0.7rem'}}
-        image={<Image src={profileImg} />}
+      <Card fluid onClick={click} style={{fontSize: '0.8rem', border: '0', margin: '1.5rem'}}
+        image={<Image fluid src={profileImg} />}
         header={course.metadata.title}
-        meta={<div>{course.metadata.tName}</div>}
         description='출제자가 노리는 함정을 정확히 짚어주는 강의'
+        meta={<div>{course.metadata.tName}</div>}
         extra={<div style={{textAlign:'center'}} >
         <Icon name='users' />{course.metadata.attendeeCount}
         <Icon name='comment' style={{marginLeft:'2rem'}}/>{course.metadata.questionCount}

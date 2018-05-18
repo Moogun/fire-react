@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Segment, Container, Grid, Header, Responsive, Loader, Item, Label } from 'semantic-ui-react'
+import { Segment, Container, Grid, Header, Responsive, Loader, Item, Label, Card } from 'semantic-ui-react'
 import CourseCard from './CourseCard'
 import Teacher from '../teacher/Teacher'
 import {Route, withRouter } from 'react-router-dom'
@@ -51,22 +51,24 @@ class CourseCards extends Component {
                   </Item> )}
                   </Item.Group>
                 )
-            : (  <Grid container columns={5} textAlign='left' stackable doubling >
-              {Object.keys(courses).map(key =>
-                <Grid.Column key={key} mobile={16} tablet={8} computer={3} style={{padding: '0.5rem'}}>
-                  <CourseCard
-                    key={key}
-                    course={courses[key]}
-                    click={() => this.handleClick( key,
-                    courses[key].metadata.tid,
-                    courses[key].metadata.title,
-                    courses[key].metadata.tName)}
-                   />
-                    </Grid.Column>
-                  )}
-              </Grid>)
-          }
-
+            : (
+              <Grid container textAlign='left' stackable doubling >
+                <Card.Group itemsPerRow={4} doubling>
+                {Object.keys(courses).map(key =>
+                  // <Grid.Column key={key} mobile={16} tablet={8} computer={4}>
+                    <CourseCard
+                      key={key}
+                      course={courses[key]}
+                      click={() => this.handleClick( key,
+                      courses[key].metadata.tid,
+                      courses[key].metadata.title,
+                      courses[key].metadata.tName)}
+                     />
+                      // </Grid.Column>
+                    )}
+                  </Card.Group>
+                </Grid>)
+            }
         </div>
       : <Loader active inline='centered' />
 
