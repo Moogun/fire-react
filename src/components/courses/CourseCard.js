@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Card, Image, Grid, Rating, Button } from 'semantic-ui-react'
+import { Icon, Card, Image, Grid, Rating, Button, Item, Label } from 'semantic-ui-react'
 import helen from '../../assets/helen.png'
 import {Link, Route} from 'react-router-dom'
 import Teacher from '../teacher/Teacher'
@@ -14,7 +14,7 @@ const CourseCard = ({course, click}) => {
       profileImg = profile
     }
     return (
-      <Card fluid onClick={click} style={{fontSize: '0.8rem'}}
+      <Card fluid onClick={click} style={{fontSize: '0.7rem'}}
         image={<Image src={profileImg} />}
         header={course.metadata.title}
         meta={<div>{course.metadata.tName}</div>}

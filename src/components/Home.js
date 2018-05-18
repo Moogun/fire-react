@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Segment, Container, Grid, Header, Button } from 'semantic-ui-react'
+import { Segment, Container, Grid, Header, Button, Visibility } from 'semantic-ui-react'
 import withAuthorization from '../HOC/withAuthorization';
 import {db} from '../firebase';
 
@@ -12,9 +12,17 @@ class HomePage extends Component {
     this.state = {
       users: null,
       courses: null,
-      isLoading: false
+      isLoading: false,
+      calculations: {
+        width: 0,
+      },
     };
   }
+
+  handleContextRef = contextRef => this.setState({ contextRef })
+  handleUpdate = (e, { calculations }) => this.setState({ calculations })
+
+
   componentDidMount(){
     // 1. get all users value under at a single node
     db.onceGetUsers().then(snapshot=>
@@ -37,16 +45,20 @@ class HomePage extends Component {
 
   render() {
 
-    const {users, courses, isLoading} = this.state;
+    const {users, courses, isLoading, calculations, contextRef } = this.state;
+    let mobile = calculations.width < 768 ? true : false
     // let cList = courses
     // ? <CourseCards courses={courses}/>
     // : <Segment basic textAlign='center'>
     //     <p>No course yet</p>
     //   </Segment>
+
     return (
-
-        <CourseCards courses={courses} loading={isLoading}/>
-
+      <div ref={this.handleContextRef} style={{ margin: !mobile ? '2rem' : '1rem'}}>
+        <Visibility onUpdate={this.handleUpdate}>
+          <CourseCards courses={courses} loading={isLoading} mobile={mobile}/>
+         </Visibility>
+      </div>
     );
   }
 }
@@ -63,5 +75,5 @@ const UserList = ({users}) =>
 // const authCondition = (authUser) => !!authUser;
 
 // export default withAuthorization(authCondition)(HomePage);
-//May 16 this keeps loading 
+//May 16 this keeps loading
 export default HomePage;

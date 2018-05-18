@@ -184,24 +184,17 @@ class AccountPage extends Component {
       if (!!imageBeforeCropping && !!Object.keys(imageBeforeCropping)) {
         imageKey = Object.keys(imageBeforeCropping)[0]
         filename = imageBeforeCropping[imageKey].file.name
-        type = imageBeforeCropping[imageKey].file.type
-        // console.log('hello', imageKey, images[imageKey], filename, type);
+        type = imageBeforeCropping[imageKey].file.type;
       }
 
-      const base64Image = canvas.toDataURL(type);
-      // console.log('base64image', base64Image);
+      const base64Image = canvas.toDataURL(type)
 
       canvas.toBlob((blob) => {
-          // console.log('blob', new File([blob], filename));
           imageBeforeCropping[imageKey].file = new File([blob], filename)
           imageBeforeCropping[imageKey].imagePreviewUrl = base64Image
           imageBeforeCropping[imageKey].progress = 0
-          console.log('new file', imageBeforeCropping);
           this.setState ({ images: imageBeforeCropping, cropperModalOpen: false, })
       }, type);
-
-    // const { imageAfterCropping } = this.state
-    // this.setState ({ cropperModalOpen: true, images: imageAfterCropping })
   }
 
   onPhotoSubmit = () => {
