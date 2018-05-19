@@ -25,7 +25,7 @@ class AuthContainer extends Component {
     calculations: {
      direction: 'none',
      height: 0,
-     width: 768,
+     width: 767,
      topPassed: false,
      bottomPassed: false,
      pixelsPassed: 0,
@@ -96,6 +96,8 @@ class AuthContainer extends Component {
     const { calculations, contextRef } = this.state
     // console.log('calculations. width', calculations.width, match);
     let mobile = calculations.width < 768 ? true : false
+
+    const { isMobile } = this.props
 
     return (
       <div ref={this.handleContextRef}>
