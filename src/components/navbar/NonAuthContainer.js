@@ -20,7 +20,7 @@ class NonAuthContainer extends Component {
     calculations: {
      direction: 'none',
      height: 0,
-     width: 768,
+     width: 767,
      topPassed: false,
      bottomPassed: false,
      pixelsPassed: 0,
@@ -62,7 +62,8 @@ class NonAuthContainer extends Component {
     const { calculations, contextRef } = this.state
     // console.log('calculations. width', calculations.width);
     let mobile = calculations.width < 768 ? true : false
-
+    const { isMobile } = this.props
+    
     return (
       <div ref={this.handleContextRef}>
           <Sidebar.Pushable>
