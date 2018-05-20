@@ -28,22 +28,27 @@ class QuestionPage extends Component {
 
     if (this.props.location.state.q != 'null') {
       // CASE: MY COURSE PAGE
+      console.log('[1]');
       const {tid, cid,} = this.props.location.state.q[0]
       const {username, photoUrl, uid,} = this.props.location.state
       const qid = this.props.location.state.qid
       const {authUser} = this.context
       let timeStamp = fb.database.ServerValue.TIMESTAMP
       console.log('answers save', answerText, tid, cid, username, photoUrl, uid, qid,);
+
       db.doSaveAnswer(tid, cid, qid, uid, username, photoUrl, answerText, timeStamp, 'img', aid)
         .then(res => {
           this.setState({answerText: '', error: null,})
+          this.props.handleAnswerAddedLocally(qid)
         })
         .catch(error => {
           this.setState(byPropKey('error', error))
         })
+
+
     } else {
       // CASE: DASHBOARD Q PANEL
-      console.log('[q page] why');
+      console.log('[2]');
       const {selectedQuestion, user, uid } = this.props
       let tid = selectedQuestion[0].tid
       let cid = selectedQuestion[0].cid
@@ -113,6 +118,7 @@ class QuestionPage extends Component {
           answers.splice(index, 1)
           console.log('index', index, answers); // index is -1
           this.setState ({answers})
+          this.props.handleDeleteAnswerLocally(qid)
       })
       .catch(error => {
         this.setState({[error]: error});

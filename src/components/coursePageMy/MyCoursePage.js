@@ -111,6 +111,29 @@ class MyCoursePage extends Component {
     console.log('follow tid, cid',  qid);
   }
 
+  handleAnswerAddedLocally = (qid) => {
+    console.log('qid', qid);
+    const {questions} = this.state
+    let index = questions.map(q => q['qid'] == qid).indexOf(true)
+    let q = questions.filter(q => q.qid === qid)
+    q[0].answerCount += 1
+    console.log('[q]', q[0]);
+    questions[index] = q[0]
+    console.log('[questions]', questions, q, index);
+    this.setState ({ questions })
+  }
+
+  handleDeleteAnswerLocally = (qid) => {
+    const {questions} = this.state
+    let index = questions.map(q => q['qid'] == qid).indexOf(true)
+    let q = questions.filter(q => q.qid === qid)
+    q[0].answerCount -= 1
+    console.log('[q]', q[0]);
+    questions[index] = q[0]g
+    console.log('[questions]', questions, q);
+    this.setState ({ questions })
+  }
+
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   handleNavToTeacher = () => {
@@ -454,7 +477,7 @@ class MyCoursePage extends Component {
               <SectionContainer>
 
                 <Header as='h1' inverted>
-                   <Image circular src={profile}/>
+                   <Image circular src={teacherProfile ? teacherProfile : profile}/>
                    <Header.Content>
                      {title}
                      <Header.Subheader>
@@ -595,6 +618,8 @@ class MyCoursePage extends Component {
                         render={() => <QuestionPage
                           handleDeleteQuestion={this.handleDeleteQuestion}
                           handleFollowQuestion={this.handleFollowQuestion}
+                          handleAnswerAddedLocally={this.handleAnswerAddedLocally}
+                          handleDeleteAnswerLocally={this.handleDeleteAnswerLocally}
                         />}
                       />
 
@@ -633,7 +658,7 @@ class MyCoursePage extends Component {
                        // <CourseMeta
                        //   meta={meta}
                        //  />} />
-                       <InfoBundle
+                      <InfoBundle
                          meta={meta}
                          features={features}
                          images={images}
@@ -657,6 +682,8 @@ class MyCoursePage extends Component {
                       render={() => <QuestionPage
                         handleDeleteQuestion={this.handleDeleteQuestion}
                         handleFollowQuestion={this.handleFollowQuestion}
+                        handleAnswerAddedLocally={this.handleAnswerAddedLocally}
+                        handleDeleteAnswerLocally={this.handleDeleteAnswerLocally}
                       />}
                     />
 
