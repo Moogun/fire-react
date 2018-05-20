@@ -31,6 +31,8 @@ import * as routes from '../../constants/routes';
 
 import {QuestionType} from '../quiz/QuizEditTop'
 
+
+
 class MyCoursePage extends Component {
   constructor(props){
     super(props)
@@ -56,6 +58,7 @@ class MyCoursePage extends Component {
       startTest: true,
       quizEntryResult: false,
 
+      cannotDeleteOpen: false,
 // modalStatus 1. readyToQuiz, 2.readyToSubmit, readyToReview, readyToclose
     }
   }
@@ -83,25 +86,34 @@ class MyCoursePage extends Component {
 
   handleDeleteQuestion = (question) => {
 
-    const {questions} = this.state
+    const {questions, cannotDeleteOpen} = this.state
 
     let tid = question['tid']
     let cid = question['cid']
     let qid = question['qid']
 
     const { match } = this.props
-    console.log('delete tid, cid',  qid);
-    db.doDeleteQuestion(tid, cid, qid)
-    .then(res => {
-      let index = questions.map(q => q['qid'] == qid).indexOf(true)
-      questions.splice(index, 1)
-      this.setState ({questions})
-      this.props.history.replace(`${match.url}`)
-    })
-    .catch(error => {
-      this.setState({[error]: error});
-    });
+    console.log('delete tid, cid',  question);
+
+    if (question.answerCount != 0) {
+      console.log('cannot delete the q');
+      this.setState ({ cannotDeleteOpen: true,})
+    } else {
+      db.doDeleteQuestion(tid, cid, qid)
+      .then(res => {
+        let index = questions.map(q => q['qid'] == qid).indexOf(true)
+        questions.splice(index, 1)
+        this.setState ({questions})
+        this.props.history.replace(`${match.url}`)
+      })
+      .catch(error => {
+        this.setState({[error]: error});
+      });
+    }
+
   }
+
+  cannotDeleteConfirm = () => this.setState ({ cannotDeleteOpen: false})
 
   handleFollowQuestion = (qid) => {
     // let question = this.props.location.state.q
@@ -128,9 +140,7 @@ class MyCoursePage extends Component {
     let index = questions.map(q => q['qid'] == qid).indexOf(true)
     let q = questions.filter(q => q.qid === qid)
     q[0].answerCount -= 1
-    console.log('[q]', q[0]);
-    questions[index] = q[0]g
-    console.log('[questions]', questions, q);
+    questions[index] = q[0]
     this.setState ({ questions })
   }
 
@@ -449,6 +459,7 @@ class MyCoursePage extends Component {
       quizSelected,
       quizEntryResult,
 
+      cannotDeleteOpen,
     } = this.state
 
     // let teacherName = tName ? tName : 'Teacher'
@@ -706,6 +717,20 @@ class MyCoursePage extends Component {
               : null}
 
           </Grid.Column>
+
+          <Modal size='mini' open={cannotDeleteOpen}>
+            <Modal.Content >
+              <Modal.Description>
+                <Header>'댓글이 등록된 질문은 삭제할 수 없습니다.'</Header>
+              </Modal.Description>
+            </Modal.Content>
+             <Modal.Actions>
+              <Button color='green' onClick={this.cannotDeleteConfirm} >
+                <Icon name='remove' /> 확인
+              </Button>
+            </Modal.Actions>
+          </Modal>
+
       </Grid>
 
     )
