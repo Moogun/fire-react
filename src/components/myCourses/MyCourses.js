@@ -6,7 +6,6 @@ import * as style from '../../style/inline';
 import withAuthorization from '../../HOC/withAuthorization';
 
 import MyCourseCards from '../courses/MyCourseCards'
-import CourseCards from '../courses/CourseCards'
 import { Grid, Header, Menu, Visibility, Responsive, Card, Button } from 'semantic-ui-react'
 import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
 import SectionContainer from '../navbar/SectionContainer'
@@ -119,7 +118,7 @@ class MyCourses extends Component {
             {/* <Grid style={style.DASHBOARD_BODY} centered>
                 <Grid.Column> */}
 
-                  <CourseCards
+                  <MyCourseCards
                     courses={attendingCourses}
                     loading={isLoading}
                     mobile={mobile}

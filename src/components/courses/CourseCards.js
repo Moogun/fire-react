@@ -25,6 +25,7 @@ class CourseCards extends Component {
 
   render() {
     // const {courses} = this.state
+    console.log('this props', this.props);
     const { courses, loading, mobile} = this.props
 
     let courseList = courses ?

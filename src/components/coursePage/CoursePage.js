@@ -245,7 +245,6 @@ class CoursePage extends Component {
                           >
                           <Grid.Column mobile={6} tablet={4} computer={4} verticalAlign='middle' >
                             <Image size='small' src={teacherProfile} circular
-                              fluid
                               centered
                               // style={{marginLeft: !mobile ? '0rem' : '-2rem'}}
                             />
