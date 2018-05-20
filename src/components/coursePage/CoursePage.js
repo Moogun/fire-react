@@ -239,24 +239,22 @@ class CoursePage extends Component {
             <Segment style={style.COURSE_PAGE_HEAD_GRID} basic
               // style={{ paddingTop: '3rem', paddingBottom: '3rem'}}
               >
-                      <Grid container>
+                      <Grid container={!mobile ? true: false}>
                         <Grid.Row
                           style={style.COURSE_PAGE_HEAD_GRID_ROW}
                           >
                           <Grid.Column mobile={6} tablet={4} computer={4} verticalAlign='middle' >
-                            <Image size='small' src={profile} circular
+                            <Image size='small' src={teacherProfile} circular
                               fluid
                               centered
                               // style={{marginLeft: !mobile ? '0rem' : '-2rem'}}
                             />
                           </Grid.Column>
                           <Grid.Column mobile={10} tablet={9} computer={9} verticalAlign='middle' textAlign='left'>
-                            <Header as={!mobile ? 'h1' : 'h3'} inverted content={title} subheader='좌절하지 말고 오라'/>
+                            <Header as={!mobile ? 'h1' : 'h3'} inverted content={title} subheader={subTitle}/>
                             <Header as={!mobile ? 'h2' : 'h4'} inverted
                               onClick={this.handleNavToTeacher} style={{marginTop: '0rem'}}>
                                <Header.Content>
-                                 {/* {tName} */}
-                                 {/* <Rating icon='star' defaultRating={5} maxRating={5} disabled/> */}
                                  <Header.Subheader>
                                    {tName}
                                  </Header.Subheader>
@@ -266,30 +264,6 @@ class CoursePage extends Component {
                           </Grid.Column>
                           </Grid.Row>
                         </Grid>
-
-                        <Grid style={style.COURSE_PAGE_HEAD_GRID} stackable centered>
-                              <Grid.Row
-                                style={style.COURSE_PAGE_HEAD_GRID_ROW}
-                                >
-                                <Grid.Column width={12} >
-
-                                     <Header as='h1' inverted >
-                                      <Image circular src={profile}/>
-                                      <Header.Content>
-                                        {tName}
-                                        <Header.Subheader style={{color: '#fff'}}>
-                                          The best of the best
-                                        </Header.Subheader>
-                                        <Header.Subheader style={{color: '#fff'}}>
-                                          <Rating icon='star' defaultRating={5} maxRating={5} disabled/>
-                                        </Header.Subheader>
-                                      </Header.Content>
-
-                                    </Header>
-                                </Grid.Column>
-                              </Grid.Row>
-                          </Grid>
-
                 </Segment>
               </Visibility>
 
