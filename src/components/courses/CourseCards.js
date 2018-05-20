@@ -28,7 +28,7 @@ class CourseCards extends Component {
     const { courses, loading, mobile} = this.props
 
     let courseList = courses ?
-        <div>
+        <div style={{ margin: !mobile ? '2rem' : '1rem'}}>
           {mobile
             ? (<Item.Group divided unstackable> { Object.keys(courses).map(key =>
                   <Item as='a' key={key} style={{fontSize: '0.8rem'}} onClick={() => this.handleClick(key,
@@ -53,20 +53,24 @@ class CourseCards extends Component {
                 )
             : (
               <Grid container textAlign='left' stackable doubling >
-                <Card.Group itemsPerRow={4} doubling>
-                {Object.keys(courses).map(key =>
-                  // <Grid.Column key={key} mobile={16} tablet={8} computer={4}>
-                    <CourseCard
-                      key={key}
-                      course={courses[key]}
-                      click={() => this.handleClick( key,
-                      courses[key].metadata.tid,
-                      courses[key].metadata.title,
-                      courses[key].metadata.tName)}
-                     />
-                      // </Grid.Column>
-                    )}
-                  </Card.Group>
+                <Grid.Row>
+                  <Grid.Column>
+                  <Card.Group itemsPerRow={4} doubling>
+                  {Object.keys(courses).map(key =>
+                    // <Grid.Column key={key} mobile={16} tablet={8} computer={4}>
+                      <CourseCard
+                        key={key}
+                        course={courses[key]}
+                        click={() => this.handleClick( key,
+                        courses[key].metadata.tid,
+                        courses[key].metadata.title,
+                        courses[key].metadata.tName)}
+                       />
+                        // </Grid.Column>
+                      )}
+                    </Card.Group>
+                    </Grid.Column>
+                  </Grid.Row>
                 </Grid>)
             }
         </div>

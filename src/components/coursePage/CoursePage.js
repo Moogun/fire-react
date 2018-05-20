@@ -239,8 +239,10 @@ class CoursePage extends Component {
             <Segment style={style.COURSE_PAGE_HEAD_GRID} basic
               // style={{ paddingTop: '3rem', paddingBottom: '3rem'}}
               >
-                {!mobile}
                       <Grid container>
+                        <Grid.Row
+                          style={style.COURSE_PAGE_HEAD_GRID_ROW}
+                          >
                           <Grid.Column mobile={6} tablet={4} computer={4} verticalAlign='middle' >
                             <Image size='small' src={profile} circular
                               fluid
@@ -262,13 +264,37 @@ class CoursePage extends Component {
                              </Header>
                             {register}
                           </Grid.Column>
+                          </Grid.Row>
                         </Grid>
+
+                        <Grid style={style.COURSE_PAGE_HEAD_GRID} stackable centered>
+                              <Grid.Row
+                                style={style.COURSE_PAGE_HEAD_GRID_ROW}
+                                >
+                                <Grid.Column width={12} >
+
+                                     <Header as='h1' inverted >
+                                      <Image circular src={profile}/>
+                                      <Header.Content>
+                                        {tName}
+                                        <Header.Subheader style={{color: '#fff'}}>
+                                          The best of the best
+                                        </Header.Subheader>
+                                        <Header.Subheader style={{color: '#fff'}}>
+                                          <Rating icon='star' defaultRating={5} maxRating={5} disabled/>
+                                        </Header.Subheader>
+                                      </Header.Content>
+
+                                    </Header>
+                                </Grid.Column>
+                              </Grid.Row>
+                          </Grid>
 
                 </Segment>
               </Visibility>
 
-              <CourseMeta meta={meta}/>
-              <CourseFeatures features={features}/>
+              <CourseMeta meta={meta} mobile={mobile}/>
+              <CourseFeatures features={features} mobile={mobile}/>
               <CourseGallery images={images}/>
               <CourseCurri sections={curri} handleSecToggle={this.handleSecToggle} takeQuiz={this.handleTakeQuiz}/>
               {/* video  */}

@@ -6,6 +6,7 @@ import * as style from '../../style/inline';
 import withAuthorization from '../../HOC/withAuthorization';
 
 import MyCourseCards from '../courses/MyCourseCards'
+import CourseCards from '../courses/CourseCards'
 import { Grid, Header, Menu, Visibility, Responsive, Card, Button } from 'semantic-ui-react'
 import {Link, Route, withRouter, Redirect, Switch} from 'react-router-dom'
 import SectionContainer from '../navbar/SectionContainer'
@@ -18,19 +19,11 @@ class MyCourses extends Component {
       activeItem : 'courses',
       calculations: {
         width: 0,
-        topPassed: false,
-        bottomPassed: false,
-        pixelsPassed: 0,
-        percentagePassed: 0,
-        topVisible: false,
-        bottomVisible: false,
-        fits: false,
-        passing: false,
-        onScreen: false,
-        offScreen: false,
       },
       isLoading: false,
   }
+  handleContextRef = contextRef => this.setState({ contextRef })
+  handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
   handleItemClick = (e, {name}) => this.setState({activeItem: name})
 
@@ -78,11 +71,11 @@ class MyCourses extends Component {
   render() {
     const {match} = this.props
     const {calculations, activeItem, user, attendingCourses, isLoading} = this.state
-    console.log('width', calculations.width, 'attendingCourses', attendingCourses);
+    let mobile = calculations.width < 768 ? true : false
 
     return (
-      <React.Fragment>
-
+      <div ref={this.handleContextRef}>
+        <Visibility onUpdate={this.handleUpdate}>
             <SectionContainer>
                 <Header as='h1' style={style.DASHBOARD_HEADER}>My Courses</Header>
                 <Menu size='small' secondary pointing inverted
@@ -122,16 +115,20 @@ class MyCourses extends Component {
                   /> */}
                 </Menu>
             </SectionContainer_M>
-
+           </Visibility>
             {/* <Grid style={style.DASHBOARD_BODY} centered>
                 <Grid.Column> */}
 
-                  <MyCourseCards courses={attendingCourses} loading={isLoading}/>
+                  <CourseCards
+                    courses={attendingCourses}
+                    loading={isLoading}
+                    mobile={mobile}
+                  />
 
                 {/* </Grid.Column>
             </Grid> */}
 
-      </React.Fragment>
+      </div>
     );
   }
 }

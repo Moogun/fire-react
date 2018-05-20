@@ -4,9 +4,8 @@ import * as style from '../../style/inline'
 
 const CourseFeatures = ({mobile, features}) => {
   // console.log('features', features && Object.keys(features).map(i => features[i].header) )
-
   let featureList = features ?
-    <Grid container doubling columns={3} style={{padding: '5rem 0rem', }}>
+    <Grid container doubling columns={!mobile ? 3 : 1} style={{padding: '5rem 0rem', }}>
       {Object.keys(features).map(key =>
         <Grid.Column key={key} textAlign='center'>
           <Header as="h3" attached='top' style={{fontSize: '2rem',}}> {features[key].header}

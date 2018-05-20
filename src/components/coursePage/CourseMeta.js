@@ -3,7 +3,7 @@ import { Segment, Table, Grid, Image, Button, Header, Container } from 'semantic
 import profile from '../../assets/profile-lg.png'
 import * as style from '../../style/inline'
 
-const CourseMeta = ({meta}) => {
+const CourseMeta = ({meta, mobile}) => {
   console.log('course meta ', meta);
   let date = meta ? meta.date : ''
   let time = meta ? meta.time : ''

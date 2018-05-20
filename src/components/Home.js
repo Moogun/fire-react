@@ -54,7 +54,7 @@ class HomePage extends Component {
     //   </Segment>
 
     return (
-      <div ref={this.handleContextRef} style={{ margin: !mobile ? '2rem' : '1rem'}}>
+      <div ref={this.handleContextRef}>
         <Visibility onUpdate={this.handleUpdate}>
           <CourseCards courses={courses} loading={isLoading} mobile={mobile}/>
          </Visibility>
