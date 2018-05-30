@@ -19,7 +19,35 @@ const google = new firebase.auth.GoogleAuthProvider();
 const facebook = new firebase.auth.FacebookAuthProvider();
 const db = firebase.database();
 const storage = firebase.storage();
-const msg = firebase.messaging();
+const messaging = firebase.messaging();
+
+messaging.requestPermission()
+  .then(() => handleTokenRefresh())
+  // .then(() => checkSubscription())
+  .catch((err) => {
+    console.log("error getting permission :(");
+  });
+
+  function handleTokenRefresh() {
+    let uid = auth.currentUser.uid
+    return messaging.getToken().then((token) => {
+      var updates = {}
+      updates[`users/${uid}/token`] = token
+      db.ref().update(updates)
+    });
+  }
+
+  // function checkSubscription() {
+  //   db.ref('/tokens').orderByChild("uid").equalTo(auth.currentUser.uid).once('value').then((snapshot) => {
+  //     if ( snapshot.val() ) {
+  //       console.log(snapshot.val());
+  //     } else {
+  //       console.log('none');
+  //     }
+  //   });
+  // }
+
+
 
 export {
   fb,
@@ -28,5 +56,5 @@ export {
   facebook,
   db,
   storage,
-  msg,
+  messaging,
 }

@@ -330,6 +330,8 @@ class Teacher extends Component {
   }
 
   componentDidMount(){
+    const { isMobile } = this.props
+    console.log('isMobile', isMobile);
     const {tName} = this.props.match.params
     let teacherId
     db.onceGetUserWithName(tName)

@@ -339,7 +339,7 @@ class AccountPage extends Component {
                    <Container>
                       <Segment basic clearing style={{paddingLeft: '0', paddingRight: '0'}}>
                           <Header as='h5' floated='left' style={{marginBottom: '0'}}>
-                            <Image circular src={profile} size='tiny'/>
+                            <Image circular src={photoUrl ? photoUrl : profile} size='tiny'/>
                             <Header.Content>
                               {user.username}
                               <Header.Subheader>

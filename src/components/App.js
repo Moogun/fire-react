@@ -49,12 +49,23 @@ import {firebase} from '../firebase';
 import withAuthentication from '../HOC/withAuthentication';
 import ResponsiveContainer from './navbar/ResponsiveContainer';
 
+import ReactGA from 'react-ga';
 import withTracker from '../HOC/withTracker';
+
+
+  // ReactGA.initialize('UA-119623208-1', {
+  //   debug: true,
+  //   titleCase: false,
+  //   gaOptions: {
+  //     userId: 123
+  //   }
+  // });
+  // ReactGA.pageview(window.location.pathname + window.location.search);
+
 
 class App extends Component {
 
   render() {
-
 
     let isMobile = false; //initiate as false
     // device detection

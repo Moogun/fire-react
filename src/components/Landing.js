@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Segment, Container, Grid, Header, Button, Icon, Image, Divider } from 'semantic-ui-react'
 import './color.css'
 import './App.css'
+import profile from '../assets/profile-lg.png'
 
 class Landing extends Component {
   constructor(props) {
@@ -63,17 +64,19 @@ HomepageHeading.propTypes = {
 
 const LandingBody = () => {
   return (
-      <div className='landing'>
+      <div
+        // className='landing'
+        >
 
-        {/* <Segment style={{ padding: '8em 0em' }} vertical>
+        <Segment style={{ padding: '8em 0em' }} vertical>
         <Grid container stackable verticalAlign='middle'>
           <Grid.Row>
             <Grid.Column width={8}>
-              <Header as='h3' style={{ fontSize: '2em' }}>We Help Teachers and Students</Header>
+              <Header as='h3' style={{ fontSize: '2em' }}>선생님과 학생을 위한 QnA 메신저</Header>
               <p style={{ fontSize: '1.33em' }}>
-                To be added
+
               </p>
-              <Header as='h3' style={{ fontSize: '2em' }}>To be added </Header>
+              <Header as='h3' style={{ fontSize: '2em' }}></Header>
               <p style={{ fontSize: '1.33em' }}>
                 To be added
               </p>
@@ -89,10 +92,18 @@ const LandingBody = () => {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column textAlign='center'>
-              <Button size='huge'>Check Them Out</Button>
+              <Button size='huge'>더 알아보기</Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>
+      </Segment>
+      <Segment style={{ padding: '8em 0em' }} vertical>
+        <ol>
+          <li>수업 정보를 등록하고 비밀번호를 설정하세요 </li>
+          <li>비밀번호를 학생들에게 알려주세요</li>
+          <li>답변 되는 질문들마다 선생님에게 추천 점수가 쌓입니다.</li>
+          <li>원하는 시간에 카카오톡으로 질문 현황이 업데이트 됩니다.</li>
+        </ol>
       </Segment>
       <Segment style={{ padding: '0em' }} vertical>
         <Grid celled='internally' columns='equal' stackable>
@@ -110,7 +121,7 @@ const LandingBody = () => {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </Segment> */}
+      </Segment>
       <Segment style={{ padding: '8em 0em' }} vertical>
         <Container text>
           <Header as='h3' style={{ fontSize: '2em' }}>We Help Teachers and Students</Header>

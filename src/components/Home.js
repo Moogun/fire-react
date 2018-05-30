@@ -14,7 +14,7 @@ class HomePage extends Component {
       courses: null,
       isLoading: false,
       calculations: {
-        width: 0,
+        width: null,
       },
     };
   }
@@ -41,18 +41,21 @@ class HomePage extends Component {
           this.setState({courses: courseSnap})
         }
       })
+
+    const {calculations} = this.state
+    const { isMobile } = this.props
+    console.log('isMobile', isMobile);
+    calculations.width = isMobile ? 767 : 768
+    this.setState ({calculations })
   }
 
   render() {
 
     const {users, courses, isLoading, calculations, contextRef } = this.state;
     let mobile = calculations.width < 768 ? true : false
-    // let cList = courses
-    // ? <CourseCards courses={courses}/>
-    // : <Segment basic textAlign='center'>
-    //     <p>No course yet</p>
-    //   </Segment>
 
+    const { isMobile } = this.props
+    console.log('isMobile' , isMobile);
     return (
       <div ref={this.handleContextRef}>
         <Visibility onUpdate={this.handleUpdate}>

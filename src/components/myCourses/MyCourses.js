@@ -17,7 +17,7 @@ class MyCourses extends Component {
     state = {
       activeItem : 'courses',
       calculations: {
-        width: 0,
+        width: null,
       },
       isLoading: false,
   }
@@ -29,6 +29,12 @@ class MyCourses extends Component {
   handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
   componentDidMount(){
+    const {calculations} = this.state
+    const { isMobile } = this.props
+    console.log('isMobile', isMobile);
+    calculations.width = isMobile ? 767 : 768
+    this.setState ({calculations })
+    
     console.log('my courses did mount 1 ', )
     const {authUser} = this.context
     console.log('authUser', authUser);
@@ -59,6 +65,7 @@ class MyCourses extends Component {
           this.setState({[error]: error});
         });
     }
+
   }
 
   handleQuestion = () => {
@@ -68,9 +75,12 @@ class MyCourses extends Component {
   }
 
   render() {
-    const {match} = this.props
+    const {match, isMobile} = this.props
     const {calculations, activeItem, user, attendingCourses, isLoading} = this.state
     let mobile = calculations.width < 768 ? true : false
+
+    // const { isMobile } = this.props
+    console.log('isMobile', isMobile);
 
     return (
       <div ref={this.handleContextRef}>

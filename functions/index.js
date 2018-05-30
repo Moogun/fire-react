@@ -1,5 +1,5 @@
 const functions = require('firebase-functions');
-
+// const gcs = require('@google-cloud/storage')()
 const admin = require('firebase-admin');
 admin.initializeApp();
 // // Create and Deploy Your First Cloud Functions
@@ -130,15 +130,6 @@ exports.countAnswer = functions.database.ref('/questionsForT/{tid}/{qid}/answers
         return console.log('Counter updated.');
       });
 
-
-
-      // Return the promise from countRef.transaction() so our function
-      // waits for this async event to complete before it exits.
-      // return countRef.transaction((current) => {
-      //   return (current || 0) + increment;
-      // }).then(() => {
-      //   return console.log('Counter updated.');
-      // });
     });
 
   exports.countAttendee = functions.database.ref('/teaching/{tid}/{cid}/attendee/{uid}').onWrite(
@@ -175,11 +166,15 @@ exports.countAnswer = functions.database.ref('/questionsForT/{tid}/{qid}/answers
           return console.log('Counter updated.');
         });
 
-        // Return the promise from countRef.transaction() so our function
-        // waits for this async event to complete before it exits.
-      //   return countRef.transaction((current) => {
-      //     return (current || 0) + increment;
-      //   }).then(() => {
-      //     return console.log('Counter updated.');
-      //   });
       });
+
+exports.processFile = functions.storage.object().onFinalize((object, context) => {
+  const filePath = object.name;
+  const contentType = object.contentType;
+  console.log('File change detected, function execution started');
+
+  if (object.resourceState === 'not_exists') {
+      console.log('We deleted a file, exit...');
+      return;
+  }
+});
